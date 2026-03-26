@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,800;1,400&amp;family=Nunito:wght@300;400;600;700;800&amp;family=Newsreader:ital,wght@0,400;0,700;1,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "outline-variant": "#d8c2b4",
+              "on-primary": "#ffffff",
+              "primary-fixed": "#ffdcc5",
+              "outline": "#867468",
+              "on-tertiary-fixed": "#3c0700",
+              "surface-container-high": "#eee7e1",
+              "surface-bright": "#fff8f2",
+              "surface-container-lowest": "#ffffff",
+              "surface-container": "#f3ede7",
+              "on-tertiary": "#ffffff",
+              "surface-container-highest": "#e8e1dc",
+              "on-tertiary-fixed-variant": "#83260e",
+              "on-background": "#1e1b18",
+              "on-surface-variant": "#534439",
+              "tertiary-container": "#c05237",
+              "surface-container-low": "#f9f2ec",
+              "tertiary-fixed": "#ffdad2",
+              "surface-variant": "#e8e1dc",
+              "secondary-container": "#ffab69",
+              "inverse-surface": "#33302c",
+              "on-error-container": "#93000a",
+              "inverse-primary": "#ffb782",
+              "secondary-fixed": "#ffdcc4",
+              "background": "#fff8f2",
+              "secondary-fixed-dim": "#ffb780",
+              "on-secondary-container": "#783d01",
+              "surface-tint": "#8f4e13",
+              "on-primary-fixed-variant": "#703800",
+              "primary-fixed-dim": "#ffb782",
+              "error-container": "#ffdad6",
+              "surface-dim": "#dfd9d3",
+              "tertiary-fixed-dim": "#ffb4a2",
+              "on-secondary": "#ffffff",
+              "on-surface": "#1e1b18",
+              "secondary": "#8e4e14",
+              "inverse-on-surface": "#f6f0ea",
+              "primary": "#8c4b10",
+              "on-primary-container": "#fffbff",
+              "on-tertiary-container": "#fffbff",
+              "surface": "#fff8f2",
+              "on-secondary-fixed": "#2f1400",
+              "on-secondary-fixed-variant": "#6f3800",
+              "tertiary": "#a03b21",
+              "primary-container": "#aa6328",
+              "error": "#ba1a1a",
+              "on-primary-fixed": "#301400",
+              "on-error": "#ffffff"
+            },
+            fontFamily: {
+              "headline": ["Newsreader", "serif"],
+              "body": ["Plus Jakarta Sans", "sans-serif"],
+              "label": ["Plus Jakarta Sans", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+      }
+      .font-serif-display { font-family: 'Playfair Display', serif; }
+      .font-sans-ui { font-family: 'Nunito', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-fixed min-h-screen pb-32">
+<!-- Top Navigation Shell -->
+<header class="fixed top-0 w-full z-50 bg-[#FFF8F2]/80 dark:bg-stone-900/80 backdrop-blur-xl shadow-[0_8px_24px_rgba(30,27,24,0.06)]">
+<div class="flex items-center justify-between px-6 py-4 w-full">
+<div class="flex items-center gap-4">
+<button class="text-[#8C4B10] dark:text-[#C2773A] hover:opacity-80 transition-opacity active:scale-95 duration-200">
+<span class="material-symbols-outlined text-2xl">arrow_back</span>
+</button>
+<h1 class="font-['Playfair_Display'] text-2xl font-bold tracking-tight text-[#8C4B10] dark:text-[#C2773A]">Artisanal Breads</h1>
+</div>
+<div class="flex items-center gap-3">
+<button class="text-[#1E1B18]/60 dark:text-stone-400 hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined">search</span>
+</button>
+<div class="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden">
+<img alt="Profile" class="w-full h-full object-cover" data-alt="close-up portrait of a smiling person with warm lighting and soft background bokeh" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxlwMgafWI7hkImfO6Q3cLS5MXhcIsI1m77AjXPBenfF5SiZTgmEKbQ6Z5cXjhegmRKC_fJ_NbvJ0ARjD1aiYQ98qzgrJFDZqcqHIOm5LObyxo1WIQUe89evfH2PfMsv_Nb28khQ3vp8bKrMvaPgWbqcztunpF-IZ_pDwLZAI_ZFD4TkJ1M83E7fgDBEwy57Op8w6Yn161rxvtA-DEos0nN2OETh7e-3Lobr_h-M1zPLkI3g9HSo8HhBsuSMVEyzrpLHaUGu766fU"/>
+</div>
+</div>
+</div>
+</header>
+<main class="mt-24 px-6 max-w-7xl mx-auto">
+<!-- Filter Section -->
+<section class="mb-8 -mx-6 px-6 overflow-x-auto no-scrollbar">
+<div class="flex items-center gap-3 py-2 min-w-max">
+<button class="px-6 py-2.5 rounded-full bg-gradient-to-br from-primary to-primary-container text-white font-sans-ui font-bold text-sm shadow-md transition-all active:scale-95">All</button>
+<button class="px-6 py-2.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-sans-ui font-semibold text-sm border border-outline-variant/15 hover:bg-surface-container transition-colors">Eggless</button>
+<button class="px-6 py-2.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-sans-ui font-semibold text-sm border border-outline-variant/15 hover:bg-surface-container transition-colors">Under ₹500</button>
+<button class="px-6 py-2.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-sans-ui font-semibold text-sm border border-outline-variant/15 hover:bg-surface-container transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">star</span>
+                    Rating 4+
+                </button>
+</div>
+</section>
+<!-- Product Grid -->
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-12 gap-x-4 md:gap-x-8">
+<!-- Card 1 -->
+<article class="flex flex-col group">
+<div class="relative bg-surface-container-lowest rounded-[1.5rem] p-3 mb-4 transition-transform duration-300 group-hover:-translate-y-2">
+<div class="aspect-[4/5] overflow-visible mb-2">
+<img alt="Sourdough" class="w-full h-full object-cover rounded-DEFAULT shadow-lg -mt-8 mb-4" data-alt="rustic artisan sourdough bread loaf with a perfectly dusted flour crust sitting on a dark wooden table" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDx6uZ6tf5cx5-PZ4oglFejPJphx7mPMuCxF7M1-f4iN83GdiaAbeemXrPmq2_YMqfvuA4rA9hhOcb3CB0coWftEt0WqMO7JhApyQeBvwuTQ6aMIqibezEjFO-91kCNUuQWAihckO0FCyjxmNeeFlqLy9yYv-cJB7O2ghCwod0bBve8bvHL7Tw0K3JiXjBYze7IS4uol_fHKT8oZJ-TXCGS3OoHX0wzkV0HG1BujD_xZ0klxR08ACRMjz6SWrG1lci-bOFbbOiOWVg"/>
+</div>
+<div class="flex items-center justify-between mb-1">
+<div class="flex items-center gap-1 text-[#8C4B10]">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-sans-ui font-bold text-xs">4.9</span>
+</div>
+<span class="text-[10px] uppercase tracking-widest font-sans-ui font-bold text-[#1E1B18]/40">Eggless</span>
+</div>
+<h3 class="font-serif-display text-lg font-bold text-on-surface leading-tight mb-1">Country Sourdough</h3>
+<p class="font-sans-ui text-xs text-on-surface-variant/70 line-clamp-2 mb-4 leading-relaxed">Fermented for 24 hours for a deep, tangy flavor.</p>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-sans-ui font-extrabold text-primary text-lg">₹350</span>
+<button class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary-container text-white flex items-center justify-center active:scale-90 transition-transform shadow-md">
+<span class="material-symbols-outlined text-xl">add</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 2 -->
+<article class="flex flex-col group">
+<div class="relative bg-surface-container-lowest rounded-[1.5rem] p-3 mb-4 transition-transform duration-300 group-hover:-translate-y-2">
+<div class="aspect-[4/5] overflow-visible mb-2">
+<img alt="Baguette" class="w-full h-full object-cover rounded-DEFAULT shadow-lg -mt-8 mb-4" data-alt="three long golden brown french baguette breads stacked together in a wicker basket under warm sunlight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWUSwASka6TOAIIk9LsKdi7ZIVVKkAE3vX27IiDF2Q1br_u9AdsDI3hCTVi3mMm7N-jUQyRUqL4TuT43_tep15VkD06Hb4NyVgQwv1rVRxSsrWqb2tRPrQq50XccPhU56LpUSDRepkoSyeiHgsNwaO8bHtSGI4hXNIjkPMtKZGdJgTNld5LszPPjObClOy4kewslsWLySeQXvk_Qgzh2aLH4QcfbtFPzugjKtNvrF6JHj6X17f_8sWUD3mbVh6930_QlX3PCt8XAA"/>
+</div>
+<div class="flex items-center justify-between mb-1">
+<div class="flex items-center gap-1 text-[#8C4B10]">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-sans-ui font-bold text-xs">4.7</span>
+</div>
+<span class="text-[10px] uppercase tracking-widest font-sans-ui font-bold text-[#1E1B18]/40">Vegan</span>
+</div>
+<h3 class="font-serif-display text-lg font-bold text-on-surface leading-tight mb-1">French Baguette</h3>
+<p class="font-sans-ui text-xs text-on-surface-variant/70 line-clamp-2 mb-4 leading-relaxed">Classic crusty exterior with a soft, airy crumb.</p>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-sans-ui font-extrabold text-primary text-lg">₹180</span>
+<button class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary-container text-white flex items-center justify-center active:scale-90 transition-transform shadow-md">
+<span class="material-symbols-outlined text-xl">add</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 3 -->
+<article class="flex flex-col group mt-8 md:mt-0">
+<div class="relative bg-surface-container-lowest rounded-[1.5rem] p-3 mb-4 transition-transform duration-300 group-hover:-translate-y-2">
+<div class="aspect-[4/5] overflow-visible mb-2">
+<img alt="Rye Bread" class="w-full h-full object-cover rounded-DEFAULT shadow-lg -mt-8 mb-4" data-alt="sliced dark rye bread with seeds on top placed on a marble surface with artistic flour dusting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZvB3GIsQdba50vi1gICzasc_3LT177abyRMFZcXuQ8ZAiPKeRJLkeq9Uip4zBT3ivkd2N3CItlciuE0CXx4EqDE3QPY2TZ84ooApT7ZPzuGhdch-XKUqnR9JnY_-9ptzNt17ZZFpTg-p2bN3j-zYnbJUrLJVO84J-stg-JCi5kRvaU59sUF-pqKKDYW0jZkIMNq_5rfdYnGC_bz7d8l9ui6xZbT4l2qEYDCLOQVqDcdF6cnV8uqdQpjo0-8TLkda2xgH3PUiML1Y"/>
+</div>
+<div class="flex items-center justify-between mb-1">
+<div class="flex items-center gap-1 text-[#8C4B10]">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-sans-ui font-bold text-xs">4.8</span>
+</div>
+<span class="text-[10px] uppercase tracking-widest font-sans-ui font-bold text-[#1E1B18]/40">Whole Grain</span>
+</div>
+<h3 class="font-serif-display text-lg font-bold text-on-surface leading-tight mb-1">Dark Forest Rye</h3>
+<p class="font-sans-ui text-xs text-on-surface-variant/70 line-clamp-2 mb-4 leading-relaxed">Robust rye bread with toasted caraway seeds.</p>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-sans-ui font-extrabold text-primary text-lg">₹420</span>
+<button class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary-container text-white flex items-center justify-center active:scale-90 transition-transform shadow-md">
+<span class="material-symbols-outlined text-xl">add</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 4 -->
+<article class="flex flex-col group mt-8 md:mt-0">
+<div class="relative bg-surface-container-lowest rounded-[1.5rem] p-3 mb-4 transition-transform duration-300 group-hover:-translate-y-2">
+<div class="aspect-[4/5] overflow-visible mb-2">
+<img alt="Focaccia" class="w-full h-full object-cover rounded-DEFAULT shadow-lg -mt-8 mb-4" data-alt="mediterranean focaccia bread topped with rosemary sprigs and sea salt being drizzled with golden olive oil" src="https://lh3.googleusercontent.com/aida-public/AB6AXuALSKV3pYmvcWFdSkneQhatBIQvk9HG7xnDYdEfYTG4MaaOnllbbRlmXvIl47aw6YqbGA0J5vjxfns8LC757MFLiceoWx-GGc1UVwx_SDJWb3tY-lPzVH5-z2lUGvZQ9WZaPS_zmM_gS-rRR9kyOeIBcvIIrKELhApH6fyKI-oWd0EmnDPdztIbXc5dHTtDNJNwyQ1h4Aehd1CqSuSWmBUcYryxdvlaV6omceZRKcK4WhrHH4DGNielfAVAI7eC2M9XRGluwJABt-A"/>
+</div>
+<div class="flex items-center justify-between mb-1">
+<div class="flex items-center gap-1 text-[#8C4B10]">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-sans-ui font-bold text-xs">4.6</span>
+</div>
+<span class="text-[10px] uppercase tracking-widest font-sans-ui font-bold text-[#1E1B18]/40">Herbed</span>
+</div>
+<h3 class="font-serif-display text-lg font-bold text-on-surface leading-tight mb-1">Rosemary Focaccia</h3>
+<p class="font-sans-ui text-xs text-on-surface-variant/70 line-clamp-2 mb-4 leading-relaxed">Infused with extra virgin olive oil and fresh rosemary.</p>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-sans-ui font-extrabold text-primary text-lg">₹280</span>
+<button class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary-container text-white flex items-center justify-center active:scale-90 transition-transform shadow-md">
+<span class="material-symbols-outlined text-xl">add</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 5 -->
+<article class="flex flex-col group mt-8">
+<div class="relative bg-surface-container-lowest rounded-[1.5rem] p-3 mb-4 transition-transform duration-300 group-hover:-translate-y-2">
+<div class="aspect-[4/5] overflow-visible mb-2">
+<img alt="Ciabatta" class="w-full h-full object-cover rounded-DEFAULT shadow-lg -mt-8 mb-4" data-alt="crusty italian ciabatta loaf cut in half showing large air pockets on a flour dusted surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvmD28nqEfiTzMD1RJ-fyop10-vbBIfWih742bo_rtR-ykSSUGlyuf6WTl1a7QQEtRhoI408fznDxSkW7DqwFD1qCTdP6thfpwU2VWxU8-fTVaXKOsVolPI1u93kiTfQZgjbABdsX0uqEIc6JXUSeO2ImnD42X36xz2y0KdAWe4AzDIhlJiXVqTVtaftDIB28KIYa3Ur3cthd3nWycw40yIumyIArEx6-0ZAoG9mI3mUV8XSBvvcYEev1SFXJ4eRnBInkSIXZLUKM"/>
+</div>
+<div class="flex items-center justify-between mb-1">
+<div class="flex items-center gap-1 text-[#8C4B10]">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-sans-ui font-bold text-xs">4.9</span>
+</div>
+<span class="text-[10px] uppercase tracking-widest font-sans-ui font-bold text-[#1E1B18]/40">Classic</span>
+</div>
+<h3 class="font-serif-display text-lg font-bold text-on-surface leading-tight mb-1">Rustic Ciabatta</h3>
+<p class="font-sans-ui text-xs text-on-surface-variant/70 line-clamp-2 mb-4 leading-relaxed">Perfect for sandwiches with its thin crust and soft interior.</p>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-sans-ui font-extrabold text-primary text-lg">₹220</span>
+<button class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary-container text-white flex items-center justify-center active:scale-90 transition-transform shadow-md">
+<span class="material-symbols-outlined text-xl">add</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 6 -->
+<article class="flex flex-col group mt-8">
+<div class="relative bg-surface-container-lowest rounded-[1.5rem] p-3 mb-4 transition-transform duration-300 group-hover:-translate-y-2">
+<div class="aspect-[4/5] overflow-visible mb-2">
+<img alt="Challah" class="w-full h-full object-cover rounded-DEFAULT shadow-lg -mt-8 mb-4" data-alt="beautifully braided shiny golden challah bread glazed with egg wash on a parchment paper" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSorALEv32NWkj0YdW-DCgcKEaUnKiNEArsbERBMW9SGVnmTZkCRM7VaJm45CT8LucRlsaj_E7R_uVtbWrEsndtCyhQvW8pxsLDl07oVwwHa3TLRrrG5NE7J_jUPgKdNmiew8dFKrLFbZYD7yH7hKWJ2sGZ9P_ov9tTXrkvKRxLlmkOBjB_dNNuGGLV6mCVkgf6O0n6cw5BUGWwA8rL950Ffmy4uOS7mgxW-vktEY7pv1JEtdSy6q1rgVW1G0JpiOGp4ex-yOs5_U"/>
+</div>
+<div class="flex items-center justify-between mb-1">
+<div class="flex items-center gap-1 text-[#8C4B10]">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-sans-ui font-bold text-xs">5.0</span>
+</div>
+<span class="text-[10px] uppercase tracking-widest font-sans-ui font-bold text-[#1E1B18]/40">Braided</span>
+</div>
+<h3 class="font-serif-display text-lg font-bold text-on-surface leading-tight mb-1">Honey Challah</h3>
+<p class="font-sans-ui text-xs text-on-surface-variant/70 line-clamp-2 mb-4 leading-relaxed">Rich, braided bread sweetened with pure organic honey.</p>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-sans-ui font-extrabold text-primary text-lg">₹550</span>
+<button class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary-container text-white flex items-center justify-center active:scale-90 transition-transform shadow-md">
+<span class="material-symbols-outlined text-xl">add</span>
+</button>
+</div>
+</div>
+</article>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-[#FFF8F2]/80 dark:bg-stone-900/80 backdrop-blur-2xl z-50 rounded-t-[32px] shadow-[0_-8px_24px_rgba(30,27,24,0.04)]">
+<div class="flex flex-col items-center justify-center bg-gradient-to-br from-[#8C4B10] to-[#AA6328] text-white rounded-full px-5 py-2 scale-110 -translate-y-1 transition-all">
+<span class="material-symbols-outlined">bakery_dining</span>
+<span class="font-['Nunito'] text-[10px] font-bold uppercase tracking-widest mt-1">Shop</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#1E1B18]/50 dark:text-stone-500 px-4 py-2 hover:text-[#8C4B10] dark:hover:text-[#C2773A] transition-colors">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-['Nunito'] text-[10px] font-bold uppercase tracking-widest mt-1">Orders</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#1E1B18]/50 dark:text-stone-500 px-4 py-2 hover:text-[#8C4B10] dark:hover:text-[#C2773A] transition-colors">
+<span class="material-symbols-outlined">favorite</span>
+<span class="font-['Nunito'] text-[10px] font-bold uppercase tracking-widest mt-1">Wishlist</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#1E1B18]/50 dark:text-stone-500 px-4 py-2 hover:text-[#8C4B10] dark:hover:text-[#C2773A] transition-colors">
+<span class="material-symbols-outlined">person</span>
+<span class="font-['Nunito'] text-[10px] font-bold uppercase tracking-widest mt-1">Profile</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#1E1B18]/50 dark:text-stone-500 px-4 py-2 hover:text-[#8C4B10] dark:hover:text-[#C2773A] transition-colors">
+<span class="material-symbols-outlined">history</span>
+<span class="font-['Nunito'] text-[10px] font-bold uppercase tracking-widest mt-1">History</span>
+</div>
+</nav>
+<!-- Floating Action Button for Cart (Optional addition for UX) -->
+<div class="fixed bottom-28 right-6 z-40">
+<button class="w-16 h-16 rounded-full bg-primary text-white shadow-xl flex items-center justify-center relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-primary to-primary-container opacity-100"></div>
+<span class="material-symbols-outlined text-3xl relative z-10" style="font-variation-settings: 'FILL' 1;">shopping_bag</span>
+<div class="absolute top-3 right-3 w-5 h-5 bg-tertiary rounded-full border-2 border-primary-fixed flex items-center justify-center text-[10px] font-bold z-20">2</div>
+</button>
+</div>
+</body></html>

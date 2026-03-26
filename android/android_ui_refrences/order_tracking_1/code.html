@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,800;1,400&amp;family=Nunito:wght@400;600;700;800&amp;family=Newsreader:opsz,wght@6..72,400;6..72,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "outline-variant": "#d8c2b4",
+              "on-primary": "#ffffff",
+              "primary-fixed": "#ffdcc5",
+              "outline": "#867468",
+              "on-tertiary-fixed": "#3c0700",
+              "surface-container-high": "#eee7e1",
+              "surface-bright": "#fff8f2",
+              "surface-container-lowest": "#ffffff",
+              "surface-container": "#f3ede7",
+              "on-tertiary": "#ffffff",
+              "surface-container-highest": "#e8e1dc",
+              "on-tertiary-fixed-variant": "#83260e",
+              "on-background": "#1e1b18",
+              "on-surface-variant": "#534439",
+              "tertiary-container": "#c05237",
+              "surface-container-low": "#f9f2ec",
+              "tertiary-fixed": "#ffdad2",
+              "surface-variant": "#e8e1dc",
+              "secondary-container": "#ffab69",
+              "inverse-surface": "#33302c",
+              "on-error-container": "#93000a",
+              "inverse-primary": "#ffb782",
+              "secondary-fixed": "#ffdcc4",
+              "background": "#fff8f2",
+              "secondary-fixed-dim": "#ffb780",
+              "on-secondary-container": "#783d01",
+              "surface-tint": "#8f4e13",
+              "on-primary-fixed-variant": "#703800",
+              "primary-fixed-dim": "#ffb782",
+              "error-container": "#ffdad6",
+              "surface-dim": "#dfd9d3",
+              "tertiary-fixed-dim": "#ffb4a2",
+              "on-secondary": "#ffffff",
+              "on-surface": "#1e1b18",
+              "secondary": "#8e4e14",
+              "inverse-on-surface": "#f6f0ea",
+              "primary": "#8c4b10",
+              "on-primary-container": "#fffbff",
+              "on-tertiary-container": "#fffbff",
+              "surface": "#fff8f2",
+              "on-secondary-fixed": "#2f1400",
+              "on-secondary-fixed-variant": "#6f3800",
+              "tertiary": "#a03b21",
+              "primary-container": "#aa6328",
+              "error": "#ba1a1a",
+              "on-primary-fixed": "#301400",
+              "on-error": "#ffffff"
+            },
+            fontFamily: {
+              "headline": ["Newsreader", "serif"],
+              "body": ["Plus Jakarta Sans", "sans-serif"],
+              "label": ["Plus Jakarta Sans", "sans-serif"],
+              "serif-display": ["Playfair Display", "serif"],
+              "sans-ui": ["Nunito", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+      }
+      .step-active { color: #C2773A; }
+      .step-complete { color: #52B788; }
+      .glass-nav { backdrop-filter: blur(16px); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-fixed min-h-screen pb-32">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 w-full z-50 bg-[#FFF8F2]/80 dark:bg-stone-900/80 backdrop-blur-xl shadow-[0_8px_24px_rgba(30,27,24,0.06)] flex items-center justify-between px-6 py-4">
+<div class="flex items-center gap-4">
+<button class="hover:opacity-80 transition-opacity active:scale-95 duration-200">
+<span class="material-symbols-outlined text-[#8C4B10]">arrow_back</span>
+</button>
+<h1 class="font-serif-display text-2xl font-bold tracking-tight text-[#8C4B10]">The Artisanal Hearth</h1>
+</div>
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-fixed shadow-sm">
+<img alt="Profile picture" data-alt="Close up studio portrait of a friendly man with a warm smile, soft natural lighting, professional photography style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDT22kF4lrPevm0ViuojWO98mZ6_kByLBTn178giXWAC01IYjHQSv4o5-mIEfK0GAaWXAahra94u5THMyQ2NNrz4yrcAc5jsmku_9Dq59pzj7piyPkYI_wK4dk-UqphV_Oj6jIawGy6WaufmRRCsozS0dDoEcYjBuQu_WHObn88KdwLHsLT0Zh3_A92iyrnzjH_WGsVx4HtiEFPwEtSFBa-_wNWdb0R62ZlVxrohOOXrRajv1vTTa80gK7rUBQFQsSMqH4c5GlIP2g"/>
+</div>
+</header>
+<main class="pt-24 px-6 max-w-2xl mx-auto space-y-8">
+<!-- Order Header -->
+<section class="space-y-1">
+<div class="flex justify-between items-end">
+<div>
+<p class="font-label text-xs uppercase tracking-[0.15em] text-outline mb-1">Order Details</p>
+<h2 class="font-headline text-3xl font-bold text-on-surface">#AH-829341</h2>
+</div>
+<p class="font-sans-ui text-sm font-semibold text-primary">Oct 24, 2023</p>
+</div>
+</section>
+<!-- Status Stepper (Bento Style Container) -->
+<section class="bg-surface-container-lowest p-8 rounded-lg shadow-[0_12px_40px_rgba(140,75,16,0.05)] relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-3xl"></div>
+<h3 class="font-headline text-xl font-bold mb-8">Current Progress</h3>
+<div class="relative space-y-10">
+<!-- Progress Line -->
+<div class="absolute left-[11px] top-2 bottom-2 w-[2px] bg-surface-container-highest"></div>
+<!-- Completed Line Overlay -->
+<div class="absolute left-[11px] top-2 h-[55%] w-[2px] bg-[#52B788]"></div>
+<!-- Step: Placed -->
+<div class="flex items-start gap-6 relative z-10">
+<div class="w-6 h-6 rounded-full bg-[#52B788] flex items-center justify-center ring-4 ring-white shadow-sm">
+<span class="material-symbols-outlined text-white text-[16px]" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+<div>
+<p class="font-sans-ui text-sm font-extrabold uppercase tracking-widest text-[#52B788]">Placed</p>
+<p class="text-xs text-outline mt-0.5">10:30 AM • We've received your order</p>
+</div>
+</div>
+<!-- Step: Accepted -->
+<div class="flex items-start gap-6 relative z-10">
+<div class="w-6 h-6 rounded-full bg-[#52B788] flex items-center justify-center ring-4 ring-white shadow-sm">
+<span class="material-symbols-outlined text-white text-[16px]" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+<div>
+<p class="font-sans-ui text-sm font-extrabold uppercase tracking-widest text-[#52B788]">Accepted</p>
+<p class="text-xs text-outline mt-0.5">10:35 AM • The baker is ready</p>
+</div>
+</div>
+<!-- Step: Preparing (Active) -->
+<div class="flex items-start gap-6 relative z-10">
+<div class="w-6 h-6 rounded-full bg-[#C2773A] flex items-center justify-center ring-4 ring-[#C2773A]/20 shadow-[0_0_15px_rgba(194,119,58,0.4)]">
+<div class="w-2 h-2 rounded-full bg-white"></div>
+</div>
+<div>
+<p class="font-sans-ui text-sm font-extrabold uppercase tracking-widest text-[#C2773A]">Preparing</p>
+<p class="text-xs text-on-surface font-medium mt-0.5">10:45 AM • In the oven right now</p>
+</div>
+</div>
+<!-- Step: Dispatched -->
+<div class="flex items-start gap-6 relative z-10 opacity-40">
+<div class="w-6 h-6 rounded-full bg-surface-container-highest flex items-center justify-center ring-4 ring-white"></div>
+<div>
+<p class="font-sans-ui text-sm font-extrabold uppercase tracking-widest text-outline">Dispatched</p>
+<p class="text-xs text-outline mt-0.5">Estimated 11:15 AM</p>
+</div>
+</div>
+<!-- Step: Delivered -->
+<div class="flex items-start gap-6 relative z-10 opacity-40">
+<div class="w-6 h-6 rounded-full bg-surface-container-highest flex items-center justify-center ring-4 ring-white"></div>
+<div>
+<p class="font-sans-ui text-sm font-extrabold uppercase tracking-widest text-outline">Delivered</p>
+<p class="text-xs text-outline mt-0.5">Hand-delivered with care</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Order Content & Address (Grid) -->
+<div class="grid md:grid-cols-2 gap-6">
+<!-- Items Card -->
+<section class="bg-surface-container-low p-6 rounded-lg space-y-4">
+<h4 class="font-sans-ui text-xs font-bold uppercase tracking-[0.2em] text-primary">Your Treats</h4>
+<div class="space-y-4">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded bg-white overflow-hidden shadow-sm">
+<img alt="Sourdough Loaf" data-alt="Close-up of a rustic artisan sourdough loaf with a beautiful flour-dusted crust on a wooden board" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmpMvVfZxL4Itog_cqqEI16KkEfhFQoSL22KXJZOHbTgW0Tb4aGG8hrB1u5nsjnMiEGW5i0CpqbsSeji40HPFiCfIy6nAyp1vSth-WD6__XyAuaOxpO0KCpbdYmaF2VRNR0roXTfrrO0pLDtTg-0yuwa6A6kiAH0xm8HJA7zUEspp5Yt7e3FDMUayikSkq8x2wExn9v9gXqjswi4PfQXr9tguHymLCn5puc6tlQoWec9koQ6k_KK7PR5Y0StlsjLWYdFrCliYyBro"/>
+</div>
+<div class="flex-1">
+<p class="text-sm font-bold">Country Sourdough</p>
+<p class="text-xs text-outline">1 unit • $9.50</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded bg-white overflow-hidden shadow-sm">
+<img alt="Croissant" data-alt="Golden flaky buttery croissants stacked on a ceramic plate, warm morning light, cinematic food photography" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATqsyfpc9xuhXj786d6793H8pSwVORZg-jWJnEWlAMWSvXWTb8x1kj-ilp1YnI9wy4B3zbsCgwRAeZ-UWdpP9SwqR9N_wAuoApZlrLgeBPtxOG_78hbQEiO4Bdp2pEKYnK8KemB185T6GVYqJwv4WX83RVZMbjKU0cad9qI980IK_vHtWAC00evsUniOg_zXje8VsxVvWEuSFu9Ca1ot5XBwJIRBiHvd7ZCA04Y5FgyKBjwvhypjP51yxifRSn-cqzx5cUpzOmMo8"/>
+</div>
+<div class="flex-1">
+<p class="text-sm font-bold">Honey Croissant</p>
+<p class="text-xs text-outline">2 units • $11.00</p>
+</div>
+</div>
+</div>
+<div class="pt-4 mt-4 border-t border-outline-variant/20 flex justify-between items-center">
+<span class="text-sm font-semibold">Total</span>
+<span class="text-lg font-bold text-primary">$20.50</span>
+</div>
+</section>
+<!-- Delivery Card -->
+<section class="bg-surface-container-low p-6 rounded-lg flex flex-col justify-between">
+<div>
+<h4 class="font-sans-ui text-xs font-bold uppercase tracking-[0.2em] text-primary mb-4">Delivery to</h4>
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-primary text-xl">location_on</span>
+<address class="not-italic">
+<p class="text-sm font-bold">The Willow House</p>
+<p class="text-sm text-outline leading-relaxed">42 Oak Avenue, Suite 102<br/>Hearthside, OR 97005</p>
+</address>
+</div>
+</div>
+<div class="mt-8">
+<button class="w-full bg-white text-primary border border-primary/10 py-3 rounded-full text-sm font-bold hover:bg-primary/5 transition-colors flex items-center justify-center gap-2 shadow-sm">
+<span class="material-symbols-outlined text-lg">support_agent</span>
+                        Need help?
+                    </button>
+</div>
+</section>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-[#FFF8F2]/80 dark:bg-stone-900/80 backdrop-blur-2xl z-50 rounded-t-[32px] shadow-[0_-8px_24px_rgba(30,27,24,0.04)]">
+<a class="flex flex-col items-center justify-center text-[#1E1B18]/50 dark:text-stone-500 px-4 py-2 hover:text-[#8C4B10] transition-colors" href="#">
+<span class="material-symbols-outlined">bakery_dining</span>
+<span class="font-sans-ui text-[10px] font-bold uppercase tracking-widest mt-1">Shop</span>
+</a>
+<!-- Active Tab: Orders -->
+<a class="flex flex-col items-center justify-center bg-gradient-to-br from-[#8C4B10] to-[#AA6328] text-white rounded-full px-5 py-2 scale-110 -translate-y-1 transition-all shadow-lg" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+<span class="font-sans-ui text-[10px] font-bold uppercase tracking-widest mt-1">Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#1E1B18]/50 dark:text-stone-500 px-4 py-2 hover:text-[#8C4B10] transition-colors" href="#">
+<span class="material-symbols-outlined">favorite</span>
+<span class="font-sans-ui text-[10px] font-bold uppercase tracking-widest mt-1">Wishlist</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#1E1B18]/50 dark:text-stone-500 px-4 py-2 hover:text-[#8C4B10] transition-colors" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-sans-ui text-[10px] font-bold uppercase tracking-widest mt-1">Profile</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#1E1B18]/50 dark:text-stone-500 px-4 py-2 hover:text-[#8C4B10] transition-colors" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-sans-ui text-[10px] font-bold uppercase tracking-widest mt-1">History</span>
+</a>
+</nav>
+</body></html>

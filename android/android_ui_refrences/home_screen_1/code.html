@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Artisanal Hearth - Gourmet Bakery</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..800;1,6..72,400..800&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "secondary-fixed": "#ffdcc4",
+              "surface-bright": "#fff8f2",
+              "on-tertiary-fixed": "#3c0700",
+              "tertiary-fixed": "#ffdad2",
+              "surface": "#fff8f2",
+              "tertiary": "#a03b21",
+              "surface-tint": "#8f4e13",
+              "secondary-fixed-dim": "#ffb780",
+              "primary": "#8c4b10",
+              "on-surface-variant": "#534439",
+              "on-error-container": "#93000a",
+              "on-background": "#1e1b18",
+              "primary-fixed": "#ffdcc5",
+              "outline": "#867468",
+              "outline-variant": "#d8c2b4",
+              "on-primary-fixed-variant": "#703800",
+              "primary-fixed-dim": "#ffb782",
+              "on-error": "#ffffff",
+              "on-primary": "#ffffff",
+              "on-secondary": "#ffffff",
+              "on-tertiary-fixed-variant": "#83260e",
+              "error": "#ba1a1a",
+              "surface-container-low": "#f9f2ec",
+              "secondary": "#8e4e14",
+              "surface-variant": "#e8e1dc",
+              "primary-container": "#aa6328",
+              "on-tertiary": "#ffffff",
+              "surface-container": "#f3ede7",
+              "tertiary-container": "#c05237",
+              "on-surface": "#1e1b18",
+              "inverse-primary": "#ffb782",
+              "on-primary-container": "#fffbff",
+              "background": "#fff8f2",
+              "on-primary-fixed": "#301400",
+              "error-container": "#ffdad6",
+              "surface-dim": "#dfd9d3",
+              "inverse-surface": "#33302c",
+              "on-secondary-fixed": "#2f1400",
+              "inverse-on-surface": "#f6f0ea",
+              "on-tertiary-container": "#fffbff",
+              "surface-container-highest": "#e8e1dc",
+              "on-secondary-container": "#783d01",
+              "surface-container-high": "#eee7e1",
+              "on-secondary-fixed-variant": "#6f3800",
+              "secondary-container": "#ffab69",
+              "tertiary-fixed-dim": "#ffb4a2",
+              "surface-container-lowest": "#ffffff"
+            },
+            fontFamily: {
+              "headline": ["Newsreader", "serif"],
+              "body": ["Plus Jakarta Sans", "sans-serif"],
+              "label": ["Plus Jakarta Sans", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .glass-effect { backdrop-filter: blur(24px); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface antialiased min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#FFF8F2]/80 dark:bg-stone-900/80 backdrop-blur-xl">
+<div class="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
+<div class="flex items-center gap-2 group cursor-pointer">
+<span class="material-symbols-outlined text-[#C2773A]" data-icon="location_on">location_on</span>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Deliver to</span>
+<div class="flex items-center gap-1">
+<span class="font-headline font-bold text-lg leading-none">123 Maple St</span>
+<span class="material-symbols-outlined text-sm text-[#C2773A]">expand_more</span>
+</div>
+</div>
+</div>
+<div class="font-serif text-[#8C4B10] dark:text-[#C2773A] text-xl font-black">The Artisanal Hearth</div>
+<button class="relative p-2 hover:opacity-80 transition-opacity active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-tertiary rounded-full"></span>
+</button>
+</div>
+</header>
+<main class="pt-24 px-6 space-y-10 max-w-7xl mx-auto">
+<!-- Search Bar -->
+<section class="relative">
+<div class="flex items-center bg-surface-container-highest px-5 py-4 rounded-full shadow-sm">
+<span class="material-symbols-outlined text-outline mr-3" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 w-full text-on-surface placeholder:text-outline-variant font-medium" placeholder="Search for sourdough, pastries..." type="text"/>
+</div>
+</section>
+<!-- Banner Carousel -->
+<section class="overflow-x-auto hide-scrollbar flex gap-4 -mx-6 px-6 snap-x">
+<div class="relative min-w-[85%] md:min-w-[400px] aspect-[16/8] rounded-lg overflow-hidden snap-center group">
+<img class="absolute inset-0 w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105" data-alt="close-up of golden brown artisan sourdough bread with flour dusting on a rustic wooden table with soft morning light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDH8-cbvEpAb7E8g1Oh_lJZLdT1wUV7adGUacDmCXoSq5FNSrVj7GQ04FeffPEd2WLmNpPCqf2TubsYY92stzNBLluTjIoa6zTTxm4UUBg0o5sSmB7fojBec7zkBUkkLuGDkzRIiSpXdsD-8NFwKGNERZ899tPjn_pRFihtiBPmkkMKMQ57xltv1eSH0SgEXTGSlThf7RUENd_E52ub71eHnXneBDlEB2JN3VI39iAkyrg49u0ICE_Yso_WWPqZqmnajFy9c8kXehU"/>
+<div class="absolute inset-0 bg-gradient-to-r from-[#8C4B10]/80 to-transparent flex flex-col justify-center p-8 text-white">
+<span class="text-xs font-bold tracking-widest uppercase mb-2">Baker's Choice</span>
+<h2 class="font-headline text-3xl font-bold mb-1">30% off all pastries</h2>
+<p class="text-sm opacity-90 max-w-[200px]">Fresh from the oven every morning.</p>
+</div>
+</div>
+<div class="relative min-w-[85%] md:min-w-[400px] aspect-[16/8] rounded-lg overflow-hidden snap-center group">
+<img class="absolute inset-0 w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105" data-alt="selection of colorful french macarons in a luxury box with soft pastel lighting and elegant presentation" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhDt7-He4mGx6r0AhBu2a-TZw3UKS_imMdUSRHMWUBT4h_Nqx8WiiMXMFgitwAYWc1K4UHSfAv9uyh9dgSpK3NCr3_mvI7HuMjzmHe5nvWsIFoyBwlylqS3QeBaruKQcU4OWntpX-G5lgfiv4bglQyYzKJKfgLh7XBgzRisYZn2WULRVLxwKazGFUq8GKY2uEZzNHV2i6rwBM4weBQKfznrGsI6QMPJpsj2WOMRIMPG_jbHyeFJqIoOT2BJfdHIJVqv4f7yjXmIXQ"/>
+<div class="absolute inset-0 bg-gradient-to-r from-tertiary/80 to-transparent flex flex-col justify-center p-8 text-white">
+<span class="text-xs font-bold tracking-widest uppercase mb-2">Weekend Special</span>
+<h2 class="font-headline text-3xl font-bold mb-1">Sweet Box Sets</h2>
+<p class="text-sm opacity-90 max-w-[200px]">Perfect for gifting or sharing.</p>
+</div>
+</div>
+</section>
+<!-- Category Row -->
+<section class="space-y-4">
+<h3 class="font-headline text-2xl font-bold px-2">Explore Craft</h3>
+<div class="flex gap-6 overflow-x-auto hide-scrollbar -mx-6 px-6">
+<div class="flex flex-col items-center gap-3 group cursor-pointer">
+<div class="w-20 h-20 rounded-full overflow-hidden p-1 bg-surface-container-low group-hover:bg-primary-fixed transition-colors">
+<img class="w-full h-full object-cover rounded-full" data-alt="elegant chocolate layer cake with rich ganache topping on a marble pedestal" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3KsPr_Zn99nRwF6ObhngW5kf6sMYhltshPZPnsMa1OZ-SABSpKdD0_QZbxAz_DvSa-_lfCY1POmSi-8P40GpCK5gVTqFpaJAfSnHL_V9edSlkGYf6uesNbiFKUXjprmBsgkF3-dQhighuO-dQQ39GGKWrM8REmK7UeRCcJoRR5qyvVGBGaMTVy3JJUlNGiwfe9tn1Vp9tu3PmqAm6UieIg9UX5vMPlABHjFEX_8-drvcgACQ85DGTt__cL22CbPwbF37ZCGyhBqA"/>
+</div>
+<span class="text-xs font-bold tracking-wide uppercase text-on-surface-variant">Cakes</span>
+</div>
+<div class="flex flex-col items-center gap-3 group cursor-pointer">
+<div class="w-20 h-20 rounded-full overflow-hidden p-1 bg-surface-container-low group-hover:bg-primary-fixed transition-colors">
+<img class="w-full h-full object-cover rounded-full" data-alt="golden flaky buttery croissants piled high in a wicker basket" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB16J457ikokKDdp6DTlnIV7-qNNX9L-Jy5g551m4xIyLRnkuVBr8bh_4RH3KmffJuYvINIPFPLWoosYgmNgAEHqFYPqSyc9BHMvjebDJhfMQfy3h39-pjyP9rtU5Bo1AjLNAZInhrmyyHW8cKUYc2wUqjAd0d6M4He1hEXwcrarj4Mkrd8L3wXOWdwFUGMiPFzaiBgn6qXoSRAL3I6NHVyl_lzH4HJJecaC-6wD2vxbnAFZkwRo9S1v3r8fqMah7ZR-V8rseuvfAQ"/>
+</div>
+<span class="text-xs font-bold tracking-wide uppercase text-on-surface-variant">Pastries</span>
+</div>
+<div class="flex flex-col items-center gap-3 group cursor-pointer">
+<div class="w-20 h-20 rounded-full overflow-hidden p-1 bg-surface-container-low group-hover:bg-primary-fixed transition-colors">
+<img class="w-full h-full object-cover rounded-full" data-alt="rustic crusty loaf of artisanal bread sliced on a wooden board" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4rejnYkQ2txrgZS_mBxPI-O4-bJRjkW5jIIZDbSDrm-fDUkzc0fBoNS12lXYfD4FCrizGAR0tSviHo7dLb_mCC-xVddk2TKSpdmFLXaVYtwP5lr3LKS9BFWSn4mwdL00G-Wc4rgBDmWHGxacPn_BrHrifSWaTrS31QYJ5-6mVwm2iJnvhvr7SZ1eSn7XQCgpnXyHks9hs73VuRP0pdD4WUjrpRUL97uXDKXxLj7OGo0aAeHd4zJmsn-_vJ8zIGEjnnAO3HOcr0NI"/>
+</div>
+<span class="text-xs font-bold tracking-wide uppercase text-on-surface-variant">Breads</span>
+</div>
+<div class="flex flex-col items-center gap-3 group cursor-pointer">
+<div class="w-20 h-20 rounded-full overflow-hidden p-1 bg-surface-container-low group-hover:bg-primary-fixed transition-colors">
+<img class="w-full h-full object-cover rounded-full" data-alt="savory cheese puffs and gourmet appetizers on a stone serving plate" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAu79dm6cZHpc3O3iT2C1sd_fXPLIcWLYKf9wTpgEeu9Jcamo3WRdZ7qxORx5StFv54-Fji-1Bz3EK8K-LHj3a1Y8ea6a6uqAsROybdxTaJJGcICevYrpq1OoC-Rzdqein6mk2BemlqTC0c18_ZAZpctGoldRbwixoXXvA6j6Gq2o8-2WPDVePWati-xMBTbYnyKg6L-LtNErLDze7Myu9H31qTQ0E3Qj47QPzj2v4gKTWGSQiT8Z9Znk17Nivv0_hbqZo4m12vrDA"/>
+</div>
+<span class="text-xs font-bold tracking-wide uppercase text-on-surface-variant">Snacks</span>
+</div>
+<div class="flex flex-col items-center gap-3 group cursor-pointer">
+<div class="w-20 h-20 rounded-full overflow-hidden p-1 bg-surface-container-low group-hover:bg-primary-fixed transition-colors">
+<img class="w-full h-full object-cover rounded-full" data-alt="steaming hot latte with intricate heart-shaped foam art in a ceramic cup" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnfA_wp7vmrU0Sdh1OCReCRAE9alOq8jissimByfJ2s6wYWnWNqlP5OzbVOm2UT-TuaZep3_bDfwCPeSVBKtb7pZTcWpSSBmtNcWohP9IyzU7hEKTZsyKZa27GXHgwNlHajZZq-gaJf9bOUvuovqWK_ndiY-nP4Erg_C8bK6unsIfuAysSh1EMEJ7WXtQe9zLVWhIniOfWNFJQWTywGyZ-kWuReOzWbOm3HiMVy_WX6K12zXFg69C07JWhX1NEjio7Gf1HNXSVLaI"/>
+</div>
+<span class="text-xs font-bold tracking-wide uppercase text-on-surface-variant">Beverages</span>
+</div>
+</div>
+</section>
+<!-- Bestsellers Section -->
+<section class="space-y-6">
+<div class="flex justify-between items-end px-2">
+<h3 class="font-headline text-3xl font-bold leading-none">Bestsellers</h3>
+<span class="text-primary font-bold text-sm tracking-tight cursor-pointer hover:underline underline-offset-4">View All</span>
+</div>
+<div class="flex gap-6 overflow-x-auto hide-scrollbar -mx-6 px-6 pb-4">
+<!-- Product Card 1 -->
+<div class="min-w-[200px] bg-surface-container-lowest rounded-lg p-3 relative group">
+<div class="relative overflow-hidden rounded-sm mb-4 aspect-square">
+<img class="w-full h-full object-cover transition-transform group-hover:scale-105" data-alt="close up of gooey chocolate chip cookies stacked with visible melting chocolate chunks" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBL14nqvVCob1rO0FvIeaz3hYOuQj7DJvbmJRW2t7L_f1hcC2YXsSed5CwbdlWJfEgehgTVkr-ThR3ACm-q51bt6Sh0bb3ErGSEXFqg0iJr4fe3bHcJGsmGGYJiCdtOpDeHE5GMyfP72SvTTohUIrkKIEzUPEqJjWO8o1Lk0TFgblwhAt3jzZVdtW3eNStF2H-sW3Ein7C4Cu0Qar0U1OpVPQ4KCWwc75JQKQWTvBPaX0RKzMtms1LluTYa-z5RklFe4KNZLwbEbeY"/>
+</div>
+<div class="space-y-1">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-amber-500" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-xs font-bold text-on-surface-variant">4.9</span>
+</div>
+<h4 class="font-headline text-lg font-bold">Midnight Cookie</h4>
+<p class="text-primary font-bold">$4.50</p>
+</div>
+<button class="absolute bottom-4 right-4 w-10 h-10 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+</div>
+<!-- Product Card 2 -->
+<div class="min-w-[200px] bg-surface-container-lowest rounded-lg p-3 relative group">
+<div class="relative overflow-hidden rounded-sm mb-4 aspect-square">
+<img class="w-full h-full object-cover transition-transform group-hover:scale-105" data-alt="rich creamy latte in a glass cup with artistic foam on a marble table next to a croissant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPTG1UbsxGgOkpC1oNsKwCra23VYcBbXX1pymRJR2MiPPxSvkr5QCrop2Pai6820POTuP3bgG0ulSqhPhSCMtqd_Rl06kFjoDoFDhqbCJM_qvHCRI5lw2L6M_EaqFJN2ZKBm84ZxVeOOWtEsBlk6bbB3YFiBTJvG82RGW7S_Mfc5PgUOw1_fcGynz-RelozYYZzUoplUJr1ZmgbbfE__uuIYjoh5FHFhloA_TlhHfoJkXaYUmHICqQgwxrTLcvNI0OiAmjqwqPk2M"/>
+</div>
+<div class="space-y-1">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-amber-500" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-xs font-bold text-on-surface-variant">4.8</span>
+</div>
+<h4 class="font-headline text-lg font-bold">Hazelnut Latte</h4>
+<p class="text-primary font-bold">$5.25</p>
+</div>
+<button class="absolute bottom-4 right-4 w-10 h-10 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+</div>
+<!-- Product Card 3 -->
+<div class="min-w-[200px] bg-surface-container-lowest rounded-lg p-3 relative group">
+<div class="relative overflow-hidden rounded-sm mb-4 aspect-square">
+<img class="w-full h-full object-cover transition-transform group-hover:scale-105" data-alt="buttery pain au chocolat with dark chocolate stripes emerging from golden layers" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKunWFLX1ojQKj-pbQUAbUznryseLQURDgwlJteDhLpJp7MHviqsZb8-15vP-VYE4J_sNlY_fQeaOHNN8ARbVu3Qo-gAnwcApbZvvLt2ZzE4OlZpdkzMT-uleMCXfVlmSGGbMrZABzJleQuiYI7j1R_z0tPvCkH962MhW6PHOs2t3uvhjp2J8GXe54Xd_PfRzDsKjX6IuIU4NO4RGjEbV0VOpioiUSyw3-BQDmvx29RY-V_WoDKfxU7acQQbzXIoEafuBuK-G86uI"/>
+</div>
+<div class="space-y-1">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-amber-500" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-xs font-bold text-on-surface-variant">5.0</span>
+</div>
+<h4 class="font-headline text-lg font-bold">Pain au Chocolat</h4>
+<p class="text-primary font-bold">$3.95</p>
+</div>
+<button class="absolute bottom-4 right-4 w-10 h-10 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Special Occasion Section (Bento Grid) -->
+<section class="space-y-6 pb-12">
+<h3 class="font-headline text-3xl font-bold px-2">Special Occasion</h3>
+<div class="grid grid-cols-2 gap-4">
+<div class="relative h-64 rounded-lg overflow-hidden group">
+<img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="stunning minimalist tiered wedding cake decorated with fresh white flowers and eucalyptus leaves" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA91D-sQwz6_r7W--rAV9twg1n-m8w16M1xXsqtev6HyHmPBfXu9Yq2qpjwUdspfYcBngUwGqIOXuPcAU6nWWzHxUBOQFsH-jxgT6JtYhc_sLmJCUDwSVYdykj2x67zeMedSzaxjKcAkQ5FH22DAcks87BfO88Qds1J9Vi3wijofM7Kl_Zlc5OAxBAh0iB42x39F8d6BJGMdG6-9FelD0VeOEHldVOvyBwo5pYXW8GmRa_Kwgi7MdWFeN8d6SgSUEQWbu0_XuR7E7Q"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#1E1B18]/90 via-[#1E1B18]/20 to-transparent p-6 flex flex-col justify-end">
+<h4 class="text-white font-headline text-xl font-bold">Wedding Tiers</h4>
+<p class="text-white/80 text-xs font-medium uppercase tracking-widest mt-1">Custom Crafted</p>
+</div>
+</div>
+<div class="relative h-64 rounded-lg overflow-hidden group">
+<img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="vibrant birthday cake with multi-colored sprinkles and festive candle on top against a soft peach background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOorh5RmJtNzcmSh8duCz3SmERz9uRmfXmkCdb1ns2gVyjFifexFDLzuWHG9sY_e9saKOMo7wBPTSmPcXVGd_DNHT5j1O8wgMVzlgEenUeJZeLeOrDnQP2Ae0s-eg4iEG2t6WvH5xIre_RoDEYkniUxvFkla5SNzlwabevsMtJVbDD0cklldp4oYIn0ke0paHLq-DRVfHGKXXanPffieTPughKPt7Wj14pEmnCbYpkgnSg5f-LClqDHnEkfeJJE3uf4tXp-Ca_ZVk"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#1E1B18]/90 via-[#1E1B18]/20 to-transparent p-6 flex flex-col justify-end">
+<h4 class="text-white font-headline text-xl font-bold">Birthday Joy</h4>
+<p class="text-white/80 text-xs font-medium uppercase tracking-widest mt-1">Personalized Designs</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Floating Action Button (Cart) -->
+<div class="fixed bottom-28 right-6 z-40">
+<button class="w-16 h-16 bg-gradient-to-br from-[#8C4B10] to-[#AA6328] rounded-full flex items-center justify-center text-white shadow-[0_8px_24px_rgba(30,27,24,0.15)] active:scale-95 transition-all">
+<span class="material-symbols-outlined text-2xl" data-icon="shopping_basket">shopping_basket</span>
+<span class="absolute -top-1 -right-1 w-6 h-6 bg-tertiary border-2 border-surface flex items-center justify-center rounded-full text-[11px] font-bold">3</span>
+</button>
+</div>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-[#FFF8F2]/80 dark:bg-stone-900/80 backdrop-blur-2xl rounded-t-[32px] shadow-[0_-4px_24px_rgba(30,27,24,0.06)] px-4 pb-6 pt-3 flex justify-around items-center">
+<div class="flex flex-col items-center justify-center text-[#8C4B10] dark:text-[#C2773A] bg-[#C2773A]/10 rounded-full px-5 py-2 cursor-pointer transition-all duration-300 ease-out active:scale-110">
+<span class="material-symbols-outlined" data-icon="home_filled" style="font-variation-settings: 'FILL' 1;">home_filled</span>
+<span class="font-sans text-[11px] font-semibold tracking-wider uppercase">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#1E1B18]/50 dark:text-stone-500 group cursor-pointer hover:text-[#8C4B10] transition-colors">
+<span class="material-symbols-outlined" data-icon="bakery_dining">bakery_dining</span>
+<span class="font-sans text-[11px] font-semibold tracking-wider uppercase">Bakery</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#1E1B18]/50 dark:text-stone-500 group cursor-pointer hover:text-[#8C4B10] transition-colors">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-sans text-[11px] font-semibold tracking-wider uppercase">Orders</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#1E1B18]/50 dark:text-stone-500 group cursor-pointer hover:text-[#8C4B10] transition-colors">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-sans text-[11px] font-semibold tracking-wider uppercase">Profile</span>
+</div>
+</nav>
+</body></html>

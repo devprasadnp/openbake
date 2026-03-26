@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OTP Verification - The Artisanal Hearth</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,700;1,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Playfair+Display:ital,wght@0,700;1,700&amp;family=Nunito:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary-container": "#783d01",
+              "secondary-fixed-dim": "#ffb780",
+              "background": "#fff8f2",
+              "surface-tint": "#8f4e13",
+              "surface-variant": "#e8e1dc",
+              "secondary-fixed": "#ffdcc4",
+              "on-error-container": "#93000a",
+              "inverse-primary": "#ffb782",
+              "secondary-container": "#ffab69",
+              "inverse-surface": "#33302c",
+              "on-surface-variant": "#534439",
+              "on-background": "#1e1b18",
+              "tertiary-fixed": "#ffdad2",
+              "surface-container-low": "#f9f2ec",
+              "tertiary-container": "#c05237",
+              "surface-container-high": "#eee7e1",
+              "primary-fixed": "#ffdcc5",
+              "outline": "#867468",
+              "on-tertiary-fixed": "#3c0700",
+              "on-primary": "#ffffff",
+              "outline-variant": "#d8c2b4",
+              "on-tertiary-fixed-variant": "#83260e",
+              "surface-container-highest": "#e8e1dc",
+              "surface-container-lowest": "#ffffff",
+              "surface-container": "#f3ede7",
+              "on-tertiary": "#ffffff",
+              "surface-bright": "#fff8f2",
+              "error": "#ba1a1a",
+              "tertiary": "#a03b21",
+              "primary-container": "#aa6328",
+              "on-secondary-fixed-variant": "#6f3800",
+              "on-primary-fixed": "#301400",
+              "on-error": "#ffffff",
+              "on-tertiary-container": "#fffbff",
+              "on-primary-container": "#fffbff",
+              "primary": "#8c4b10",
+              "surface": "#fff8f2",
+              "on-secondary-fixed": "#2f1400",
+              "on-surface": "#1e1b18",
+              "on-secondary": "#ffffff",
+              "inverse-on-surface": "#f6f0ea",
+              "secondary": "#8e4e14",
+              "error-container": "#ffdad6",
+              "primary-fixed-dim": "#ffb782",
+              "on-primary-fixed-variant": "#703800",
+              "tertiary-fixed-dim": "#ffb4a2",
+              "surface-dim": "#dfd9d3"
+            },
+            fontFamily: {
+              "headline": ["Newsreader", "serif"],
+              "serif-display": ["Playfair Display", "serif"],
+              "body": ["Nunito", "sans-serif"],
+              "label": ["Plus Jakarta Sans", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+      }
+      .glass-effect {
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body min-h-screen flex flex-col">
+<!-- Top Navigation Anchor (As per Shared Components JSON) -->
+<header class="fixed top-0 w-full z-50 bg-[#FFF8F2]/80 backdrop-blur-lg flex justify-between items-center px-6 py-4">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-[#F9F2EC] transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined text-[#8C4B10]">arrow_back</span>
+</button>
+<h1 class="font-headline italic tracking-tight text-xl text-[#8C4B10]">The Artisanal Hearth</h1>
+<div class="w-10"></div> <!-- Spacer for centering -->
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col items-center justify-center px-6 pt-24 pb-12">
+<div class="w-full max-w-md space-y-12">
+<!-- Branding/Identity Section -->
+<div class="text-center space-y-4">
+<div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-surface-container-low mb-4">
+<span class="material-symbols-outlined text-4xl text-primary" style="font-variation-settings: 'FILL' 1;">mark_email_read</span>
+</div>
+<h2 class="font-serif-display text-4xl text-on-surface leading-tight">Verify Your Identity</h2>
+<p class="text-on-surface-variant font-body text-lg">
+                    We've sent a 4-digit code to <br/>
+<span class="font-bold text-on-surface">+1 (555) 000-8892</span>
+<button class="ml-2 text-primary text-sm font-label uppercase tracking-widest hover:underline active:scale-95 transition-all">Change</button>
+</p>
+</div>
+<!-- OTP Input Section -->
+<form action="#" class="space-y-10">
+<div class="flex justify-center gap-4">
+<!-- OTP Box 1 -->
+<input autofocus="" class="w-16 h-16 text-center text-2xl font-bold bg-surface-container-highest border-none rounded-[12px] focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-all text-on-surface" maxlength="1" type="text"/>
+<!-- OTP Box 2 -->
+<input class="w-16 h-16 text-center text-2xl font-bold bg-surface-container-highest border-none rounded-[12px] focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-all text-on-surface" maxlength="1" type="text"/>
+<!-- OTP Box 3 -->
+<input class="w-16 h-16 text-center text-2xl font-bold bg-surface-container-highest border-none rounded-[12px] focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-all text-on-surface" maxlength="1" type="text"/>
+<!-- OTP Box 4 -->
+<input class="w-16 h-16 text-center text-2xl font-bold bg-surface-container-highest border-none rounded-[12px] focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-all text-on-surface" maxlength="1" type="text"/>
+</div>
+<div class="space-y-8">
+<!-- Submit Button -->
+<button class="w-full py-5 rounded-full bg-gradient-to-br from-[#8C4B10] to-[#AA6328] text-white font-label font-bold text-lg shadow-lg shadow-primary/20 active:scale-95 transition-all duration-200 uppercase tracking-widest" type="submit">
+                        Verify
+                    </button>
+<!-- Timer/Resend Section -->
+<div class="text-center">
+<p class="text-on-surface-variant font-label text-sm uppercase tracking-wider">
+                            Resend in <span class="text-primary font-bold">00:45</span>
+</p>
+<button class="mt-4 text-on-surface/30 font-bold uppercase tracking-widest text-xs cursor-not-allowed" disabled="" type="button">
+                            Resend Code Now
+                        </button>
+</div>
+</div>
+</form>
+<!-- Bottom Graphic Decor -->
+<div class="relative pt-12 opacity-40 grayscale pointer-events-none overflow-hidden h-32">
+<img alt="Artisan pastries" class="w-full h-full object-cover rounded-xl scale-110 rotate-1" data-alt="Soft focused close-up of freshly baked golden croissants and sourdough loaves on a rustic wooden table with flour dusting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpXBtUMm2J1fg6xuCmIxUDP44QQXzEL3EvqPnFH4pONx3tBbIzk02bydTKjmcdc_zbjOxasEdX_0v8RqhRRSMCFJzK3FStMJ2xWXG5x22-0F0H5KPeWWxqbgCFg--w-JtB1pw8LeCkglW3g7aOQfjo32Za9MvlF00xE_IV2TbZ9TklZUfBrqI3_Adfxq8bTlu3qQcmNg1I7nBA_hSXNy-fZmkepQLruroWCZLsKEXYRGoi0n23HQbvPySyJM1hW3Ry3zJ2ZIxV-PM"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background to-transparent"></div>
+</div>
+</div>
+</main>
+<!-- Contextual Footer suppression for Transactional screen (as per mandate) -->
+<!-- We do not render the BottomNavBar here because OTP is a task-focused sub-page -->
+</body></html>

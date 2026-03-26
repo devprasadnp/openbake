@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Checkout - Address Selection</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&amp;family=Nunito:wght@400;600;700&amp;family=Newsreader:opsz,wght@6..72,400;6..72,700;6..72,800&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-tint": "#8f4e13",
+              "on-tertiary": "#ffffff",
+              "surface-container-lowest": "#ffffff",
+              "on-primary-container": "#fffbff",
+              "primary-container": "#aa6328",
+              "on-secondary-fixed-variant": "#6f3800",
+              "on-primary": "#ffffff",
+              "secondary-container": "#ffab69",
+              "on-surface": "#1e1b18",
+              "outline-variant": "#d8c2b4",
+              "primary-fixed": "#ffdcc5",
+              "on-error-container": "#93000a",
+              "inverse-surface": "#33302c",
+              "inverse-on-surface": "#f6f0ea",
+              "tertiary-fixed": "#ffdad2",
+              "primary-fixed-dim": "#ffb782",
+              "secondary-fixed": "#ffdcc4",
+              "surface": "#fff8f2",
+              "primary": "#8c4b10",
+              "surface-variant": "#e8e1dc",
+              "surface-container-highest": "#e8e1dc",
+              "on-secondary-container": "#783d01",
+              "on-primary-fixed-variant": "#703800",
+              "tertiary-container": "#c05237",
+              "surface-container-low": "#f9f2ec",
+              "on-primary-fixed": "#301400",
+              "inverse-primary": "#ffb782",
+              "surface-dim": "#dfd9d3",
+              "background": "#fff8f2",
+              "error": "#ba1a1a",
+              "surface-container-high": "#eee7e1",
+              "surface-bright": "#fff8f2",
+              "on-surface-variant": "#534439",
+              "on-secondary-fixed": "#2f1400",
+              "tertiary": "#a03b21",
+              "surface-container": "#f3ede7",
+              "outline": "#867468",
+              "on-tertiary-fixed-variant": "#83260e",
+              "secondary-fixed-dim": "#ffb780",
+              "on-secondary": "#ffffff",
+              "tertiary-fixed-dim": "#ffb4a2",
+              "error-container": "#ffdad6",
+              "on-error": "#ffffff",
+              "on-tertiary-container": "#fffbff",
+              "on-tertiary-fixed": "#3c0700",
+              "secondary": "#8e4e14",
+              "on-background": "#1e1b18"
+            },
+            fontFamily: {
+              "headline": ["Newsreader", "serif"],
+              "body": ["Plus Jakarta Sans", "sans-serif"],
+              "label": ["Plus Jakarta Sans", "sans-serif"],
+              "serif": ["Playfair Display", "serif"],
+              "sans": ["Nunito", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+      }
+      body {
+        -webkit-font-smoothing: antialiased;
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-sans min-h-screen flex flex-col">
+<!-- TopAppBar Component -->
+<header class="bg-[#FFF8F2] dark:bg-stone-900 flex items-center justify-between px-6 py-4 w-full docked full-width top-0 z-40">
+<div class="flex items-center gap-4">
+<button class="text-[#8C4B10] hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-serif text-2xl font-bold tracking-tight text-[#8C4B10]">Checkout</h1>
+</div>
+<div class="w-10"></div> <!-- Spacer for center alignment feel -->
+</header>
+<main class="flex-grow flex flex-col px-6 pt-4 pb-32 max-w-2xl mx-auto w-full">
+<!-- Checkout Stepper -->
+<div class="flex items-center justify-between mb-12 mt-4 px-2">
+<div class="flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary-container flex items-center justify-center text-white shadow-lg">
+<span class="font-bold text-sm">1</span>
+</div>
+<span class="font-sans text-[10px] uppercase tracking-widest font-bold text-primary">Address</span>
+</div>
+<div class="h-[2px] flex-grow mx-4 bg-surface-container-highest rounded-full"></div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant">
+<span class="font-bold text-sm">2</span>
+</div>
+<span class="font-sans text-[10px] uppercase tracking-widest font-bold text-stone-400">Payment</span>
+</div>
+<div class="h-[2px] flex-grow mx-4 bg-surface-container-highest rounded-full"></div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant">
+<span class="font-bold text-sm">3</span>
+</div>
+<span class="font-sans text-[10px] uppercase tracking-widest font-bold text-stone-400">Review</span>
+</div>
+</div>
+<!-- Address Section Title -->
+<div class="mb-8">
+<h2 class="font-serif text-3xl font-bold text-on-surface mb-2">Delivery Address</h2>
+<p class="text-on-surface-variant text-sm font-sans">Where should we deliver your freshly baked goods?</p>
+</div>
+<!-- Saved Addresses List (Bento-style Card Stack) -->
+<div class="space-y-4">
+<!-- Home Address Card -->
+<label class="block cursor-pointer group">
+<input checked="" class="hidden peer" name="address" type="radio"/>
+<div class="p-6 rounded-DEFAULT bg-surface-container-lowest peer-checked:ring-2 peer-checked:ring-primary/20 transition-all duration-200 relative overflow-hidden flex items-start gap-4">
+<div class="absolute top-0 right-0 p-4 opacity-0 peer-checked:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="w-12 h-12 rounded-full bg-surface-container-low flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+</div>
+<div class="flex-grow pr-8">
+<div class="flex items-center gap-2 mb-1">
+<span class="font-sans text-[10px] uppercase tracking-widest font-bold text-primary">Home</span>
+</div>
+<h3 class="font-serif text-lg font-bold text-on-surface">123 Maple St</h3>
+<p class="text-on-surface-variant text-sm font-sans mt-1">Springfield, IL 62704</p>
+</div>
+</div>
+</label>
+<!-- Work Address Card -->
+<label class="block cursor-pointer group">
+<input class="hidden peer" name="address" type="radio"/>
+<div class="p-6 rounded-DEFAULT bg-surface-container-lowest peer-checked:ring-2 peer-checked:ring-primary/20 transition-all duration-200 relative overflow-hidden flex items-start gap-4">
+<div class="absolute top-0 right-0 p-4 opacity-0 peer-checked:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="w-12 h-12 rounded-full bg-surface-container-low flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined" data-icon="work">work</span>
+</div>
+<div class="flex-grow pr-8">
+<div class="flex items-center gap-2 mb-1">
+<span class="font-sans text-[10px] uppercase tracking-widest font-bold text-primary">Work</span>
+</div>
+<h3 class="font-serif text-lg font-bold text-on-surface">456 Baker St</h3>
+<p class="text-on-surface-variant text-sm font-sans mt-1">Chicago, IL 60601</p>
+</div>
+</div>
+</label>
+<!-- Add New Address Button -->
+<button class="w-full p-6 rounded-DEFAULT border-2 border-dashed border-outline-variant/30 hover:border-primary/50 hover:bg-surface-container-low transition-all duration-300 flex items-center justify-center gap-3 group">
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors" data-icon="add_location">add_location</span>
+<span class="font-sans text-sm font-bold text-on-surface-variant group-hover:text-primary transition-colors uppercase tracking-wider">Add New Address</span>
+</button>
+</div>
+<!-- Decorative Element -->
+<div class="mt-12 opacity-40">
+<img class="w-full h-32 object-cover rounded-xl grayscale opacity-30 mix-blend-multiply" data-alt="whimsical illustration of a small neighborhood bakery with soft warm light through windows in a minimalist hand-drawn style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKeSF98TvvRqVYa2cat9HpPFhQrwfHVeQdOwQnqw5HOzbYu7h07DmcREbFk8gk6rwN9gYZ9oTNCSv7aEutKeMdVTkTfzz226sKLxkQ0v0gFq_8-Y3KxWBBmKnSX5QEtIwvza5FZftRt_d5g1tqgZJW9Q3jqkdBgO1x-mZ5Ls-W4xUt4bgEzUrkY7qNwVVP8-fUdbx5QcWzx9bp4HmNd4GALJwSkEMvrcdCOHJ9b1a0e9lT5YyP7b3HEwRYU3aXdfSRU3yEtARdOUA"/>
+</div>
+</main>
+<!-- Bottom Navigation Bar & Action Area -->
+<div class="fixed bottom-0 left-0 w-full z-50">
+<!-- Action Button Layer (Pill Layout) -->
+<div class="px-6 pb-6 pt-4 bg-gradient-to-t from-surface to-transparent">
+<button class="w-full bg-gradient-to-br from-[#8C4B10] to-[#AA6328] text-white py-5 rounded-full shadow-lg hover:shadow-xl active:scale-95 transition-all duration-200 flex items-center justify-center gap-3">
+<span class="font-sans text-sm uppercase tracking-widest font-bold">Continue to Payment</span>
+<span class="material-symbols-outlined text-lg" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<!-- Global Navigation Shell -->
+<nav class="bg-[#FFF8F2]/80 dark:bg-stone-900/80 backdrop-blur-xl border-t border-[#8C4B10]/10 flex justify-around items-center px-4 pb-6 pt-2 shadow-[0_-8px_24px_rgba(30,27,24,0.06)] rounded-t-3xl">
+<div class="flex flex-col items-center justify-center text-stone-500 p-2 hover:text-[#8C4B10] transition-colors cursor-pointer">
+<span class="material-symbols-outlined" data-icon="bakery_dining">bakery_dining</span>
+<span class="font-sans text-[10px] uppercase tracking-widest font-bold mt-1">Menu</span>
+</div>
+<div class="flex flex-col items-center justify-center text-stone-500 p-2 hover:text-[#8C4B10] transition-colors cursor-pointer">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-sans text-[10px] uppercase tracking-widest font-bold mt-1">Orders</span>
+</div>
+<!-- Active State Shell Logic for Checkout: Cart corresponds to current journey -->
+<div class="flex flex-col items-center justify-center bg-gradient-to-br from-[#8C4B10] to-[#AA6328] text-white rounded-full w-12 h-12 shadow-inner scale-110">
+<span class="material-symbols-outlined" data-icon="shopping_basket" style="font-variation-settings: 'FILL' 1;">shopping_basket</span>
+</div>
+<div class="flex flex-col items-center justify-center text-stone-500 p-2 hover:text-[#8C4B10] transition-colors cursor-pointer">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-sans text-[10px] uppercase tracking-widest font-bold mt-1">Profile</span>
+</div>
+</nav>
+</div>
+</body></html>

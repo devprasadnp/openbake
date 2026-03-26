@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Order History - The Artisanal Hearth</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Newsreader:opsz,wght@6..72,400;6..72,700&amp;family=Nunito:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "outline-variant": "#d8c2b4",
+              "on-primary": "#ffffff",
+              "primary-fixed": "#ffdcc5",
+              "outline": "#867468",
+              "on-tertiary-fixed": "#3c0700",
+              "surface-container-high": "#eee7e1",
+              "surface-bright": "#fff8f2",
+              "surface-container-lowest": "#ffffff",
+              "surface-container": "#f3ede7",
+              "on-tertiary": "#ffffff",
+              "surface-container-highest": "#e8e1dc",
+              "on-tertiary-fixed-variant": "#83260e",
+              "on-background": "#1e1b18",
+              "on-surface-variant": "#534439",
+              "tertiary-container": "#c05237",
+              "surface-container-low": "#f9f2ec",
+              "tertiary-fixed": "#ffdad2",
+              "surface-variant": "#e8e1dc",
+              "secondary-container": "#ffab69",
+              "inverse-surface": "#33302c",
+              "on-error-container": "#93000a",
+              "inverse-primary": "#ffb782",
+              "secondary-fixed": "#ffdcc4",
+              "background": "#fff8f2",
+              "secondary-fixed-dim": "#ffb780",
+              "on-secondary-container": "#783d01",
+              "surface-tint": "#8f4e13",
+              "on-primary-fixed-variant": "#703800",
+              "primary-fixed-dim": "#ffb782",
+              "error-container": "#ffdad6",
+              "surface-dim": "#dfd9d3",
+              "tertiary-fixed-dim": "#ffb4a2",
+              "on-secondary": "#ffffff",
+              "on-surface": "#1e1b18",
+              "secondary": "#8e4e14",
+              "inverse-on-surface": "#f6f0ea",
+              "primary": "#8c4b10",
+              "on-primary-container": "#fffbff",
+              "on-tertiary-container": "#fffbff",
+              "surface": "#fff8f2",
+              "on-secondary-fixed": "#2f1400",
+              "on-secondary-fixed-variant": "#6f3800",
+              "tertiary": "#a03b21",
+              "primary-container": "#aa6328",
+              "error": "#ba1a1a",
+              "on-primary-fixed": "#301400",
+              "on-error": "#ffffff"
+            },
+            fontFamily: {
+              "headline": ["Newsreader", "serif"],
+              "body": ["Plus Jakarta Sans", "sans-serif"],
+              "label": ["Plus Jakarta Sans", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+      }
+      .font-playfair { font-family: 'Playfair Display', serif; }
+      .font-nunito { font-family: 'Nunito', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body min-h-screen">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#FFF8F2]/80 backdrop-blur-xl shadow-[0_8px_24px_rgba(30,27,24,0.06)] flex items-center justify-between px-6 py-4">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[#8C4B10]">menu</span>
+<h1 class="font-playfair text-2xl font-bold tracking-tight text-[#8C4B10]">The Artisanal Hearth</h1>
+</div>
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-highest">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="Close up portrait of a friendly man in a warm sunlit room, smiling softly, high quality editorial photography style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBggjf39SCduOJqnBejBwnZr5YN_vILZ_ZYm3EuJbJ5rcxZAoIzii81nbp1XZkPoEPlX3yP3FpnBRPuGnbtbIQI41Ji8lXI0JcLGoXj5DeyoLipAeKsdIT7o9x5q-ViewpmStfdLKet3MM7e4A_bV2sD7eoBVxy0jqNCSuWYAi_RifMVnnSeUMN80w4GuFJhhFicZNFrX3phthD9GHlbIpcbYwyYdV06YcvFFKD_kbUTzlJXWuAPo98ROi0wk5gXBVsJLV8vcmAuUo"/>
+</div>
+</header>
+<main class="pt-24 pb-32 px-6 max-w-2xl mx-auto">
+<!-- Page Header -->
+<div class="mb-10">
+<p class="font-nunito text-[10px] font-bold uppercase tracking-[0.2em] text-primary/60 mb-2">Account Overview</p>
+<h2 class="font-playfair text-4xl font-bold text-on-surface">Order History</h2>
+</div>
+<!-- History Content -->
+<div class="flex flex-col gap-6">
+<!-- Order Card 1: Delivered -->
+<div class="bg-surface-container-lowest p-6 rounded-DEFAULT shadow-[0_4px_12px_rgba(30,27,24,0.02)] transition-all hover:scale-[1.01]">
+<div class="flex justify-between items-start mb-4">
+<div class="flex flex-col">
+<span class="text-xs font-bold font-nunito text-primary/40 uppercase tracking-widest">October 24, 2023</span>
+<h3 class="font-playfair text-xl font-bold mt-1 text-on-surface">The Morning Basket</h3>
+</div>
+<span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                        delivered
+                    </span>
+</div>
+<div class="flex items-center gap-4 mb-6">
+<div class="flex -space-x-3 overflow-hidden">
+<img alt="Bread" class="inline-block h-12 w-12 rounded-sm ring-4 ring-surface-container-lowest object-cover" data-alt="Close up of fresh golden sourdough bread loaf with rustic texture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrUUua5qCqzhstUG_DmM4FeAe9Kfi51XySvFmy9eLr-hQicRZ4_yDObMm3hPwCguV24xYKlqlRZ771xRmgXGuxYDcpG_eA0d6bpmbNri-cDM-tJKlS1Bk8_XMFAvFCrBJezHa_sjnko8f1Nbqib5UhQzW0wwlxdzcDzA5440f6Buk3K4YckZNkiNdsJMw9z_jjyXJG1LQKF_NkUmiV1VVb2N2saOARlzk9qkoJfo-gV5O3D44D7ktpf2P5sNRvrAYja9IHW9vRI8E"/>
+<img alt="Croissants" class="inline-block h-12 w-12 rounded-sm ring-4 ring-surface-container-lowest object-cover" data-alt="Two warm buttery croissants on a wooden board" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9zF6O5MPqYM2Z3YdUZP7Mowy8hCpDydumaPEbUs30fR0_n_Tkx_c9GOEKxonZeJxIl_XcsvbBG-olqeJVSR2UHw0Kcb7nrR2lR4L-Lf00luo2udbSMnsEKTPbtMRWaakED3H6xvfi5vqJv--D4lNhwv_dRiqVDmyPXu_kqKnwImGailOqz8srfZfxZ-vlX-NxK8CiD1OjjIc-cv5oH3STyK4mzfxnbt3Uso0Mzx0W9RT9iCc7nAYPGrvjiKLGVY-fCbMAuipEA2U"/>
+</div>
+<div>
+<p class="text-sm font-medium text-on-surface-variant">3 Items</p>
+<p class="text-lg font-bold text-primary">$32.50</p>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 py-3 px-6 rounded-full bg-gradient-to-br from-[#8C4B10] to-[#AA6328] text-white font-nunito text-xs font-bold uppercase tracking-widest shadow-md active:scale-95 transition-all">
+                        Reorder
+                    </button>
+<button class="px-6 py-3 rounded-full bg-surface-container-low text-primary font-nunito text-xs font-bold uppercase tracking-widest hover:bg-surface-container-highest transition-colors">
+                        Details
+                    </button>
+</div>
+</div>
+<!-- Order Card 2: Preparing -->
+<div class="bg-surface-container-lowest p-6 rounded-DEFAULT shadow-[0_4px_12px_rgba(30,27,24,0.02)] transition-all hover:scale-[1.01]">
+<div class="flex justify-between items-start mb-4">
+<div class="flex flex-col">
+<span class="text-xs font-bold font-nunito text-primary/40 uppercase tracking-widest">Today, 10:45 AM</span>
+<h3 class="font-playfair text-xl font-bold mt-1 text-on-surface">Sweet Treats Box</h3>
+</div>
+<span class="px-3 py-1 rounded-full bg-amber-50 text-amber-700 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">skillet</span>
+                        preparing
+                    </span>
+</div>
+<div class="flex items-center gap-4 mb-6">
+<div class="flex -space-x-3 overflow-hidden">
+<img alt="Cakes" class="inline-block h-12 w-12 rounded-sm ring-4 ring-surface-container-lowest object-cover" data-alt="Selection of small artisan cakes and pastries" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvu6VTsTJXb3IPu7fxv6gItJMBzvqKgB8KCKMLIitriOqVTbs_KsKx1i0mUcW3Id4hcjyGBF4rNeS519L2iqcrP48pu-ZmmCyr0PsocW44SfFc6NKVwpdOlyfireX10wMdA6FfhdxdQ36HkXyGytvvt1tGF3-wts9XtQzB8vwX5JZLSQtVUzYg6F4Ae6sPmBflGRyBu0UW78YpIolz24bk9_S9EdX7DIJc1JqQcd5yhDE0WVheOgZ5y88rvuMlH4YF4XmP-1J6Ir0"/>
+</div>
+<div>
+<p class="text-sm font-medium text-on-surface-variant">1 Item</p>
+<p class="text-lg font-bold text-primary">$18.00</p>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="w-full py-3 px-6 rounded-full border border-outline-variant/30 text-on-surface-variant font-nunito text-xs font-bold uppercase tracking-widest hover:bg-surface-container-low transition-colors">
+                        Track Delivery
+                    </button>
+</div>
+</div>
+<!-- Order Card 3: Cancelled -->
+<div class="bg-surface-container-low/50 p-6 rounded-DEFAULT border border-dashed border-outline-variant/20 transition-all opacity-80">
+<div class="flex justify-between items-start mb-4">
+<div class="flex flex-col">
+<span class="text-xs font-bold font-nunito text-primary/40 uppercase tracking-widest">October 12, 2023</span>
+<h3 class="font-playfair text-xl font-bold mt-1 text-on-surface-variant">Weekly Loaf Subscription</h3>
+</div>
+<span class="px-3 py-1 rounded-full bg-red-50 text-red-700 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">cancel</span>
+                        cancelled
+                    </span>
+</div>
+<div class="flex items-center gap-4 mb-6">
+<div class="flex -space-x-3 overflow-hidden grayscale">
+<img alt="Bread" class="inline-block h-12 w-12 rounded-sm ring-4 ring-surface-container-lowest object-cover" data-alt="Artisanal grain bread loaf" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMGI01UHLhFiGU5g0pF2gagKxJCdBDkzdrEGar6jenf3AvAvYUCKgfft4KYKpxwdM93CF69k790rYThMjib7vHwtirPjvIpDqzmt0bW8_M8HdSRY-fxkwfzBEHWllaEgMGtl4KULFPlubEO6QCHmjJfQqN_R4sCGBHjqg2R8MZ4s6hacXfD6xeMRKJ_S6D03ASkSX3Mi4s4j8806m0yffFlL7Kqz7EcABinfik6yz60_eLPfvINndBCMrZnQZ6n6R0clkl_khcv0o"/>
+</div>
+<div>
+<p class="text-sm font-medium text-on-surface-variant">5 Items</p>
+<p class="text-lg font-bold text-on-surface-variant/60">$45.00</p>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="w-full py-3 px-6 rounded-full bg-surface-container-highest text-on-surface-variant font-nunito text-xs font-bold uppercase tracking-widest hover:bg-surface-container-high transition-colors">
+                        View Receipt
+                    </button>
+</div>
+</div>
+<!-- Order Card 4: Delivered -->
+<div class="bg-surface-container-lowest p-6 rounded-DEFAULT shadow-[0_4px_12px_rgba(30,27,24,0.02)] transition-all hover:scale-[1.01]">
+<div class="flex justify-between items-start mb-4">
+<div class="flex flex-col">
+<span class="text-xs font-bold font-nunito text-primary/40 uppercase tracking-widest">September 28, 2023</span>
+<h3 class="font-playfair text-xl font-bold mt-1 text-on-surface">Tea Time Selection</h3>
+</div>
+<span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                        delivered
+                    </span>
+</div>
+<div class="flex items-center gap-4 mb-6">
+<div class="flex -space-x-3 overflow-hidden">
+<img alt="Cookies" class="inline-block h-12 w-12 rounded-sm ring-4 ring-surface-container-lowest object-cover" data-alt="Delicious fresh cookies with chocolate chips" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAs5NzOeEJ8juY83orIuXYuFxIQjtPwjaAgyALuG99Q8Omjk68bJuTJnM_SsVqc4Vd_Mgw0V4UZwce4mLCeAQ7jS8TwtciJv_h1mmfw6KxQMOb9O68ev4n5pmJOzMT9lOpYuz2OBAgorwZ-MnmvOX6y6oQZ5ofojDCKXKDExPKbeUFBFzrfpj_VwvBQURl5oycCIPXfT21Mo1Zd-XxT_WgWTBRscfCoLCc-UP-LvfxDiDwnTS-309Qw1sSxIDJC1e6aZF1y0wQUu7s"/>
+<img alt="Cake" class="inline-block h-12 w-12 rounded-sm ring-4 ring-surface-container-lowest object-cover" data-alt="Warm chocolate cake piece on a small plate" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNGPpDsAUEmkJbiAloOjavqAJeBanFUZh20G2NZIIUjYYvCbAhNhnvdnqDKCNEePzy2U-NsDyZeimT1gv-S77WQlePgooSdHjC5N_FPPn5VYtFUkEqR7Y3vGPnGaPzaTkJjca7cfhcALcjiUoXaYxwCPYGPYr6tpjAX7I3OU4Ze9sB4UE901i2dkgZPotk975UyDgZHjUeLjzWWh4KcbkkEefKC0aGfXs3FxIto1ERqpX03gCSA3N_QZMFKj8QANtbEuHv18KJJPU"/>
+</div>
+<div>
+<p class="text-sm font-medium text-on-surface-variant">2 Items</p>
+<p class="text-lg font-bold text-primary">$12.75</p>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 py-3 px-6 rounded-full bg-gradient-to-br from-[#8C4B10] to-[#AA6328] text-white font-nunito text-xs font-bold uppercase tracking-widest shadow-md active:scale-95 transition-all">
+                        Reorder
+                    </button>
+<button class="px-6 py-3 rounded-full bg-surface-container-low text-primary font-nunito text-xs font-bold uppercase tracking-widest">
+                        Details
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-[#FFF8F2]/80 dark:bg-stone-900/80 backdrop-blur-2xl z-50 rounded-t-[32px] shadow-[0_-8px_24px_rgba(30,27,24,0.04)]">
+<!-- Shop -->
+<a class="flex flex-col items-center justify-center text-[#1E1B18]/50 dark:text-stone-500 px-4 py-2 hover:text-[#8C4B10]" href="#">
+<span class="material-symbols-outlined mb-1">bakery_dining</span>
+<span class="font-nunito text-[10px] font-bold uppercase tracking-widest">Shop</span>
+</a>
+<!-- Orders (ACTIVE) -->
+<a class="flex flex-col items-center justify-center bg-gradient-to-br from-[#8C4B10] to-[#AA6328] text-white rounded-full px-5 py-2 scale-110 -translate-y-1 transition-all" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+<span class="font-nunito text-[10px] font-bold uppercase tracking-widest">History</span>
+</a>
+<!-- Wishlist -->
+<a class="flex flex-col items-center justify-center text-[#1E1B18]/50 dark:text-stone-500 px-4 py-2 hover:text-[#8C4B10]" href="#">
+<span class="material-symbols-outlined mb-1">favorite</span>
+<span class="font-nunito text-[10px] font-bold uppercase tracking-widest">Wishlist</span>
+</a>
+<!-- Profile -->
+<a class="flex flex-col items-center justify-center text-[#1E1B18]/50 dark:text-stone-500 px-4 py-2 hover:text-[#8C4B10]" href="#">
+<span class="material-symbols-outlined mb-1">person</span>
+<span class="font-nunito text-[10px] font-bold uppercase tracking-widest">Profile</span>
+</a>
+</nav>
+</body></html>

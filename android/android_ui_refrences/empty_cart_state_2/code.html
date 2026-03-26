@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;family=Nunito:wght@300;400;600;700&amp;family=Newsreader:opsz,wght@6..72,400;6..72,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-fixed": "#ffdad2",
+              "on-primary-container": "#fffbff",
+              "on-primary": "#ffffff",
+              "surface-container-high": "#eee7e1",
+              "secondary-fixed-dim": "#ffb780",
+              "primary": "#8c4b10",
+              "secondary": "#8e4e14",
+              "on-surface": "#1e1b18",
+              "on-primary-fixed": "#301400",
+              "error": "#ba1a1a",
+              "on-error-container": "#93000a",
+              "surface-container-lowest": "#ffffff",
+              "on-tertiary-fixed": "#3c0700",
+              "inverse-primary": "#ffb782",
+              "surface-tint": "#8f4e13",
+              "error-container": "#ffdad6",
+              "on-surface-variant": "#534439",
+              "on-secondary-fixed-variant": "#6f3800",
+              "secondary-container": "#ffab69",
+              "primary-fixed": "#ffdcc5",
+              "outline-variant": "#d8c2b4",
+              "on-secondary-fixed": "#2f1400",
+              "background": "#fff8f2",
+              "on-tertiary-container": "#fffbff",
+              "on-error": "#ffffff",
+              "tertiary": "#a03b21",
+              "on-primary-fixed-variant": "#703800",
+              "surface-container-highest": "#e8e1dc",
+              "inverse-on-surface": "#f6f0ea",
+              "surface-container": "#f3ede7",
+              "outline": "#867468",
+              "secondary-fixed": "#ffdcc4",
+              "surface": "#fff8f2",
+              "primary-container": "#aa6328",
+              "on-background": "#1e1b18",
+              "tertiary-fixed-dim": "#ffb4a2",
+              "tertiary-container": "#c05237",
+              "on-tertiary-fixed-variant": "#83260e",
+              "on-secondary": "#ffffff",
+              "surface-dim": "#dfd9d3",
+              "surface-container-low": "#f9f2ec",
+              "primary-fixed-dim": "#ffb782",
+              "surface-bright": "#fff8f2",
+              "inverse-surface": "#33302c",
+              "on-secondary-container": "#783d01",
+              "surface-variant": "#e8e1dc",
+              "on-tertiary": "#ffffff"
+            },
+            fontFamily: {
+              "headline": ["Newsreader", "serif"],
+              "body": ["Plus Jakarta Sans", "sans-serif"],
+              "label": ["Plus Jakarta Sans", "sans-serif"],
+              "serif": ["Playfair Display", "serif"],
+              "sans": ["Nunito", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+      }
+      .tonal-shift-bottom {
+        box-shadow: 0 4px 20px -5px rgba(30, 27, 24, 0.05);
+      }
+      .tonal-shift-top {
+        box-shadow: 0 -4px 24px rgba(30, 27, 24, 0.06);
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#FFF8F2]/80 dark:bg-[#1E1B18]/80 backdrop-blur-xl flex items-center justify-between px-6 py-4 w-full tonal-shift-bottom">
+<button class="text-[#8C4B10] dark:text-[#C2773A] active:scale-95 duration-200">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="text-[#8C4B10] dark:text-[#C2773A] font-serif italic text-2xl tracking-tight Playfair Display">Amber Hearth</h1>
+<button class="text-[#8C4B10] dark:text-[#C2773A] active:scale-95 duration-200">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col items-center justify-center px-8 pt-20 pb-24 text-center max-w-lg mx-auto">
+<!-- Empty Basket Illustration Container -->
+<div class="relative mb-12">
+<!-- Decorative Background Element -->
+<div class="absolute -inset-4 bg-surface-container-high rounded-full blur-3xl opacity-40"></div>
+<!-- Warm Illustration / Placeholder for Image -->
+<div class="relative">
+<div class="w-64 h-64 mx-auto rounded-full overflow-hidden bg-surface-container-low flex items-center justify-center">
+<img alt="Warm artisanal basket with cloth" class="w-full h-full object-cover mix-blend-multiply opacity-80" data-alt="A rustic wicker bread basket with a soft linen cloth, sitting on a sunlit kitchen table with warm golden hour light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpd44Vc1FqbNLiEAqaUV3x4grdLuMU-r6iAYKuNRjI1s9fjkCdRTpIYtLH0TAFjmoDVngwIss6m_SlSjcTxTRLI5Kb2fadKh9ZL77MxzxTbcEkvh2liGN1k53iY-VC8gvzYfuNfzcVArCh4SD95vejiU-avxOhYi2-305cZo9LKrPLhW7147pRyyk8OF7kjbgDca8wwkjbn1atemzaFe6vAWt-JuWg_g_2_fA3oWx6O5EhPrqChDcaLFIidKyUnBjuhRGtIuZp-5c"/>
+</div>
+<!-- Floating Icon Tag -->
+<div class="absolute bottom-4 right-4 bg-surface-container-lowest p-4 rounded-full shadow-lg">
+<span class="material-symbols-outlined text-primary text-4xl" data-icon="shopping_basket">shopping_basket</span>
+</div>
+</div>
+</div>
+<!-- Typography Stack -->
+<div class="space-y-4">
+<h2 class="font-serif text-4xl md:text-5xl text-on-surface leading-tight tracking-tight">Your basket is empty</h2>
+<p class="font-sans text-lg text-on-surface-variant leading-relaxed px-4">
+                It looks like you haven't picked any treats yet. Let's find something delicious!
+            </p>
+</div>
+<!-- Action Section -->
+<div class="mt-12 w-full">
+<button class="w-full py-5 px-8 rounded-full bg-gradient-to-br from-[#8C4B10] to-[#AA6328] text-white font-semibold text-lg shadow-lg hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-3">
+<span>Start Shopping</span>
+<span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<button class="mt-6 font-sans text-primary font-bold tracking-wide uppercase text-xs hover:underline transition-all">
+                View Past Orders
+            </button>
+</div>
+<!-- Recommended Categories (Subtle Bento Hint) -->
+<div class="mt-16 w-full grid grid-cols-2 gap-4">
+<div class="bg-surface-container-low p-6 rounded-lg text-left flex flex-col justify-between h-40 group hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-primary" data-icon="bakery_dining">bakery_dining</span>
+<span class="font-serif text-xl">Fresh Breads</span>
+</div>
+<div class="bg-surface-container-low p-6 rounded-lg text-left flex flex-col justify-between h-40 group hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-primary" data-icon="cookie">cookie</span>
+<span class="font-serif text-xl">Pastries</span>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-[#FFF8F2]/80 dark:bg-[#1E1B18]/80 backdrop-blur-xl z-50 rounded-t-[32px] tonal-shift-top">
+<div class="flex flex-col items-center justify-center text-[#1E1B18]/50 dark:text-[#FFF8F2]/50 px-5 py-2 hover:text-[#8C4B10] transition-colors active:scale-90 duration-300">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-sans text-[10px] uppercase tracking-widest Nunito mt-1">Hearth</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#1E1B18]/50 dark:text-[#FFF8F2]/50 px-5 py-2 hover:text-[#8C4B10] transition-colors active:scale-90 duration-300">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="font-sans text-[10px] uppercase tracking-widest Nunito mt-1">Search</span>
+</div>
+<!-- Active State: Orders (as we are in the Cart/Basket flow) -->
+<div class="flex flex-col items-center justify-center bg-gradient-to-br from-[#8C4B10] to-[#AA6328] text-white rounded-full px-5 py-2 active:scale-90 duration-300">
+<span class="material-symbols-outlined" data-icon="receipt_long" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+<span class="font-sans text-[10px] uppercase tracking-widest Nunito mt-1">Orders</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#1E1B18]/50 dark:text-[#FFF8F2]/50 px-5 py-2 hover:text-[#8C4B10] transition-colors active:scale-90 duration-300">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-sans text-[10px] uppercase tracking-widest Nunito mt-1">Profile</span>
+</div>
+</nav>
+</body></html>

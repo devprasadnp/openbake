@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Amber Hearth - Discover</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;family=Nunito:wght@300;400;600;700;800&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,700;1,6..72,400&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-fixed": "#ffdad2",
+              "on-primary-container": "#fffbff",
+              "on-primary": "#ffffff",
+              "surface-container-high": "#eee7e1",
+              "secondary-fixed-dim": "#ffb780",
+              "primary": "#8c4b10",
+              "secondary": "#8e4e14",
+              "on-surface": "#1e1b18",
+              "on-primary-fixed": "#301400",
+              "error": "#ba1a1a",
+              "on-error-container": "#93000a",
+              "surface-container-lowest": "#ffffff",
+              "on-tertiary-fixed": "#3c0700",
+              "inverse-primary": "#ffb782",
+              "surface-tint": "#8f4e13",
+              "error-container": "#ffdad6",
+              "on-surface-variant": "#534439",
+              "on-secondary-fixed-variant": "#6f3800",
+              "secondary-container": "#ffab69",
+              "primary-fixed": "#ffdcc5",
+              "outline-variant": "#d8c2b4",
+              "on-secondary-fixed": "#2f1400",
+              "background": "#fff8f2",
+              "on-tertiary-container": "#fffbff",
+              "on-error": "#ffffff",
+              "tertiary": "#a03b21",
+              "on-primary-fixed-variant": "#703800",
+              "surface-container-highest": "#e8e1dc",
+              "inverse-on-surface": "#f6f0ea",
+              "surface-container": "#f3ede7",
+              "outline": "#867468",
+              "secondary-fixed": "#ffdcc4",
+              "surface": "#fff8f2",
+              "primary-container": "#aa6328",
+              "on-background": "#1e1b18",
+              "tertiary-fixed-dim": "#ffb4a2",
+              "tertiary-container": "#c05237",
+              "on-tertiary-fixed-variant": "#83260e",
+              "on-secondary": "#ffffff",
+              "surface-dim": "#dfd9d3",
+              "surface-container-low": "#f9f2ec",
+              "primary-fixed-dim": "#ffb782",
+              "surface-bright": "#fff8f2",
+              "inverse-surface": "#33302c",
+              "on-secondary-container": "#783d01",
+              "surface-variant": "#e8e1dc",
+              "on-tertiary": "#ffffff"
+            },
+            fontFamily: {
+              "headline": ["Newsreader", "serif"],
+              "body": ["Plus Jakarta Sans", "sans-serif"],
+              "label": ["Plus Jakarta Sans", "sans-serif"],
+              "serif": ["Playfair Display", "serif"],
+              "sans": ["Nunito", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+      }
+      .tonal-shift-bottom {
+        box-shadow: 0 4px 20px -10px rgba(140, 75, 16, 0.08);
+      }
+      .tonal-shift-top {
+        box-shadow: 0 -4px 20px -10px rgba(140, 75, 16, 0.08);
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#FFF8F2]/80 dark:bg-[#1E1B18]/80 backdrop-blur-xl flex items-center justify-between px-6 py-4 w-full shadow-sm shadow-[#1E1B18]/5 tonal-shift-bottom">
+<div class="flex items-center gap-4">
+<button class="text-[#8C4B10] dark:text-[#C2773A] active:scale-95 duration-200 hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="font-serif text-2xl tracking-tight Playfair Display text-[#8C4B10] dark:text-[#C2773A] italic">Amber Hearth</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-[#8C4B10] dark:text-[#C2773A] active:scale-95 duration-200 hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+</button>
+</div>
+</header>
+<main class="pt-24 pb-32 px-6 max-w-5xl mx-auto min-h-screen">
+<!-- Search Bar Section -->
+<section class="mb-10">
+<div class="relative group">
+<div class="absolute inset-y-0 left-5 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-primary/60" data-icon="search">search</span>
+</div>
+<input class="w-full bg-surface-container-highest border-none rounded-full py-5 pl-14 pr-6 text-on-surface placeholder:text-on-surface-variant/50 focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all duration-300 font-sans text-lg" placeholder="What's baking in your heart?" type="text"/>
+</div>
+</section>
+<!-- Recent Searches & Trending -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
+<!-- Recent Searches -->
+<section>
+<div class="flex items-center justify-between mb-6">
+<h2 class="font-serif text-xl text-on-surface">Recent Searches</h2>
+<button class="text-primary text-xs font-bold tracking-widest uppercase hover:opacity-70 transition-opacity">Clear All</button>
+</div>
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between p-4 bg-surface-container-low rounded-xl group hover:bg-surface-container-high transition-colors cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant/40 text-sm" data-icon="history">history</span>
+<span class="text-on-surface/80 font-medium">Rosemary Focaccia</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant/20 group-hover:text-on-surface-variant transition-colors" data-icon="north_west">north_west</span>
+</div>
+<div class="flex items-center justify-between p-4 bg-surface-container-low rounded-xl group hover:bg-surface-container-high transition-colors cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant/40 text-sm" data-icon="history">history</span>
+<span class="text-on-surface/80 font-medium">Almond Croissants</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant/20 group-hover:text-on-surface-variant transition-colors" data-icon="north_west">north_west</span>
+</div>
+</div>
+</section>
+<!-- Trending Now -->
+<section>
+<h2 class="font-serif text-xl text-on-surface mb-6">Trending Now</h2>
+<div class="flex flex-wrap gap-3">
+<button class="px-6 py-2.5 rounded-full bg-surface-container-lowest text-primary font-bold text-sm shadow-sm border border-outline-variant/10 hover:border-primary/30 transition-all">Sourdough</button>
+<button class="px-6 py-2.5 rounded-full bg-surface-container-lowest text-primary font-bold text-sm shadow-sm border border-outline-variant/10 hover:border-primary/30 transition-all">Tarts</button>
+<button class="px-6 py-2.5 rounded-full bg-surface-container-lowest text-primary font-bold text-sm shadow-sm border border-outline-variant/10 hover:border-primary/30 transition-all">Vegan Specialties</button>
+<button class="px-6 py-2.5 rounded-full bg-surface-container-lowest text-primary font-bold text-sm shadow-sm border border-outline-variant/10 hover:border-primary/30 transition-all">Seasonal Pear</button>
+<button class="px-6 py-2.5 rounded-full bg-surface-container-lowest text-primary font-bold text-sm shadow-sm border border-outline-variant/10 hover:border-primary/30 transition-all">Rye</button>
+</div>
+</section>
+</div>
+<!-- Chef's Recommendations Bento Grid -->
+<section class="mb-12">
+<div class="flex items-end justify-between mb-8">
+<div>
+<span class="text-primary text-[10px] uppercase tracking-[0.2em] font-extrabold mb-1 block">Curated Selection</span>
+<h2 class="font-serif text-3xl text-on-surface">Chef's Recommendations</h2>
+</div>
+<button class="hidden md:flex items-center gap-2 text-primary font-bold text-sm group">
+                    View full menu
+                    <span class="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+<!-- Card 1 -->
+<div class="flex flex-col group cursor-pointer">
+<div class="relative aspect-[4/5] mb-4 overflow-hidden rounded-lg">
+<img alt="Cinnamon Bun" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="close-up of a giant sticky cinnamon bun with pecans and glistening sugar glaze on a rustic wooden board" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgCbXZj6MUk2jE9Gql4E4OwuVlIhaIDQ7W5tnF631PT9DaY-m5AMICy__F2zpesMAS0HGiI8XzoLrQw6RG6JCEgmNsqna0B93pEelXdu55rheV6dUAO8-n9NRS4qZpAxmppSWwiW2xFTs1-6-rnXmIAEorfUK02PtnfR1cIubCe7CoQou__yOM5h4KHYwAC_ydUOBEpQlCy-NeghpSqybO5lQoTne4R1Ptjn_TRfogrla5P7fEmFyGfrOxc614lODAjbt4MfAmem4"/>
+<div class="absolute top-3 right-3">
+<button class="w-8 h-8 rounded-full bg-white/90 backdrop-blur flex items-center justify-center text-primary shadow-lg hover:bg-primary hover:text-white transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="add">add</span>
+</button>
+</div>
+</div>
+<h3 class="font-serif text-lg leading-tight group-hover:text-primary transition-colors">Morning Glazed Pecan Bun</h3>
+<p class="font-sans text-sm text-on-surface-variant/70 mt-1">$4.50</p>
+</div>
+<!-- Card 2 -->
+<div class="flex flex-col group cursor-pointer md:mt-12">
+<div class="relative aspect-[4/5] mb-4 overflow-hidden rounded-lg">
+<img alt="Rustic Loaf" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="dramatic side-lit photo of a crusty artisanal sourdough loaf with beautiful flour patterns on a dark surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBV-OpUdk7e4pnmGaabXIGgdz4qTQ4g9cLyj0Y16jSRIrhNAOLDz5hjYKtsXBCg9p2FQqu9fCEoBRGQzOaRsiGx2jFOp5bTociApW8XcmwWjHRBjUL5EHBIob5ur10ECtUA8VVyPQpTPvxutOJtqFg0K2DT0p3T_90nzLuchB1YdiwLsXAUwG22tnFveA14zJIfQ0_AlakiC7ztUfiDsPvWn0tN-D9rTCjqU46Pef7z_jFYwoqyAcEoQFjf2kPHY4xhB0_H20HZGfo"/>
+<div class="absolute top-3 right-3">
+<button class="w-8 h-8 rounded-full bg-white/90 backdrop-blur flex items-center justify-center text-primary shadow-lg hover:bg-primary hover:text-white transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="add">add</span>
+</button>
+</div>
+</div>
+<h3 class="font-serif text-lg leading-tight group-hover:text-primary transition-colors">Signature Heritage Sourdough</h3>
+<p class="font-sans text-sm text-on-surface-variant/70 mt-1">$8.00</p>
+</div>
+<!-- Card 3 -->
+<div class="flex flex-col group cursor-pointer">
+<div class="relative aspect-[4/5] mb-4 overflow-hidden rounded-lg">
+<img alt="Fruit Tart" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="elegant French fruit tart with perfectly arranged raspberries and gold leaf on a creamy custard base" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzEk9nHux9X4LmYa9O8bKo2724c1hNhwl6R9eEJybeqwcQy8xUrUptYIr06SDHaiSbYNjjJQBVQ6CdjfUWP3AulqWGxCRAt17VUn9PrRVwgBGteIByUfggFAEqv5NYlwfbaaiVe-acYaabqdJqsJNblm33W_1Js9N0KJT-9OF4owe1-iUGzef-RwGroOyZiIj9laTXmFS-8i-rcY1EOmoX2VPq3z3_bt6mzD8XLyBMuJGUjNdNmVMB0jYiN93iCxjJq9eOOK9pS-U"/>
+<div class="absolute top-3 right-3">
+<button class="w-8 h-8 rounded-full bg-white/90 backdrop-blur flex items-center justify-center text-primary shadow-lg hover:bg-primary hover:text-white transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="add">add</span>
+</button>
+</div>
+</div>
+<h3 class="font-serif text-lg leading-tight group-hover:text-primary transition-colors">Raspberry Crème Pâtissière</h3>
+<p class="font-sans text-sm text-on-surface-variant/70 mt-1">$6.25</p>
+</div>
+<!-- Card 4 -->
+<div class="flex flex-col group cursor-pointer md:mt-12">
+<div class="relative aspect-[4/5] mb-4 overflow-hidden rounded-lg">
+<img alt="Braided Bread" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="golden brown braided challah bread sprinkled with poppy seeds on a bed of fresh linen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfFYtQTUtRIEbwK4Yp5v2I0Z6aMXO42eDXU17vUmHM_6NA9hAhpCvQYVnXAQAtKMfpU8xRs2r0LYBCScPRwTwoEf5CJ5kcIxex_ZmdIhH8KPvHoMAI8PxJl3tBc375DN-KvJ9n3GC47Es9Cq-N3edfiybRVFRmWK4xq69cV2RQw15JhaLa1DUI4BAth0BZurfK81pSPyeg8ai36tB6qghH5CUZosVkgdP0HXY--dSmoHRcJ6KSH_9M1zl74ZnQwWYz-B6-qwlUVHw"/>
+<div class="absolute top-3 right-3">
+<button class="w-8 h-8 rounded-full bg-white/90 backdrop-blur flex items-center justify-center text-primary shadow-lg hover:bg-primary hover:text-white transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="add">add</span>
+</button>
+</div>
+</div>
+<h3 class="font-serif text-lg leading-tight group-hover:text-primary transition-colors">Honey-Glazed Brioche Braid</h3>
+<p class="font-sans text-sm text-on-surface-variant/70 mt-1">$7.50</p>
+</div>
+</div>
+</section>
+<!-- Seasonal Highlight (Extra Contextual Section) -->
+<section class="bg-surface-container-low rounded-lg p-8 flex flex-col md:flex-row items-center gap-8 mb-12">
+<div class="w-full md:w-1/3">
+<img alt="Flour spill" class="rounded-lg shadow-xl -rotate-2 group-hover:rotate-0 transition-transform duration-500" data-alt="artistic shot of flour dusted on a dark wooden table with an old copper measuring cup and wheat stalks" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRnlP0EBNvMnKCQgRx8MdOA-7TUrCHj9Q36UEA_CrPsGC-53oXEW_0x2dIkYkkGw689N4uKzzdJuo08zhD8wQOmz9uIj1hT4rBklmFJ1f55rL0qUfUB7xLUQSxoq5BQuuF_uMX8Eqmqg-kzdXucBMyN689-M5vIxsFUdTCVZX4ZU1M7Si9c0QLFjvy_VVkyp1hsA2IZVJ-K7jExmXYy065v4RxjaQhlprV1aewXm3ViVV_j1bk4RLLXL1X2cyqD6CfXlnmq8RV9Qk"/>
+</div>
+<div class="w-full md:w-2/3">
+<span class="text-secondary font-bold text-xs uppercase tracking-widest mb-3 block">From the Miller's Desk</span>
+<h2 class="font-serif text-3xl text-on-surface mb-4 italic">Discover Our Ancient Grains</h2>
+<p class="font-sans text-on-surface-variant leading-relaxed mb-6">We partner with local organic mills to source stone-ground heirloom wheat. This search for quality is what makes Amber Hearth unique.</p>
+<button class="px-8 py-3 rounded-full bg-gradient-to-br from-[#8C4B10] to-[#AA6328] text-white font-bold text-sm shadow-lg active:scale-95 duration-200">Learn about our sourcing</button>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-[#FFF8F2]/80 dark:bg-[#1E1B18]/80 backdrop-blur-xl z-50 rounded-t-[32px] shadow-[0_-4px_24px_rgba(30,27,24,0.06)] tonal-shift-top">
+<a class="flex flex-col items-center justify-center text-[#1E1B18]/50 dark:text-[#FFF8F2]/50 px-5 py-2 hover:text-[#8C4B10] transition-colors active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="home">home</span>
+<span class="font-sans text-[10px] uppercase tracking-widest Nunito">Hearth</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-gradient-to-br from-[#8C4B10] to-[#AA6328] text-white rounded-full px-5 py-2 active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="search" style="font-variation-settings: 'FILL' 1;">search</span>
+<span class="font-sans text-[10px] uppercase tracking-widest Nunito">Search</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#1E1B18]/50 dark:text-[#FFF8F2]/50 px-5 py-2 hover:text-[#8C4B10] transition-colors active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="receipt_long">receipt_long</span>
+<span class="font-sans text-[10px] uppercase tracking-widest Nunito">Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#1E1B18]/50 dark:text-[#FFF8F2]/50 px-5 py-2 hover:text-[#8C4B10] transition-colors active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="person">person</span>
+<span class="font-sans text-[10px] uppercase tracking-widest Nunito">Profile</span>
+</a>
+</nav>
+</body></html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Your Cart | Amber Hearth</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;family=Nunito:ital,wght@0,200..1000;1,200..1000&amp;family=Plus+Jakarta+Sans:wght@200..800&amp;family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary-fixed-variant": "#6f3800",
+              "on-tertiary": "#ffffff",
+              "on-tertiary-fixed-variant": "#83260e",
+              "on-secondary-container": "#783d01",
+              "inverse-primary": "#ffb782",
+              "outline-variant": "#d8c2b4",
+              "tertiary-fixed": "#ffdad2",
+              "surface-dim": "#dfd9d3",
+              "tertiary-container": "#c05237",
+              "on-primary-container": "#fffbff",
+              "background": "#fff8f2",
+              "on-tertiary-fixed": "#3c0700",
+              "surface-variant": "#e8e1dc",
+              "on-error": "#ffffff",
+              "surface-container": "#f3ede7",
+              "secondary": "#8e4e14",
+              "outline": "#867468",
+              "on-tertiary-container": "#fffbff",
+              "secondary-container": "#ffab69",
+              "tertiary": "#a03b21",
+              "secondary-fixed": "#ffdcc4",
+              "surface-container-highest": "#e8e1dc",
+              "surface": "#fff8f2",
+              "primary-container": "#aa6328",
+              "surface-container-low": "#f9f2ec",
+              "inverse-on-surface": "#f6f0ea",
+              "surface-container-lowest": "#ffffff",
+              "secondary-fixed-dim": "#ffb780",
+              "on-secondary-fixed": "#2f1400",
+              "on-surface-variant": "#534439",
+              "on-primary-fixed": "#301400",
+              "primary-fixed": "#ffdcc5",
+              "on-background": "#1e1b18",
+              "error-container": "#ffdad6",
+              "on-secondary": "#ffffff",
+              "inverse-surface": "#33302c",
+              "error": "#ba1a1a",
+              "primary": "#8c4b10",
+              "tertiary-fixed-dim": "#ffb4a2",
+              "primary-fixed-dim": "#ffb782",
+              "on-primary-fixed-variant": "#703800",
+              "surface-bright": "#fff8f2",
+              "on-error-container": "#93000a",
+              "on-primary": "#ffffff",
+              "surface-container-high": "#eee7e1",
+              "on-surface": "#1e1b18",
+              "surface-tint": "#8f4e13"
+            },
+            fontFamily: {
+              "headline": ["Newsreader", "serif"],
+              "body": ["Plus Jakarta Sans", "sans-serif"],
+              "label": ["Plus Jakarta Sans", "sans-serif"],
+              "serif": ["Playfair Display", "serif"],
+              "sans": ["Nunito", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+      }
+      .glass-nav {
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-sans min-h-screen pb-40">
+<!-- Top Navigation Bar (Shared Component Strategy) -->
+<nav class="fixed top-0 w-full z-50 glass-nav bg-[#FFF8F2]/80 flex items-center justify-between px-6 py-4">
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors active:scale-95 duration-200 text-primary">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-serif text-2xl font-bold italic tracking-tight text-primary">Your Cart</h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors text-primary relative">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+<span class="absolute top-1 right-1 bg-tertiary text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">3</span>
+</button>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="pt-24 px-6 max-w-2xl mx-auto space-y-8">
+<!-- Section Header -->
+<header>
+<h2 class="font-serif text-3xl font-bold italic text-on-surface">Your Cart (3 Items)</h2>
+<p class="font-label text-sm uppercase tracking-widest text-on-surface-variant/60 mt-2">Delivery to: 124 Baker St, London</p>
+</header>
+<!-- Item List (No-Line Rule: Separated by spacing and tonal shifts) -->
+<section class="space-y-4">
+<!-- Item 1: Sourdough -->
+<div class="relative group">
+<div class="flex gap-4 p-4 bg-surface-container-lowest rounded-DEFAULT transition-transform hover:-translate-y-1">
+<div class="w-24 h-24 flex-shrink-0 bg-surface-container-highest rounded-sm overflow-hidden">
+<img alt="Artisanal Sourdough" class="w-full h-full object-cover" data-alt="close-up of a rustic artisanal sourdough loaf with a thick golden crust and dusted with flour on a wooden board" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCK_fCGohFwpvQto1lEn6FsP56cFzogceX-cZc-u5Cn1MmhqpWBtb9xRNi3bqHcMEDFqBw_G2K4WR52KdkxrLM22EtDka4qL0KsNpC0vg2sdB3PXYBnBnAcLU0KMzd6BZC6fgLeycyrLZyfWf6mLv6728eP6uRsHiMQNGMlhcVwVubqVeY0N2fWYMeTPaG2vjumG5QurxYBOI7sDl5WfQeTeQDfaDXqokdJpGbvJS6sGLAp274dCaO1k3tIrO-KhkcROkt_Uo5HirI"/>
+</div>
+<div class="flex-grow flex flex-col justify-between">
+<div>
+<h3 class="font-serif text-lg font-bold text-on-surface">Artisanal Sourdough</h3>
+<p class="text-sm text-on-surface-variant font-body">Whole, Sliced</p>
+</div>
+<div class="flex justify-between items-end">
+<span class="font-bold text-primary font-body">$8.50</span>
+<div class="flex items-center bg-surface-container rounded-full px-2 py-1 gap-3">
+<button class="w-6 h-6 flex items-center justify-center rounded-full text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined text-sm" data-icon="remove">remove</span></button>
+<span class="text-xs font-bold font-body">1</span>
+<button class="w-6 h-6 flex items-center justify-center rounded-full text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined text-sm" data-icon="add">add</span></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Item 2: Midnight Cookies (Swipe Indication) -->
+<div class="relative group overflow-hidden rounded-DEFAULT">
+<!-- Delete Action (Simulated swipe reveal) -->
+<div class="absolute inset-0 bg-error flex items-center justify-end px-6 text-white">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</div>
+<!-- Main Card (Translated for swipe effect) -->
+<div class="relative flex gap-4 p-4 bg-surface-container-lowest rounded-DEFAULT -translate-x-12">
+<div class="w-24 h-24 flex-shrink-0 bg-surface-container-highest rounded-sm overflow-hidden">
+<img alt="Midnight Cookies" class="w-full h-full object-cover" data-alt="stack of thick chocolate fudge cookies with melting chocolate chunks and sea salt flakes on top" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgBjjRNYvOAdlJpqQpRpdSMDgApt6-P9IogaDCUWE3fc_qtcioHKef5QM7MSsEVK40dEDwwDOl6uLgly4AbCOsNxLOuz02PCZBWcURG-MLBJfS0syYDim9mfyLeGfKbqTgPR8AKxcpzVyngRSPh5uQT6qG-SvyPXT0-vYqr-ftxkgzTeC13vqF_mpXqNP5D-EgdaUCFcMfZQaCO7r1yxCZL_WeCBKyNQtepFQcUjd_ZhZwISYc56KdZ38CglwD3pvbETqmjUxa81U"/>
+</div>
+<div class="flex-grow flex flex-col justify-between">
+<div>
+<h3 class="font-serif text-lg font-bold text-on-surface">Midnight Cookies</h3>
+<p class="text-sm text-on-surface-variant font-body">Box of 6</p>
+</div>
+<div class="flex justify-between items-end">
+<span class="font-bold text-primary font-body">$12.00</span>
+<div class="flex items-center bg-surface-container rounded-full px-2 py-1 gap-3">
+<button class="w-6 h-6 flex items-center justify-center rounded-full text-on-surface-variant"><span class="material-symbols-outlined text-sm" data-icon="remove">remove</span></button>
+<span class="text-xs font-bold font-body">2</span>
+<button class="w-6 h-6 flex items-center justify-center rounded-full text-on-surface-variant"><span class="material-symbols-outlined text-sm" data-icon="add">add</span></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Item 3: Hazelnut Latte -->
+<div class="flex gap-4 p-4 bg-surface-container-lowest rounded-DEFAULT transition-transform hover:-translate-y-1">
+<div class="w-24 h-24 flex-shrink-0 bg-surface-container-highest rounded-sm overflow-hidden">
+<img alt="Hazelnut Latte" class="w-full h-full object-cover" data-alt="creamy latte in a ceramic mug with intricate leaf latte art on a textured neutral surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQiJUsMWhn1gfX1wsPLeCZjjQk_I3ZwYjeC-pEoS7yHtBp3U0JUrGlyvBeYKc4a_Uz-Ewi1bTWV7tPf2oEmOZ4fHvhtsTnaRQfy6WZPBZXurm6gp1wY3tDBB210Ficll3880NtZLH788mLMvWMLi3UuJGN326hVTjxlYihTIgjm8sh_V-4dI3ztgYBI8_gWYb_Lf93speBmAqWvRKcZX6SxT_tF_VMjHY7Omh5D2hB1_yNjUPMECLtQSWQE6PYriBOhBj5RKdEdgk"/>
+</div>
+<div class="flex-grow flex flex-col justify-between">
+<div>
+<h3 class="font-serif text-lg font-bold text-on-surface">Hazelnut Latte</h3>
+<p class="text-sm text-on-surface-variant font-body">Large, Oat Milk</p>
+</div>
+<div class="flex justify-between items-end">
+<span class="font-bold text-primary font-body">$5.25</span>
+<div class="flex items-center bg-surface-container rounded-full px-2 py-1 gap-3">
+<button class="w-6 h-6 flex items-center justify-center rounded-full text-on-surface-variant"><span class="material-symbols-outlined text-sm" data-icon="remove">remove</span></button>
+<span class="text-xs font-bold font-body">1</span>
+<button class="w-6 h-6 flex items-center justify-center rounded-full text-on-surface-variant"><span class="material-symbols-outlined text-sm" data-icon="add">add</span></button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Coupon Section -->
+<section class="space-y-3">
+<h4 class="font-label text-[10px] uppercase tracking-[0.2em] font-bold text-on-surface-variant">Promotions</h4>
+<div class="flex gap-3">
+<div class="relative flex-grow">
+<input class="w-full h-12 px-4 bg-surface-container-highest rounded-sm border-none focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest font-body text-sm placeholder:text-on-surface-variant/40" placeholder="Promo Code" type="text"/>
+</div>
+<button class="px-8 h-12 bg-[#C2773A] text-white rounded-full font-label text-sm font-bold shadow-lg shadow-[#C2773A]/10 active:scale-95 transition-all">Apply</button>
+</div>
+</section>
+<!-- Order Summary Card -->
+<section class="bg-surface-container-low p-6 rounded-lg space-y-4">
+<div class="space-y-3">
+<div class="flex justify-between items-center text-sm font-body text-on-surface-variant">
+<span>Subtotal</span>
+<span>$31.00</span>
+</div>
+<div class="flex justify-between items-center text-sm font-body text-tertiary">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" data-icon="sell">sell</span>
+<span>Discount (NEWUSER20)</span>
+</div>
+<span>-$6.20</span>
+</div>
+<div class="flex justify-between items-center text-sm font-body text-on-surface-variant">
+<span>Delivery Fee</span>
+<span>$2.50</span>
+</div>
+</div>
+<!-- Divider Ban: using spacing instead -->
+<div class="pt-4 mt-4 flex justify-between items-center border-t border-on-surface/5">
+<span class="font-serif text-xl font-bold italic">Total</span>
+<span class="font-sans text-2xl font-black text-on-surface tracking-tight">$27.30</span>
+</div>
+</section>
+</main>
+<!-- Sticky Bottom Checkout Container -->
+<div class="fixed bottom-0 left-0 w-full p-6 glass-nav bg-[#FFF8F2]/90 flex flex-col items-center">
+<!-- Floating Active Navigation Style -->
+<button class="w-full h-14 bg-gradient-to-br from-[#8C4B10] to-[#AA6328] text-white rounded-full flex items-center justify-center gap-2 font-label font-bold uppercase tracking-widest shadow-xl shadow-[#8C4B10]/20 active:scale-95 transition-all">
+<span>Proceed to Checkout</span>
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+<!-- Tab Bar Visual Guide (Small indicator) -->
+<div class="mt-4 flex gap-8">
+<div class="flex flex-col items-center gap-1 opacity-40">
+<span class="material-symbols-outlined" data-icon="storefront">storefront</span>
+<span class="text-[8px] uppercase font-bold tracking-tighter">Boulangerie</span>
+</div>
+<div class="flex flex-col items-center gap-1 opacity-40">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+<span class="text-[8px] uppercase font-bold tracking-tighter">Favorites</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-primary">
+<div class="w-8 h-8 flex items-center justify-center bg-primary/10 rounded-full">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+</div>
+<span class="text-[8px] uppercase font-bold tracking-tighter">Orders</span>
+</div>
+<div class="flex flex-col items-center gap-1 opacity-40">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="text-[8px] uppercase font-bold tracking-tighter">Profile</span>
+</div>
+</div>
+</div>
+</body></html>
