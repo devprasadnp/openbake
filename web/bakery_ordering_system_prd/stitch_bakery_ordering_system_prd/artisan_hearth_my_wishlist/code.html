@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700;900&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container-lowest": "#ffffff",
+              "on-tertiary-fixed-variant": "#83260e",
+              "on-tertiary-container": "#fffbff",
+              "error-container": "#ffdad6",
+              "background": "#fff8f2",
+              "on-secondary-fixed": "#2f1400",
+              "on-secondary-container": "#783d01",
+              "on-error-container": "#93000a",
+              "inverse-on-surface": "#f6f0ea",
+              "tertiary-fixed": "#ffdad2",
+              "secondary-container": "#ffab69",
+              "on-error": "#ffffff",
+              "surface-tint": "#8f4e13",
+              "primary-fixed": "#ffdcc5",
+              "on-tertiary": "#ffffff",
+              "surface-container": "#f3ede7",
+              "on-primary-fixed": "#301400",
+              "outline-variant": "#d8c2b4",
+              "on-surface": "#1e1b18",
+              "error": "#ba1a1a",
+              "on-primary-fixed-variant": "#703800",
+              "secondary": "#8e4e14",
+              "primary-fixed-dim": "#ffb782",
+              "surface": "#fff8f2",
+              "secondary-fixed-dim": "#ffb780",
+              "on-surface-variant": "#534439",
+              "on-primary": "#ffffff",
+              "primary": "#8c4b10",
+              "secondary-fixed": "#ffdcc4",
+              "tertiary": "#a03b21",
+              "surface-container-high": "#eee7e1",
+              "on-background": "#1e1b18",
+              "inverse-surface": "#33302c",
+              "tertiary-container": "#c05237",
+              "surface-container-low": "#f9f2ec",
+              "surface-bright": "#fff8f2",
+              "on-primary-container": "#fffbff",
+              "surface-variant": "#e8e1dc",
+              "primary-container": "#aa6328",
+              "inverse-primary": "#ffb782",
+              "outline": "#867468",
+              "surface-container-highest": "#e8e1dc",
+              "on-secondary": "#ffffff",
+              "on-tertiary-fixed": "#3c0700",
+              "surface-dim": "#dfd9d3",
+              "tertiary-fixed-dim": "#ffb4a2",
+              "on-secondary-fixed-variant": "#6f3800"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .filled-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body min-h-screen">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#fff8f2]/70 dark:bg-stone-900/70 backdrop-blur-md shadow-sm shadow-[#8c4b10]/5">
+<nav class="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
+<div class="text-2xl font-serif font-black text-[#8c4b10] dark:text-[#ffab69] tracking-tight">
+                Artisan Hearth
+            </div>
+<div class="hidden md:flex items-center space-gap-8 gap-8">
+<a class="font-serif font-bold text-lg text-stone-600 dark:text-stone-400 hover:text-[#aa6328] transition-colors duration-300" href="#">Home</a>
+<a class="font-serif font-bold text-lg text-[#8c4b10] border-b-2 border-[#8c4b10] pb-1" href="#">Wishlist</a>
+<a class="font-serif font-bold text-lg text-stone-600 dark:text-stone-400 hover:text-[#aa6328] transition-colors duration-300" href="#">Orders</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-[#8c4b10] hover:bg-surface-variant rounded-full transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-[#8c4b10] hover:bg-surface-variant rounded-full transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</nav>
+</header>
+<main class="pt-28 pb-32 px-6 max-w-7xl mx-auto">
+<!-- Hero Header -->
+<section class="mb-12">
+<h1 class="font-headline text-5xl md:text-6xl font-black text-primary leading-tight mb-4">
+                My Hearth Favorites
+            </h1>
+<p class="text-on-surface-variant text-lg max-w-2xl">
+                A curated collection of your most-loved artisanal breads and pastries, ready for your next warm gathering.
+            </p>
+</section>
+<!-- Wishlist Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+<!-- Item 1 -->
+<div class="group bg-surface-container-lowest rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-outline-variant/10">
+<div class="relative aspect-square overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="close-up of a rustic sourdough boule with a beautiful golden crust and flour dusting on a warm wooden surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEo5HKWuvNlXF9I_kJ8K5XYknJyZESU6ptJ3nEUuFkD-YAt74K5zZD9h1bzix4BghH53uoJ-bF7SMZsroZSKv3u_GsnW63p1qIbY24_Kj3xL9y_c09j1QI0HgyQmUt19Fn6DdtoDnuIDlUu4_X8MDdxCe2Mg6Cj4nid4CA4vGby-6HuOp_LkGg1x4VNOOFtbAKqVbJYT_G-Ekea_8MbdWaNetTySenCLZu9XdXGdxFA39kLbwKJKgdDP8HqMbDci2WVEybQ32WkV4"/>
+<button class="absolute top-4 right-4 w-10 h-10 flex items-center justify-center bg-surface-container-lowest/80 backdrop-blur-md rounded-full text-tertiary">
+<span class="material-symbols-outlined filled-icon" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</button>
+</div>
+<div class="p-6">
+<span class="text-[10px] uppercase tracking-widest text-secondary font-bold mb-2 block">Signature Sourdough</span>
+<h3 class="font-headline text-xl text-on-surface mb-2">Heritage Wheat Boule</h3>
+<div class="flex items-center justify-between mt-4">
+<span class="text-2xl font-black text-primary">$12.50</span>
+<button class="flex items-center gap-2 bg-gradient-to-br from-primary to-primary-container text-white px-6 py-2 rounded-full font-bold text-sm shadow-md shadow-primary/20 hover:scale-105 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="shopping_bag">shopping_bag</span>
+                            Add to Cart
+                        </button>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="group bg-surface-container-lowest rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-outline-variant/10">
+<div class="relative aspect-square overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="golden flaky croissants piled on a marble tray in a bright sunlit kitchen with soft morning light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuArM77iTLtgaUZWcnPXCflIjzWpwrq0kFlxOVt9Kr4ccC_m5baAjgESNHLG7PKZ0Tnl1uJGNv_4tM6jsQ3gFvXBkFvt--19EraiRMCFB9YEAFlvLsEw8yk74dcSKdABHR4ufpQHWD9jNxzL8kpW6EAutBBw73YNoTHYW65rceZE_R5jHX3VzSHt6fbrgnrZNmNJdXkXEIdcx2cJ1GZXvctcxSAvm1_pP2UlEc6rcj0c20DPx4IO5RJH9j9ulze3qGIU-BRc51K6iyo"/>
+<button class="absolute top-4 right-4 w-10 h-10 flex items-center justify-center bg-surface-container-lowest/80 backdrop-blur-md rounded-full text-tertiary">
+<span class="material-symbols-outlined filled-icon" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</button>
+</div>
+<div class="p-6">
+<span class="text-[10px] uppercase tracking-widest text-secondary font-bold mb-2 block">Viennoiserie</span>
+<h3 class="font-headline text-xl text-on-surface mb-2">Butter Croissant Set</h3>
+<div class="flex items-center justify-between mt-4">
+<span class="text-2xl font-black text-primary">$18.00</span>
+<button class="flex items-center gap-2 bg-gradient-to-br from-primary to-primary-container text-white px-6 py-2 rounded-full font-bold text-sm shadow-md shadow-primary/20 hover:scale-105 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="shopping_bag">shopping_bag</span>
+                            Add to Cart
+                        </button>
+</div>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="group bg-surface-container-lowest rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-outline-variant/10">
+<div class="relative aspect-square overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="dark chocolate sea salt cookies with soft centers and melting chocolate chunks on a parchment paper" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5vq4gAgpD3ranxoTIG2zMVjNz8Z9kWn0Axi3URSCbm19y8n33pKs7Kxse_jW1ts7IPIwGenhLTE6I2xMywtY_yVBaT5SilrnYRn3g8PjNppXrnEDrYWN7TFwMg8zakIKat3dTH_1O943DsXmcx-9uyBLWn_-8vEELJ_bF8uWNUIazzF2nWTOdq25muKIMpMeGM7X2OYcfSt1ATx63-aPuY6QdqiABRWFyZXVDqSbyXRpejxV5sdTSwYQzQhvf0Et8l-6qp6q2_Tk"/>
+<button class="absolute top-4 right-4 w-10 h-10 flex items-center justify-center bg-surface-container-lowest/80 backdrop-blur-md rounded-full text-tertiary">
+<span class="material-symbols-outlined filled-icon" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</button>
+</div>
+<div class="p-6">
+<span class="text-[10px] uppercase tracking-widest text-secondary font-bold mb-2 block">Daily Treats</span>
+<h3 class="font-headline text-xl text-on-surface mb-2">Midnight Cocoa Cookies</h3>
+<div class="flex items-center justify-between mt-4">
+<span class="text-2xl font-black text-primary">$15.00</span>
+<button class="flex items-center gap-2 bg-gradient-to-br from-primary to-primary-container text-white px-6 py-2 rounded-full font-bold text-sm shadow-md shadow-primary/20 hover:scale-105 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="shopping_bag">shopping_bag</span>
+                            Add to Cart
+                        </button>
+</div>
+</div>
+</div>
+<!-- Item 4 -->
+<div class="group bg-surface-container-lowest rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-outline-variant/10">
+<div class="relative aspect-square overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="long crusty baguettes in a woven basket with a rustic linen cloth and warm ambient bakery lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKDZPIczFGQw4_S1ZCmM2MMOkkQ6VSCzOCkQdRmvs6spc9j47TFf0m3G9E4Z-87VsCtD8bUIu4-x7yifNhIY-3uFTyAewIuEEWFyA6YgVUxQwHz2M7NjyegZAfTe3NZRoBZZ6OUAGGD3lAQSNisQjqaNhVplxxjhf_HwG2NmiU7CL3qubc1BHXQPp799nQ-JE8CgPs0PUh8SRaFobvQiohA9CrzBHqnsNqbvf3kMxFFl87qxm3NFJwpgchKYHn6DAVcUeEvNQoQkE"/>
+<button class="absolute top-4 right-4 w-10 h-10 flex items-center justify-center bg-surface-container-lowest/80 backdrop-blur-md rounded-full text-tertiary">
+<span class="material-symbols-outlined filled-icon" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</button>
+</div>
+<div class="p-6">
+<span class="text-[10px] uppercase tracking-widest text-secondary font-bold mb-2 block">French Classics</span>
+<h3 class="font-headline text-xl text-on-surface mb-2">Traditional Baguette</h3>
+<div class="flex items-center justify-between mt-4">
+<span class="text-2xl font-black text-primary">$4.50</span>
+<button class="flex items-center gap-2 bg-gradient-to-br from-primary to-primary-container text-white px-6 py-2 rounded-full font-bold text-sm shadow-md shadow-primary/20 hover:scale-105 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="shopping_bag">shopping_bag</span>
+                            Add to Cart
+                        </button>
+</div>
+</div>
+</div>
+<!-- Bento Styled Spotlight Card -->
+<div class="lg:col-span-2 bg-primary-fixed p-8 rounded-lg flex flex-col md:flex-row items-center gap-8 relative overflow-hidden">
+<div class="flex-1 z-10">
+<div class="flex items-center gap-2 text-primary font-bold mb-4">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+<span class="text-[10px] uppercase tracking-widest">Seasonal Recommendation</span>
+</div>
+<h2 class="font-headline text-3xl text-on-primary-fixed font-black mb-4">Smoked Honey Focaccia</h2>
+<p class="text-on-primary-fixed-variant mb-6 leading-relaxed">
+                        A unique seasonal favorite that pairs perfectly with your wishlist items. Hand-pressed with organic rosemary and wildflower honey.
+                    </p>
+<button class="bg-primary text-white px-8 py-3 rounded-full font-bold shadow-lg shadow-primary/30 hover:bg-primary-container transition-colors">
+                        Discover More
+                    </button>
+</div>
+<div class="flex-1 relative">
+<img class="rounded-lg shadow-2xl rotate-3 transform transition-transform group-hover:rotate-0" data-alt="artisan focaccia bread topped with sea salt and rosemary being drizzled with honey in a warm lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVS4auLYYUVUhhSEkWA6feREKiyzMIaS3JI4t3AtNJ6NLY7oc92UyX22kHTAKzxpdpY1X0iL20uyfIWVqmxdUwekkFgt2_1l5O4v6SAeXc7K5BkNNTiRNHZ3XH_C_QFGp3Wte2KvSu7KXf3i4UGWBTMGHqu6dWPFqWR-TQXcDKY1KDCDeRerfE5KerBbj3ahPK77Un-o82s70oEE-L27FTQjsw-kQNCpibbokL38FzW1Le1EDuyfSEz5k3Q19iIVmQFTZaohUOb1I"/>
+</div>
+</div>
+<!-- Item 5 -->
+<div class="group bg-surface-container-lowest rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-outline-variant/10">
+<div class="relative aspect-square overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="cinnamon rolls with thick white icing and swirls of cinnamon on a rustic plate" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDv7Fh2_GnCr8-9gi5Vlv7lzGe_sr5AxPgiiGTJ8NVxe2xy9IACsLPrTBxAmMd3KmLsKeKIN77K74rUhNONtL9-1xdY9ChL-6MGeAObwE3vJF9yW1ZV7aBvdUno_I_SR0PWXM11I0qo1FI1-31bHMZTamdDAJTZBbRz4aP92ADun5ZCA-_X6bH2tDNSOJ-XVmMWYM_KfEa8fcqonsE_08kMZbn4h3bw8cnNCUsHFzkvx73jAPQYmZFbF4SDgGbiEtHUEFnp6sjJubs"/>
+<button class="absolute top-4 right-4 w-10 h-10 flex items-center justify-center bg-surface-container-lowest/80 backdrop-blur-md rounded-full text-tertiary">
+<span class="material-symbols-outlined filled-icon" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</button>
+</div>
+<div class="p-6">
+<span class="text-[10px] uppercase tracking-widest text-secondary font-bold mb-2 block">Breakfast Favorites</span>
+<h3 class="font-headline text-xl text-on-surface mb-2">Cinnamon Swirl Roll</h3>
+<div class="flex items-center justify-between mt-4">
+<span class="text-2xl font-black text-primary">$6.50</span>
+<button class="flex items-center gap-2 bg-gradient-to-br from-primary to-primary-container text-white px-6 py-2 rounded-full font-bold text-sm shadow-md shadow-primary/20 hover:scale-105 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="shopping_bag">shopping_bag</span>
+                            Add to Cart
+                        </button>
+</div>
+</div>
+</div>
+<!-- Item 6 -->
+<div class="group bg-surface-container-lowest rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-outline-variant/10">
+<div class="relative aspect-square overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="dark crusty rye bread loaf on a dark background with dramatic shadows and crumbs" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXr-I73GcSaDItHYfaqxVXJ8pTgw-rvSyv56sgij66mEyduClwmrriKjqyw1d8Ns53YYK3ftCQEnj5dwRelKwAsJ2EoOJlS-Fw4-MQ9BZVfB99wFrgEqQIK7va4NvPwnsVSoejh1ujY903KSTOGTdjHgUsJwusCfRvhszXDPyQ1C7k1KUk2Pl_I-LnS3GPhIAHvNSw5jUX_WJtREj8Yew8_Hx0nBRAJa1b6iZChY7dgYnzg3NmNq9I2AsCWW4XtEB6ZFKug0tCkeY"/>
+<button class="absolute top-4 right-4 w-10 h-10 flex items-center justify-center bg-surface-container-lowest/80 backdrop-blur-md rounded-full text-tertiary">
+<span class="material-symbols-outlined filled-icon" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</button>
+</div>
+<div class="p-6">
+<span class="text-[10px] uppercase tracking-widest text-secondary font-bold mb-2 block">Specialty Grains</span>
+<h3 class="font-headline text-xl text-on-surface mb-2">Dark Rye Sourdough</h3>
+<div class="flex items-center justify-between mt-4">
+<span class="text-2xl font-black text-primary">$13.50</span>
+<button class="flex items-center gap-2 bg-gradient-to-br from-primary to-primary-container text-white px-6 py-2 rounded-full font-bold text-sm shadow-md shadow-primary/20 hover:scale-105 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="shopping_bag">shopping_bag</span>
+                            Add to Cart
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-end px-6 pb-6 bg-[#fff8f2]/90 dark:bg-stone-900/90 backdrop-blur-xl rounded-t-[2.5rem] z-50 shadow-2xl">
+<div class="flex flex-col items-center justify-center text-stone-400 dark:text-stone-500 py-4">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-sans font-bold text-[10px] uppercase tracking-widest mt-1">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-gradient-to-br from-[#8c4b10] to-[#aa6328] text-white rounded-full w-14 h-14 -translate-y-4 shadow-lg shadow-[#8c4b10]/20 active:scale-90 transition-all">
+<span class="material-symbols-outlined filled-icon" data-icon="favorite" style="font-variation-settings: 'FILL' 1;">favorite</span>
+<span class="font-sans font-bold text-[8px] uppercase tracking-widest">Wishlist</span>
+</div>
+<div class="flex flex-col items-center justify-center text-stone-400 dark:text-stone-500 py-4">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+<span class="font-sans font-bold text-[10px] uppercase tracking-widest mt-1">Orders</span>
+</div>
+<div class="flex flex-col items-center justify-center text-stone-400 dark:text-stone-500 py-4">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-sans font-bold text-[10px] uppercase tracking-widest mt-1">Profile</span>
+</div>
+</nav>
+</body></html>

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Artisanal Hearth Admin - Management Portal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface": "#fff8f2",
+                        "tertiary-fixed": "#ffdad2",
+                        "primary": "#8c4b10",
+                        "on-surface-variant": "#534439",
+                        "secondary-fixed-dim": "#ffb780",
+                        "surface-tint": "#8f4e13",
+                        "tertiary": "#a03b21",
+                        "secondary-fixed": "#ffdcc4",
+                        "surface-bright": "#fff8f2",
+                        "on-tertiary-fixed": "#3c0700",
+                        "surface-container-low": "#f9f2ec",
+                        "error": "#ba1a1a",
+                        "surface-variant": "#e8e1dc",
+                        "secondary": "#8e4e14",
+                        "outline-variant": "#d8c2b4",
+                        "outline": "#867468",
+                        "primary-fixed": "#ffdcc5",
+                        "on-background": "#1e1b18",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#83260e",
+                        "on-secondary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "primary-fixed-dim": "#ffb782",
+                        "on-primary-fixed-variant": "#703800",
+                        "on-error": "#ffffff",
+                        "background": "#fff8f2",
+                        "on-primary-fixed": "#301400",
+                        "surface-container": "#f3ede7",
+                        "primary-container": "#aa6328",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#fffbff",
+                        "inverse-primary": "#ffb782",
+                        "on-surface": "#1e1b18",
+                        "tertiary-container": "#c05237",
+                        "secondary-container": "#ffab69",
+                        "on-secondary-fixed-variant": "#6f3800",
+                        "surface-container-high": "#eee7e1",
+                        "on-secondary-container": "#783d01",
+                        "surface-container-highest": "#e8e1dc",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-fixed-dim": "#ffb4a2",
+                        "surface-dim": "#dfd9d3",
+                        "inverse-surface": "#33302c",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-container": "#fffbff",
+                        "inverse-on-surface": "#f6f0ea",
+                        "on-secondary-fixed": "#2f1400"
+                    },
+                    fontFamily: {
+                        "headline": ["Noto Serif"],
+                        "body": ["Plus Jakarta Sans"],
+                        "label": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #fff8f2; color: #1e1b18; }
+        .font-serif { font-family: 'Noto Serif', serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .ambient-glow { box-shadow: 0 8px 32px rgba(140, 75, 16, 0.06); }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e8e1dc; border-radius: 10px; }
+    </style>
+</head>
+<body class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 overflow-y-auto bg-stone-50 flex flex-col py-6 gap-2 z-50 transition-all duration-300">
+<div class="px-8 mb-8 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-secondary-container">bakery_dining</span>
+</div>
+<div>
+<h2 class="font-serif text-2xl text-orange-900 leading-tight">The Hearth</h2>
+<p class="text-xs font-sans tracking-tight text-stone-500 uppercase">Management Portal</p>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<!-- Dashboard Active -->
+<a class="bg-orange-100 text-orange-900 font-semibold rounded-full px-4 py-3 flex items-center gap-3 transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm">Dashboard</span>
+</a>
+<a class="text-stone-600 hover:bg-stone-200/50 rounded-full px-4 py-3 flex items-center gap-3 transition-all group" href="#">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="text-sm">Orders</span>
+</a>
+<a class="text-stone-600 hover:bg-stone-200/50 rounded-full px-4 py-3 flex items-center gap-3 transition-all group" href="#">
+<span class="material-symbols-outlined">bakery_dining</span>
+<span class="text-sm">Products</span>
+</a>
+<a class="text-stone-600 hover:bg-stone-200/50 rounded-full px-4 py-3 flex items-center gap-3 transition-all group" href="#">
+<span class="material-symbols-outlined">category</span>
+<span class="text-sm">Categories</span>
+</a>
+<a class="text-stone-600 hover:bg-stone-200/50 rounded-full px-4 py-3 flex items-center gap-3 transition-all group" href="#">
+<span class="material-symbols-outlined">confirmation_number</span>
+<span class="text-sm">Coupons</span>
+</a>
+<a class="text-stone-600 hover:bg-stone-200/50 rounded-full px-4 py-3 flex items-center gap-3 transition-all group" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="text-sm">Inventory</span>
+</a>
+<a class="text-stone-600 hover:bg-stone-200/50 rounded-full px-4 py-3 flex items-center gap-3 transition-all group" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="text-sm">Analytics</span>
+</a>
+</nav>
+<div class="px-6 mt-8">
+<button class="w-full bg-gradient-to-br from-primary to-primary-container text-white py-3 px-6 rounded-full font-medium shadow-md flex items-center justify-center gap-2 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-base">add</span>
+<span class="text-sm">New Product</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 flex-1 flex flex-col min-h-screen bg-surface">
+<!-- TopNavBar -->
+<header class="w-full sticky top-0 z-40 bg-white/70 backdrop-blur-md shadow-sm shadow-orange-900/5 flex justify-between items-center px-8 py-3">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative max-w-md w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 text-lg">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container border-none rounded-xl focus:ring-2 focus:ring-primary/20 text-sm placeholder-stone-400" placeholder="Search orders, items..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="text-stone-500 hover:bg-stone-100/50 p-2 rounded-full transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-tertiary rounded-full border-2 border-white"></span>
+</button>
+<button class="text-stone-500 hover:bg-stone-100/50 p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="h-8 w-[1px] bg-stone-200 mx-2"></div>
+<div class="flex items-center gap-3">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-bold text-orange-900 leading-none">Elena Thorne</p>
+<p class="text-[10px] text-stone-500 font-medium uppercase tracking-wider">Head Baker</p>
+</div>
+<img alt="Admin Profile Avatar" class="w-10 h-10 rounded-full object-cover border-2 border-primary/10" data-alt="professional portrait of a head baker woman with a warm friendly smile in a modern bakery kitchen setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuADMewAcPHDuWPp5T3dRoKJst7n-nKOt7COqqvS3LlZ4bJ9dJzUE7yJAvY75B3GVJuoATAoS2Lp9eVsu-MGeZ9Tm1Gs-bDqvXh2KSd51_1itOQethtJuQZSGHNvZ1yeTVdNYMBsv8aO4IideCWBYV7WPL4YIVdUOWr7dqRLyrFuXHbldxVEthn2A4eGoFCaymgDTcj_F5E13N_ncEu3G8mZPLN9af2Hk4NT00odMjXhhibWYNTilE3pIJovvY04lW1Rb1YneYNnVis"/>
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<div class="p-8 space-y-10 custom-scrollbar overflow-y-auto">
+<!-- Welcome Header -->
+<section>
+<h1 class="font-serif italic text-4xl text-orange-900">Good morning, Elena</h1>
+<p class="text-stone-500 mt-2">Here is what's simmering in the hearth today.</p>
+</section>
+<!-- KPI Card Row -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest p-6 rounded-lg ambient-glow flex items-start justify-between">
+<div>
+<p class="text-sm font-medium text-stone-500">Today's Orders</p>
+<h3 class="text-3xl font-bold text-orange-900 mt-1">128</h3>
+<div class="flex items-center gap-1 mt-2 text-green-600 font-medium text-xs">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span>+12% vs yesterday</span>
+</div>
+</div>
+<div class="p-3 bg-orange-50 rounded-2xl text-orange-700">
+<span class="material-symbols-outlined">shopping_basket</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest p-6 rounded-lg ambient-glow flex items-start justify-between">
+<div>
+<p class="text-sm font-medium text-stone-500">Revenue</p>
+<h3 class="text-3xl font-bold text-orange-900 mt-1">$2,450</h3>
+<div class="flex items-center gap-1 mt-2 text-green-600 font-medium text-xs">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span>+8% vs last week</span>
+</div>
+</div>
+<div class="p-3 bg-green-50 rounded-2xl text-green-700">
+<span class="material-symbols-outlined">payments</span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest p-6 rounded-lg ambient-glow flex items-start justify-between">
+<div>
+<p class="text-sm font-medium text-stone-500">New Customers</p>
+<h3 class="text-3xl font-bold text-orange-900 mt-1">45</h3>
+<div class="flex items-center gap-1 mt-2 text-green-600 font-medium text-xs">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span>+5% growth</span>
+</div>
+</div>
+<div class="p-3 bg-blue-50 rounded-2xl text-blue-700">
+<span class="material-symbols-outlined">person_add</span>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-container-lowest p-6 rounded-lg ambient-glow flex items-start justify-between">
+<div>
+<p class="text-sm font-medium text-stone-500">Pending Orders</p>
+<h3 class="text-3xl font-bold text-orange-900 mt-1">18</h3>
+<div class="flex items-center gap-1 mt-2 text-tertiary font-medium text-xs">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span>Needs attention</span>
+</div>
+</div>
+<div class="p-3 bg-orange-100 rounded-2xl text-orange-800">
+<span class="material-symbols-outlined">timer</span>
+</div>
+</div>
+</section>
+<!-- Analytics Section -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Left: Order Trends (Bento Large) -->
+<div class="lg:col-span-2 bg-surface-container-lowest p-8 rounded-lg ambient-glow flex flex-col gap-6">
+<div class="flex justify-between items-end">
+<div>
+<h4 class="font-serif text-xl text-orange-900">Order Trends</h4>
+<p class="text-sm text-stone-400">Weekly performance summary</p>
+</div>
+<div class="flex bg-surface-container p-1 rounded-full text-xs font-semibold text-stone-500">
+<button class="px-4 py-1.5 rounded-full bg-white text-orange-900 shadow-sm">Week</button>
+<button class="px-4 py-1.5 rounded-full">Month</button>
+<button class="px-4 py-1.5 rounded-full">Year</button>
+</div>
+</div>
+<div class="h-64 relative flex items-end justify-between gap-4 pt-8">
+<!-- Mock Chart Visualization -->
+<div class="flex-1 flex flex-col justify-end items-center gap-2 group">
+<div class="w-full bg-primary-fixed-dim/20 rounded-t-lg relative" style="height: 40%">
+<div class="absolute inset-x-0 bottom-0 bg-primary/40 rounded-t-lg transition-all h-3/4 group-hover:bg-primary/60"></div>
+</div>
+<span class="text-[10px] uppercase tracking-tighter text-stone-400">Mon</span>
+</div>
+<div class="flex-1 flex flex-col justify-end items-center gap-2 group">
+<div class="w-full bg-primary-fixed-dim/20 rounded-t-lg relative" style="height: 60%">
+<div class="absolute inset-x-0 bottom-0 bg-primary/40 rounded-t-lg h-2/3 group-hover:bg-primary/60 transition-all"></div>
+</div>
+<span class="text-[10px] uppercase tracking-tighter text-stone-400">Tue</span>
+</div>
+<div class="flex-1 flex flex-col justify-end items-center gap-2 group">
+<div class="w-full bg-primary-fixed-dim/20 rounded-t-lg relative" style="height: 50%">
+<div class="absolute inset-x-0 bottom-0 bg-primary/40 rounded-t-lg h-4/5 group-hover:bg-primary/60 transition-all"></div>
+</div>
+<span class="text-[10px] uppercase tracking-tighter text-stone-400">Wed</span>
+</div>
+<div class="flex-1 flex flex-col justify-end items-center gap-2 group">
+<div class="w-full bg-primary-fixed-dim/20 rounded-t-lg relative" style="height: 85%">
+<div class="absolute inset-x-0 bottom-0 bg-primary rounded-t-lg h-full"></div>
+<div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-orange-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">142</div>
+</div>
+<span class="text-[10px] uppercase tracking-tighter font-bold text-orange-900">Thu</span>
+</div>
+<div class="flex-1 flex flex-col justify-end items-center gap-2 group">
+<div class="w-full bg-primary-fixed-dim/20 rounded-t-lg relative" style="height: 70%">
+<div class="absolute inset-x-0 bottom-0 bg-primary/40 rounded-t-lg h-3/4 group-hover:bg-primary/60 transition-all"></div>
+</div>
+<span class="text-[10px] uppercase tracking-tighter text-stone-400">Fri</span>
+</div>
+<div class="flex-1 flex flex-col justify-end items-center gap-2 group">
+<div class="w-full bg-primary-fixed-dim/20 rounded-t-lg relative" style="height: 45%">
+<div class="absolute inset-x-0 bottom-0 bg-primary/40 rounded-t-lg h-1/2 group-hover:bg-primary/60 transition-all"></div>
+</div>
+<span class="text-[10px] uppercase tracking-tighter text-stone-400">Sat</span>
+</div>
+<div class="flex-1 flex flex-col justify-end items-center gap-2 group">
+<div class="w-full bg-primary-fixed-dim/20 rounded-t-lg relative" style="height: 30%">
+<div class="absolute inset-x-0 bottom-0 bg-primary/40 rounded-t-lg h-1/3 group-hover:bg-primary/60 transition-all"></div>
+</div>
+<span class="text-[10px] uppercase tracking-tighter text-stone-400">Sun</span>
+</div>
+</div>
+</div>
+<!-- Right: Orders by Status (Donut Chart Mock) -->
+<div class="bg-surface-container-lowest p-8 rounded-lg ambient-glow flex flex-col items-center">
+<div class="w-full flex justify-between items-end mb-6">
+<div>
+<h4 class="font-serif text-xl text-orange-900">Distribution</h4>
+<p class="text-sm text-stone-400">Live order status</p>
+</div>
+</div>
+<div class="relative w-48 h-48 mb-8">
+<!-- Pseudo-Donut SVG -->
+<svg class="w-full h-full -rotate-90" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="transparent" r="40" stroke="#f3ede7" stroke-width="12"></circle>
+<circle cx="50" cy="50" fill="transparent" r="40" stroke="#8c4b10" stroke-dasharray="100 251" stroke-width="12"></circle>
+<circle cx="50" cy="50" fill="transparent" r="40" stroke="#ffab69" stroke-dasharray="60 251" stroke-dashoffset="-100" stroke-width="12"></circle>
+<circle cx="50" cy="50" fill="transparent" r="40" stroke="#a03b21" stroke-dasharray="30 251" stroke-dashoffset="-160" stroke-width="12"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-2xl font-bold text-orange-900">128</span>
+<span class="text-[10px] text-stone-400 uppercase tracking-widest">Total</span>
+</div>
+</div>
+<div class="w-full space-y-2">
+<div class="flex items-center justify-between text-xs">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary"></div>
+<span class="text-stone-600">Delivered</span>
+</div>
+<span class="font-bold text-orange-900">45%</span>
+</div>
+<div class="flex items-center justify-between text-xs">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-secondary-container"></div>
+<span class="text-stone-600">Preparing</span>
+</div>
+<span class="font-bold text-orange-900">28%</span>
+</div>
+<div class="flex items-center justify-between text-xs">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-tertiary"></div>
+<span class="text-stone-600">Pending</span>
+</div>
+<span class="font-bold text-orange-900">14%</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Recent Activity Section -->
+<section class="bg-surface-container-lowest rounded-lg ambient-glow overflow-hidden">
+<div class="p-8 flex justify-between items-center">
+<div>
+<h4 class="font-serif text-2xl text-orange-900">Recent Orders</h4>
+<p class="text-sm text-stone-400">Manage the latest incoming sourdough requests</p>
+</div>
+<button class="text-primary font-medium text-sm flex items-center gap-1 hover:underline">
+                        View All History <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-stone-50/50 text-stone-500 text-[10px] uppercase tracking-widest border-b border-stone-100">
+<th class="px-8 py-4 font-semibold">Order ID</th>
+<th class="px-4 py-4 font-semibold">Customer</th>
+<th class="px-4 py-4 font-semibold">Items</th>
+<th class="px-4 py-4 font-semibold">Total</th>
+<th class="px-4 py-4 font-semibold">Status</th>
+<th class="px-8 py-4 font-semibold text-right">Time</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-stone-50">
+<!-- Row 1 -->
+<tr class="hover:bg-orange-50/20 transition-colors">
+<td class="px-8 py-5 text-sm font-medium text-orange-900">#AH-8902</td>
+<td class="px-4 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-800 text-[10px] font-bold">JD</div>
+<span class="text-sm font-medium text-stone-700">Julianna Duarte</span>
+</div>
+</td>
+<td class="px-4 py-5 text-sm text-stone-500">2x Olive Batard, 1x Croissant</td>
+<td class="px-4 py-5 text-sm font-bold text-orange-900">$34.50</td>
+<td class="px-4 py-5">
+<span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold uppercase rounded-full">Delivered</span>
+</td>
+<td class="px-8 py-5 text-xs text-stone-400 text-right">12 mins ago</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-orange-50/20 transition-colors">
+<td class="px-8 py-5 text-sm font-medium text-orange-900">#AH-8901</td>
+<td class="px-4 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center text-stone-600 text-[10px] font-bold">MK</div>
+<span class="text-sm font-medium text-stone-700">Marcus Kane</span>
+</div>
+</td>
+<td class="px-4 py-5 text-sm text-stone-500">1x Classic Sourdough, 3x Danish</td>
+<td class="px-4 py-5 text-sm font-bold text-orange-900">$22.00</td>
+<td class="px-4 py-5">
+<span class="px-3 py-1 bg-orange-100 text-orange-700 text-[10px] font-bold uppercase rounded-full">Preparing</span>
+</td>
+<td class="px-8 py-5 text-xs text-stone-400 text-right">24 mins ago</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-orange-50/20 transition-colors">
+<td class="px-8 py-5 text-sm font-medium text-orange-900">#AH-8900</td>
+<td class="px-4 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 text-[10px] font-bold">LW</div>
+<span class="text-sm font-medium text-stone-700">Lydia Wells</span>
+</div>
+</td>
+<td class="px-4 py-5 text-sm text-stone-500">4x Almond Pain Au Choc</td>
+<td class="px-4 py-5 text-sm font-bold text-orange-900">$28.40</td>
+<td class="px-4 py-5">
+<span class="px-3 py-1 bg-blue-100 text-blue-700 text-[10px] font-bold uppercase rounded-full">Accepted</span>
+</td>
+<td class="px-8 py-5 text-xs text-stone-400 text-right">45 mins ago</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-orange-50/20 transition-colors">
+<td class="px-8 py-5 text-sm font-medium text-orange-900">#AH-8899</td>
+<td class="px-4 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center text-red-800 text-[10px] font-bold">RT</div>
+<span class="text-sm font-medium text-stone-700">Robert Taylor</span>
+</div>
+</td>
+<td class="px-4 py-5 text-sm text-stone-500">1x Baker's Dozen Assorted</td>
+<td class="px-4 py-5 text-sm font-bold text-orange-900">$45.00</td>
+<td class="px-4 py-5">
+<span class="px-3 py-1 bg-red-100 text-red-700 text-[10px] font-bold uppercase rounded-full">Pending</span>
+</td>
+<td class="px-8 py-5 text-xs text-stone-400 text-right">1 hour ago</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-orange-50/20 transition-colors">
+<td class="px-8 py-5 text-sm font-medium text-orange-900">#AH-8898</td>
+<td class="px-4 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-800 text-[10px] font-bold">SO</div>
+<span class="text-sm font-medium text-stone-700">Sarah O'Brian</span>
+</div>
+</td>
+<td class="px-4 py-5 text-sm text-stone-500">2x Baguettes, 1x Sea Salt Rye</td>
+<td class="px-4 py-5 text-sm font-bold text-orange-900">$18.25</td>
+<td class="px-4 py-5">
+<span class="px-3 py-1 bg-stone-100 text-stone-600 text-[10px] font-bold uppercase rounded-full">Dispatched</span>
+</td>
+<td class="px-8 py-5 text-xs text-stone-400 text-right">1.5 hours ago</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Inventory Management | Artisan Hearth</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-dim": "#dfd9d3",
+              "tertiary-fixed-dim": "#ffb4a2",
+              "error-container": "#ffdad6",
+              "on-primary-fixed-variant": "#703800",
+              "primary-fixed-dim": "#ffb782",
+              "inverse-on-surface": "#f6f0ea",
+              "secondary": "#8e4e14",
+              "on-surface": "#1e1b18",
+              "on-secondary": "#ffffff",
+              "surface": "#fff8f2",
+              "on-secondary-fixed": "#2f1400",
+              "on-tertiary-container": "#fffbff",
+              "primary": "#8c4b10",
+              "on-primary-container": "#fffbff",
+              "on-primary-fixed": "#301400",
+              "on-error": "#ffffff",
+              "error": "#ba1a1a",
+              "on-secondary-fixed-variant": "#6f3800",
+              "tertiary": "#a03b21",
+              "primary-container": "#aa6328",
+              "surface-container-highest": "#e8e1dc",
+              "on-tertiary-fixed-variant": "#83260e",
+              "surface-bright": "#fff8f2",
+              "surface-container-lowest": "#ffffff",
+              "surface-container": "#f3ede7",
+              "on-tertiary": "#ffffff",
+              "primary-fixed": "#ffdcc5",
+              "outline": "#867468",
+              "on-tertiary-fixed": "#3c0700",
+              "surface-container-high": "#eee7e1",
+              "outline-variant": "#d8c2b4",
+              "on-primary": "#ffffff",
+              "tertiary-fixed": "#ffdad2",
+              "tertiary-container": "#c05237",
+              "surface-container-low": "#f9f2ec",
+              "on-surface-variant": "#534439",
+              "on-background": "#1e1b18",
+              "on-error-container": "#93000a",
+              "inverse-primary": "#ffb782",
+              "secondary-fixed": "#ffdcc4",
+              "secondary-container": "#ffab69",
+              "inverse-surface": "#33302c",
+              "surface-variant": "#e8e1dc",
+              "surface-tint": "#8f4e13",
+              "secondary-fixed-dim": "#ffb780",
+              "on-secondary-container": "#783d01",
+              "background": "#fff8f2"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        h1, h2, h3, .font-serif { font-family: 'Noto Serif', serif; }
+        .glass-header { background: rgba(255, 248, 242, 0.7); backdrop-filter: blur(12px); }
+        .ambient-shadow { shadow-[0_8px_32px_rgba(140,75,16,0.06)]; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex">
+<!-- SideNavBar (Shared Component) -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-[#eee7e1] dark:bg-stone-800 flex flex-col p-6 space-y-2 z-50">
+<div class="mb-8 px-4">
+<h2 class="font-serif font-bold text-[#8c4b10] text-xl">Bakery Admin</h2>
+<p class="text-xs text-on-surface-variant opacity-70">Master Baker Mode</p>
+</div>
+<nav class="flex-grow space-y-1">
+<a class="text-[#1e1b18] dark:text-stone-400 px-4 py-3 flex items-center gap-3 hover:bg-[#f9f2ec] dark:hover:bg-stone-700/50 rounded-full transition-colors duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-['Noto_Serif'] text-sm">Dashboard</span>
+</a>
+<a class="text-[#1e1b18] dark:text-stone-400 px-4 py-3 flex items-center gap-3 hover:bg-[#f9f2ec] dark:hover:bg-stone-700/50 rounded-full transition-colors duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="bakery_dining">bakery_dining</span>
+<span class="font-['Noto_Serif'] text-sm">Product Management</span>
+</a>
+<a class="bg-[#fff8f2] dark:bg-stone-700 text-[#8c4b10] rounded-full font-bold shadow-sm px-4 py-3 flex items-center gap-3 transition-colors duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-['Noto_Serif'] text-sm">Inventory</span>
+</a>
+<a class="text-[#1e1b18] dark:text-stone-400 px-4 py-3 flex items-center gap-3 hover:bg-[#f9f2ec] dark:hover:bg-stone-700/50 rounded-full transition-colors duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="local_shipping">local_shipping</span>
+<span class="font-['Noto_Serif'] text-sm">Order Fulfillment</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-outline-variant/10 space-y-1">
+<button class="w-full bg-gradient-to-br from-primary to-primary-container text-white py-3 rounded-full font-bold text-sm mb-4 shadow-md active:scale-95 transition-transform">
+                Add New Loaf
+            </button>
+<a class="text-[#1e1b18] dark:text-stone-400 px-4 py-3 flex items-center gap-3 hover:bg-[#f9f2ec] dark:hover:bg-stone-700/50 rounded-full transition-colors duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-['Noto_Serif'] text-sm">Settings</span>
+</a>
+<a class="text-[#1e1b18] dark:text-stone-400 px-4 py-3 flex items-center gap-3 hover:bg-[#f9f2ec] dark:hover:bg-stone-700/50 rounded-full transition-colors duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+<span class="font-['Noto_Serif'] text-sm">Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 flex-grow min-h-screen">
+<!-- Header -->
+<header class="sticky top-0 z-40 glass-header px-10 py-6 flex justify-between items-center">
+<div>
+<h1 class="text-3xl font-headline font-bold text-primary tracking-tight">Inventory Management</h1>
+<p class="text-on-surface-variant text-sm mt-1">Real-time stock tracking and flour metrics.</p>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-high border-none rounded-xl focus:ring-2 focus:ring-primary/20 w-64 text-sm transition-all" placeholder="Search inventory..." type="text"/>
+</div>
+<button class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant hover:bg-primary-fixed transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary/20">
+<img class="w-full h-full object-cover" data-alt="Portrait of an artisanal baker wearing a clean white apron in a sunlit kitchen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtkxp4HDEE-H-0ih3OqHCOOvLaS4poh6vwLRv0kgiO9e-3wjMAhpsRxV4yGZ2mWhMafWaPC7HqSlv1C91vwzlgACg0GRe-31A7m72FewU1yXa464h4qba-4c4t2NKHwK12TjiF32TMYHex4Om5nxxHdD3vLUV69bojf4EEHidr8JNhnpZcumSw4jz8czWnHrxnkNjZj3GX16bryamJ7rWE969c3m0sFkpWQxVWWliLpDqT7VpoxJIHmfuNqJ15rKVLxNK2TGF7z3s"/>
+</div>
+</div>
+</header>
+<!-- Insights Bento Grid -->
+<section class="px-10 py-8 grid grid-cols-1 md:grid-cols-4 gap-6">
+<div class="md:col-span-2 bg-tertiary-container rounded-lg p-6 text-white relative overflow-hidden group shadow-lg">
+<div class="relative z-10">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined bg-white/20 p-2 rounded-full" data-icon="warning">warning</span>
+<span class="font-bold text-sm tracking-wide uppercase">Critical Alerts</span>
+</div>
+<h3 class="text-4xl font-headline font-bold mb-2">4 Items Low</h3>
+<p class="opacity-90 max-w-xs">Sourdough starters and Rye flour levels are below 15% capacity. Immediate restock advised.</p>
+</div>
+<span class="material-symbols-outlined absolute -right-8 -bottom-8 text-white/10 text-9xl rotate-12 group-hover:rotate-0 transition-transform duration-500" data-icon="inventory">inventory</span>
+</div>
+<div class="bg-surface-container-lowest rounded-lg p-6 flex flex-col justify-between shadow-[0_8px_32px_rgba(140,75,16,0.04)] border border-outline-variant/5">
+<span class="text-on-surface-variant text-sm font-medium">Daily Flour Usage</span>
+<div class="mt-4">
+<span class="text-3xl font-headline font-bold text-primary">142kg</span>
+<div class="flex items-center gap-1 text-tertiary text-xs font-bold mt-1">
+<span class="material-symbols-outlined text-sm" data-icon="trending_up">trending_up</span>
+<span>+12% from yesterday</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-lg p-6 flex flex-col justify-between shadow-[0_8px_32px_rgba(140,75,16,0.04)] border border-outline-variant/5">
+<span class="text-on-surface-variant text-sm font-medium">Pending Deliveries</span>
+<div class="mt-4">
+<span class="text-3xl font-headline font-bold text-secondary">03</span>
+<p class="text-on-surface-variant text-xs mt-1">Estimated arrival: 2:00 PM</p>
+</div>
+</div>
+</section>
+<!-- Inventory Table Section -->
+<section class="px-10 pb-16">
+<div class="bg-surface-container-lowest rounded-lg shadow-[0_8px_32px_rgba(140,75,16,0.06)] overflow-hidden">
+<div class="p-6 border-b border-surface-variant flex justify-between items-center">
+<h2 class="text-xl font-headline font-bold text-on-surface">Live Stock Tracking</h2>
+<div class="flex gap-2">
+<button class="px-4 py-2 rounded-full bg-surface-container-high text-xs font-bold text-on-surface-variant hover:bg-surface-variant transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="filter_list">filter_list</span>
+                            Filter
+                        </button>
+<button class="px-4 py-2 rounded-full bg-surface-container-high text-xs font-bold text-on-surface-variant hover:bg-surface-variant transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="download">download</span>
+                            Export CSV
+                        </button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/50 text-on-surface-variant text-xs font-bold uppercase tracking-wider">
+<th class="px-8 py-4">Product Name</th>
+<th class="px-6 py-4">Category</th>
+<th class="px-6 py-4">Current Stock</th>
+<th class="px-6 py-4">Threshold</th>
+<th class="px-6 py-4">Status</th>
+<th class="px-8 py-4 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-variant/30">
+<!-- Low Stock Item -->
+<tr class="hover:bg-error-container/10 transition-colors group">
+<td class="px-8 py-5">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Close-up of freshly baked sourdough bread with a perfect ear and dusted with flour on a rustic wood surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1DEdsXxrRx6l3y18nJLw25WQZIWo_MYopzF5S0aMUUrdMUbZPV11uCnGh1g0aKRbg9IGGaQWbzEg2f-aebMqKoSoyrxRfwi157F46rwfO5zmoU6Pi4V_EICnnrHHexhyQONBqnB_UCA0fm5EeXRU5V7osYe5GhdSQv_m-EOs-8DdhlhvaopwxKbQOyr_whMH-6h8IPGNqQgRcnCB5UZsZN22g9Zd_mhVC02McDaPtoUU8pSZe8CfGqCUozSlyssiYodELnb9oXkM"/>
+</div>
+<div>
+<p class="font-bold text-on-surface">Classic Sourdough Loaf</p>
+<p class="text-xs text-on-surface-variant">SKU: AH-SDL-001</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="px-3 py-1 bg-surface-container-high rounded-full text-xs font-medium text-on-surface-variant">Daily Bread</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<span class="text-tertiary font-bold text-lg">12</span>
+<span class="text-xs text-on-surface-variant">units</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="text-sm font-medium text-on-surface-variant">25 units</span>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 bg-error-container text-on-error-container rounded-full text-xs font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-error animate-pulse"></span>
+                                        Critical Low
+                                    </span>
+</td>
+<td class="px-8 py-5 text-right">
+<button class="text-primary hover:text-primary-container transition-colors font-bold text-xs underline underline-offset-4 decoration-primary/30">Restock Now</button>
+</td>
+</tr>
+<!-- Warning Item -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-8 py-5">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Artisanal French baguettes in a wicker basket with golden crispy crust and flour dusting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuArH030Qbmao1GA4e12wYsbxmLVRaWoXmQrvPnEldlB776LKEvQt1OyW1fKPrYUK2hHkAnknywJ6J5jouS0tn8590a4QDFAqn0Z3gB93hpBY6sATHrkk53I7RQPjYttaI1R5zUQ3Yvfpe9FO4Hfsr6sBgUEgeI4dpQ7cbU_dPTFOXl0JeDZ2FRBdAyH1a4QnHw_Xl6FlEYE8RUNuNfqW64IRRlv0xwS-m0M3LwfrxQ2rO1Ap5S8PIWz3ggRZZVnCee_a3yq74wU8B0"/>
+</div>
+<div>
+<p class="font-bold text-on-surface">Artisan Baguette</p>
+<p class="text-xs text-on-surface-variant">SKU: AH-BAG-042</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="px-3 py-1 bg-surface-container-high rounded-full text-xs font-medium text-on-surface-variant">Pastries</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<span class="text-secondary font-bold text-lg">48</span>
+<span class="text-xs text-on-surface-variant">units</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="text-sm font-medium text-on-surface-variant">40 units</span>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 bg-secondary-fixed text-on-secondary-fixed rounded-full text-xs font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                                        Reaching Limit
+                                    </span>
+</td>
+<td class="px-8 py-5 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors font-bold text-xs underline underline-offset-4 decoration-outline/30">Edit Details</button>
+</td>
+</tr>
+<!-- Healthy Item -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-8 py-5">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Selection of flaky golden croissants and sweet danishes on a marble bakery counter" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3gjw04EpUitAlIb_EqN-uFZcFmaOdO8x-gEHILJimyQR1N1ATnu76CP5y6fBzbBtf2_g_Qh-BEkG5f-zgqZhInJ2-F5neo_OuDrDgqmUoqJpgkU-Y50dzb-HwY0datJNI4kK7tgi_-CJNqEvQmOWZVQabTxaYmGPO4ynNa3QYw3NrEPuKRca2B4I8QNO4R0QWDJpaUC_Bf62BsNLII3M614JD_95p1nWliVO4-FixtYsljhPwphgQqKwbK6oNUXc4V4fvY7EgBKg"/>
+</div>
+<div>
+<p class="font-bold text-on-surface">Brioche Buns (6-pack)</p>
+<p class="text-xs text-on-surface-variant">SKU: AH-BRI-009</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="px-3 py-1 bg-surface-container-high rounded-full text-xs font-medium text-on-surface-variant">Pastries</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<span class="text-on-surface font-bold text-lg">120</span>
+<span class="text-xs text-on-surface-variant">units</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="text-sm font-medium text-on-surface-variant">30 units</span>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 bg-primary-fixed text-on-primary-fixed-variant rounded-full text-xs font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                                        Well Stocked
+                                    </span>
+</td>
+<td class="px-8 py-5 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors font-bold text-xs underline underline-offset-4 decoration-outline/30">Edit Details</button>
+</td>
+</tr>
+<!-- Raw Materials Item -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-8 py-5">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Organic whole wheat flour being scooped with a wooden spoon, rustic kitchen setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjJW1A1-0WA8BSgfu40pXGr0sVWF5V2rpWUu4QXOa58zrWP_USBnr3UQR2gdJWwprFeGrHxLB5PPPbvvgnXJPH4kzdFdzjpFT2Vm6kFhgexCUuswDfODdTnE377eRjtwMvZKyComrj-5MD7dfWhv5xAED8KIRX3tm-_i_nUK7f4Le1hPCw9_YQc2-HK2Y4v8ZEjXDxsv37j27DKiwWLAT5i23lSswbOJKFaNvBLNXlwt0tcw5v2Mnh_vQqN0DjwCNEiImf4xbR-WY"/>
+</div>
+<div>
+<p class="font-bold text-on-surface">Stone-Ground Rye Flour</p>
+<p class="text-xs text-on-surface-variant">SKU: RM-RYE-882</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="px-3 py-1 bg-surface-container-high rounded-full text-xs font-medium text-on-surface-variant">Raw Materials</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<span class="text-tertiary font-bold text-lg">5.5</span>
+<span class="text-xs text-on-surface-variant">kg</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="text-sm font-medium text-on-surface-variant">25 kg</span>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 bg-error-container text-on-error-container rounded-full text-xs font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-error animate-pulse"></span>
+                                        Critical Low
+                                    </span>
+</td>
+<td class="px-8 py-5 text-right">
+<button class="text-primary hover:text-primary-container transition-colors font-bold text-xs underline underline-offset-4 decoration-primary/30">Reorder</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Simple Pagination -->
+<div class="p-6 bg-surface-container-low/30 border-t border-surface-variant/30 flex items-center justify-between">
+<span class="text-xs text-on-surface-variant font-medium">Showing 4 of 32 artisanal products</span>
+<div class="flex gap-1">
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded-full bg-primary text-white text-xs font-bold shadow-sm">1</button>
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface hover:bg-surface-container-highest transition-colors text-xs font-bold">2</button>
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface hover:bg-surface-container-highest transition-colors text-xs font-bold">3</button>
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer (Shared Component) -->
+<footer class="w-full mt-auto bg-[#f9f2ec] dark:bg-stone-950 flex flex-col md:flex-row justify-between items-center px-12 py-16 gap-8">
+<div class="text-[#8c4b10] dark:text-[#aa6328] font-['Noto_Serif'] text-xs tracking-wide uppercase">
+                © 2024 Artisan Hearth Bakery. Handcrafted Digital Experience.
+            </div>
+<div class="flex gap-8">
+<a class="text-[#1e1b18] dark:text-stone-500 font-['Noto_Serif'] text-xs tracking-wide uppercase hover:text-[#8c4b10] dark:hover:text-[#ffab69] transition-colors opacity-80 hover:opacity-100" href="#">Privacy Policy</a>
+<a class="text-[#1e1b18] dark:text-stone-500 font-['Noto_Serif'] text-xs tracking-wide uppercase hover:text-[#8c4b10] dark:hover:text-[#ffab69] transition-colors opacity-80 hover:opacity-100" href="#">Shipping Info</a>
+<a class="text-[#1e1b18] dark:text-stone-500 font-['Noto_Serif'] text-xs tracking-wide uppercase hover:text-[#8c4b10] dark:hover:text-[#ffab69] transition-colors opacity-80 hover:opacity-100" href="#">Wholesale</a>
+<a class="text-[#1e1b18] dark:text-stone-500 font-['Noto_Serif'] text-xs tracking-wide uppercase hover:text-[#8c4b10] dark:hover:text-[#ffab69] transition-colors opacity-80 hover:opacity-100" href="#">Contact Us</a>
+</div>
+</footer>
+</main>
+</body></html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Artisan Hearth | Your Profile</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-dim": "#dfd9d3",
+              "tertiary-fixed-dim": "#ffb4a2",
+              "error-container": "#ffdad6",
+              "on-primary-fixed-variant": "#703800",
+              "primary-fixed-dim": "#ffb782",
+              "inverse-on-surface": "#f6f0ea",
+              "secondary": "#8e4e14",
+              "on-surface": "#1e1b18",
+              "on-secondary": "#ffffff",
+              "surface": "#fff8f2",
+              "on-secondary-fixed": "#2f1400",
+              "on-tertiary-container": "#fffbff",
+              "primary": "#8c4b10",
+              "on-primary-container": "#fffbff",
+              "on-primary-fixed": "#301400",
+              "on-error": "#ffffff",
+              "error": "#ba1a1a",
+              "on-secondary-fixed-variant": "#6f3800",
+              "tertiary": "#a03b21",
+              "primary-container": "#aa6328",
+              "surface-container-highest": "#e8e1dc",
+              "on-tertiary-fixed-variant": "#83260e",
+              "surface-bright": "#fff8f2",
+              "surface-container-lowest": "#ffffff",
+              "surface-container": "#f3ede7",
+              "on-tertiary": "#ffffff",
+              "primary-fixed": "#ffdcc5",
+              "outline": "#867468",
+              "on-tertiary-fixed": "#3c0700",
+              "surface-container-high": "#eee7e1",
+              "outline-variant": "#d8c2b4",
+              "on-primary": "#ffffff",
+              "tertiary-fixed": "#ffdad2",
+              "tertiary-container": "#c05237",
+              "surface-container-low": "#f9f2ec",
+              "on-surface-variant": "#534439",
+              "on-background": "#1e1b18",
+              "on-error-container": "#93000a",
+              "inverse-primary": "#ffb782",
+              "secondary-fixed": "#ffdcc4",
+              "secondary-container": "#ffab69",
+              "inverse-surface": "#33302c",
+              "surface-variant": "#e8e1dc",
+              "surface-tint": "#8f4e13",
+              "secondary-fixed-dim": "#ffb780",
+              "on-secondary-container": "#783d01",
+              "background": "#fff8f2"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #fff8f2;
+        }
+        h1, h2, h3, .font-serif {
+            font-family: 'Noto Serif', serif;
+        }
+    </style>
+</head>
+<body class="text-on-surface">
+<!-- TopAppBar -->
+<header class="bg-[#fff8f2]/70 dark:bg-stone-900/70 backdrop-blur-md sticky top-0 w-full z-50 shadow-[0_8px_32px_rgba(140,75,16,0.06)]">
+<div class="flex justify-between items-center px-8 py-4 max-w-7xl mx-auto">
+<div class="text-2xl font-serif italic text-[#8c4b10] dark:text-[#ffab69]">Artisan Hearth</div>
+<nav class="hidden md:flex gap-8 font-['Noto_Serif'] font-bold tracking-tight">
+<a class="text-[#1e1b18] dark:text-stone-300 opacity-80 hover:opacity-100 hover:text-[#aa6328] transition-all" href="#">Shop</a>
+<a class="text-[#1e1b18] dark:text-stone-300 opacity-80 hover:opacity-100 hover:text-[#aa6328] transition-all" href="#">Orders</a>
+<a class="text-[#8c4b10] border-b-2 border-[#8c4b10] pb-1" href="#">Profile</a>
+<a class="text-[#1e1b18] dark:text-stone-300 opacity-80 hover:opacity-100 hover:text-[#aa6328] transition-all" href="#">Bakery Story</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-[#8c4b10] scale-95 active:duration-150" data-icon="shopping_basket">shopping_basket</button>
+<button class="material-symbols-outlined text-[#8c4b10] scale-95 active:duration-150" data-icon="account_circle">account_circle</button>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-4 md:px-8 py-12 flex flex-col md:flex-row gap-12">
+<!-- Sidebar Navigation -->
+<aside class="w-full md:w-72 flex-shrink-0">
+<div class="bg-surface-container-high rounded-lg p-6 space-y-2 sticky top-24">
+<div class="mb-8 px-4">
+<h2 class="font-headline text-xl font-bold text-primary italic">My Sanctuary</h2>
+<p class="text-xs text-on-surface-variant uppercase tracking-widest mt-1">Account Settings</p>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 bg-surface-container-lowest text-primary rounded-full font-bold shadow-sm px-4 py-3 transition-colors duration-300" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span>
+<span>Profile Details</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface px-4 py-3 rounded-full hover:bg-surface-container-low transition-colors duration-300" href="#">
+<span class="material-symbols-outlined">location_on</span>
+<span>Addresses</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface px-4 py-3 rounded-full hover:bg-surface-container-low transition-colors duration-300" href="#">
+<span class="material-symbols-outlined">favorite</span>
+<span>Wishlist</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface px-4 py-3 rounded-full hover:bg-surface-container-low transition-colors duration-300" href="#">
+<span class="material-symbols-outlined">notifications</span>
+<span>Notifications</span>
+</a>
+<div class="pt-8 mt-8 border-t border-outline-variant/20">
+<a class="flex items-center gap-3 text-error px-4 py-3 rounded-full hover:bg-error-container/20 transition-colors duration-300" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span>Sign Out</span>
+</a>
+</div>
+</nav>
+</div>
+</aside>
+<!-- Main Profile Content -->
+<section class="flex-grow">
+<!-- Header Section -->
+<div class="mb-12">
+<h1 class="text-4xl md:text-5xl font-headline font-bold text-on-surface tracking-tight mb-4">Welcome back, <span class="text-primary italic">Elias</span>.</h1>
+<p class="text-on-surface-variant max-w-xl">Customize your profile settings to ensure your loaves are always delivered to the right hearth.</p>
+</div>
+<div class="grid grid-cols-1 gap-8">
+<!-- Profile Picture Card -->
+<div class="bg-surface-container-low rounded-lg p-8 flex flex-col md:flex-row items-center gap-8">
+<div class="relative group">
+<div class="w-32 h-32 rounded-full overflow-hidden border-4 border-surface-container-lowest shadow-lg">
+<img alt="Profile Portrait" class="w-full h-full object-cover" data-alt="Close-up portrait of a friendly man with a short beard in a sunlit kitchen, warm natural lighting, soft focus background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKCvAxvPdM8iGWhrpuXVjRs9UH3Ww3yNe2Uv0nZj8LGftctNvciolsmdDAHILiHUgAs32MTv8MoYlionaa_5JcdX_lFblfb2oi1y2Z2GBQklRKBPEG8ir1IWaH7ZcaAG5DlCY3K-sHtNtpMvF2nm-S15OQ7LQvj3S3C02u3PaP2ebzPTsjMRs_38ajUZMUL515YOr8Xrw1A24oVEw8-acicatSWin95YoN1TdXK6L60h3AKPTGNGwWBfAyxV8n2l17wKJe_wOqwbs"/>
+</div>
+<button class="absolute bottom-0 right-0 bg-primary text-on-primary p-2 rounded-full shadow-md hover:bg-primary-container transition-all flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">edit</span>
+</button>
+</div>
+<div class="text-center md:text-left">
+<h3 class="font-headline text-xl font-bold text-on-surface">Profile Picture</h3>
+<p class="text-sm text-on-surface-variant mt-1 mb-4">PNG, JPG or GIF. Max 2MB.</p>
+<div class="flex gap-3 justify-center md:justify-start">
+<button class="px-6 py-2 bg-primary text-on-primary rounded-full text-sm font-medium hover:opacity-90 transition-all">Upload New</button>
+<button class="px-6 py-2 border border-outline-variant/30 text-on-surface-variant rounded-full text-sm font-medium hover:bg-surface-container-highest transition-all">Remove</button>
+</div>
+</div>
+</div>
+<!-- Bento Grid Info Fields -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Name Field -->
+<div class="bg-surface-container-lowest p-6 rounded-lg shadow-[0_8px_32px_rgba(140,75,16,0.04)]">
+<label class="block text-xs font-bold text-primary uppercase tracking-widest mb-2">Full Name</label>
+<input class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all text-on-surface font-medium" type="text" value="Elias Thorne"/>
+</div>
+<!-- Email Field -->
+<div class="bg-surface-container-lowest p-6 rounded-lg shadow-[0_8px_32px_rgba(140,75,16,0.04)]">
+<label class="block text-xs font-bold text-primary uppercase tracking-widest mb-2">Email Address</label>
+<input class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all text-on-surface font-medium" type="email" value="elias.thorne@bakery.com"/>
+</div>
+<!-- Phone Field -->
+<div class="bg-surface-container-lowest p-6 rounded-lg shadow-[0_8px_32px_rgba(140,75,16,0.04)]">
+<label class="block text-xs font-bold text-primary uppercase tracking-widest mb-2">Phone Number</label>
+<input class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all text-on-surface font-medium" type="tel" value="+1 (555) 234-5678"/>
+</div>
+<!-- Role/Badge -->
+<div class="bg-primary-fixed p-6 rounded-lg flex items-center justify-between">
+<div>
+<label class="block text-xs font-bold text-on-primary-fixed-variant uppercase tracking-widest mb-1">Membership Status</label>
+<p class="font-headline font-bold text-on-primary-fixed text-lg">Master Dough Taster</p>
+</div>
+<span class="material-symbols-outlined text-4xl text-on-primary-fixed-variant/40" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+</div>
+</div>
+<!-- Action Bar -->
+<div class="flex flex-col sm:flex-row items-center justify-between gap-6 pt-8 border-t border-outline-variant/10">
+<p class="text-sm text-on-surface-variant italic">Last updated: Oct 24, 2023</p>
+<div class="flex gap-4 w-full sm:w-auto">
+<button class="flex-1 sm:flex-none px-10 py-4 bg-gradient-to-br from-primary to-primary-container text-white rounded-full font-bold shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all">
+                            Save Changes
+                        </button>
+</div>
+</div>
+<!-- Recent Activity Section (Asymmetric) -->
+<div class="mt-12">
+<h3 class="font-headline text-2xl font-bold text-on-surface mb-6">Recent Deliveries</h3>
+<div class="flex flex-col gap-4">
+<div class="bg-surface-container-low p-4 rounded-lg flex items-center gap-6 group hover:bg-surface-container transition-all">
+<div class="w-16 h-16 rounded overflow-hidden flex-shrink-0">
+<img alt="Sourdough Loaf" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="Rustic crusty sourdough bread on a wooden board, moody atmosphere, artisan bakery style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTakjRNA8ppjQIvY3GYUMR8I7x77eP6cGEUkJIYQU7ZC7YZdfsUdoVlPGzYl9h8UiAd8AdAGN9usqbG5rhg4CNDy-XhBfFOqAmAQTh-Qe8LkO66KugJkFXzqA0f5BSYu9KOxYQuXRV_uNeYIUDHQZoHmABgwCA9QndhHazsY2mv-T7LjWHg7ZSO6IrxjV7x7tavKzmhdVnOMV76joytJaSkfcupaBZ6NjPi6SnPLwVRK6LRKNmzJHAPyQ1T0XCxyGuDbShamj3yE0"/>
+</div>
+<div class="flex-grow">
+<p class="text-xs font-bold text-primary uppercase">Delivered • Oct 20</p>
+<h4 class="font-bold text-on-surface">The Heritage Rye Bundle</h4>
+</div>
+<button class="text-sm font-bold text-primary hover:underline underline-offset-4">Reorder</button>
+</div>
+<div class="bg-surface-container-low p-4 rounded-lg flex items-center gap-6 group hover:bg-surface-container transition-all">
+<div class="w-16 h-16 rounded overflow-hidden flex-shrink-0">
+<img alt="Rosemary Loaf" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="Freshly baked baguette with rosemary sprigs, golden brown crust, close-up texture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDD4aXUMFIkTNFRpuCVkm02ED5OI60LHepp8RZ0bIR5BaTZxKc7OVD0C54lOV9tp3ssvV-HXbfyZZwlsuDqXzY86aFrEdTHqxS60uvv_WrOsALIOJ7yoZxVDnRy-9mP_b5gHgyO8Y-Xb3pjaNadi7hpZDYTQoRtOor1AjRP41u4zmcjvdpUY7EY6YQHxb8WDP_Djjht9EXVS6Pllps_q59Tox8CkBxl-YVHLTsJYayHK2YgMIUwGwIfes5MEWvuKIwAkdg0HXhy2zg"/>
+</div>
+<div class="flex-grow">
+<p class="text-xs font-bold text-primary uppercase">Delivered • Oct 12</p>
+<h4 class="font-bold text-on-surface">Roasted Rosemary Baguette</h4>
+</div>
+<button class="text-sm font-bold text-primary hover:underline underline-offset-4">Reorder</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-[#f9f2ec] dark:bg-stone-950 w-full mt-auto">
+<div class="flex flex-col md:flex-row justify-between items-center px-12 py-16 gap-8">
+<p class="font-['Noto_Serif'] text-xs tracking-wide uppercase text-[#1e1b18] dark:text-stone-500">
+                © 2024 Artisan Hearth Bakery. Handcrafted Digital Experience.
+            </p>
+<div class="flex gap-8">
+<a class="font-['Noto_Serif'] text-xs tracking-wide uppercase text-[#1e1b18] dark:text-stone-500 hover:text-[#8c4b10] dark:hover:text-[#ffab69] transition-colors" href="#">Privacy Policy</a>
+<a class="font-['Noto_Serif'] text-xs tracking-wide uppercase text-[#1e1b18] dark:text-stone-500 hover:text-[#8c4b10] dark:hover:text-[#ffab69] transition-colors" href="#">Shipping Info</a>
+<a class="font-['Noto_Serif'] text-xs tracking-wide uppercase text-[#1e1b18] dark:text-stone-500 hover:text-[#8c4b10] dark:hover:text-[#ffab69] transition-colors" href="#">Wholesale</a>
+<a class="font-['Noto_Serif'] text-xs tracking-wide uppercase text-[#1e1b18] dark:text-stone-500 hover:text-[#8c4b10] dark:hover:text-[#ffab69] transition-colors" href="#">Contact Us</a>
+</div>
+</div>
+</footer>
+<!-- Mobile Navigation (Visible only on small screens) -->
+<div class="md:hidden fixed bottom-0 left-0 right-0 bg-[#fff8f2]/90 backdrop-blur-lg border-t border-outline-variant/10 flex justify-around p-4 z-50">
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">bakery_dining</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Shop</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Orders</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Profile</span>
+</a>
+</div>
+</body></html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container": "#f3ede7",
+              "primary": "#8c4b10",
+              "outline-variant": "#d8c2b4",
+              "error": "#ba1a1a",
+              "surface-container-highest": "#e8e1dc",
+              "on-error-container": "#93000a",
+              "on-tertiary": "#ffffff",
+              "surface-container-high": "#eee7e1",
+              "surface-dim": "#dfd9d3",
+              "primary-fixed-dim": "#ffb782",
+              "inverse-on-surface": "#f6f0ea",
+              "secondary-fixed-dim": "#ffb780",
+              "inverse-surface": "#33302c",
+              "secondary-container": "#ffab69",
+              "primary-container": "#aa6328",
+              "background": "#fff8f2",
+              "surface-variant": "#e8e1dc",
+              "on-tertiary-fixed": "#3c0700",
+              "inverse-primary": "#ffb782",
+              "on-primary-fixed-variant": "#703800",
+              "surface-tint": "#8f4e13",
+              "on-tertiary-container": "#fffbff",
+              "on-tertiary-fixed-variant": "#83260e",
+              "tertiary": "#a03b21",
+              "secondary-fixed": "#ffdcc4",
+              "on-secondary-fixed": "#2f1400",
+              "on-secondary-container": "#783d01",
+              "surface-container-lowest": "#ffffff",
+              "on-primary": "#ffffff",
+              "surface-container-low": "#f9f2ec",
+              "surface-bright": "#fff8f2",
+              "surface": "#fff8f2",
+              "on-primary-container": "#fffbff",
+              "on-primary-fixed": "#301400",
+              "tertiary-fixed-dim": "#ffb4a2",
+              "on-surface": "#1e1b18",
+              "on-background": "#1e1b18",
+              "on-secondary": "#ffffff",
+              "on-secondary-fixed-variant": "#6f3800",
+              "on-error": "#ffffff",
+              "tertiary-container": "#c05237",
+              "tertiary-fixed": "#ffdad2",
+              "secondary": "#8e4e14",
+              "primary-fixed": "#ffdcc5",
+              "outline": "#867468",
+              "error-container": "#ffdad6",
+              "on-surface-variant": "#534439"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .font-serif-editorial { font-family: 'Noto Serif', serif; }
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body antialiased min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="sticky top-0 w-full z-50 bg-[#fff8f2]/70 dark:bg-[#1e1b18]/70 backdrop-blur-xl shadow-sm shadow-[#8c4b10]/5">
+<nav class="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
+<div class="text-2xl font-bold tracking-tight text-[#8c4b10] dark:text-[#ffdcc5] font-serif-editorial">Artisan Hearth</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-[#8c4b10] dark:text-[#ffdcc5] border-b-2 border-[#8c4b10] pb-1 font-serif-editorial italic" href="#">Our Breads</a>
+<a class="text-[#5c524d] dark:text-[#d8c2b4] hover:text-[#8c4b10] transition-colors font-serif-editorial italic" href="#">Pastries</a>
+<a class="text-[#5c524d] dark:text-[#d8c2b4] hover:text-[#8c4b10] transition-colors font-serif-editorial italic" href="#">About Us</a>
+<a class="text-[#5c524d] dark:text-[#d8c2b4] hover:text-[#8c4b10] transition-colors font-serif-editorial italic" href="#">Find Us</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:opacity-80 transition-opacity text-[#8c4b10]">
+<span class="material-symbols-outlined">shopping_basket</span>
+</button>
+<button class="p-2 hover:opacity-80 transition-opacity text-[#8c4b10]">
+<span class="material-symbols-outlined">person</span>
+</button>
+</div>
+</nav>
+</header>
+<main class="flex-grow max-w-7xl mx-auto w-full px-6 py-8 md:py-12">
+<!-- Progress Bar -->
+<div class="max-w-3xl mx-auto mb-12">
+<div class="flex justify-between items-center relative">
+<div class="absolute top-1/2 left-0 w-full h-0.5 bg-surface-container-highest -z-10 -translate-y-1/2"></div>
+<div class="absolute top-1/2 left-0 w-1/3 h-0.5 bg-primary -z-10 -translate-y-1/2"></div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold">1</div>
+<span class="text-sm font-semibold text-primary">Contact &amp; Address</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center font-bold">2</div>
+<span class="text-sm font-medium text-on-surface-variant">Delivery Time</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center font-bold">3</div>
+<span class="text-sm font-medium text-on-surface-variant">Payment</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+<!-- Left Column: Form -->
+<div class="lg:col-span-7 space-y-10">
+<!-- Contact Section -->
+<section>
+<h2 class="text-3xl font-serif-editorial text-primary mb-6">Contact Information</h2>
+<div class="bg-surface-container-lowest p-8 rounded-lg shadow-sm shadow-[#8c4b10]/5 space-y-6">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="text-sm font-semibold text-on-surface-variant ml-1">Full Name</label>
+<input class="w-full bg-surface-container-low border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all outline-none" placeholder="Julian Smith" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="text-sm font-semibold text-on-surface-variant ml-1">Phone Number</label>
+<input class="w-full bg-surface-container-low border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all outline-none" placeholder="(555) 000-0000" type="tel"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-sm font-semibold text-on-surface-variant ml-1">Email Address</label>
+<input class="w-full bg-surface-container-low border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all outline-none" placeholder="julian@example.com" type="email"/>
+</div>
+</div>
+</section>
+<!-- Delivery Method & Address -->
+<section>
+<div class="flex justify-between items-end mb-6">
+<h2 class="text-3xl font-serif-editorial text-primary">Shipping Details</h2>
+<div class="bg-surface-container-high p-1 rounded-full flex gap-1">
+<button class="px-6 py-2 rounded-full text-sm font-bold bg-white shadow-sm text-primary transition-all">Delivery</button>
+<button class="px-6 py-2 rounded-full text-sm font-medium text-on-surface-variant hover:bg-surface-container-highest transition-all">Pickup</button>
+</div>
+</div>
+<div class="space-y-4">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Saved Address Card Active -->
+<div class="p-6 rounded-lg bg-surface-container-lowest border-2 border-primary ring-4 ring-primary/5 cursor-pointer relative group">
+<div class="absolute top-4 right-4 text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<span class="text-xs font-bold uppercase tracking-wider text-primary-container mb-2 block">Primary</span>
+<h3 class="font-bold text-on-surface mb-1">Home</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed">
+                                    123 Baker St, Flour District<br/>
+                                    San Francisco, CA 94110
+                                </p>
+</div>
+<!-- Saved Address Card Inactive -->
+<div class="p-6 rounded-lg bg-surface-container-low border-2 border-transparent hover:border-outline-variant transition-all cursor-pointer group">
+<h3 class="font-bold text-on-surface mb-1">Office</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed">
+                                    456 Mill Avenue, Suite 200<br/>
+                                    Oakland, CA 94607
+                                </p>
+</div>
+</div>
+<button class="w-full py-4 border-2 border-dashed border-outline-variant rounded-lg text-on-surface-variant font-semibold hover:bg-surface-container-high transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">add_location_alt</span>
+                            Add New Address
+                        </button>
+</div>
+</section>
+<div class="pt-4">
+<button class="w-full md:w-auto px-12 py-4 rounded-full bg-gradient-to-r from-tertiary to-tertiary-container text-white font-bold text-lg shadow-lg shadow-tertiary/20 hover:scale-[1.02] active:scale-95 transition-all">
+                        Continue to Delivery
+                    </button>
+</div>
+</div>
+<!-- Right Column: Sticky Summary -->
+<div class="lg:col-span-5 lg:sticky lg:top-28">
+<div class="bg-surface-container-high rounded-lg p-8">
+<h3 class="text-2xl font-serif-editorial text-primary mb-6">Order Summary</h3>
+<div class="space-y-6 mb-8">
+<!-- Item 1 -->
+<div class="flex gap-4">
+<div class="w-20 h-20 rounded-sm overflow-hidden flex-shrink-0 bg-surface-container-highest">
+<img alt="Artisan Sourdough" class="w-full h-full object-cover" data-alt="close-up of a rustic artisan sourdough loaf with a golden crispy crust and flour dusting on a neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHCxjzfBJGj0U7Sm3_KaXeYKTEfiEgN_Y0QY0VBXNw95i68gq5WOJveLGZtVM423vtHK3G4AhES25B76scaSHmbhUcxb6wINzHQvPj8f9ho8CwfAppq66GlUGaeb-Fwb5QCpsh2makiLfOBv1ZoBOtn28mMnQGHD5qOieO3Os9TVTXlPkGXFN0X7XUUKlq_I7NQT8b-h2dfvc4FjPThL_ZF2Jk6ZnlSxQB5lMhPQMu-0LN9BQFFSx2ipofI1BptHqDfpOBDA7-xb4"/>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between">
+<h4 class="font-bold text-on-surface">Country Sourdough</h4>
+<span class="font-bold text-primary">$12.00</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-1 italic">Hand-kneaded, 24h fermented</p>
+<p class="text-sm text-on-surface-variant mt-1">Qty: 1</p>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex gap-4">
+<div class="w-20 h-20 rounded-sm overflow-hidden flex-shrink-0 bg-surface-container-highest">
+<img alt="Almond Croissant" class="w-full h-full object-cover" data-alt="golden flaky almond croissant topped with powdered sugar and sliced almonds on a textured linen surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsHyzYW7OkV5TituMDhU0we2bzTjpWCdtqxgY6E2V8ZBtMIPJI1M8-OA7sUOtlnIlpid1Jr1VmpBVOemfKjSD6ebCm1V1LsFCoYf8MbrvRwJbfO0f2tipqTTo932bATvVhfsohqemX4bzQrtNOw4cfe_WGKtrqZWlRgm7DH0AD_LSgUHKeOWC6mJk4rPut_jojZrBNr4xSlIbmdnX0cUfDKCSQTnvILHAM3t9vdDkIL-zxtnBDVQiOVoV_yFOqAhLtYYAYOFb7plo"/>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between">
+<h4 class="font-bold text-on-surface">Almond Croissant</h4>
+<span class="font-bold text-primary">$14.00</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-1 italic">Double-baked, almond frangipane</p>
+<p class="text-sm text-on-surface-variant mt-1">Qty: 2</p>
+</div>
+</div>
+</div>
+<div class="space-y-3 pt-6 border-t border-outline-variant/30">
+<div class="flex justify-between text-on-surface-variant">
+<span>Subtotal</span>
+<span>$26.00</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>Delivery Fee</span>
+<span class="text-tertiary font-medium">Free</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>Estimated Tax</span>
+<span>$2.21</span>
+</div>
+<div class="flex justify-between text-xl font-bold text-primary pt-4">
+<span>Total</span>
+<span>$28.21</span>
+</div>
+</div>
+<div class="mt-8 bg-surface-container-lowest p-4 rounded-xl flex items-center gap-4">
+<span class="material-symbols-outlined text-secondary">local_fire_department</span>
+<p class="text-xs text-on-surface-variant leading-tight">
+                            Freshness Guarantee: Your breads are baked within 4 hours of your chosen delivery time.
+                        </p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full mt-auto bg-[#eee7e1] dark:bg-[#161412]">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 px-8 py-12 max-w-7xl mx-auto items-center">
+<div class="space-y-4">
+<div class="text-lg font-semibold text-[#8c4b10] dark:text-[#ffdcc5] font-serif-editorial">Artisan Hearth Bakery</div>
+<p class="text-[#8c4b10] dark:text-[#ffdcc5] font-serif-editorial text-sm italic">© 2024 Artisan Hearth Bakery. Hand-kneaded in the digital age.</p>
+</div>
+<div class="flex flex-wrap gap-6 md:justify-end">
+<a class="text-[#5c524d] dark:text-[#d8c2b4] hover:text-[#8c4b10] transition-colors duration-300 font-serif-editorial text-sm italic" href="#">Sustainability</a>
+<a class="text-[#5c524d] dark:text-[#d8c2b4] hover:text-[#8c4b10] transition-colors duration-300 font-serif-editorial text-sm italic" href="#">Wholesale</a>
+<a class="text-[#5c524d] dark:text-[#d8c2b4] hover:text-[#8c4b10] transition-colors duration-300 font-serif-editorial text-sm italic" href="#">Careers</a>
+<a class="text-[#5c524d] dark:text-[#d8c2b4] hover:text-[#8c4b10] transition-colors duration-300 font-serif-editorial text-sm italic underline decoration-[#8c4b10]" href="#">Privacy Policy</a>
+</div>
+</div>
+</footer>
+</body></html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container": "#f3ede7",
+              "primary": "#8c4b10",
+              "outline-variant": "#d8c2b4",
+              "error": "#ba1a1a",
+              "surface-container-highest": "#e8e1dc",
+              "on-error-container": "#93000a",
+              "on-tertiary": "#ffffff",
+              "surface-container-high": "#eee7e1",
+              "surface-dim": "#dfd9d3",
+              "primary-fixed-dim": "#ffb782",
+              "inverse-on-surface": "#f6f0ea",
+              "secondary-fixed-dim": "#ffb780",
+              "inverse-surface": "#33302c",
+              "secondary-container": "#ffab69",
+              "primary-container": "#aa6328",
+              "background": "#fff8f2",
+              "surface-variant": "#e8e1dc",
+              "on-tertiary-fixed": "#3c0700",
+              "inverse-primary": "#ffb782",
+              "on-primary-fixed-variant": "#703800",
+              "surface-tint": "#8f4e13",
+              "on-tertiary-container": "#fffbff",
+              "on-tertiary-fixed-variant": "#83260e",
+              "tertiary": "#a03b21",
+              "secondary-fixed": "#ffdcc4",
+              "on-secondary-fixed": "#2f1400",
+              "on-secondary-container": "#783d01",
+              "surface-container-lowest": "#ffffff",
+              "on-primary": "#ffffff",
+              "surface-container-low": "#f9f2ec",
+              "surface-bright": "#fff8f2",
+              "surface": "#fff8f2",
+              "on-primary-container": "#fffbff",
+              "on-primary-fixed": "#301400",
+              "tertiary-fixed-dim": "#ffb4a2",
+              "on-surface": "#1e1b18",
+              "on-background": "#1e1b18",
+              "on-secondary": "#ffffff",
+              "on-secondary-fixed-variant": "#6f3800",
+              "on-error": "#ffffff",
+              "tertiary-container": "#c05237",
+              "tertiary-fixed": "#ffdad2",
+              "secondary": "#8e4e14",
+              "primary-fixed": "#ffdcc5",
+              "outline": "#867468",
+              "error-container": "#ffdad6",
+              "on-surface-variant": "#534439"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        h1, h2, h3, .serif-font { font-family: 'Noto Serif', serif; }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen">
+<!-- Header Navigation (Shared Component Integration) -->
+<nav class="sticky top-0 w-full z-50 bg-[#fff8f2]/70 dark:bg-[#1e1b18]/70 backdrop-blur-xl shadow-sm shadow-[#8c4b10]/5 transition-all duration-300">
+<div class="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
+<div class="text-2xl font-bold tracking-tight text-[#8c4b10] dark:text-[#ffdcc5] serif-font">Artisan Hearth</div>
+<div class="hidden md:flex gap-8 items-center">
+<a class="text-[#5c524d] dark:text-[#d8c2b4] hover:text-[#8c4b10] transition-colors font-medium" href="#">Our Breads</a>
+<a class="text-[#5c524d] dark:text-[#d8c2b4] hover:text-[#8c4b10] transition-colors font-medium" href="#">Pastries</a>
+<a class="text-[#5c524d] dark:text-[#d8c2b4] hover:text-[#8c4b10] transition-colors font-medium" href="#">About Us</a>
+<a class="text-[#5c524d] dark:text-[#d8c2b4] hover:text-[#8c4b10] transition-colors font-medium" href="#">Find Us</a>
+</div>
+<div class="flex items-center gap-4 text-[#8c4b10] dark:text-[#ffdcc5]">
+<button class="hover:opacity-80 transition-opacity p-2 active:scale-95 duration-200">
+<span class="material-symbols-outlined">person</span>
+</button>
+<button class="hover:opacity-80 transition-opacity p-2 active:scale-95 duration-200 relative">
+<span class="material-symbols-outlined">shopping_basket</span>
+<span class="absolute top-0 right-0 bg-tertiary text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">2</span>
+</button>
+</div>
+</div>
+</nav>
+<!-- Background Content Mockup (to show drawer context) -->
+<main class="max-w-7xl mx-auto px-6 py-12">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Example Product Card -->
+<div class="bg-surface-container-lowest rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-[#8c4b10]/10">
+<div class="aspect-[4/3] overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="close-up of artisan sourdough bread loaf on a wooden cutting board with dusted flour and rustic background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCl0cZgI206IYNUnu3cSFQ7w6oGbFExKtMxjUb8Gt1ETVwV_M_uJWuXMi3KmvF9EfJUZYTQSCj6UoE7tAlqJMsAU0icXmqvC-gVcGAw9-cX6T_2S-ewCmmI4SH-DAtSx2-W35ysThc8yk4fKTTwL7uMK4x2kCDZVQHCezhkC8VimZtYt7p1HhrwgTqU9iEYYeZCyLAe_MwW4uNXldrXTxqgq5Iu5zkyUhYMXW9p1mTwpnZBBjbMjHMVxRu2NGxSczgN--fRFVu6HBw"/>
+</div>
+<div class="p-6">
+<h3 class="text-xl font-bold mb-2">Heritage Sourdough</h3>
+<p class="text-on-surface-variant text-sm mb-4">Naturally leavened for 24 hours for a deep, complex flavor and perfect crust.</p>
+<div class="flex justify-between items-center">
+<span class="text-lg font-bold text-primary">$12.00</span>
+<button class="bg-primary-container text-white px-6 py-2 rounded-full font-medium hover:opacity-90 transition-opacity">Add to Cart</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Cart Drawer Overlay -->
+<div class="fixed inset-0 z-[100] bg-on-surface/20 backdrop-blur-sm transition-opacity">
+<!-- Drawer Panel -->
+<div class="absolute right-0 top-0 h-full w-full max-w-[400px] bg-surface flex flex-col shadow-[-10px_0_30px_rgba(140,75,16,0.08)]">
+<!-- Header -->
+<div class="px-8 py-6 flex justify-between items-center border-b border-outline-variant/10">
+<h2 class="text-2xl font-bold text-primary serif-font">Your Cart</h2>
+<button class="p-2 hover:bg-surface-container-high rounded-full transition-colors active:scale-95">
+<span class="material-symbols-outlined text-primary">close</span>
+</button>
+</div>
+<!-- Scrollable Item List -->
+<div class="flex-1 overflow-y-auto px-8 py-4 space-y-6">
+<!-- Item 1 -->
+<div class="flex gap-4 group">
+<div class="h-24 w-24 flex-shrink-0 bg-surface-container rounded-md overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="luxurious signature chocolate truffle cake with smooth dark ganache and gold leaf detail" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKFiukOGuwlEik0ELCEx_-iBom17tUWvuB22CtIRrQ29toDcYMwnTOX1hD3g28mvE6VACF2LhOy9LqT9QNE8X9TwDukcPoHW6Oov-fiVR-c0AWsXQ1nGkIUcoCloQOynYBED4Ry1cAVZL53tyTl4SS0MPfNDYf1cCTs-Wio2h1aW1T_Ej7wu02pO83agbmY6S4GQpdCNluNt8vSg1Z_TWClijgEJvLAy-qWBd_-zvTf1gsrZR4ulKCzG5g_oMAIRIV2_qUjnsxMnQ"/>
+</div>
+<div class="flex-1 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start">
+<h4 class="font-bold text-primary text-base leading-tight">Signature Truffle cake</h4>
+<button class="text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined text-sm">delete</span>
+</button>
+</div>
+<p class="text-xs text-on-surface-variant mt-1 italic">1.0kg • Eggless</p>
+</div>
+<div class="flex justify-between items-center mt-2">
+<span class="font-bold text-primary">$48.00</span>
+<div class="flex items-center bg-surface-container-high rounded-full px-2 py-1 gap-3">
+<button class="w-6 h-6 flex items-center justify-center hover:bg-surface-container-highest rounded-full transition-colors">
+<span class="material-symbols-outlined text-xs">remove</span>
+</button>
+<span class="text-sm font-bold w-4 text-center">1</span>
+<button class="w-6 h-6 flex items-center justify-center hover:bg-surface-container-highest rounded-full transition-colors">
+<span class="material-symbols-outlined text-xs">add</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex gap-4 group">
+<div class="h-24 w-24 flex-shrink-0 bg-surface-container rounded-md overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="freshly baked golden brown flaky croissants arranged on a linen napkin in a basket" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdJg_Drxp57pqU9-EG6HB7R87T-RAzzfk0tlvZUNqcFm-Bjuydinh9XzqOHrySiWhyYyvtk9viqiA5U35_ZuuHSsVsFjb4FOzH8bztk8-pHfhEXMq7Dd7GI6hD1TxQe-xTNQZNImqqH_vCSbtamKLoOQBSknqG_IUyDC1I3oCPdPrwzwHSyT1a98EKMSg_HuOerH_7JtTT4egRXtWZePprcwsRyflKc6m_2quCjDiZJFfg8g5K30C6PWRJX4Du7ccaC7imrwYsuyY"/>
+</div>
+<div class="flex-1 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start">
+<h4 class="font-bold text-primary text-base leading-tight">Classic Butter Croissants</h4>
+<button class="text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined text-sm">delete</span>
+</button>
+</div>
+<p class="text-xs text-on-surface-variant mt-1 italic">Pack of 4 • Flaky</p>
+</div>
+<div class="flex justify-between items-center mt-2">
+<span class="font-bold text-primary">$16.00</span>
+<div class="flex items-center bg-surface-container-high rounded-full px-2 py-1 gap-3">
+<button class="w-6 h-6 flex items-center justify-center hover:bg-surface-container-highest rounded-full transition-colors">
+<span class="material-symbols-outlined text-xs">remove</span>
+</button>
+<span class="text-sm font-bold w-4 text-center">1</span>
+<button class="w-6 h-6 flex items-center justify-center hover:bg-surface-container-highest rounded-full transition-colors">
+<span class="material-symbols-outlined text-xs">add</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Area: Coupon and Summary -->
+<div class="bg-surface-container-low px-8 py-8 space-y-6">
+<!-- Coupon Input -->
+<div class="flex gap-2">
+<input class="flex-1 bg-surface-container-lowest border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 placeholder:text-outline transition-all" placeholder="Promo code" type="text"/>
+<button class="bg-primary text-white px-4 py-3 rounded-xl font-bold text-xs uppercase tracking-wider hover:opacity-90 active:scale-95 transition-all">Apply</button>
+</div>
+<!-- Summary -->
+<div class="space-y-2 border-t border-outline-variant/20 pt-4">
+<div class="flex justify-between text-sm">
+<span class="text-on-surface-variant">Subtotal</span>
+<span class="font-medium">$64.00</span>
+</div>
+<div class="flex justify-between text-sm">
+<span class="text-on-surface-variant">Delivery Fee</span>
+<span class="font-medium">$5.00</span>
+</div>
+<div class="flex justify-between text-xl font-bold text-primary pt-2">
+<span>Total</span>
+<span>$69.00</span>
+</div>
+</div>
+<!-- CTA -->
+<button class="w-full bg-tertiary text-white py-5 rounded-full font-bold text-lg shadow-lg shadow-tertiary/20 hover:scale-[1.02] active:scale-95 transition-all">
+                    Proceed to Checkout
+                </button>
+<p class="text-center text-[10px] text-on-surface-variant italic">
+                    Hand-kneaded in the digital age. Artisan Hearth Bakery.
+                </p>
+</div>
+</div>
+</div>
+<!-- Footer Component -->
+<footer class="bg-[#eee7e1] dark:bg-[#161412] w-full mt-auto">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 px-8 py-12 max-w-7xl mx-auto">
+<div class="space-y-4">
+<div class="text-lg font-semibold text-[#8c4b10] dark:text-[#ffdcc5] serif-font">Artisan Hearth</div>
+<p class="font-['Noto_Serif'] text-sm italic text-[#5c524d] dark:text-[#d8c2b4]">© 2024 Artisan Hearth Bakery. Hand-kneaded in the digital age.</p>
+</div>
+<div class="flex flex-wrap gap-x-8 gap-y-2 justify-start md:justify-end items-center font-['Noto_Serif'] text-sm italic">
+<a class="text-[#5c524d] dark:text-[#d8c2b4] hover:text-[#8c4b10] transition-colors duration-300 hover:translate-x-1 transition-transform" href="#">Sustainability</a>
+<a class="text-[#5c524d] dark:text-[#d8c2b4] hover:text-[#8c4b10] transition-colors duration-300 hover:translate-x-1 transition-transform" href="#">Wholesale</a>
+<a class="text-[#5c524d] dark:text-[#d8c2b4] hover:text-[#8c4b10] transition-colors duration-300 hover:translate-x-1 transition-transform" href="#">Careers</a>
+<a class="text-[#5c524d] dark:text-[#d8c2b4] hover:text-[#8c4b10] underline decoration-[#8c4b10] transition-colors duration-300 hover:translate-x-1 transition-transform" href="#">Privacy Policy</a>
+</div>
+</div>
+</footer>
+</body></html>

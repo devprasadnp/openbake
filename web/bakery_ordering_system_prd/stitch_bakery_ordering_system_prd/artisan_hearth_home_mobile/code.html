@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-primary-fixed-variant": "#703800",
+              "primary-container": "#aa6328",
+              "error-container": "#ffdad6",
+              "surface-dim": "#dfd9d3",
+              "surface-container-high": "#eee7e1",
+              "secondary-fixed": "#ffdcc4",
+              "on-error-container": "#93000a",
+              "surface-tint": "#8f4e13",
+              "on-secondary-fixed-variant": "#6f3800",
+              "outline-variant": "#d8c2b4",
+              "on-surface": "#1e1b18",
+              "tertiary": "#a03b21",
+              "on-tertiary-fixed-variant": "#83260e",
+              "primary-fixed": "#ffdcc5",
+              "on-secondary": "#ffffff",
+              "secondary": "#8e4e14",
+              "inverse-on-surface": "#f6f0ea",
+              "surface-container-lowest": "#ffffff",
+              "surface-bright": "#fff8f2",
+              "tertiary-fixed": "#ffdad2",
+              "outline": "#867468",
+              "inverse-primary": "#ffb782",
+              "primary": "#8c4b10",
+              "secondary-fixed-dim": "#ffb780",
+              "primary-fixed-dim": "#ffb782",
+              "inverse-surface": "#33302c",
+              "surface": "#fff8f2",
+              "secondary-container": "#ffab69",
+              "surface-variant": "#e8e1dc",
+              "error": "#ba1a1a",
+              "on-tertiary-fixed": "#3c0700",
+              "background": "#fff8f2",
+              "surface-container-low": "#f9f2ec",
+              "tertiary-container": "#c05237",
+              "on-primary": "#ffffff",
+              "on-surface-variant": "#534439",
+              "on-primary-container": "#fffbff",
+              "on-tertiary-container": "#fffbff",
+              "on-tertiary": "#ffffff",
+              "on-secondary-container": "#783d01",
+              "on-primary-fixed": "#301400",
+              "on-error": "#ffffff",
+              "surface-container-highest": "#e8e1dc",
+              "on-background": "#1e1b18",
+              "surface-container": "#f3ede7",
+              "tertiary-fixed-dim": "#ffb4a2",
+              "on-secondary-fixed": "#2f1400"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        ::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body selection:bg-secondary-container/30">
+<!-- TopAppBar -->
+<header class="bg-[#fff8f2]/70 dark:bg-[#1e1b18]/70 backdrop-blur-md fixed top-0 w-full z-50 flex justify-between items-center px-6 py-4 w-full shadow-sm shadow-[#8c4b10]/5">
+<div class="flex items-center gap-4">
+<button class="text-[#8c4b10] dark:text-[#ffab69] hover:bg-[#eee7e1]/50 dark:hover:bg-[#302a24] transition-colors active:scale-95 transition-transform duration-200 rounded-full p-1">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="text-2xl font-serif italic text-[#8c4b10] dark:text-[#ffab69]">Artisan Hearth</h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="text-[#8c4b10] dark:text-[#ffab69] hover:bg-[#eee7e1]/50 dark:hover:bg-[#302a24] transition-colors active:scale-95 transition-transform duration-200 rounded-full p-2">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+</button>
+</div>
+</header>
+<main class="pt-20 pb-32 px-4 space-y-10 overflow-x-hidden">
+<!-- Hero Section: Editorial Asymmetry -->
+<section class="relative w-full overflow-visible">
+<div class="flex flex-col gap-6">
+<div class="relative z-10 max-w-[80%]">
+<h2 class="font-headline text-5xl font-bold tracking-tight text-on-surface leading-[1.1]">
+                        Baked Fresh, <br/>
+<span class="text-primary italic">Delivered Warm</span>
+</h2>
+<p class="mt-4 text-on-surface-variant text-lg leading-relaxed">
+                        Handcrafted daily with locally sourced organic grains and a century of tradition.
+                    </p>
+<div class="mt-8">
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-10 py-4 rounded-full font-semibold shadow-lg shadow-primary/20 active:scale-95 transition-transform">
+                            Order Now
+                        </button>
+</div>
+</div>
+<!-- Hero Image Bleed -->
+<div class="absolute -right-12 -top-10 w-64 h-80 rounded-l-3xl overflow-hidden shadow-2xl rotate-3">
+<img class="w-full h-full object-cover" data-alt="close-up of fresh sourdough bread with golden crust on a wooden table with soft morning sunlight and flour dusting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8yMeYaxhcQ7ejmio4E5kGx2X0qu5dqtvwsFB0Nhd3293hADRtTpd8hXkn-4As05Bomv7Puh-V1KwVWaJ4eI953ABf37jdJMg3A8rbP_ZxLmg0dzz5Ej0lchpxQC6z3Jmtn08gAWo39WknnaH7EXUeR5T0cB_Va8OWRxXbRyJRInsi5qo3qZSDv5NG16nkxDFgMan6Kzb-343m4qJukxYwBkwOzaxM60Eh_T_VQ_ctaKES6rE2QHoQ4yf1iiFBJTBsxNZcbfPhdQs"/>
+</div>
+</div>
+</section>
+<!-- Category Quick Access: Horizontal Scrollable Chips -->
+<section class="space-y-4 -mx-4">
+<div class="flex items-center justify-between px-4">
+<h3 class="font-headline text-xl font-bold text-on-surface">Our Pantry</h3>
+<span class="text-primary text-sm font-semibold">View All</span>
+</div>
+<div class="flex gap-3 overflow-x-auto no-scrollbar px-4 pb-2">
+<button class="bg-primary text-on-primary px-6 py-2.5 rounded-full flex items-center gap-2 whitespace-nowrap shadow-md">
+<span class="material-symbols-outlined text-[18px]" data-icon="bakery_dining">bakery_dining</span>
+<span class="font-medium text-sm">Breads</span>
+</button>
+<button class="bg-surface-container-high text-on-surface-variant px-6 py-2.5 rounded-full flex items-center gap-2 whitespace-nowrap hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="cake">cake</span>
+<span class="font-medium text-sm">Cakes</span>
+</button>
+<button class="bg-surface-container-high text-on-surface-variant px-6 py-2.5 rounded-full flex items-center gap-2 whitespace-nowrap hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="cookie">cookie</span>
+<span class="font-medium text-sm">Pastries</span>
+</button>
+<button class="bg-surface-container-high text-on-surface-variant px-6 py-2.5 rounded-full flex items-center gap-2 whitespace-nowrap hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="local_cafe">local_cafe</span>
+<span class="font-medium text-sm">Coffee</span>
+</button>
+</div>
+</section>
+<!-- Bestsellers: Bento-esque Grid -->
+<section class="space-y-6">
+<h3 class="font-headline text-2xl font-bold text-on-surface">The Morning Favorites</h3>
+<div class="grid grid-cols-2 gap-4">
+<!-- Product Card 1 -->
+<div class="bg-surface-container-lowest p-3 rounded-lg shadow-sm group">
+<div class="relative aspect-square rounded-sm overflow-hidden mb-3">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="artisanal pain au chocolat with flaky golden layers and dark chocolate drizzle in soft cafe lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuArBKxz7yJ7iCfOde-xHmSwVncgzhL0cjqntfQmNa38yZjBs_AYiATs9-OgVFN7rfoWpFVcNvOJG4vgrAM8L8amyrEmWjtwiXUTC8N4iRE0PysUA19MfjAppjbM3czKqw29O59xOcgjpkxpfwgvSzvDRoAfA6Pg5roBGg98HCf9WHtqx8efWYUK3WBJKv2rzhvkQfXLAIRE9jScmMESyklpbcTgxh-7f4X4noQJnInIP3iFgDL0M-lF_Dk7ghGdU95aSTCiI2xxDvE"/>
+<button class="absolute top-2 right-2 bg-white/80 backdrop-blur-sm p-1.5 rounded-full text-primary shadow-sm">
+<span class="material-symbols-outlined text-[20px]" data-icon="favorite">favorite</span>
+</button>
+</div>
+<h4 class="font-bold text-on-surface text-sm line-clamp-1">Classic Pain au Chocolat</h4>
+<p class="text-xs text-on-surface-variant mb-3">Butter-layered puff pastry</p>
+<div class="flex items-center justify-between">
+<span class="font-bold text-primary">$4.50</span>
+<button class="bg-primary-fixed text-on-primary-fixed-variant p-2 rounded-full active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-[20px]" data-icon="add">add</span>
+</button>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="bg-surface-container-lowest p-3 rounded-lg shadow-sm group">
+<div class="relative aspect-square rounded-sm overflow-hidden mb-3">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="crusty rustic artisan sourdough loaf sliced on a linen cloth with crumbs and dramatic side light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8dPB3ojqoPD70VSfaTlLaDI3EZlo5wrzrEX2NXUXjLLb2yJkIadHBCvjeO4Tp2qhtUjMfgjQ3BqRek5cj55g6h-ZZY9Nr4X_s1_Q1-gl1_J2G87LDEeeLC2eVXsdTZy6WhqZyAS9vjVi8imOS2Pzo-3e6zXtCA8qSVLDHgVC6F8rFz5RVO6zdLfWJnWAWqma4J1tR7uUMYCq8nwGLj55etTa0MVNa3QMGfH7eFwMkiHyYcfh0XBTWsWHewb2iMqNViiON6_pMrZg"/>
+<button class="absolute top-2 right-2 bg-white/80 backdrop-blur-sm p-1.5 rounded-full text-primary shadow-sm">
+<span class="material-symbols-outlined text-[20px]" data-icon="favorite">favorite</span>
+</button>
+</div>
+<h4 class="font-bold text-on-surface text-sm line-clamp-1">Wild Yeast Sourdough</h4>
+<p class="text-xs text-on-surface-variant mb-3">36-hour slow fermented</p>
+<div class="flex items-center justify-between">
+<span class="font-bold text-primary">$8.00</span>
+<button class="bg-primary-fixed text-on-primary-fixed-variant p-2 rounded-full active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-[20px]" data-icon="add">add</span>
+</button>
+</div>
+</div>
+<!-- Featured Large Card -->
+<div class="col-span-2 bg-surface-container-low rounded-lg p-5 flex items-center gap-5">
+<div class="flex-1">
+<span class="text-[10px] font-bold uppercase tracking-widest text-tertiary">Limited Edition</span>
+<h4 class="font-headline text-lg font-bold text-on-surface mt-1">Cinnamon Braided Brioche</h4>
+<p class="text-xs text-on-surface-variant mt-1 mb-4">Warm Ceylon cinnamon and pearl sugar.</p>
+<div class="flex items-center gap-4">
+<span class="font-bold text-primary">$12.00</span>
+<button class="bg-primary text-on-primary text-xs px-4 py-2 rounded-full font-semibold">Add to Cart</button>
+</div>
+</div>
+<div class="w-24 h-24 rounded-full overflow-hidden shadow-lg border-4 border-white">
+<img class="w-full h-full object-cover" data-alt="close up of a golden braided cinnamon brioche roll with sugar crystals on top in a warm kitchen setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7kS1JAZe869B-SuXoE7ccm1XvVnQKCJkC_6M__MDJuwAbyhou2Vb2Xcf_B8vkX94Ylu08V6mu924zEdGH7YxU7H65btR8Mh2tJqeRFINrcBcX_j6xSoxX3euu5CC-ZnBnuKj57BXINz0ds8Uc4Sq2lMJmpivI_FlIgn99j_HydkcIXZCiSHi7Cm0JR313bmQHBSX1rWVSly--8LrMsV3T3xgFlGgIZxcwUsaf5DsLGs6I7NjE1751OiOdxfCVsGlR6XIOqsb8fus"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Special Occasions: Banners -->
+<section class="space-y-4 pb-4">
+<h3 class="font-headline text-2xl font-bold text-on-surface">Celebrate with Us</h3>
+<div class="space-y-4">
+<!-- Birthday Banner -->
+<div class="relative w-full h-40 rounded-lg overflow-hidden flex items-center group">
+<img class="absolute inset-0 w-full h-full object-cover brightness-50 group-hover:scale-105 transition-transform duration-700" data-alt="elegant pastel birthday cake with floral decorations and glowing candles on a wooden table" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoieOld4vLXtxXe0dJlA33YO5E36NfxUUkgybU-7PLP7uuzPBSHHmeyD2-2cB8aFHp1v1BYNUStnuGyUohwuhe8KNjQXtdyTFR2BgYNg6UB2Y5S0NKVxgnU4vhlsGh9PMpaS9YWN70oddCVIAlHypCBn5AKP0b02nY8YzR_jw2EKEEQsfxWe_-Pk-uYCNXln_kM8dSki9PjqmBUNYvKIs6ucaW9SEpZp5CJhkk6Qp7o99yaHKjR5di1UlDpmYadtUMNUMn0ZXKR6A"/>
+<div class="relative z-10 px-6">
+<h4 class="font-headline text-white text-2xl font-bold italic">Birthdays</h4>
+<p class="text-white/80 text-sm mt-1">Custom designs for your special day.</p>
+<button class="mt-3 text-white text-xs font-bold border-b border-white pb-0.5">Explore Designs</button>
+</div>
+</div>
+<!-- Wedding Banner -->
+<div class="relative w-full h-40 rounded-lg overflow-hidden flex items-center group">
+<img class="absolute inset-0 w-full h-full object-cover brightness-50 group-hover:scale-105 transition-transform duration-700" data-alt="multi-tiered white wedding cake with fresh eucalyptus leaves and golden light in a garden setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHilFAIetK3yqdOPKRrkALrE0O_sDwG4VmAzaQJa-aKsB8x4dgz-sPkKYDdd598C3aoyrRYqdSgJGhfWZUD-w0rSglReSVyN0cqdxq-nR4bKrz74fzHAxiuCuhPxq0k9rXWVUw0kQrntd9UUxtj_yxvzbGxbACD9UFQ4i4TiBlZW7Q78xbMajwYNgk_PqgZla8Vm2mfgAbJibuvIixD1njBDRmfKTSWc2IHGNmbOXYwa9u0sSF7sbfutV6YQQhsIYxe5UI8wdcQGY"/>
+<div class="relative z-10 px-6">
+<h4 class="font-headline text-white text-2xl font-bold italic">Weddings</h4>
+<p class="text-white/80 text-sm mt-1">Timeless elegance, baked with love.</p>
+<button class="mt-3 text-white text-xs font-bold border-b border-white pb-0.5">Book Consultation</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-2 bg-[#fff8f2]/80 dark:bg-[#1e1b18]/80 backdrop-blur-lg rounded-t-[2.5rem] z-50 shadow-[0_-4px_20px_rgba(140,75,16,0.08)]">
+<!-- Home (Active) -->
+<a class="flex flex-col items-center justify-center bg-gradient-to-br from-[#8c4b10] to-[#aa6328] text-white rounded-full w-14 h-14 -mt-4 shadow-lg shadow-[#8c4b10]/20 active:scale-90 transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="home_app_logo" style="font-variation-settings: 'FILL' 1;">home_app_logo</span>
+<span class="font-sans text-[8px] font-semibold tracking-wide uppercase mt-0.5">Home</span>
+</a>
+<!-- Menu -->
+<a class="flex flex-col items-center justify-center text-[#5a4d41] dark:text-[#b0a090] p-2 hover:text-[#8c4b10] dark:hover:text-[#ffab69] active:scale-90 transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="restaurant_menu">restaurant_menu</span>
+<span class="font-sans text-[8px] font-semibold tracking-wide uppercase mt-1">Menu</span>
+</a>
+<!-- Orders -->
+<a class="flex flex-col items-center justify-center text-[#5a4d41] dark:text-[#b0a090] p-2 hover:text-[#8c4b10] dark:hover:text-[#ffab69] active:scale-90 transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-sans text-[8px] font-semibold tracking-wide uppercase mt-1">Orders</span>
+</a>
+<!-- Profile -->
+<a class="flex flex-col items-center justify-center text-[#5a4d41] dark:text-[#b0a090] p-2 hover:text-[#8c4b10] dark:hover:text-[#ffab69] active:scale-90 transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-sans text-[8px] font-semibold tracking-wide uppercase mt-1">Profile</span>
+</a>
+</nav>
+</body></html>

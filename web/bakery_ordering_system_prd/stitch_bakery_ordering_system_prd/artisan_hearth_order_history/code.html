@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Order History | Artisan Hearth</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-dim": "#dfd9d3",
+              "tertiary-fixed-dim": "#ffb4a2",
+              "error-container": "#ffdad6",
+              "on-primary-fixed-variant": "#703800",
+              "primary-fixed-dim": "#ffb782",
+              "inverse-on-surface": "#f6f0ea",
+              "secondary": "#8e4e14",
+              "on-surface": "#1e1b18",
+              "on-secondary": "#ffffff",
+              "surface": "#fff8f2",
+              "on-secondary-fixed": "#2f1400",
+              "on-tertiary-container": "#fffbff",
+              "primary": "#8c4b10",
+              "on-primary-container": "#fffbff",
+              "on-primary-fixed": "#301400",
+              "on-error": "#ffffff",
+              "error": "#ba1a1a",
+              "on-secondary-fixed-variant": "#6f3800",
+              "tertiary": "#a03b21",
+              "primary-container": "#aa6328",
+              "surface-container-highest": "#e8e1dc",
+              "on-tertiary-fixed-variant": "#83260e",
+              "surface-bright": "#fff8f2",
+              "surface-container-lowest": "#ffffff",
+              "surface-container": "#f3ede7",
+              "on-tertiary": "#ffffff",
+              "primary-fixed": "#ffdcc5",
+              "outline": "#867468",
+              "on-tertiary-fixed": "#3c0700",
+              "surface-container-high": "#eee7e1",
+              "outline-variant": "#d8c2b4",
+              "on-primary": "#ffffff",
+              "tertiary-fixed": "#ffdad2",
+              "tertiary-container": "#c05237",
+              "surface-container-low": "#f9f2ec",
+              "on-surface-variant": "#534439",
+              "on-background": "#1e1b18",
+              "on-error-container": "#93000a",
+              "inverse-primary": "#ffb782",
+              "secondary-fixed": "#ffdcc4",
+              "secondary-container": "#ffab69",
+              "inverse-surface": "#33302c",
+              "surface-variant": "#e8e1dc",
+              "surface-tint": "#8f4e13",
+              "secondary-fixed-dim": "#ffb780",
+              "on-secondary-container": "#783d01",
+              "background": "#fff8f2"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #fff8f2;
+            color: #1e1b18;
+        }
+        h1, h2, h3, .font-serif {
+            font-family: 'Noto Serif', serif;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- TopAppBar -->
+<header class="bg-[#fff8f2]/70 backdrop-blur-md sticky top-0 w-full z-50 shadow-[0_8px_32px_rgba(140,75,16,0.06)]">
+<div class="flex justify-between items-center px-8 py-4 max-w-7xl mx-auto">
+<div class="text-2xl font-serif italic text-[#8c4b10]">Artisan Hearth</div>
+<nav class="hidden md:flex items-center space-x-8 font-['Noto_Serif'] font-bold tracking-tight">
+<a class="text-[#1e1b18] opacity-80 hover:opacity-100 hover:text-[#aa6328] transition-all" href="#">Shop</a>
+<a class="text-[#8c4b10] border-b-2 border-[#8c4b10] pb-1 hover:opacity-100 hover:text-[#aa6328] transition-all" href="#">Orders</a>
+<a class="text-[#1e1b18] opacity-80 hover:opacity-100 hover:text-[#aa6328] transition-all" href="#">Profile</a>
+<a class="text-[#1e1b18] opacity-80 hover:opacity-100 hover:text-[#aa6328] transition-all" href="#">Bakery Story</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="text-[#8c4b10] scale-95 active:duration-150 transition-all">
+<span class="material-symbols-outlined" data-icon="shopping_basket">shopping_basket</span>
+</button>
+<button class="text-[#8c4b10] scale-95 active:duration-150 transition-all">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-6 py-12 md:py-20">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
+<div class="space-y-2">
+<h1 class="text-5xl md:text-6xl font-bold text-primary tracking-tight leading-none">Order History</h1>
+<p class="text-lg text-on-surface-variant max-w-md">Relive the warmth of your past favorites and bring the hearth back to your table.</p>
+</div>
+<div class="flex items-center gap-4 bg-surface-container-low p-2 rounded-full px-6 py-3 shadow-sm border border-outline-variant/10">
+<span class="text-sm font-medium text-on-surface-variant">Total Loaves Enjoyed: <span class="text-primary font-bold">42</span></span>
+</div>
+</div>
+<!-- Orders Grid (Bento Style) -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Active/Processing Order (Larger Card) -->
+<div class="lg:col-span-2 bg-surface-container-lowest p-8 rounded-lg shadow-[0_8px_32px_rgba(140,75,16,0.06)] relative overflow-hidden flex flex-col justify-between min-h-[400px]">
+<div class="absolute -right-16 -top-16 w-64 h-64 bg-primary-fixed/30 rounded-full blur-3xl"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-8">
+<div>
+<span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary-fixed text-on-secondary-fixed text-xs font-bold uppercase tracking-wider mb-4">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+                                Processing
+                            </span>
+<h3 class="text-3xl font-serif font-bold text-on-surface">Order #AH-9821</h3>
+<p class="text-on-surface-variant font-medium">Placed on October 24, 2024</p>
+</div>
+<div class="text-right">
+<p class="text-sm text-on-surface-variant uppercase tracking-widest font-bold">Total</p>
+<p class="text-4xl font-serif font-bold text-primary">$54.20</p>
+</div>
+</div>
+<div class="flex flex-wrap gap-4 mb-8">
+<div class="flex items-center gap-4 bg-surface-container p-3 rounded-xl border border-outline-variant/10">
+<img class="w-16 h-16 rounded-md object-crop" data-alt="close-up of a rustic sourdough boule with beautiful scoring and flour dusting on top" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAstgHndAqf4zD8u59Utysgkdc_keowNSSizjXC-A5H6wUF835PWp1DKmqefV_JZXY9KJRNqpFcRjXIl9X91qcU9tn7c5695dnHoLBxCH4qEoD2x5bLnhgYwhpGukB3zrVlY3Xzx-q4G2_qDA3xQ9mIWbs-IkSD83NXM-ZtRTx_FLPnARgCgvxpnVAhEMcF2JYILiW9fIHcXPNH9-perzKKmWl6k5DhiqSjoZ5HCxRLyscfPEoOiIJmaXE40nNmlnx3FJcsUE0Oito"/>
+<div>
+<p class="font-bold text-sm">Signature Sourdough</p>
+<p class="text-xs text-on-surface-variant">Qty: 2</p>
+</div>
+</div>
+<div class="flex items-center gap-4 bg-surface-container p-3 rounded-xl border border-outline-variant/10">
+<img class="w-16 h-16 rounded-md object-crop" data-alt="golden brown honey whole wheat bread loaf sliced on a wooden board" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDurvGYKdKD6GnwmLuym7S5PBExciXjXwq05sgxDI6NhkCV7YCejDCYQxd24ioA3YG7etQdipImF6EhyVqv7XtMxrG5szV7pbFNcxZACSDPGNsAXno2K_QayquKZ0rRmFIniAndUUydQg17pru6jUqwBXsEpfCakDhf-vj7wZk4knYh59X75cfZuNpXmVidu-UlI1sXn9p9W41ObCGixk5t3GV2EP6nbfFbXRc4iroOoQXfJ70onH0ngYjSssjbHdj8qMXc5e_ST0U"/>
+<div>
+<p class="font-bold text-sm">Honey Whole Wheat</p>
+<p class="text-xs text-on-surface-variant">Qty: 1</p>
+</div>
+</div>
+</div>
+</div>
+<div class="relative z-10 flex gap-4">
+<button class="bg-gradient-to-br from-primary to-primary-container text-white px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-primary/20 transition-all active:scale-95 flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="local_shipping">local_shipping</span>
+                        Track Delivery
+                    </button>
+<button class="px-8 py-4 rounded-full font-bold text-primary hover:bg-primary-fixed/50 transition-all border border-primary/20">
+                        View Details
+                    </button>
+</div>
+</div>
+<!-- Stats/Membership Sidebar -->
+<div class="bg-primary text-on-primary p-8 rounded-lg flex flex-col justify-between overflow-hidden relative">
+<div class="absolute bottom-0 right-0 opacity-10 translate-x-1/4 translate-y-1/4">
+<span class="material-symbols-outlined text-[200px]" data-icon="bakery_dining">bakery_dining</span>
+</div>
+<div class="relative z-10">
+<h4 class="text-2xl font-serif font-bold mb-2">Hearth Rewards</h4>
+<p class="text-primary-fixed opacity-90 mb-8">You're 2 loaves away from a free Artisan Pastry!</p>
+<div class="w-full bg-on-primary/20 h-3 rounded-full overflow-hidden mb-8">
+<div class="bg-secondary-container h-full w-[80%] rounded-full shadow-[0_0_12px_rgba(255,171,105,0.5)]"></div>
+</div>
+</div>
+<button class="relative z-10 bg-white text-primary px-6 py-3 rounded-full font-bold text-sm w-full hover:bg-surface-container-lowest transition-all">
+                    Redeem Points
+                </button>
+</div>
+<!-- Past Order Row 1 -->
+<div class="bg-surface-container-low p-6 rounded-lg group hover:bg-surface-container-highest transition-all duration-300 border border-outline-variant/5">
+<div class="flex justify-between items-start mb-4">
+<span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase tracking-wider">Delivered</span>
+<p class="text-xs text-on-surface-variant font-bold">OCT 12, 2024</p>
+</div>
+<h3 class="text-xl font-serif font-bold mb-2">#AH-9744</h3>
+<div class="flex items-baseline gap-2 mb-6">
+<span class="text-2xl font-bold text-secondary">$32.50</span>
+<span class="text-xs text-on-surface-variant">3 items</span>
+</div>
+<button class="w-full flex items-center justify-center gap-2 py-3 border-2 border-primary/10 rounded-full text-primary font-bold group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="replay">replay</span>
+                    Reorder
+                </button>
+</div>
+<!-- Past Order Row 2 -->
+<div class="bg-surface-container-low p-6 rounded-lg group hover:bg-surface-container-highest transition-all duration-300 border border-outline-variant/5">
+<div class="flex justify-between items-start mb-4">
+<span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase tracking-wider">Delivered</span>
+<p class="text-xs text-on-surface-variant font-bold">SEP 28, 2024</p>
+</div>
+<h3 class="text-xl font-serif font-bold mb-2">#AH-9612</h3>
+<div class="flex items-baseline gap-2 mb-6">
+<span class="text-2xl font-bold text-secondary">$18.00</span>
+<span class="text-xs text-on-surface-variant">1 item</span>
+</div>
+<button class="w-full flex items-center justify-center gap-2 py-3 border-2 border-primary/10 rounded-full text-primary font-bold group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="replay">replay</span>
+                    Reorder
+                </button>
+</div>
+<!-- Past Order Row 3 -->
+<div class="bg-surface-container-low p-6 rounded-lg group hover:bg-surface-container-highest transition-all duration-300 border border-outline-variant/5">
+<div class="flex justify-between items-start mb-4">
+<span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase tracking-wider">Delivered</span>
+<p class="text-xs text-on-surface-variant font-bold">SEP 15, 2024</p>
+</div>
+<h3 class="text-xl font-serif font-bold mb-2">#AH-9588</h3>
+<div class="flex items-baseline gap-2 mb-6">
+<span class="text-2xl font-bold text-secondary">$45.10</span>
+<span class="text-xs text-on-surface-variant">5 items</span>
+</div>
+<button class="w-full flex items-center justify-center gap-2 py-3 border-2 border-primary/10 rounded-full text-primary font-bold group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="replay">replay</span>
+                    Reorder
+                </button>
+</div>
+</div>
+<!-- Pagination/Load More -->
+<div class="mt-16 flex justify-center">
+<button class="group flex items-center gap-3 text-primary font-bold hover:gap-5 transition-all">
+                View All Past Orders
+                <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-[#f9f2ec] w-full mt-auto">
+<div class="flex flex-col md:flex-row justify-between items-center px-12 py-16 gap-8 max-w-7xl mx-auto">
+<div class="text-[#1e1b18] text-xs font-['Noto_Serif'] tracking-wide uppercase opacity-80">
+                © 2024 Artisan Hearth Bakery. Handcrafted Digital Experience.
+            </div>
+<nav class="flex flex-wrap justify-center gap-8 font-['Noto_Serif'] text-xs tracking-wide uppercase">
+<a class="text-[#1e1b18] hover:text-[#8c4b10] transition-colors opacity-80 hover:opacity-100" href="#">Privacy Policy</a>
+<a class="text-[#1e1b18] hover:text-[#8c4b10] transition-colors opacity-80 hover:opacity-100" href="#">Shipping Info</a>
+<a class="text-[#1e1b18] hover:text-[#8c4b10] transition-colors opacity-80 hover:opacity-100" href="#">Wholesale</a>
+<a class="text-[#1e1b18] hover:text-[#8c4b10] transition-colors opacity-80 hover:opacity-100" href="#">Contact Us</a>
+</nav>
+</div>
+</footer>
+</body></html>

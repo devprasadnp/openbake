@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Order Confirmed | Artisan Hearth</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container": "#f3ede7",
+              "primary": "#8c4b10",
+              "outline-variant": "#d8c2b4",
+              "error": "#ba1a1a",
+              "surface-container-highest": "#e8e1dc",
+              "on-error-container": "#93000a",
+              "on-tertiary": "#ffffff",
+              "surface-container-high": "#eee7e1",
+              "surface-dim": "#dfd9d3",
+              "primary-fixed-dim": "#ffb782",
+              "inverse-on-surface": "#f6f0ea",
+              "secondary-fixed-dim": "#ffb780",
+              "inverse-surface": "#33302c",
+              "secondary-container": "#ffab69",
+              "primary-container": "#aa6328",
+              "background": "#fff8f2",
+              "surface-variant": "#e8e1dc",
+              "on-tertiary-fixed": "#3c0700",
+              "inverse-primary": "#ffb782",
+              "on-primary-fixed-variant": "#703800",
+              "surface-tint": "#8f4e13",
+              "on-tertiary-container": "#fffbff",
+              "on-tertiary-fixed-variant": "#83260e",
+              "tertiary": "#a03b21",
+              "secondary-fixed": "#ffdcc4",
+              "on-secondary-fixed": "#2f1400",
+              "on-secondary-container": "#783d01",
+              "surface-container-lowest": "#ffffff",
+              "on-primary": "#ffffff",
+              "surface-container-low": "#f9f2ec",
+              "surface-bright": "#fff8f2",
+              "surface": "#fff8f2",
+              "on-primary-container": "#fffbff",
+              "on-primary-fixed": "#301400",
+              "tertiary-fixed-dim": "#ffb4a2",
+              "on-surface": "#1e1b18",
+              "on-background": "#1e1b18",
+              "on-secondary": "#ffffff",
+              "on-secondary-fixed-variant": "#6f3800",
+              "on-error": "#ffffff",
+              "tertiary-container": "#c05237",
+              "tertiary-fixed": "#ffdad2",
+              "secondary": "#8e4e14",
+              "primary-fixed": "#ffdcc5",
+              "outline": "#867468",
+              "error-container": "#ffdad6",
+              "on-surface-variant": "#534439"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .check-draw {
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+            animation: draw 0.8s ease-out forwards;
+        }
+        @keyframes draw {
+            to { stroke-dashoffset: 0; }
+        }
+    </style>
+</head>
+<body class="bg-background font-body text-on-surface min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<nav class="sticky top-0 w-full z-50 bg-[#fff8f2]/70 dark:bg-[#1e1b18]/70 backdrop-blur-xl no-border-tonal-shift bg-[#f9f2ec] dark:bg-[#2d2824] shadow-sm shadow-[#8c4b10]/5">
+<div class="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
+<div class="text-2xl font-bold tracking-tight text-[#8c4b10] dark:text-[#ffdcc5] font-headline">Artisan Hearth</div>
+<div class="hidden md:flex gap-8 items-center">
+<a class="text-[#5c524d] dark:text-[#d8c2b4] hover:text-[#8c4b10] transition-colors font-label" href="#">Our Breads</a>
+<a class="text-[#5c524d] dark:text-[#d8c2b4] hover:text-[#8c4b10] transition-colors font-label" href="#">Pastries</a>
+<a class="text-[#5c524d] dark:text-[#d8c2b4] hover:text-[#8c4b10] transition-colors font-label" href="#">About Us</a>
+<a class="text-[#5c524d] dark:text-[#d8c2b4] hover:text-[#8c4b10] transition-colors font-label" href="#">Find Us</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-[#8c4b10] dark:text-[#ffdcc5] hover:opacity-80 transition-opacity p-2 rounded-full active:scale-95 transition-transform duration-200">
+<span class="material-symbols-outlined">shopping_basket</span>
+</button>
+<button class="text-[#8c4b10] dark:text-[#ffdcc5] hover:opacity-80 transition-opacity p-2 rounded-full active:scale-95 transition-transform duration-200">
+<span class="material-symbols-outlined">person</span>
+</button>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex items-center justify-center p-6 md:p-12">
+<div class="max-w-2xl w-full">
+<!-- Animated Success Header -->
+<div class="flex flex-col items-center text-center mb-8">
+<div class="w-24 h-24 bg-surface-container-lowest rounded-full flex items-center justify-center shadow-lg shadow-[#8c4b10]/5 mb-6">
+<svg class="w-16 h-16 text-primary" viewbox="0 0 52 52">
+<circle class="opacity-20" cx="26" cy="26" fill="none" r="25" stroke="currentColor" stroke-width="2"></circle>
+<path class="check-draw" d="M14 27l7 7 16-16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"></path>
+</svg>
+</div>
+<h1 class="font-headline text-4xl md:text-5xl font-bold text-primary mb-4 tracking-tight">Your order is confirmed! 🎉</h1>
+<div class="bg-surface-container-high px-6 py-2 rounded-full inline-block">
+<p class="text-on-surface-variant font-medium text-sm md:text-base">
+                        Order ID: <span class="text-primary">#AH-8293</span> | Estimated delivery: <span class="text-primary">45 mins</span>
+</p>
+</div>
+</div>
+<!-- Confirmation Card -->
+<div class="bg-surface-container-lowest rounded-lg p-8 shadow-xl shadow-[#8c4b10]/5 relative overflow-hidden">
+<!-- Decorative background elements -->
+<div class="absolute -top-12 -right-12 w-48 h-48 bg-primary-fixed/20 rounded-full blur-3xl"></div>
+<div class="relative z-10">
+<h2 class="font-headline text-2xl text-on-surface mb-6 border-b border-outline-variant/20 pb-4">Order Summary</h2>
+<div class="space-y-6">
+<!-- Item 1 -->
+<div class="flex items-center gap-4">
+<div class="w-20 h-20 rounded-sm overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Close-up of a crusty artisanal sourdough loaf with beautiful score marks and flour dusting on a rustic wooden board" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAAJ0fXLMyxZ2xTz3zDsS39o-7-LVp6ctBHXl6LfSqXfrKQYcPJtmyHTdSqJKn7sFYqjGP9ZOuVbQwnURHwQKjm6cueg6xobugSYWZnZZqzCKw2gmNpAteipRrmr5R2pkXopOp3qPaLEWyJZTUEvpaDKBqtHB_cPdI5_0SwxqJ6KvRBY-Zi7B7bVMW2CfV57AGT0JAYQ_6V3LAWAe2_B4kXb_HytKPlHb1cSLGsIn1Me-Qo8hUuoVHIUTlCpA9uP6spQKp31HM2c8"/>
+</div>
+<div class="flex-grow">
+<h3 class="font-bold text-on-surface">Country Sourdough Loaf</h3>
+<p class="text-on-surface-variant text-sm">Large • Sliced</p>
+</div>
+<div class="text-right">
+<p class="font-bold text-primary">$8.50</p>
+<p class="text-on-surface-variant text-xs italic">Qty: 1</p>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex items-center gap-4">
+<div class="w-20 h-20 rounded-sm overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Glistening golden-brown flaky butter croissants arranged neatly in a warm sunlit bakery display case" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-heBcAuokb6hlOdbCQ-yAFiYafs5rZclv4Uzf4oJdytLTpL8Tdahfyt3z7auUFUhusFgm0ouA3e53fymKYYgWLWsXTRFhczbTs7VpryE1JU36kt3j-nIihPxB1XOOKHK9LOSThVurG4k6_rkmZ_zMgoGAPwSmiRGkh1VNYkjcnV6nRd-NRYiZMH2WhEcikbrqVzCn1WCkBNVA8ef_L7S6KKiVkkKQ_aecoQMvrBL7TfuvWCvrAoK8kPbcP3CVVoPwHwM4TzDoPlw"/>
+</div>
+<div class="flex-grow">
+<h3 class="font-bold text-on-surface">Honey Glazed Croissants</h3>
+<p class="text-on-surface-variant text-sm">Box of 4</p>
+</div>
+<div class="text-right">
+<p class="font-bold text-primary">$12.00</p>
+<p class="text-on-surface-variant text-xs italic">Qty: 1</p>
+</div>
+</div>
+</div>
+<!-- Totals -->
+<div class="mt-8 pt-6 border-t border-outline-variant/30 space-y-2">
+<div class="flex justify-between text-on-surface-variant text-sm">
+<span>Subtotal</span>
+<span>$20.50</span>
+</div>
+<div class="flex justify-between text-on-surface-variant text-sm">
+<span>Delivery Fee</span>
+<span>$2.50</span>
+</div>
+<div class="flex justify-between text-xl font-bold text-on-surface pt-2">
+<span>Total</span>
+<span class="text-primary">$23.00</span>
+</div>
+</div>
+<!-- Actions -->
+<div class="mt-10 flex flex-col sm:flex-row gap-4">
+<button class="flex-1 rounded-full bg-gradient-to-br from-primary to-primary-container text-on-primary py-4 px-8 font-bold text-center shadow-lg shadow-primary/20 hover:opacity-90 transition-all active:scale-[0.98]">
+                            Track Order
+                        </button>
+<button class="flex-1 rounded-full border-2 border-primary-fixed-dim text-primary py-4 px-8 font-bold text-center hover:bg-primary-fixed/10 transition-all active:scale-[0.98]">
+                            Continue Shopping
+                        </button>
+</div>
+</div>
+</div>
+<!-- Helpful Info Section -->
+<div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="bg-surface-container-low p-6 rounded-lg">
+<div class="flex items-center gap-3 text-primary mb-2">
+<span class="material-symbols-outlined">local_shipping</span>
+<h4 class="font-bold">Contactless Delivery</h4>
+</div>
+<p class="text-sm text-on-surface-variant leading-relaxed italic">Our courier will leave your warm breads at the front door as requested.</p>
+</div>
+<div class="bg-surface-container-low p-6 rounded-lg">
+<div class="flex items-center gap-3 text-primary mb-2">
+<span class="material-symbols-outlined">mail</span>
+<h4 class="font-bold">Receipt Sent</h4>
+</div>
+<p class="text-sm text-on-surface-variant leading-relaxed italic">A copy of your receipt and tracking link has been sent to your email.</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full mt-auto bg-[#eee7e1] dark:bg-[#161412]">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 px-8 py-12 max-w-7xl mx-auto items-center">
+<div>
+<div class="text-lg font-semibold text-[#8c4b10] dark:text-[#ffdcc5] font-headline mb-2">Artisan Hearth</div>
+<p class="font-['Noto_Serif'] text-sm italic text-[#5c524d] dark:text-[#d8c2b4]">© 2024 Artisan Hearth Bakery. Hand-kneaded in the digital age.</p>
+</div>
+<div class="flex flex-wrap gap-6 md:justify-end">
+<a class="text-[#5c524d] dark:text-[#d8c2b4] hover:text-[#8c4b10] transition-colors duration-300 text-sm hover:translate-x-1 transition-transform" href="#">Sustainability</a>
+<a class="text-[#5c524d] dark:text-[#d8c2b4] hover:text-[#8c4b10] transition-colors duration-300 text-sm hover:translate-x-1 transition-transform" href="#">Wholesale</a>
+<a class="text-[#5c524d] dark:text-[#d8c2b4] hover:text-[#8c4b10] transition-colors duration-300 text-sm hover:translate-x-1 transition-transform" href="#">Careers</a>
+<a class="text-[#5c524d] dark:text-[#d8c2b4] hover:text-[#8c4b10] transition-colors duration-300 text-sm hover:translate-x-1 transition-transform" href="#">Privacy Policy</a>
+</div>
+</div>
+</footer>
+</body></html>

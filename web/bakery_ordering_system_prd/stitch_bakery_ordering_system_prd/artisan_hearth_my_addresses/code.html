@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Saved Addresses - Artisan Hearth</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700;900&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#83260e",
+                        "on-tertiary-container": "#fffbff",
+                        "error-container": "#ffdad6",
+                        "background": "#fff8f2",
+                        "on-secondary-fixed": "#2f1400",
+                        "on-secondary-container": "#783d01",
+                        "on-error-container": "#93000a",
+                        "inverse-on-surface": "#f6f0ea",
+                        "tertiary-fixed": "#ffdad2",
+                        "secondary-container": "#ffab69",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#8f4e13",
+                        "primary-fixed": "#ffdcc5",
+                        "on-tertiary": "#ffffff",
+                        "surface-container": "#f3ede7",
+                        "on-primary-fixed": "#301400",
+                        "outline-variant": "#d8c2b4",
+                        "on-surface": "#1e1b18",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed-variant": "#703800",
+                        "secondary": "#8e4e14",
+                        "primary-fixed-dim": "#ffb782",
+                        "surface": "#fff8f2",
+                        "secondary-fixed-dim": "#ffb780",
+                        "on-surface-variant": "#534439",
+                        "on-primary": "#ffffff",
+                        "primary": "#8c4b10",
+                        "secondary-fixed": "#ffdcc4",
+                        "tertiary": "#a03b21",
+                        "surface-container-high": "#eee7e1",
+                        "on-background": "#1e1b18",
+                        "inverse-surface": "#33302c",
+                        "tertiary-container": "#c05237",
+                        "surface-container-low": "#f9f2ec",
+                        "surface-bright": "#fff8f2",
+                        "on-primary-container": "#fffbff",
+                        "surface-variant": "#e8e1dc",
+                        "primary-container": "#aa6328",
+                        "inverse-primary": "#ffb782",
+                        "outline": "#867468",
+                        "surface-container-highest": "#e8e1dc",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-fixed": "#3c0700",
+                        "surface-dim": "#dfd9d3",
+                        "tertiary-fixed-dim": "#ffb4a2",
+                        "on-secondary-fixed-variant": "#6f3800"
+                    },
+                    fontFamily: {
+                        "headline": ["Noto Serif"],
+                        "body": ["Plus Jakarta Sans"],
+                        "label": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .artisan-glass {
+            background: rgba(255, 248, 242, 0.7);
+            backdrop-filter: blur(12px);
+        }
+        .ambient-shadow {
+            box-shadow: 0 8px 32px rgba(140, 75, 16, 0.06);
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface">
+<!-- TopAppBar -->
+<nav class="fixed top-0 w-full z-50 bg-[#fff8f2]/70 backdrop-blur-md shadow-sm shadow-[#8c4b10]/5">
+<div class="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
+<div class="text-2xl font-headline font-black text-[#8c4b10] tracking-tight">Artisan Hearth</div>
+<div class="hidden md:flex items-center space-x-8">
+<a class="text-stone-600 font-label font-bold text-[10px] uppercase tracking-widest hover:text-[#aa6328] transition-colors duration-300" href="#">Home</a>
+<a class="text-stone-600 font-label font-bold text-[10px] uppercase tracking-widest hover:text-[#aa6328] transition-colors duration-300" href="#">Wishlist</a>
+<a class="text-stone-600 font-label font-bold text-[10px] uppercase tracking-widest hover:text-[#aa6328] transition-colors duration-300" href="#">Orders</a>
+<a class="text-[#8c4b10] border-b-2 border-[#8c4b10] pb-1 font-label font-bold text-[10px] uppercase tracking-widest" href="#">Profile</a>
+</div>
+<div class="flex items-center space-x-4">
+<button class="text-[#8c4b10] p-2 hover:bg-surface-variant rounded-full transition-all">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-[#8c4b10] p-2 hover:bg-surface-variant rounded-full transition-all">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</div>
+</nav>
+<main class="pt-24 pb-32 px-6 max-w-7xl mx-auto min-h-screen">
+<!-- Editorial Header Section -->
+<header class="mb-12 relative">
+<div class="flex items-center gap-2 text-primary font-bold mb-4">
+<span class="material-symbols-outlined text-sm" data-icon="arrow_back">arrow_back</span>
+<span class="font-label text-xs uppercase tracking-widest">Back to Profile</span>
+</div>
+<h1 class="font-headline font-black text-4xl md:text-6xl text-primary max-w-2xl leading-tight mb-4">
+                Your Delivery <span class="italic text-secondary">Sanctuaries</span>
+</h1>
+<p class="font-body text-on-surface-variant text-lg max-w-xl">
+                Manage the hearths where our artisanal breads find their home. Add, edit, or curate your delivery locations.
+            </p>
+<!-- Decorative Element -->
+<div class="absolute -top-12 -right-12 w-64 h-64 bg-primary-fixed opacity-20 rounded-full blur-3xl -z-10"></div>
+</header>
+<!-- Address Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Add New Address Card -->
+<button class="group relative flex flex-col items-center justify-center p-8 bg-surface-container-low rounded-xl border-2 border-dashed border-outline-variant/30 hover:border-primary/50 hover:bg-surface-container-highest transition-all duration-300 min-h-[280px]">
+<div class="w-16 h-16 bg-primary-fixed rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+<span class="material-symbols-outlined text-on-primary-fixed text-3xl" data-icon="add">add</span>
+</div>
+<h3 class="font-headline font-bold text-xl text-primary mb-2">Add New Address</h3>
+<p class="font-body text-on-surface-variant text-sm text-center">Pin a new location for your fresh deliveries</p>
+</button>
+<!-- Home Address Card -->
+<div class="bg-surface-container-lowest rounded-xl p-8 ambient-shadow relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4">
+<span class="bg-secondary-fixed text-on-secondary-fixed px-3 py-1 rounded-full font-label text-[10px] uppercase font-bold tracking-widest">Default</span>
+</div>
+<div class="flex items-center gap-3 mb-6">
+<div class="p-3 bg-surface-container-high rounded-lg text-primary">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+</div>
+<h3 class="font-headline font-bold text-2xl text-on-surface">Home</h3>
+</div>
+<div class="space-y-4 mb-8">
+<p class="font-body text-on-surface-variant leading-relaxed">
+                        248 Baker's Street, Flour District<br/>
+                        Amber Mill, AM 84210<br/>
+                        United Kingdom
+                    </p>
+<div class="flex items-center gap-2 text-on-surface-variant text-sm">
+<span class="material-symbols-outlined text-lg" data-icon="call">call</span>
+<span>+44 20 7946 0123</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex-1 bg-primary-fixed text-on-primary-fixed py-3 rounded-full font-label font-bold text-xs uppercase tracking-widest hover:bg-primary transition-all hover:text-white">Edit</button>
+<button class="p-3 text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+<!-- Card Interior Decoration -->
+<div class="absolute -bottom-10 -right-10 w-32 h-32 bg-secondary/5 rounded-full group-hover:scale-150 transition-transform duration-700"></div>
+</div>
+<!-- Office Address Card -->
+<div class="bg-surface-container-lowest rounded-xl p-8 ambient-shadow relative overflow-hidden group">
+<div class="flex items-center gap-3 mb-6">
+<div class="p-3 bg-surface-container-high rounded-lg text-primary">
+<span class="material-symbols-outlined" data-icon="business">business</span>
+</div>
+<h3 class="font-headline font-bold text-2xl text-on-surface">Office</h3>
+</div>
+<div class="space-y-4 mb-8">
+<p class="font-body text-on-surface-variant leading-relaxed">
+                        Creative Hearth Studio, Suite 402<br/>
+                        Innovation Plaza, North Side<br/>
+                        Amber Mill, AM 84500
+                    </p>
+<div class="flex items-center gap-2 text-on-surface-variant text-sm">
+<span class="material-symbols-outlined text-lg" data-icon="call">call</span>
+<span>+44 20 7946 0999</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex-1 bg-primary-fixed text-on-primary-fixed py-3 rounded-full font-label font-bold text-xs uppercase tracking-widest hover:bg-primary transition-all hover:text-white">Edit</button>
+<button class="p-3 text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+<!-- Parents Address Card -->
+<div class="bg-surface-container-lowest rounded-xl p-8 ambient-shadow relative overflow-hidden group">
+<div class="flex items-center gap-3 mb-6">
+<div class="p-3 bg-surface-container-high rounded-lg text-primary">
+<span class="material-symbols-outlined" data-icon="family_history">family_history</span>
+</div>
+<h3 class="font-headline font-bold text-2xl text-on-surface">Parents</h3>
+</div>
+<div class="space-y-4 mb-8">
+<p class="font-body text-on-surface-variant leading-relaxed">
+                        The Old Orchard, Cottage 12<br/>
+                        Riverside Trail, Country View<br/>
+                        Amber Mill, AM 84102
+                    </p>
+<div class="flex items-center gap-2 text-on-surface-variant text-sm">
+<span class="material-symbols-outlined text-lg" data-icon="call">call</span>
+<span>+44 20 7946 0555</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex-1 bg-primary-fixed text-on-primary-fixed py-3 rounded-full font-label font-bold text-xs uppercase tracking-widest hover:bg-primary transition-all hover:text-white">Edit</button>
+<button class="p-3 text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+<!-- Asymmetric Image Section -->
+<div class="lg:col-span-2 relative min-h-[300px] rounded-xl overflow-hidden mt-8 md:mt-0">
+<img alt="Artisan bakery interior" class="absolute inset-0 w-full h-full object-cover" data-alt="Soft focused interior of a warm rustic bakery with sunlight streaming through large windows onto wooden tables and sacks of flour" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQ3UJTbsZQQCjX4EsgtA4JgUkhNnUpvn1OCyd0tQJZDZM3IPbMw0S8NyAeo8ruNQezq-AkJc08iOKJ7mRTZ27m6NIgoEvlI5UfPsqQDrJBCbnQTnDpUDhdtdPyarBAqVPnlndUWk5L4m8mFv5alRbZhE-BHwfhTG7cf5Rkm0Y1mkBp_zScmQuATFlFNc2uRcFqFOJZWlPEgOwrW4HIiDHUhKHlird3Uut5hVpbtqStFizM_I4QBbUUD6NXd84fCM25UtjkER7_mvk"/>
+<div class="absolute inset-0 bg-gradient-to-r from-[#8c4b10]/80 to-transparent flex flex-col justify-center px-12">
+<h4 class="font-headline font-bold text-3xl text-white mb-4 leading-tight max-w-sm">Every delivery is a ritual of warmth.</h4>
+<p class="text-primary-fixed font-body max-w-xs">We ensure your sourdough arrives as fresh as the moment it left our stone hearth.</p>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-end px-6 pb-6 bg-[#fff8f2]/90 backdrop-blur-xl rounded-t-[2.5rem] shadow-2xl z-50">
+<a class="flex flex-col items-center justify-center text-stone-400 py-4" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label font-bold text-[10px] uppercase tracking-widest mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-stone-400 py-4" href="#">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+<span class="font-label font-bold text-[10px] uppercase tracking-widest mt-1">Wishlist</span>
+</a>
+<a class="flex flex-col items-center justify-center text-stone-400 py-4" href="#">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+<span class="font-label font-bold text-[10px] uppercase tracking-widest mt-1">Orders</span>
+</a>
+<div class="flex flex-col items-center justify-center bg-gradient-to-br from-[#8c4b10] to-[#aa6328] text-white rounded-full w-14 h-14 -translate-y-4 shadow-lg shadow-[#8c4b10]/20">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+</div>
+</nav>
+</body></html>

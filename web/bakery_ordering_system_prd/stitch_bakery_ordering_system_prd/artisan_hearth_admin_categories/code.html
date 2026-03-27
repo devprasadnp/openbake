@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Categories Management - Artisan Hearth</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Playfair Display for Serifs, Plus Jakarta Sans for UI -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@700;900&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Design System Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container-lowest": "#ffffff",
+              "on-tertiary-fixed-variant": "#83260e",
+              "on-tertiary-container": "#fffbff",
+              "error-container": "#ffdad6",
+              "background": "#fff8f2",
+              "on-secondary-fixed": "#2f1400",
+              "on-secondary-container": "#783d01",
+              "on-error-container": "#93000a",
+              "inverse-on-surface": "#f6f0ea",
+              "tertiary-fixed": "#ffdad2",
+              "secondary-container": "#ffab69",
+              "on-error": "#ffffff",
+              "surface-tint": "#8f4e13",
+              "primary-fixed": "#ffdcc5",
+              "on-tertiary": "#ffffff",
+              "surface-container": "#f3ede7",
+              "on-primary-fixed": "#301400",
+              "outline-variant": "#d8c2b4",
+              "on-surface": "#1e1b18",
+              "error": "#ba1a1a",
+              "on-primary-fixed-variant": "#703800",
+              "secondary": "#8e4e14",
+              "primary-fixed-dim": "#ffb782",
+              "surface": "#fff8f2",
+              "secondary-fixed-dim": "#ffb780",
+              "on-surface-variant": "#534439",
+              "on-primary": "#ffffff",
+              "primary": "#8c4b10",
+              "secondary-fixed": "#ffdcc4",
+              "tertiary": "#a03b21",
+              "surface-container-high": "#eee7e1",
+              "on-background": "#1e1b18",
+              "inverse-surface": "#33302c",
+              "tertiary-container": "#c05237",
+              "surface-container-low": "#f9f2ec",
+              "surface-bright": "#fff8f2",
+              "on-primary-container": "#fffbff",
+              "surface-variant": "#e8e1dc",
+              "primary-container": "#aa6328",
+              "inverse-primary": "#ffb782",
+              "outline": "#867468",
+              "surface-container-highest": "#e8e1dc",
+              "on-secondary": "#ffffff",
+              "on-tertiary-fixed": "#3c0700",
+              "surface-dim": "#dfd9d3",
+              "tertiary-fixed-dim": "#ffb4a2",
+              "on-secondary-fixed-variant": "#6f3800"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        background-color: #fff8f2;
+        color: #1e1b18;
+      }
+      h1, h2, h3 {
+        font-family: 'Noto Serif', serif;
+      }
+    </style>
+</head>
+<body class="flex min-h-screen">
+<!-- Shared SideNavBar -->
+<aside class="flex-none hidden md:flex h-screen w-64 flex-col py-6 bg-[#f9f2ec] dark:bg-stone-950">
+<div class="px-6 mb-10">
+<h1 class="text-xl font-serif font-bold text-[#8c4b10] dark:text-[#ffab69]">Hearth Admin</h1>
+<p class="text-xs text-stone-500 font-medium tracking-wide">Bakery Manager</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="text-stone-500 dark:text-stone-400 hover:bg-[#eee7e1] dark:hover:bg-stone-800 rounded-full mx-2 px-4 py-3 flex items-center gap-3 transition-transform duration-200 hover:translate-x-1" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-sans font-medium text-sm">Dashboard</span>
+</a>
+<a class="text-stone-500 dark:text-stone-400 hover:bg-[#eee7e1] dark:hover:bg-stone-800 rounded-full mx-2 px-4 py-3 flex items-center gap-3 transition-transform duration-200 hover:translate-x-1" href="#">
+<span class="material-symbols-outlined">confirmation_number</span>
+<span class="font-sans font-medium text-sm">Coupons</span>
+</a>
+<!-- ACTIVE TAB: Categories -->
+<a class="bg-[#ffdcc5] dark:bg-[#8c4b10]/20 text-[#301400] dark:text-[#ffdcc5] rounded-full mx-2 px-4 py-3 flex items-center gap-3 shadow-sm opacity-100" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">category</span>
+<span class="font-sans font-medium text-sm">Categories</span>
+</a>
+<a class="text-stone-500 dark:text-stone-400 hover:bg-[#eee7e1] dark:hover:bg-stone-800 rounded-full mx-2 px-4 py-3 flex items-center gap-3 transition-transform duration-200 hover:translate-x-1" href="#">
+<span class="material-symbols-outlined">bakery_dining</span>
+<span class="font-sans font-medium text-sm">Inventory</span>
+</a>
+<a class="text-stone-500 dark:text-stone-400 hover:bg-[#eee7e1] dark:hover:bg-stone-800 rounded-full mx-2 px-4 py-3 flex items-center gap-3 transition-transform duration-200 hover:translate-x-1" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-sans font-medium text-sm">Settings</span>
+</a>
+</nav>
+<div class="mt-auto px-2">
+<a class="text-stone-500 dark:text-stone-400 hover:bg-[#eee7e1] dark:hover:bg-stone-800 rounded-full px-4 py-3 flex items-center gap-3 transition-transform duration-200 hover:translate-x-1" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-sans font-medium text-sm">Help Center</span>
+</a>
+<div class="mt-6 flex items-center gap-3 px-4 py-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="portrait of a professional chef wearing a clean white baker's jacket in a bright modern kitchen setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqEPYsvvx7fxVIp5kLW5Q8hNKwuPwRFppOweswFEiG9NHMNJpf_FV3sVfKc7IBNg7w6jkLsx_YBHu5xgAKnwxlIgcw9-M85N3C0JHo2JTi0D5cW4liGAOp78C17_a8j-UKXJ1T2ehp_4UENN56jPmbt78E3gn4bMm2DgsbBeCPuLvbxaedVzB2zLb7r8emJkUgPtQ_DrxUigzPt_fPrgktP95KKipW2JXqVMnceN_EYli0pA-AoviBnZ3ycVS4UORDJKXdFATdpXI"/>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-on-surface">Chef Julian</span>
+<span class="text-[10px] text-stone-500 uppercase tracking-widest">Admin Profile</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 overflow-y-auto px-6 md:px-12 py-8 space-y-8">
+<!-- Header Section -->
+<header class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div class="space-y-2">
+<h2 class="text-4xl md:text-5xl font-black tracking-tight text-primary">Menu Categories</h2>
+<p class="text-on-surface-variant font-medium max-w-lg">Organize your artisanal offerings into collections to help customers find their perfect loaf or pastry.</p>
+</div>
+<button class="bg-gradient-to-br from-primary to-primary-container text-white px-8 py-4 rounded-full font-bold shadow-lg shadow-primary/20 flex items-center gap-2 self-start md:self-auto hover:scale-105 transition-transform active:scale-95">
+<span class="material-symbols-outlined">add_circle</span>
+                Add Category
+            </button>
+</header>
+<!-- Search and Filter (Tonal Layering instead of borders) -->
+<section class="bg-surface-container-low p-4 rounded-xl flex flex-wrap gap-4 items-center">
+<div class="relative flex-1 min-w-[280px]">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full pl-12 pr-4 py-3 bg-surface-container-lowest rounded-xl border-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-outline/60 font-medium" placeholder="Search categories..." type="text"/>
+</div>
+<div class="flex items-center gap-2 text-sm font-bold text-on-surface-variant px-2">
+<span class="material-symbols-outlined text-sm">filter_list</span>
+<span>Sort by:</span>
+<select class="bg-transparent border-none focus:ring-0 cursor-pointer font-bold text-primary">
+<option>Newest First</option>
+<option>Item Count</option>
+<option>A-Z</option>
+</select>
+</div>
+</section>
+<!-- Categories Bento-Style Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+<!-- Category Card: Signature Breads -->
+<div class="group relative bg-surface-container-lowest p-6 rounded-lg transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5">
+<div class="flex justify-between items-start mb-6">
+<div class="relative">
+<img class="w-32 h-32 object-cover rounded-sm shadow-inner group-hover:scale-105 transition-transform duration-500" data-alt="Close-up of golden brown artisan sourdough boules stacked in a rustic wooden basket with natural window light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCa6VLixL3_Q7dxGfyqMHUYnUcYBkCYwYZkDcWKZUlo-HPpXn67rGIq-E2GGTXS1PtsxL-pazSzLBPZ2BWePa6kYwC814L3qkRrfmXybVWLK2_BPmVt63ZoaKtxoYJXynjcm1JUwpDQ9xo30w5ZQn5LhdpO1TwGh-wBOXbPc6jhiART6zUf3nlFS69-b4elW9ClzgfUlEhOsERGyEmLFo45mKkAsuBFgb-1SPBOuSTY7iD-7ZogDfxvfZXyzGUCwbUeLvuaEHL1I-o"/>
+<span class="absolute -top-2 -right-2 bg-tertiary text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full shadow-md">Featured</span>
+</div>
+<div class="flex gap-2">
+<button class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-outline hover:text-error transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</div>
+<div class="space-y-1">
+<h3 class="text-2xl font-black text-on-surface">Signature Breads</h3>
+<p class="text-sm text-on-surface-variant font-medium">Daily-baked sourdough, rye, and ancient grain loaves.</p>
+</div>
+<div class="mt-6 pt-6 border-t-4 border-surface-container flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-[10px] text-outline uppercase tracking-widest font-bold">Items</span>
+<span class="text-xl font-black text-primary">24</span>
+</div>
+<div class="flex flex-col text-right">
+<span class="text-[10px] text-outline uppercase tracking-widest font-bold">Status</span>
+<span class="text-sm font-bold text-secondary flex items-center gap-1 justify-end">
+<span class="w-2 h-2 rounded-full bg-secondary"></span> Active
+                        </span>
+</div>
+</div>
+</div>
+<!-- Category Card: Artisan Pastries -->
+<div class="group relative bg-surface-container-lowest p-6 rounded-lg transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5">
+<div class="flex justify-between items-start mb-6">
+<div class="relative">
+<img class="w-32 h-32 object-cover rounded-sm shadow-inner group-hover:scale-105 transition-transform duration-500" data-alt="A tray of flaky golden croissants and pains au chocolat dusted with powdered sugar on a marble surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgu2VroBk8QhtEeFNTbtowI5WqMnwVgnnQUJLBuadynYrniE2GUcLfRt7v3E2T0shzMft5WcfW1-Mfc7JXF971WAiE38FWZLkKZBAvw6fw7GR0WLTB8wz2nzETXylARwYTPQJX3USGxsVzdoWUkhR0NZ09mFHfstMMH0zYojTlfBXW55TCAakldYa7HAb-WtFSryGGJMyTPzdK6VVbj6N9tEITntGppFJOlZ9EVqm2CPhfaaQM0mWEiaTRXyKXYlA9TnQ_UsbgEWw"/>
+</div>
+<div class="flex gap-2">
+<button class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-outline hover:text-error transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</div>
+<div class="space-y-1">
+<h3 class="text-2xl font-black text-on-surface">Artisan Pastries</h3>
+<p class="text-sm text-on-surface-variant font-medium">Laminated doughs, seasonal fruit tarts, and danishes.</p>
+</div>
+<div class="mt-6 pt-6 border-t-4 border-surface-container flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-[10px] text-outline uppercase tracking-widest font-bold">Items</span>
+<span class="text-xl font-black text-primary">18</span>
+</div>
+<div class="flex flex-col text-right">
+<span class="text-[10px] text-outline uppercase tracking-widest font-bold">Status</span>
+<span class="text-sm font-bold text-secondary flex items-center gap-1 justify-end">
+<span class="w-2 h-2 rounded-full bg-secondary"></span> Active
+                        </span>
+</div>
+</div>
+</div>
+<!-- Category Card: Wedding Cakes -->
+<div class="group relative bg-surface-container-lowest p-6 rounded-lg transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5">
+<div class="flex justify-between items-start mb-6">
+<div class="relative">
+<img class="w-32 h-32 object-cover rounded-sm shadow-inner group-hover:scale-105 transition-transform duration-500" data-alt="Elegant three-tier white wedding cake decorated with delicate fresh peonies and eucalyptus leaves" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgiCt1VPQ6xlrfFn3qVLjdiaZnR8cV7WcRvEwz0eEfD8zPOS38qNIIAVLGvBwrm9YIlh6xRh2wl4r1P7I8DTaNq_3l9G3mRfWrSiw7h7RzoA03sQHF9YW3cLxuLRDOiMA2d_-H7_mdY0f9b3EZ57mSBLwr2ykw8otsPO6SVpQud98T1acjLcTcCKwSdphlVe7o9RHV5EgkdQVaeRpCN8PPZK1NO5WRULgyd_JM4i_bAHguLHqlAFKcOl6bJYPtGqq4-wuyYDM2aIw"/>
+</div>
+<div class="flex gap-2">
+<button class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-outline hover:text-error transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</div>
+<div class="space-y-1">
+<h3 class="text-2xl font-black text-on-surface">Wedding Cakes</h3>
+<p class="text-sm text-on-surface-variant font-medium">Custom multi-tiered masterpieces for your special day.</p>
+</div>
+<div class="mt-6 pt-6 border-t-4 border-surface-container flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-[10px] text-outline uppercase tracking-widest font-bold">Items</span>
+<span class="text-xl font-black text-primary">12</span>
+</div>
+<div class="flex flex-col text-right">
+<span class="text-[10px] text-outline uppercase tracking-widest font-bold">Status</span>
+<span class="text-sm font-bold text-stone-400 flex items-center gap-1 justify-end">
+<span class="w-2 h-2 rounded-full bg-stone-300"></span> Seasonal
+                        </span>
+</div>
+</div>
+</div>
+<!-- Empty State / Add New Placeholder -->
+<div class="group relative border-4 border-dashed border-outline-variant/30 p-6 rounded-lg flex flex-col items-center justify-center text-center space-y-4 hover:bg-surface-container/30 transition-colors cursor-pointer">
+<div class="w-16 h-16 rounded-full bg-primary-fixed flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">add</span>
+</div>
+<div>
+<h3 class="text-xl font-black text-on-surface">New Category</h3>
+<p class="text-sm text-on-surface-variant font-medium">Define a new collection for your inventory.</p>
+</div>
+</div>
+</div>
+<!-- Pagination or Load More (Subtle Tonal Shift) -->
+<footer class="flex justify-center pt-8">
+<button class="bg-surface-container-high text-on-surface px-10 py-3 rounded-full font-bold hover:bg-outline-variant/30 transition-colors">
+                Load More Categories
+            </button>
+</footer>
+</main>
+<!-- Contextual FAB (Only for Mobile view or small triggers) -->
+<div class="md:hidden fixed bottom-6 right-6">
+<button class="w-14 h-14 bg-gradient-to-br from-primary to-primary-container text-white rounded-full shadow-xl flex items-center justify-center hover:scale-105 active:scale-90 transition-all">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</body></html>

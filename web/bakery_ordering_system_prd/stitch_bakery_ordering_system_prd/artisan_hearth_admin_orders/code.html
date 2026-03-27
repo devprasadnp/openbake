@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Orders Management | Artisan Hearth Admin</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "on-background": "#1e1b18",
+                "primary": "#8c4b10",
+                "primary-fixed-dim": "#ffb782",
+                "on-tertiary": "#ffffff",
+                "on-error": "#ffffff",
+                "on-primary-fixed": "#301400",
+                "tertiary-container": "#c05237",
+                "tertiary": "#a03b21",
+                "surface-dim": "#dfd9d3",
+                "surface": "#fff8f2",
+                "on-error-container": "#93000a",
+                "secondary-fixed": "#ffdcc4",
+                "inverse-primary": "#ffb782",
+                "surface-container": "#f3ede7",
+                "inverse-surface": "#33302c",
+                "surface-container-highest": "#e8e1dc",
+                "outline": "#867468",
+                "on-secondary-container": "#783d01",
+                "surface-bright": "#fff8f2",
+                "primary-fixed": "#ffdcc5",
+                "on-tertiary-fixed-variant": "#83260e",
+                "secondary-container": "#ffab69",
+                "secondary-fixed-dim": "#ffb780",
+                "tertiary-fixed-dim": "#ffb4a2",
+                "background": "#fff8f2",
+                "surface-tint": "#8f4e13",
+                "surface-container-high": "#eee7e1",
+                "surface-variant": "#e8e1dc",
+                "on-tertiary-container": "#fffbff",
+                "secondary": "#8e4e14",
+                "on-primary-fixed-variant": "#703800",
+                "error": "#ba1a1a",
+                "on-surface-variant": "#534439",
+                "surface-container-low": "#f9f2ec",
+                "tertiary-fixed": "#ffdad2",
+                "surface-container-lowest": "#ffffff",
+                "on-secondary-fixed-variant": "#6f3800",
+                "on-secondary": "#ffffff",
+                "inverse-on-surface": "#f6f0ea",
+                "on-primary-container": "#fffbff",
+                "on-secondary-fixed": "#2f1400",
+                "on-tertiary-fixed": "#3c0700",
+                "on-surface": "#1e1b18",
+                "error-container": "#ffdad6",
+                "on-primary": "#ffffff",
+                "outline-variant": "#d8c2b4",
+                "primary-container": "#aa6328"
+              },
+              fontFamily: {
+                "headline": ["Noto Serif"],
+                "body": ["Plus Jakarta Sans"],
+                "label": ["Plus Jakarta Sans"]
+              },
+              borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        h1, h2, h3, .font-serif { font-family: 'Noto Serif', serif; }
+        /* Custom scrollbar for organic feel */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f3ede7; }
+        ::-webkit-scrollbar-thumb { background: #d8c2b4; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background text-on-surface selection:bg-secondary-fixed">
+<!-- SideNavBar Component -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-[#eee7e1] dark:bg-stone-900 flex flex-col h-full py-8 px-4 z-50">
+<div class="mb-10 px-2 flex items-center gap-3">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined">bakery_dining</span>
+</div>
+<div>
+<h1 class="font-serif text-2xl font-bold text-[#8c4b10] dark:text-[#aa6328] leading-none">Artisan Hearth</h1>
+<p class="text-xs text-stone-500 font-medium tracking-wider uppercase mt-1">Bakery Management</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-[#1e1b18] dark:text-stone-400 opacity-80 hover:bg-[#f9f2ec] dark:hover:bg-stone-800 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-[#8c4b10] dark:text-[#ffab69] font-bold border-r-4 border-[#8c4b10] dark:border-[#aa6328] bg-[#f9f2ec] dark:bg-stone-800 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">shopping_bag</span>
+<span class="font-medium">Orders</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-[#1e1b18] dark:text-stone-400 opacity-80 hover:bg-[#f9f2ec] dark:hover:bg-stone-800 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-medium">Inventory</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-[#1e1b18] dark:text-stone-400 opacity-80 hover:bg-[#f9f2ec] dark:hover:bg-stone-800 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">bakery_dining</span>
+<span class="font-medium">Products</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-[#1e1b18] dark:text-stone-400 opacity-80 hover:bg-[#f9f2ec] dark:hover:bg-stone-800 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-medium">Customers</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-[#1e1b18] dark:text-stone-400 opacity-80 hover:bg-[#f9f2ec] dark:hover:bg-stone-800 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">assessment</span>
+<span class="font-medium">Reports</span>
+</a>
+</nav>
+<div class="mt-auto space-y-1">
+<button class="w-full mb-6 bg-gradient-to-br from-primary to-primary-container text-white py-3 px-4 rounded-full font-semibold shadow-lg shadow-primary/20 active:scale-95 transition-transform flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">add</span>
+                New Batch
+            </button>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-[#1e1b18] dark:text-stone-400 opacity-80 hover:bg-[#f9f2ec] dark:hover:bg-stone-800 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-medium">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-[#1e1b18] dark:text-stone-400 opacity-80 hover:bg-[#f9f2ec] dark:hover:bg-stone-800 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-medium">Support</span>
+</a>
+</div>
+</aside>
+<!-- TopAppBar Component -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] z-40 bg-[#fff8f2]/70 dark:bg-stone-950/70 backdrop-blur-md flex justify-between items-center h-16 px-8 shadow-sm shadow-[#8c4b10]/5">
+<div class="flex items-center flex-1 max-w-xl">
+<div class="relative w-full group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 group-focus-within:text-primary transition-colors">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-xl py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all outline-none placeholder:text-stone-400" placeholder="Search orders, customers, or items..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center text-stone-500 hover:text-primary transition-colors active:opacity-80">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center text-stone-500 hover:text-primary transition-colors active:opacity-80">
+<span class="material-symbols-outlined">history</span>
+</button>
+<div class="h-8 w-px bg-outline-variant/30 mx-2"></div>
+<div class="flex items-center gap-3 pl-2 group cursor-pointer">
+<div class="text-right">
+<p class="text-sm font-semibold text-on-surface">Manager Profile</p>
+<p class="text-[10px] text-stone-500 font-medium uppercase tracking-tight">Master Baker</p>
+</div>
+<img class="w-10 h-10 rounded-full object-cover ring-2 ring-primary/10 group-hover:ring-primary/30 transition-all" data-alt="portrait of a professional male baker in a white apron smiling in a warm sunlit artisanal bakery kitchen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8im2tz7xYGNF9QGodz94r2iUNSVMW5UYA-GPmkhI98YDNOK2Gpdk-IuGqCybe1uBA1TBs8n2LYsuAm6lJYbl8oQkmHbjS-fahdEVCFI8awtDq_ZfwgsFvLGvmVAj0UeY1714mlNqDmF7B_FM0_EdTwCWBxeiHX3XKY7GvdBsE1rVQdknWMc2IGsfWEK-dmgzoeujwuG0SprdGarNIS_qQmsb2VC8kXoje3SfNdywe2kGCBnRBCM5GlGVmJd7p6vDMIqrxavxatnE"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-16 min-h-screen">
+<div class="p-8 max-w-7xl mx-auto">
+<!-- Page Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+<div>
+<nav class="flex items-center gap-2 text-xs font-medium text-stone-500 mb-2">
+<span>Dashboard</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary">Orders Management</span>
+</nav>
+<h2 class="text-4xl font-serif font-bold text-on-surface">Orders Management</h2>
+<p class="text-stone-500 mt-1">Review and fulfill your daily artisanal bakery orders.</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 px-5 py-2.5 bg-surface-container-lowest border border-outline-variant/20 rounded-full text-sm font-semibold text-on-surface-variant hover:bg-surface-container-low transition-colors shadow-sm shadow-primary/5">
+<span class="material-symbols-outlined text-lg">filter_list</span>
+                        Advanced Filters
+                    </button>
+<button class="flex items-center gap-2 px-5 py-2.5 bg-primary text-on-primary rounded-full text-sm font-semibold hover:bg-primary-container transition-colors shadow-lg shadow-primary/10">
+<span class="material-symbols-outlined text-lg">download</span>
+                        Export CSV
+                    </button>
+</div>
+</div>
+<!-- Status Tabs -->
+<div class="flex items-center gap-2 overflow-x-auto pb-4 no-scrollbar border-b border-outline-variant/10 mb-8">
+<button class="px-6 py-2 rounded-full bg-primary text-on-primary text-sm font-bold shadow-md shadow-primary/10 whitespace-nowrap">All Orders</button>
+<button class="px-6 py-2 rounded-full bg-surface-container text-on-surface-variant text-sm font-medium hover:bg-surface-container-high transition-colors whitespace-nowrap">Pending <span class="ml-1 opacity-60">(12)</span></button>
+<button class="px-6 py-2 rounded-full bg-surface-container text-on-surface-variant text-sm font-medium hover:bg-surface-container-high transition-colors whitespace-nowrap">Accepted</button>
+<button class="px-6 py-2 rounded-full bg-surface-container text-on-surface-variant text-sm font-medium hover:bg-surface-container-high transition-colors whitespace-nowrap">Preparing</button>
+<button class="px-6 py-2 rounded-full bg-surface-container text-on-surface-variant text-sm font-medium hover:bg-surface-container-high transition-colors whitespace-nowrap">Dispatched</button>
+<button class="px-6 py-2 rounded-full bg-surface-container text-on-surface-variant text-sm font-medium hover:bg-surface-container-high transition-colors whitespace-nowrap">Delivered</button>
+</div>
+<!-- Orders Table Container -->
+<div class="bg-surface-container-lowest rounded-2xl shadow-sm shadow-[#8c4b10]/5 overflow-hidden border border-outline-variant/5">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/50 border-b border-outline-variant/10">
+<th class="px-6 py-5 text-xs font-bold uppercase tracking-widest text-stone-500">Order ID</th>
+<th class="px-6 py-5 text-xs font-bold uppercase tracking-widest text-stone-500">Customer</th>
+<th class="px-6 py-5 text-xs font-bold uppercase tracking-widest text-stone-500">Items</th>
+<th class="px-6 py-5 text-xs font-bold uppercase tracking-widest text-stone-500">Total Price</th>
+<th class="px-6 py-5 text-xs font-bold uppercase tracking-widest text-stone-500">Status</th>
+<th class="px-6 py-5 text-xs font-bold uppercase tracking-widest text-stone-500">Date/Time</th>
+<th class="px-6 py-5 text-xs font-bold uppercase tracking-widest text-stone-500 text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/5">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low/30 transition-colors group">
+<td class="px-6 py-4">
+<span class="font-mono text-sm font-bold text-primary">#AH-8902</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<img class="w-9 h-9 rounded-full object-cover" data-alt="close-up portrait of a young woman with a friendly smile against a soft warm studio background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMeRy6Sqy7j-c4pQbNLTiAsxN0JkpyZUItgvqs7ZkNckkz-LvhZJJ1LAcZQHKvdsQvgQoP79wF1gd6x9JVdIwUcCUf7WH8rAd_OuEeSsF32j9HTzwynxJ6ZTb25v0Mokz74RBfnt8NlBms6kmv0W7bvXDsodf4Hlhzji2HG85nVlqe-x8ATlhgHPFzSQ-b3LFN2MiBdDhJ5nDMwEdUE5CMjjgC24FRncapC_PsOJ6WWDv_k0iw3GmD8B12HIbFXmhM_xrESHSOG6Q"/>
+<div>
+<p class="text-sm font-semibold text-on-surface">Eleanor Vance</p>
+<p class="text-[11px] text-stone-400">Regular Customer</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<p class="text-sm text-on-surface-variant">2x Classic Sourdough, 1x Rye</p>
+</td>
+<td class="px-6 py-4">
+<p class="text-sm font-bold text-on-surface">$24.50</p>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-secondary-fixed text-on-secondary-fixed-variant">
+                                    Preparing
+                                </span>
+</td>
+<td class="px-6 py-4">
+<div class="text-xs">
+<p class="font-medium text-on-surface">Oct 24, 2023</p>
+<p class="text-stone-400">08:45 AM</p>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary font-bold text-sm hover:underline underline-offset-4 active:opacity-70 transition-all">View Details</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low/30 transition-colors group">
+<td class="px-6 py-4">
+<span class="font-mono text-sm font-bold text-primary">#AH-8901</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<img class="w-9 h-9 rounded-full object-cover" data-alt="professional portrait of a man with light beard wearing a casual linen shirt in warm afternoon light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4XzeevY3Z__Xa4mMVNxjzwxuejd2ZYrHASY1HdzisP7OTizEuY6nRaN6a-it_VEIwonSYSlpazEY1pI01Fjfh3-2Z_RiKDX9Gc4xtS87vILsBTixrgZ-aa1bktsWO-7-nokDhwHVAogPFlGUsUiorqIFJLuSSHYe94spW00yU_rV-p63_ty1Hi43YeaG0t5p5BVyiI-3qiHS4uonfciwonhxl5uw464c-KJrT5H8v6KGTHFNXpF8lH-g_DmUgT56nHD5HuWrgpOw"/>
+<div>
+<p class="text-sm font-semibold text-on-surface">Julian Thorne</p>
+<p class="text-[11px] text-stone-400">New Member</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<p class="text-sm text-on-surface-variant">4x Butter Croissants, 2x Pain au Chocolat</p>
+</td>
+<td class="px-6 py-4">
+<p class="text-sm font-bold text-on-surface">$32.00</p>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-green-100 text-green-700">
+                                    Delivered
+                                </span>
+</td>
+<td class="px-6 py-4">
+<div class="text-xs">
+<p class="font-medium text-on-surface">Oct 24, 2023</p>
+<p class="text-stone-400">07:12 AM</p>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary font-bold text-sm hover:underline underline-offset-4 active:opacity-70 transition-all">View Details</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low/30 transition-colors group">
+<td class="px-6 py-4">
+<span class="font-mono text-sm font-bold text-primary">#AH-8899</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed font-bold text-sm">MB</div>
+<div>
+<p class="text-sm font-semibold text-on-surface">Martha Black</p>
+<p class="text-[11px] text-stone-400">Regular Customer</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<p class="text-sm text-on-surface-variant">1x Rosemary Focaccia, 3x Baguettes</p>
+</td>
+<td class="px-6 py-4">
+<p class="text-sm font-bold text-on-surface">$28.75</p>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-orange-100 text-orange-700">
+                                    Dispatched
+                                </span>
+</td>
+<td class="px-6 py-4">
+<div class="text-xs">
+<p class="font-medium text-on-surface">Oct 23, 2023</p>
+<p class="text-stone-400">05:30 PM</p>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary font-bold text-sm hover:underline underline-offset-4 active:opacity-70 transition-all">View Details</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-low/30 transition-colors group">
+<td class="px-6 py-4">
+<span class="font-mono text-sm font-bold text-primary">#AH-8895</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<img class="w-9 h-9 rounded-full object-cover" data-alt="portrait of a bearded man with glasses in a professional studio setting with soft warm light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIeT5UEroogQA3jYfcLH1jem3qoVQ8nS0z2_c6x1utPfCuQySajjWx12ahNy8OOFpoD_3m5WRAPB08dbhMs4Xsw9AnjR_TctDYJaZezyNU7Qpy2sfbNAuvAAOk_k9pnFQlT8_-6YvlRstPSUqzHoA3syYeeQ1nrRgxNJ5H7kEtsith-eudeKTuQuQBptBlAb3YVrbyAtSMfaNVtn5sTGNo60lbue8_elckWZx0fUOfxEQaDeLfA5V2vXf6lZbOXcffjnPjYsC-Y9o"/>
+<div>
+<p class="text-sm font-semibold text-on-surface">David Miller</p>
+<p class="text-[11px] text-stone-400">Wholesale Partner</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<p class="text-sm text-on-surface-variant">10x Ciabatta Rolls, 5x Multigrain</p>
+</td>
+<td class="px-6 py-4">
+<p class="text-sm font-bold text-on-surface">$115.00</p>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-red-100 text-red-700">
+                                    Pending
+                                </span>
+</td>
+<td class="px-6 py-4">
+<div class="text-xs">
+<p class="font-medium text-on-surface">Oct 23, 2023</p>
+<p class="text-stone-400">04:15 PM</p>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary font-bold text-sm hover:underline underline-offset-4 active:opacity-70 transition-all">View Details</button>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- Pagination Footer -->
+<div class="px-6 py-6 bg-surface-container-low/30 flex items-center justify-between border-t border-outline-variant/10">
+<p class="text-sm text-stone-500 font-medium">Showing <span class="text-on-surface font-bold">1-10</span> of <span class="text-on-surface font-bold">84</span> orders</p>
+<div class="flex items-center gap-1">
+<button class="w-8 h-8 flex items-center justify-center rounded-lg text-stone-400 hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary text-on-primary text-xs font-bold shadow-sm">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high text-xs font-bold transition-colors">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high text-xs font-bold transition-colors">3</button>
+<span class="px-2 text-stone-400">...</span>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high text-xs font-bold transition-colors">9</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg text-stone-400 hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Dashboard Summary Widgets (Asymmetric Layout) -->
+<div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant/5">
+<div class="flex items-center justify-between mb-4">
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">trending_up</span>
+</div>
+<span class="text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">+14%</span>
+</div>
+<p class="text-stone-500 text-sm font-medium">Avg. Order Value</p>
+<h4 class="text-2xl font-bold text-on-surface mt-1">$42.30</h4>
+</div>
+<div class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant/5">
+<div class="flex items-center justify-between mb-4">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">schedule</span>
+</div>
+</div>
+<p class="text-stone-500 text-sm font-medium">Busiest Hour Today</p>
+<h4 class="text-2xl font-bold text-on-surface mt-1">08:00 - 09:30 AM</h4>
+</div>
+<div class="bg-primary text-on-primary p-6 rounded-2xl shadow-lg shadow-primary/20 relative overflow-hidden group">
+<div class="relative z-10">
+<p class="text-on-primary/70 text-sm font-medium">Baking Capacity</p>
+<h4 class="text-3xl font-serif font-bold mt-2">82% <span class="text-sm font-sans font-normal ml-2 opacity-80">Full</span></h4>
+<div class="w-full h-1.5 bg-white/20 rounded-full mt-4">
+<div class="w-[82%] h-full bg-white rounded-full"></div>
+</div>
+</div>
+<span class="material-symbols-outlined absolute -right-4 -bottom-4 text-8xl opacity-10 group-hover:scale-110 transition-transform">oven_gen</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button (Contextual for Orders) -->
+<button class="fixed right-8 bottom-8 w-14 h-14 bg-gradient-to-br from-tertiary to-tertiary-container text-white rounded-full shadow-2xl flex items-center justify-center group active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined text-2xl group-hover:rotate-90 transition-transform">add</span>
+</button>
+</body></html>

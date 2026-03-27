@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700;900&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container-lowest": "#ffffff",
+              "on-tertiary-fixed-variant": "#83260e",
+              "on-tertiary-container": "#fffbff",
+              "error-container": "#ffdad6",
+              "background": "#fff8f2",
+              "on-secondary-fixed": "#2f1400",
+              "on-secondary-container": "#783d01",
+              "on-error-container": "#93000a",
+              "inverse-on-surface": "#f6f0ea",
+              "tertiary-fixed": "#ffdad2",
+              "secondary-container": "#ffab69",
+              "on-error": "#ffffff",
+              "surface-tint": "#8f4e13",
+              "primary-fixed": "#ffdcc5",
+              "on-tertiary": "#ffffff",
+              "surface-container": "#f3ede7",
+              "on-primary-fixed": "#301400",
+              "outline-variant": "#d8c2b4",
+              "on-surface": "#1e1b18",
+              "error": "#ba1a1a",
+              "on-primary-fixed-variant": "#703800",
+              "secondary": "#8e4e14",
+              "primary-fixed-dim": "#ffb782",
+              "surface": "#fff8f2",
+              "secondary-fixed-dim": "#ffb780",
+              "on-surface-variant": "#534439",
+              "on-primary": "#ffffff",
+              "primary": "#8c4b10",
+              "secondary-fixed": "#ffdcc4",
+              "tertiary": "#a03b21",
+              "surface-container-high": "#eee7e1",
+              "on-background": "#1e1b18",
+              "inverse-surface": "#33302c",
+              "tertiary-container": "#c05237",
+              "surface-container-low": "#f9f2ec",
+              "surface-bright": "#fff8f2",
+              "on-primary-container": "#fffbff",
+              "surface-variant": "#e8e1dc",
+              "primary-container": "#aa6328",
+              "inverse-primary": "#ffb782",
+              "outline": "#867468",
+              "surface-container-highest": "#e8e1dc",
+              "on-secondary": "#ffffff",
+              "on-tertiary-fixed": "#3c0700",
+              "surface-dim": "#dfd9d3",
+              "tertiary-fixed-dim": "#ffb4a2",
+              "on-secondary-fixed-variant": "#6f3800"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        h1, h2, h3 { font-family: 'Noto Serif', serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface flex min-h-screen">
+<!-- SideNavBar Anchor -->
+<aside class="hidden md:flex flex-col h-screen w-64 border-r-0 bg-surface-container-low sticky top-0">
+<div class="flex flex-col h-full py-6">
+<div class="px-6 mb-10">
+<h1 class="text-xl font-serif font-bold text-primary tracking-tight">Hearth Admin</h1>
+<p class="text-xs text-on-surface-variant font-medium">Bakery Manager</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="text-stone-500 hover:bg-surface-container rounded-full mx-2 px-4 py-3 flex items-center gap-3 transition-transform duration-200 hover:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-sans font-medium text-sm">Dashboard</span>
+</a>
+<!-- Active Tab: Coupons -->
+<a class="bg-primary-fixed text-on-primary-fixed rounded-full mx-2 px-4 py-3 flex items-center gap-3 opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="confirmation_number" style="font-variation-settings: 'FILL' 1;">confirmation_number</span>
+<span class="font-sans font-medium text-sm">Coupons</span>
+</a>
+<a class="text-stone-500 hover:bg-surface-container rounded-full mx-2 px-4 py-3 flex items-center gap-3 transition-transform duration-200 hover:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="category">category</span>
+<span class="font-sans font-medium text-sm">Categories</span>
+</a>
+<a class="text-stone-500 hover:bg-surface-container rounded-full mx-2 px-4 py-3 flex items-center gap-3 transition-transform duration-200 hover:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="bakery_dining">bakery_dining</span>
+<span class="font-sans font-medium text-sm">Inventory</span>
+</a>
+<a class="text-stone-500 hover:bg-surface-container rounded-full mx-2 px-4 py-3 flex items-center gap-3 transition-transform duration-200 hover:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-sans font-medium text-sm">Settings</span>
+</a>
+</nav>
+<div class="mt-auto px-2 space-y-2">
+<a class="text-stone-500 hover:bg-surface-container rounded-full px-4 py-3 flex items-center gap-3 transition-transform duration-200 hover:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-sans font-medium text-sm">Help Center</span>
+</a>
+<div class="px-4 py-4 flex items-center gap-3 mt-4 bg-surface-container-high/50 rounded-2xl mx-2">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-primary-fixed flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="professional headshot of a smiling bakery manager in a clean white apron with a soft warm kitchen background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCodGlk0YyGNhVsjyV4kl27dNmxo3_N3MBq2mg4ct2QFN4sd0hOwcSlpcXoHArTeUHeXxUv5BguHU_Br0Bzad-yo6vLwff2JGPCtm5GXNEo-rUJHJPAlQLkppduQ-K452gB9AzDG3Tylwqad8Zvtz5sD4tm_1kdXSnX_lkNh8hSP_CXejwKs6uuNELNVuDGwjb-yo0Ya9hwOFCScvIGoir57yeG_Gdc02TrgGBvavYsVY4UUN_Kfpfa5y3f650bhRzErCg_EAUDz0w"/>
+</div>
+<div class="overflow-hidden">
+<p class="text-sm font-bold truncate">Admin Profile</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-wider">Master Baker</p>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="flex-1 min-w-0 overflow-auto bg-surface relative">
+<!-- TopBar Integration (Implicitly defined as content header) -->
+<header class="sticky top-0 z-10 flex justify-between items-center px-8 py-6 bg-surface/70 backdrop-blur-md">
+<div>
+<h2 class="text-3xl font-serif font-black text-primary tracking-tight">Promotions &amp; Coupons</h2>
+<p class="text-on-surface-variant text-sm mt-1">Manage your bakery's seasonal offers and discount codes.</p>
+</div>
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary-container px-6 py-3 rounded-full flex items-center gap-2 shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+<span class="font-bold tracking-tight">Create Coupon</span>
+</button>
+</header>
+<section class="px-8 pb-12">
+<!-- Stats Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+<div class="bg-surface-container-lowest p-6 rounded-2xl shadow-sm shadow-primary/5">
+<p class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-1">Active Coupons</p>
+<div class="flex items-end justify-between">
+<span class="text-3xl font-serif font-bold text-primary">12</span>
+<span class="text-secondary text-sm font-bold">+2 this week</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-2xl shadow-sm shadow-primary/5">
+<p class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-1">Total Redeemed</p>
+<div class="flex items-end justify-between">
+<span class="text-3xl font-serif font-bold text-primary">1,284</span>
+<span class="text-secondary text-sm font-bold">84% Rate</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-2xl shadow-sm shadow-primary/5">
+<p class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-1">Revenue Saved</p>
+<div class="flex items-end justify-between">
+<span class="text-3xl font-serif font-bold text-primary">$4,120</span>
+<span class="text-tertiary text-sm font-bold">-$120 Avg</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-2xl shadow-sm shadow-primary/5 overflow-hidden relative group">
+<img class="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:scale-110 transition-transform duration-700" data-alt="artisan pastries arranged beautifully on a rustic wooden tray with soft natural light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBDR-6v9B-OLeDSCipySGvirAPmWfRxCKxuQ0fQY0_SACCXPKAfVBOG1lKTNR0I6dLCXnttiKGddfHZIl7RhrCWZMsDVXbW6zoe-ewS38sTJEGWcZ1flhurQARc1mt64RpqDQ8WYxtQQ1e_bBR0u23qwLSxg_W9xcwE-s6rYs3a_pyr8IkDCGz4O14hjLCb5G17tq_qNCw_oWitx6FDegAH6hHNwb7jQEniG9fdMl0l6MIpH-b6yaWNk15jaJPgAzcqitS7uOQ0Io"/>
+<div class="relative z-10">
+<p class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-1">Next Campaign</p>
+<p class="text-lg font-bold text-primary">Harvest Festival</p>
+<p class="text-xs text-on-surface-variant">Starting in 4 days</p>
+</div>
+</div>
+</div>
+<!-- Management Table Container -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm shadow-primary/5">
+<div class="px-6 py-4 bg-surface-container-low flex justify-between items-center">
+<div class="flex gap-4 items-center">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm" data-icon="search">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface rounded-full text-sm border-none focus:ring-2 focus:ring-primary/20 w-64" placeholder="Search codes..." type="text"/>
+</div>
+<select class="bg-surface rounded-full text-sm border-none py-2 px-4 focus:ring-2 focus:ring-primary/20">
+<option>All Types</option>
+<option>Percentage</option>
+<option>Fixed Amount</option>
+</select>
+</div>
+<button class="text-primary font-bold text-sm flex items-center gap-1 hover:underline">
+<span class="material-symbols-outlined text-sm" data-icon="file_download">file_download</span>
+                        Export CSV
+                    </button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/50">
+<th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Code</th>
+<th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Type</th>
+<th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Value</th>
+<th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Min Order</th>
+<th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Uses</th>
+<th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Valid Until</th>
+<th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Status</th>
+<th class="px-6 py-4"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-variant/30">
+<!-- Coupon Row 1 -->
+<tr class="hover:bg-surface-container-low/30 transition-colors">
+<td class="px-6 py-5">
+<span class="bg-primary-fixed text-on-primary-fixed px-3 py-1 rounded-md font-mono font-bold text-sm tracking-tighter">WELCOME10</span>
+</td>
+<td class="px-6 py-5 text-sm font-medium">Percentage</td>
+<td class="px-6 py-5 text-sm font-bold text-primary">10%</td>
+<td class="px-6 py-5 text-sm font-medium text-on-surface-variant">$25.00</td>
+<td class="px-6 py-5 text-sm font-medium">452</td>
+<td class="px-6 py-5 text-sm font-medium">Dec 31, 2024</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-10 h-5 bg-primary-container rounded-full relative cursor-pointer shadow-inner">
+<div class="absolute right-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow-sm"></div>
+</div>
+<span class="text-[10px] font-bold uppercase tracking-widest text-primary">Active</span>
+</div>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Coupon Row 2 -->
+<tr class="hover:bg-surface-container-low/30 transition-colors">
+<td class="px-6 py-5">
+<span class="bg-primary-fixed text-on-primary-fixed px-3 py-1 rounded-md font-mono font-bold text-sm tracking-tighter">AUTUMN20</span>
+</td>
+<td class="px-6 py-5 text-sm font-medium">Fixed Amount</td>
+<td class="px-6 py-5 text-sm font-bold text-primary">$5.00</td>
+<td class="px-6 py-5 text-sm font-medium text-on-surface-variant">$40.00</td>
+<td class="px-6 py-5 text-sm font-medium">128</td>
+<td class="px-6 py-5 text-sm font-medium text-tertiary">Oct 31, 2024</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-10 h-5 bg-primary-container rounded-full relative cursor-pointer shadow-inner">
+<div class="absolute right-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow-sm"></div>
+</div>
+<span class="text-[10px] font-bold uppercase tracking-widest text-primary">Active</span>
+</div>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Coupon Row 3 (Inactive) -->
+<tr class="hover:bg-surface-container-low/30 transition-colors">
+<td class="px-6 py-5">
+<span class="bg-surface-variant text-on-surface-variant px-3 py-1 rounded-md font-mono font-bold text-sm tracking-tighter opacity-60">FREESHIP</span>
+</td>
+<td class="px-6 py-5 text-sm font-medium opacity-60">Shipping</td>
+<td class="px-6 py-5 text-sm font-bold text-on-surface-variant opacity-60">100%</td>
+<td class="px-6 py-5 text-sm font-medium text-on-surface-variant opacity-60">$15.00</td>
+<td class="px-6 py-5 text-sm font-medium opacity-60">89</td>
+<td class="px-6 py-5 text-sm font-medium opacity-60">Sep 01, 2024</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-10 h-5 bg-surface-variant rounded-full relative cursor-pointer shadow-inner">
+<div class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow-sm"></div>
+</div>
+<span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant opacity-60">Paused</span>
+</div>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Coupon Row 4 -->
+<tr class="hover:bg-surface-container-low/30 transition-colors">
+<td class="px-6 py-5">
+<span class="bg-primary-fixed text-on-primary-fixed px-3 py-1 rounded-md font-mono font-bold text-sm tracking-tighter">BAKERLOVER</span>
+</td>
+<td class="px-6 py-5 text-sm font-medium">Percentage</td>
+<td class="px-6 py-5 text-sm font-bold text-primary">15%</td>
+<td class="px-6 py-5 text-sm font-medium text-on-surface-variant">$0.00</td>
+<td class="px-6 py-5 text-sm font-medium">2,041</td>
+<td class="px-6 py-5 text-sm font-medium">Jan 01, 2025</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-10 h-5 bg-primary-container rounded-full relative cursor-pointer shadow-inner">
+<div class="absolute right-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow-sm"></div>
+</div>
+<span class="text-[10px] font-bold uppercase tracking-widest text-primary">Active</span>
+</div>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-6 py-4 bg-surface-container-low/30 flex justify-between items-center text-sm font-medium text-on-surface-variant">
+<span>Showing 1-4 of 12 coupons</span>
+<div class="flex gap-2">
+<button class="w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center">1</button>
+<button class="w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-primary-fixed transition-colors">2</button>
+<button class="w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-primary-fixed transition-colors">3</button>
+<button class="w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Contextual Tip Area -->
+<div class="mt-10 p-8 rounded-2xl bg-secondary-fixed flex items-center gap-8">
+<div class="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="close up of warm chocolate chip cookies resting on a wire rack with a dusting of sea salt" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEdkxB0o7BMDQgxIZFAuXzccS0292QeXjwW-Wl4ODncA4cGRraBG7MsIDzIAhAB5h28DzkBSOgRGZtzw7iaJWBURe0cc0LjD0_vT_Imf6-DonSZTcU7H6MYGulnmrjNuGkEABHjY5ApH4s_lXw3w6391gcpxSWYfK0opxJndJxdhbNoHIlkafJyN4FQv2pLyY5dAmN3bCFooRG5tsXcUYC_bxk559dNJrHvKgtbY4Q21O-zxmJmPeqGOeMK-jkNYZZ731uaI_2xUU"/>
+</div>
+<div>
+<h3 class="text-xl font-bold text-on-secondary-fixed">Boost Holiday Sales?</h3>
+<p class="text-on-secondary-fixed-variant max-w-2xl mt-1">Our data shows that fixed $5 discounts perform 20% better than 10% discounts for orders under $50. Consider launching a weekend 'Bakers Box' coupon.</p>
+<button class="mt-4 text-secondary-fixed-dim bg-on-secondary-fixed px-5 py-2 rounded-full font-bold text-sm hover:opacity-90 transition-opacity">View Sales Insights</button>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar for Mobile Viewports -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-end px-6 pb-6 bg-surface/90 backdrop-blur-xl z-50 rounded-t-[2.5rem] shadow-2xl">
+<a class="flex flex-col items-center justify-center text-stone-400 py-4" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-sans font-bold text-[10px] uppercase tracking-widest mt-1">Dash</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-gradient-to-br from-primary to-primary-container text-white rounded-full w-14 h-14 -translate-y-4 shadow-lg shadow-primary/20 scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="confirmation_number" style="font-variation-settings: 'FILL' 1;">confirmation_number</span>
+</a>
+<a class="flex flex-col items-center justify-center text-stone-400 py-4" href="#">
+<span class="material-symbols-outlined" data-icon="bakery_dining">bakery_dining</span>
+<span class="font-sans font-bold text-[10px] uppercase tracking-widest mt-1">Items</span>
+</a>
+<a class="flex flex-col items-center justify-center text-stone-400 py-4" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-sans font-bold text-[10px] uppercase tracking-widest mt-1">Config</span>
+</a>
+</nav>
+</body></html>
