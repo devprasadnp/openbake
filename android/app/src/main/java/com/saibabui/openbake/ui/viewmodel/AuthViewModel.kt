@@ -16,7 +16,8 @@ data class AuthUiState(
     val isLoading: Boolean = false,
     val isLoggedIn: Boolean = false,
     val user: User? = null,
-    val error: String? = null
+    val error: String? = null,
+    val updateSuccess: Boolean = false
 )
 
 class AuthViewModel(application: Application) : AndroidViewModel(application) {
@@ -100,6 +101,28 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             authRepo.logout()
             _uiState.value = AuthUiState(isLoggedIn = false)
+        }
+    }
+
+    fun updateProfile(name: String?, phone: String?) {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true, error = null, updateSuccess = false)
+            val result = authRepo.updateProfile(name, phone)
+            result.fold(
+                onSuccess = { updatedUser ->
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        user = updatedUser,
+                        updateSuccess = true
+                    )
+                },
+                onFailure = { e ->
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        error = e.message ?: "Failed to update profile"
+                    )
+                }
+            )
         }
     }
 

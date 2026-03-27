@@ -8,6 +8,7 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.os.Looper
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -35,10 +36,11 @@ import com.saibabui.openbake.data.model.AddressRequest
 import com.saibabui.openbake.ui.theme.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 import java.util.Locale
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 // ── Helper data ──────────────────────────────────────────────────────────────
 data class GeocodedAddress(val fullAddress: String, val city: String, val pincode: String)
@@ -46,30 +48,39 @@ data class GeocodedAddress(val fullAddress: String, val city: String, val pincod
 @Suppress("MissingPermission")
 suspend fun getDeviceLocation(context: Context): Location? = withContext(Dispatchers.IO) {
     val lm = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    // Try last known location first (fast path)
     for (provider in listOf(LocationManager.GPS_PROVIDER, LocationManager.NETWORK_PROVIDER)) {
         if (lm.isProviderEnabled(provider)) {
             lm.getLastKnownLocation(provider)?.let { return@withContext it }
         }
     }
-    suspendCoroutine { cont ->
-        var done = false
-        val listener = object : LocationListener {
-            override fun onLocationChanged(loc: Location) {
-                if (!done) { done = true; cont.resume(loc) }
+    // Request a fresh fix, but time-out after 10 seconds
+    withTimeoutOrNull(10_000L) {
+        suspendCancellableCoroutine { cont ->
+            var done = false
+            val listener = object : LocationListener {
+                override fun onLocationChanged(loc: Location) {
+                    if (!done) { done = true; cont.resume(loc) }
+                }
+                @Deprecated("Deprecated in Java")
+                override fun onStatusChanged(p: String?, s: Int, e: Bundle?) = Unit
             }
-            @Deprecated("Deprecated in Java")
-            override fun onStatusChanged(p: String?, s: Int, e: Bundle?) = Unit
-        }
-        val provider = when {
-            lm.isProviderEnabled(LocationManager.GPS_PROVIDER) -> LocationManager.GPS_PROVIDER
-            lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER) -> LocationManager.NETWORK_PROVIDER
-            else -> null
-        }
-        if (provider != null) {
-            try {
-                lm.requestSingleUpdate(provider, listener, null)
-            } catch (_: Exception) {
-//                cont.resume(null)
+            cont.invokeOnCancellation {
+                try { lm.removeUpdates(listener) } catch (_: Exception) { }
+            }
+            val provider = when {
+                lm.isProviderEnabled(LocationManager.GPS_PROVIDER) -> LocationManager.GPS_PROVIDER
+                lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER) -> LocationManager.NETWORK_PROVIDER
+                else -> null
+            }
+            if (provider != null) {
+                try {
+                    lm.requestSingleUpdate(provider, listener, Looper.getMainLooper())
+                } catch (_: Exception) {
+                    if (!done) { done = true; cont.resume(null) }
+                }
+            } else {
+                if (!done) { done = true; cont.resume(null) }
             }
         }
     }

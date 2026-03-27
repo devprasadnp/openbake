@@ -35,6 +35,8 @@ fun ProfileScreen(
     onNavigateToOrders: () -> Unit = {},
     onNavigateToWishlist: () -> Unit = {},
     onNavigateToAddresses: () -> Unit = {},
+    onNavigateToEditProfile: () -> Unit = {},
+    onNavigateToSettings: () -> Unit = {},
     authViewModel: AuthViewModel = viewModel()
 ) {
     val authState by authViewModel.uiState.collectAsState()
@@ -93,7 +95,8 @@ fun ProfileScreen(
             ProfileMenuItem(
                 icon = Icons.Filled.Person,
                 title = "Edit Profile",
-                subtitle = "Update your personal information"
+                subtitle = "Update your personal information",
+                onClick = onNavigateToEditProfile
             )
             ProfileMenuItem(
                 icon = Icons.Filled.LocationOn,
@@ -116,7 +119,8 @@ fun ProfileScreen(
             ProfileMenuItem(
                 icon = Icons.Filled.Settings,
                 title = "Settings",
-                subtitle = "App preferences"
+                subtitle = "App preferences",
+                onClick = onNavigateToSettings
             )
 
             Spacer(modifier = Modifier.height(24.dp))

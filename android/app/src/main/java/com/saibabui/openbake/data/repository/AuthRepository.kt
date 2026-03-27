@@ -50,6 +50,19 @@ class AuthRepository(private val tokenManager: TokenManager) {
         }
     }
 
+    suspend fun updateProfile(name: String?, phone: String?): Result<User> {
+        return try {
+            val response = api.updateProfile(UpdateProfileRequest(name = name, phone = phone))
+            if (response.isSuccessful) {
+                Result.success(response.body()!!)
+            } else {
+                Result.failure(Exception("Failed to update profile: ${response.code()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     suspend fun logout() {
         tokenManager.clearTokens()
     }

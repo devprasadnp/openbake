@@ -5,7 +5,7 @@ from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.models.order import Order
+from app.models.order import Order, OrderItem
 from app.models.product import Category, Product, ProductVariant
 from app.models.coupon import Coupon
 from app.models.user import User
@@ -51,6 +51,93 @@ def admin_dashboard(
         "month_orders": orders_since(month_start),
         "month_revenue": revenue_since(month_start),
         "pending_orders": db.query(Order).filter(Order.status == "placed").count(),
+    }
+
+
+# --- Analytics ---
+
+@router.get("/analytics")
+def admin_analytics(
+    db: Session = Depends(get_db),
+    _admin: User = Depends(require_admin),
+):
+    """Extended analytics: daily revenue/orders trend, status breakdown, top products, order type split."""
+    now = datetime.now(timezone.utc)
+
+    # ── Daily trend (last 7 days) ──────────────────────────────────────────
+    daily = []
+    for i in range(6, -1, -1):
+        day_start = (now - timedelta(days=i)).replace(hour=0, minute=0, second=0, microsecond=0)
+        day_end = day_start + timedelta(days=1)
+        orders_count = (
+            db.query(Order)
+            .filter(Order.created_at >= day_start, Order.created_at < day_end)
+            .count()
+        )
+        revenue = (
+            db.query(func.sum(Order.total))
+            .filter(
+                Order.created_at >= day_start,
+                Order.created_at < day_end,
+                Order.payment_status == "paid",
+            )
+            .scalar()
+        ) or 0.0
+        daily.append({
+            "date": day_start.strftime("%b %d"),
+            "orders": orders_count,
+            "revenue": float(revenue),
+        })
+
+    # ── Orders by status ───────────────────────────────────────────────────
+    status_rows = (
+        db.query(Order.status, func.count(Order.id))
+        .group_by(Order.status)
+        .all()
+    )
+    status_breakdown = [{"status": s, "count": c} for s, c in status_rows]
+
+    # ── Order type split ──────────────────────────────────────────────────
+    type_rows = (
+        db.query(Order.order_type, func.count(Order.id))
+        .group_by(Order.order_type)
+        .all()
+    )
+    order_type_split = [{"type": t, "count": c} for t, c in type_rows]
+
+    # ── Top 5 products by units sold ─────────────────────────────────────
+    top_products_rows = (
+        db.query(
+            Product.name,
+            func.sum(OrderItem.quantity).label("units"),
+            func.sum(OrderItem.unit_price * OrderItem.quantity).label("revenue"),
+        )
+        .join(OrderItem, OrderItem.product_id == Product.id)
+        .group_by(Product.id, Product.name)
+        .order_by(func.sum(OrderItem.quantity).desc())
+        .limit(5)
+        .all()
+    )
+    top_products = [
+        {"name": name, "units": int(units or 0), "revenue": float(rev or 0)}
+        for name, units, rev in top_products_rows
+    ]
+
+    # ── Payment method split ──────────────────────────────────────────────
+    payment_rows = (
+        db.query(Order.payment_method, func.count(Order.id))
+        .filter(Order.payment_method.isnot(None))
+        .group_by(Order.payment_method)
+        .all()
+    )
+    payment_split = [{"method": m, "count": c} for m, c in payment_rows]
+
+    return {
+        "daily_trend": daily,
+        "status_breakdown": status_breakdown,
+        "order_type_split": order_type_split,
+        "top_products": top_products,
+        "payment_split": payment_split,
     }
 
 

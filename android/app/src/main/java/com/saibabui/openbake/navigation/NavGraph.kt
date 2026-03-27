@@ -240,6 +240,12 @@ fun AppNavGraph() {
                     },
                     onNavigateToAddresses = {
                         navController.navigate(Screen.AddressManagement.route)
+                    },
+                    onNavigateToEditProfile = {
+                        navController.navigate(Screen.EditProfile.route)
+                    },
+                    onNavigateToSettings = {
+                        navController.navigate(Screen.Settings.route)
                     }
                 )
             }
@@ -254,6 +260,18 @@ fun AppNavGraph() {
 
             composable(Screen.AddressManagement.route) {
                 AddressManagementScreen(
+                    onBack = { navController.popBackStack() }
+                )
+            }
+
+            composable(Screen.EditProfile.route) {
+                EditProfileScreen(
+                    onBack = { navController.popBackStack() }
+                )
+            }
+
+            composable(Screen.Settings.route) {
+                SettingsScreen(
                     onBack = { navController.popBackStack() }
                 )
             }
