@@ -60,7 +60,9 @@ data class AddressRequest(
     @SerializedName("full_address") val fullAddress: String,
     val city: String,
     val pincode: String,
-    @SerializedName("is_default") val isDefault: Boolean = false
+    @SerializedName("is_default") val isDefault: Boolean = false,
+    val lat: Double? = null,
+    val lng: Double? = null
 )
 
 // ── Product ──

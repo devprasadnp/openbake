@@ -34,6 +34,7 @@ fun ProfileScreen(
     onLogout: () -> Unit,
     onNavigateToOrders: () -> Unit = {},
     onNavigateToWishlist: () -> Unit = {},
+    onNavigateToAddresses: () -> Unit = {},
     authViewModel: AuthViewModel = viewModel()
 ) {
     val authState by authViewModel.uiState.collectAsState()
@@ -97,7 +98,8 @@ fun ProfileScreen(
             ProfileMenuItem(
                 icon = Icons.Filled.LocationOn,
                 title = "Addresses",
-                subtitle = "Manage delivery addresses"
+                subtitle = "Manage delivery addresses",
+                onClick = onNavigateToAddresses
             )
             ProfileMenuItem(
                 icon = Icons.Filled.Receipt,

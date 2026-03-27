@@ -1,6 +1,7 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from typing import Optional, List, Dict, Any
 from datetime import date, datetime
+from app.schemas.auth import AddressResponse
 
 
 # --- Order Item Schemas ---
@@ -35,10 +36,20 @@ class OrderCreate(BaseModel):
     time_slot: Optional[str] = None
     special_note: Optional[str] = None
 
+    @field_validator("address_id", mode="before")
+    @classmethod
+    def normalize_address_id(cls, v):
+        """Convert empty string to None so FK constraint doesn't fail."""
+        if v == "" or v is None:
+            return None
+        return v
+
 
 class OrderResponse(BaseModel):
     id: str
     user_id: str
+    address_id: Optional[str] = None
+    address: Optional[AddressResponse] = None
     order_type: str
     status: str
     subtotal: float

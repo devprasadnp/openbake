@@ -3,6 +3,7 @@ package com.saibabui.openbake.navigation
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -26,13 +27,17 @@ fun AppNavGraph() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
+    val cartItems by cartViewModel.items.collectAsState()
+    val cartCount = cartItems.sumOf { it.quantity }
+
     val showBottomBar = currentRoute != null && currentRoute in listOf(
         Screen.Home.route,
         Screen.OrderHistory.route,
         Screen.Wishlist.route,
         Screen.Profile.route,
         Screen.Cart.route,
-        Screen.Search.route
+        Screen.Search.route,
+        Screen.AddressManagement.route
     ) || (currentRoute?.startsWith("product_list") == true)
 
     Scaffold(
@@ -40,6 +45,7 @@ fun AppNavGraph() {
             if (showBottomBar) {
                 OpenBakeBottomBar(
                     currentRoute = currentRoute,
+                    cartItemCount = cartCount,
                     onItemSelected = { route ->
                         navController.navigate(route) {
                             popUpTo(Screen.Home.route) { saveState = true }
@@ -231,6 +237,9 @@ fun AppNavGraph() {
                     },
                     onNavigateToWishlist = {
                         navController.navigate(Screen.Wishlist.route)
+                    },
+                    onNavigateToAddresses = {
+                        navController.navigate(Screen.AddressManagement.route)
                     }
                 )
             }
@@ -240,6 +249,12 @@ fun AppNavGraph() {
                     onProductClick = { productId ->
                         navController.navigate(Screen.ProductDetail.createRoute(productId))
                     }
+                )
+            }
+
+            composable(Screen.AddressManagement.route) {
+                AddressManagementScreen(
+                    onBack = { navController.popBackStack() }
                 )
             }
         }

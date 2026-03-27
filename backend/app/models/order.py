@@ -47,6 +47,7 @@ class Order(Base):
 
     # Relationships
     user = relationship("User", back_populates="orders")
+    address = relationship("Address", lazy="joined")
     items = relationship("OrderItem", back_populates="order", cascade="all, delete-orphan")
 
 
