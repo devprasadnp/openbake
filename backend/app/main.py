@@ -1,5 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.routers import auth, products, orders, profile, admin
 from app.database import engine, Base
@@ -7,13 +8,24 @@ from app.database import engine, Base
 # Create all tables (development only — use Alembic migrations in production)
 Base.metadata.create_all(bind=engine)
 
+# Middleware to handle ngrok browser header
+class NgrokHeaderMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        response = await call_next(request)
+        response.headers["ngrok-skip-browser-warning"] = "true"
+        return response
+
 app = FastAPI(
     title="OpenBake API",
     description="Bakery Ordering System REST API",
     version="1.0.0",
 )
 
-# CORS — allow local development origins
+# Add ngrok header middleware
+app.add_middleware(NgrokHeaderMiddleware)
+
+# CORS — allow all origins for development (restrict in production)
+# Using wildcard for development with ngrok (URLs change each session)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
