@@ -109,7 +109,10 @@ fun AppNavGraph() {
                         navController.navigate(Screen.ProductDetail.createRoute(productId))
                     },
                     onCartClick = { navController.navigate(Screen.Cart.route) },
-                    onSearchClick = { navController.navigate(Screen.Search.route) }
+                    onSearchClick = { navController.navigate(Screen.Search.route) },
+                    onMenuClick = { navController.navigate(Screen.ProductList.createRoute(null)) },
+                    onOrdersClick = { navController.navigate(Screen.OrderHistory.route) },
+                    onWishlistClick = { navController.navigate(Screen.Wishlist.route) }
                 )
             }
 
