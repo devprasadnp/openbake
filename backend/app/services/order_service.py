@@ -52,6 +52,8 @@ def calculate_order_totals(
                 discount = Decimal(str(coupon.discount_value))
             elif coupon.discount_type == "percent":
                 discount = subtotal * Decimal(str(coupon.discount_value)) / Decimal("100")
+            # Increment coupon used count
+            coupon.used_count += 1
 
     # Delivery fee
     delivery_fee = Decimal("40.00") if order_type == "delivery" else Decimal("0.00")

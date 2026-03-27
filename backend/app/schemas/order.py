@@ -14,6 +14,7 @@ class OrderItemCreate(BaseModel):
 class OrderItemResponse(BaseModel):
     id: str
     product_id: str
+    product_name: Optional[str] = None
     quantity: int
     unit_price: float
     customization: Optional[Dict[str, Any]] = None

@@ -11,12 +11,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.*import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.saibabui.openbake.data.api.RetrofitClient
+import com.saibabui.openbake.data.model.Address
 import com.saibabui.openbake.ui.screens.common.GradientButton
 import com.saibabui.openbake.ui.theme.*
 import com.saibabui.openbake.ui.viewmodel.CartViewModel
@@ -37,6 +38,20 @@ fun CheckoutScreen(
 
     var paymentMethod by remember { mutableStateOf("cod") }
     var specialNote by remember { mutableStateOf("") }
+    var addresses by remember { mutableStateOf<List<Address>>(emptyList()) }
+    var selectedAddressId by remember { mutableStateOf<String?>(null) }
+
+    // Fetch addresses
+    LaunchedEffect(Unit) {
+        try {
+            val response = RetrofitClient.apiService.getAddresses()
+            if (response.isSuccessful) {
+                val addrList = response.body() ?: emptyList()
+                addresses = addrList
+                selectedAddressId = addrList.find { it.isDefault }?.id ?: addrList.firstOrNull()?.id
+            }
+        } catch (_: Exception) {}
+    }
 
     LaunchedEffect(placedOrder) {
         placedOrder?.let { order ->
@@ -92,6 +107,57 @@ fun CheckoutScreen(
             }
 
             Spacer(modifier = Modifier.height(28.dp))
+
+            // Delivery Address
+            if (addresses.isNotEmpty()) {
+                Text(
+                    text = "Delivery Address",
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        fontFamily = PlayfairDisplay,
+                        fontWeight = FontWeight.Bold
+                    )
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                addresses.forEach { addr ->
+                    val isSelected = selectedAddressId == addr.id
+                    Surface(
+                        shape = RoundedCornerShape(16.dp),
+                        color = if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
+                        else MaterialTheme.colorScheme.surfaceContainerLowest,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 8.dp)
+                            .clickable { selectedAddressId = addr.id },
+                        border = if (isSelected) ButtonDefaults.outlinedButtonBorder(enabled = true) else null
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(
+                                selected = isSelected,
+                                onClick = { selectedAddressId = addr.id }
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    addr.label,
+                                    style = MaterialTheme.typography.bodyLarge.copy(
+                                        fontFamily = Nunito,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                )
+                                Text(
+                                    "${addr.fullAddress}, ${addr.city} - ${addr.pincode}",
+                                    style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito),
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                    }
+                }
+                Spacer(modifier = Modifier.height(24.dp))
+            }
 
             // Order Summary
             Text(
@@ -268,6 +334,7 @@ fun CheckoutScreen(
                     orderViewModel.placeOrder(
                         cartItems = cartItems,
                         paymentMethod = paymentMethod,
+                        addressId = selectedAddressId,
                         specialNote = specialNote.ifBlank { null }
                     )
                 },

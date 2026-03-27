@@ -75,6 +75,7 @@ class OrderViewModel : ViewModel() {
         cartItems: List<CartItem>,
         paymentMethod: String = "cod",
         orderType: String = "delivery",
+        addressId: String? = null,
         scheduledDate: String? = null,
         timeSlot: String? = null,
         specialNote: String? = null
@@ -92,6 +93,7 @@ class OrderViewModel : ViewModel() {
             }
 
             val request = CreateOrderRequest(
+                addressId = if (orderType == "delivery") addressId else null,
                 orderType = orderType,
                 items = items,
                 paymentMethod = paymentMethod,

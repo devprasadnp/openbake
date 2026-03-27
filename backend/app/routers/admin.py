@@ -206,6 +206,15 @@ def admin_inventory(
 
 # --- Categories ---
 
+@router.get("/categories", response_model=list[CategoryResponse])
+def admin_list_categories(
+    db: Session = Depends(get_db),
+    _admin: User = Depends(require_admin),
+):
+    """List all categories."""
+    return db.query(Category).all()
+
+
 @router.post("/categories", response_model=CategoryResponse)
 def admin_create_category(
     data: CategoryCreate,
@@ -218,6 +227,39 @@ def admin_create_category(
     db.commit()
     db.refresh(category)
     return category
+
+
+@router.patch("/categories/{category_id}", response_model=CategoryResponse)
+def admin_update_category(
+    category_id: str,
+    data: CategoryCreate,
+    db: Session = Depends(get_db),
+    _admin: User = Depends(require_admin),
+):
+    """Update a category."""
+    category = db.query(Category).filter(Category.id == category_id).first()
+    if not category:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Category not found")
+    for field, value in data.model_dump(exclude_unset=True).items():
+        setattr(category, field, value)
+    db.commit()
+    db.refresh(category)
+    return category
+
+
+@router.delete("/categories/{category_id}")
+def admin_delete_category(
+    category_id: str,
+    db: Session = Depends(get_db),
+    _admin: User = Depends(require_admin),
+):
+    """Delete a category."""
+    category = db.query(Category).filter(Category.id == category_id).first()
+    if not category:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Category not found")
+    db.delete(category)
+    db.commit()
+    return {"message": "Category deleted"}
 
 
 # --- Coupons ---

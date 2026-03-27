@@ -61,6 +61,28 @@ def add_address(
     return address
 
 
+@router.patch("/addresses/{address_id}", response_model=AddressResponse)
+def update_address(
+    address_id: str,
+    data: AddressCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Update an existing address."""
+    address = (
+        db.query(Address)
+        .filter(Address.id == address_id, Address.user_id == current_user.id)
+        .first()
+    )
+    if not address:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Address not found")
+    for field, value in data.model_dump().items():
+        setattr(address, field, value)
+    db.commit()
+    db.refresh(address)
+    return address
+
+
 @router.delete("/addresses/{address_id}")
 def delete_address(
     address_id: str,
@@ -117,18 +139,40 @@ def submit_review(
 
 # --- Wishlist ---
 
-@router.get("/wishlist", response_model=list[dict])
+@router.get("/wishlist")
 def get_wishlist(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    """Get wishlist items."""
+    """Get wishlist items with product details."""
     items = (
         db.query(WishlistItem)
         .filter(WishlistItem.user_id == current_user.id)
         .all()
     )
-    return [{"id": str(item.id), "product_id": str(item.product_id)} for item in items]
+    result = []
+    for item in items:
+        product = db.query(Product).filter(Product.id == item.product_id).first()
+        if product:
+            result.append({
+                "id": str(item.id),
+                "product_id": str(item.product_id),
+                "product": {
+                    "id": str(product.id),
+                    "name": product.name,
+                    "description": product.description,
+                    "price": product.price,
+                    "images": product.images,
+                    "rating": product.rating,
+                    "is_available": product.is_available,
+                    "is_eggless_available": product.is_eggless_available,
+                    "category_id": str(product.category_id),
+                    "customizable": product.customizable,
+                    "stock_count": product.stock_count,
+                    "variants": [],
+                },
+            })
+    return result
 
 
 @router.post("/wishlist/{product_id}")

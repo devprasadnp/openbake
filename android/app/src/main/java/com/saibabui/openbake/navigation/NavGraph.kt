@@ -26,15 +26,14 @@ fun AppNavGraph() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
-    val showBottomBar = currentRoute in listOf(
+    val showBottomBar = currentRoute != null && currentRoute in listOf(
         Screen.Home.route,
         Screen.OrderHistory.route,
         Screen.Wishlist.route,
         Screen.Profile.route,
         Screen.Cart.route,
-        Screen.Search.route,
-        Screen.ProductList.route
-    )
+        Screen.Search.route
+    ) || (currentRoute?.startsWith("product_list") == true)
 
     Scaffold(
         bottomBar = {
@@ -226,6 +225,12 @@ fun AppNavGraph() {
                         navController.navigate(Screen.Login.route) {
                             popUpTo(0) { inclusive = true }
                         }
+                    },
+                    onNavigateToOrders = {
+                        navController.navigate(Screen.OrderHistory.route)
+                    },
+                    onNavigateToWishlist = {
+                        navController.navigate(Screen.Wishlist.route)
                     }
                 )
             }

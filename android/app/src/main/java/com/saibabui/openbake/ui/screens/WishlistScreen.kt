@@ -21,8 +21,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.saibabui.openbake.data.api.RetrofitClient
 import com.saibabui.openbake.data.model.Product
-import com.saibabui.openbake.data.repository.ProductRepository
+import com.saibabui.openbake.data.model.WishlistItem
 import com.saibabui.openbake.ui.screens.common.EmptyState
 import com.saibabui.openbake.ui.screens.common.LoadingScreen
 import com.saibabui.openbake.ui.theme.*
@@ -33,8 +34,7 @@ import kotlinx.coroutines.launch
 fun WishlistScreen(
     onProductClick: (String) -> Unit
 ) {
-    // Simple local state for wishlist - in production, use a dedicated ViewModel
-    var products by remember { mutableStateOf<List<Product>>(emptyList()) }
+    var wishlistItems by remember { mutableStateOf<List<WishlistItem>>(emptyList()) }
     var isLoading by remember { mutableStateOf(true) }
     var error by remember { mutableStateOf<String?>(null) }
     val scope = rememberCoroutineScope()
@@ -43,10 +43,12 @@ fun WishlistScreen(
         scope.launch {
             isLoading = true
             try {
-                val repo = ProductRepository()
-                val result = repo.getProducts(pageSize = 50)
-                result.onSuccess { products = it }
-                result.onFailure { error = it.message }
+                val response = RetrofitClient.apiService.getWishlist()
+                if (response.isSuccessful) {
+                    wishlistItems = response.body() ?: emptyList()
+                } else {
+                    error = "Failed to load wishlist"
+                }
             } catch (e: Exception) {
                 error = e.message
             }
@@ -74,7 +76,7 @@ fun WishlistScreen(
     ) { padding ->
         when {
             isLoading -> LoadingScreen()
-            products.isEmpty() -> {
+            wishlistItems.isEmpty() -> {
                 EmptyState(
                     emoji = "💝",
                     title = "Wishlist is empty",
@@ -92,10 +94,10 @@ fun WishlistScreen(
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    items(products) { product ->
+                    items(wishlistItems) { item ->
                         WishlistCard(
-                            product = product,
-                            onClick = { onProductClick(product.id) }
+                            product = item.product,
+                            onClick = { onProductClick(item.product.id) }
                         )
                     }
                 }

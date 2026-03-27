@@ -71,7 +71,7 @@ interface ApiService {
 
     // Wishlist
     @GET("wishlist")
-    suspend fun getWishlist(): Response<List<Product>>
+    suspend fun getWishlist(): Response<List<WishlistItem>>
 
     @POST("wishlist/{productId}")
     suspend fun addToWishlist(@Path("productId") productId: String): Response<Unit>

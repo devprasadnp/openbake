@@ -95,6 +95,7 @@ data class ProductVariant(
 
 // ── Order ──
 data class CreateOrderRequest(
+    @SerializedName("address_id") val addressId: String? = null,
     @SerializedName("order_type") val orderType: String = "delivery",
     val items: List<OrderItemRequest>,
     @SerializedName("payment_method") val paymentMethod: String = "cod",
@@ -134,6 +135,7 @@ data class Order(
 data class OrderItem(
     val id: String,
     @SerializedName("product_id") val productId: String,
+    @SerializedName("product_name") val productName: String? = null,
     val quantity: Int,
     @SerializedName("unit_price") val unitPrice: Double,
     val customization: Map<String, String>? = null
@@ -170,3 +172,10 @@ data class CartItem(
     val totalPrice: Double
         get() = itemPrice * quantity
 }
+
+// ── Wishlist ──
+data class WishlistItem(
+    val id: String,
+    @SerializedName("product_id") val productId: String,
+    val product: Product
+)

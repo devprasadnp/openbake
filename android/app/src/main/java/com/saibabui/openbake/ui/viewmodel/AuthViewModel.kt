@@ -3,6 +3,7 @@ package com.saibabui.openbake.ui.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.saibabui.openbake.data.api.RetrofitClient
 import com.saibabui.openbake.data.local.TokenManager
 import com.saibabui.openbake.data.model.User
 import com.saibabui.openbake.data.repository.AuthRepository
@@ -21,6 +22,10 @@ data class AuthUiState(
 class AuthViewModel(application: Application) : AndroidViewModel(application) {
     private val tokenManager = TokenManager(application)
     private val authRepo = AuthRepository(tokenManager)
+
+    init {
+        RetrofitClient.init(tokenManager)
+    }
 
     private val _uiState = MutableStateFlow(AuthUiState())
     val uiState: StateFlow<AuthUiState> = _uiState

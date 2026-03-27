@@ -32,6 +32,8 @@ import com.saibabui.openbake.ui.viewmodel.AuthViewModel
 @Composable
 fun ProfileScreen(
     onLogout: () -> Unit,
+    onNavigateToOrders: () -> Unit = {},
+    onNavigateToWishlist: () -> Unit = {},
     authViewModel: AuthViewModel = viewModel()
 ) {
     val authState by authViewModel.uiState.collectAsState()
@@ -100,12 +102,14 @@ fun ProfileScreen(
             ProfileMenuItem(
                 icon = Icons.Filled.Receipt,
                 title = "Order History",
-                subtitle = "View past orders"
+                subtitle = "View past orders",
+                onClick = onNavigateToOrders
             )
             ProfileMenuItem(
                 icon = Icons.Filled.Favorite,
                 title = "Wishlist",
-                subtitle = "Your saved items"
+                subtitle = "Your saved items",
+                onClick = onNavigateToWishlist
             )
             ProfileMenuItem(
                 icon = Icons.Filled.Settings,
