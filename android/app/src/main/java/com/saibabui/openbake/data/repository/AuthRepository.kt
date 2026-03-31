@@ -3,6 +3,7 @@ package com.saibabui.openbake.data.repository
 import com.saibabui.openbake.data.api.RetrofitClient
 import com.saibabui.openbake.data.local.TokenManager
 import com.saibabui.openbake.data.model.*
+import kotlinx.coroutines.flow.first
 
 class AuthRepository(private val tokenManager: TokenManager) {
     private val api = RetrofitClient.apiService
@@ -15,7 +16,9 @@ class AuthRepository(private val tokenManager: TokenManager) {
                 tokenManager.saveTokens(tokens.accessToken, tokens.refreshToken)
                 Result.success(tokens)
             } else {
-                Result.failure(Exception("Registration failed: ${response.code()}"))
+                val errorBody = response.errorBody()?.string()
+                val msg = parseErrorDetail(errorBody) ?: "Registration failed: ${response.code()}"
+                Result.failure(Exception(msg))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -30,7 +33,9 @@ class AuthRepository(private val tokenManager: TokenManager) {
                 tokenManager.saveTokens(tokens.accessToken, tokens.refreshToken)
                 Result.success(tokens)
             } else {
-                Result.failure(Exception("Login failed: ${response.code()}"))
+                val errorBody = response.errorBody()?.string()
+                val msg = parseErrorDetail(errorBody) ?: "Login failed: ${response.code()}"
+                Result.failure(Exception(msg))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -64,6 +69,28 @@ class AuthRepository(private val tokenManager: TokenManager) {
     }
 
     suspend fun logout() {
+        try {
+            val refreshToken = tokenManager.refreshToken.first()
+            if (refreshToken != null) {
+                // Revoke refresh token on server
+                api.logout(RefreshTokenRequest(refreshToken))
+            }
+        } catch (_: Exception) {
+            // Best-effort server revocation; always clear local tokens
+        }
         tokenManager.clearTokens()
+    }
+
+    /**
+     * Parse FastAPI error response {"detail": "..."} to extract the message.
+     */
+    private fun parseErrorDetail(body: String?): String? {
+        if (body.isNullOrBlank()) return null
+        return try {
+            val regex = """"detail"\s*:\s*"([^"]+)"""".toRegex()
+            regex.find(body)?.groupValues?.get(1)
+        } catch (_: Exception) {
+            null
+        }
     }
 }

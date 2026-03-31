@@ -1,7 +1,9 @@
 package com.saibabui.openbake.ui.screens
 
 import android.Manifest
+import android.app.Activity
 import android.content.pm.PackageManager
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -24,14 +26,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import com.razorpay.Checkout
+import com.saibabui.openbake.BuildConfig
 import com.saibabui.openbake.data.api.RetrofitClient
 import com.saibabui.openbake.data.model.Address
 import com.saibabui.openbake.data.model.AddressRequest
+import com.saibabui.openbake.data.model.VerifyPaymentRequest
+import com.saibabui.openbake.data.repository.OrderRepository
 import com.saibabui.openbake.ui.screens.common.GradientButton
 import com.saibabui.openbake.ui.theme.*
 import com.saibabui.openbake.ui.viewmodel.CartViewModel
 import com.saibabui.openbake.ui.viewmodel.OrderViewModel
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,11 +54,14 @@ fun CheckoutScreen(
     val placingOrder by orderViewModel.placingOrder.collectAsState()
     val placedOrder by orderViewModel.placedOrder.collectAsState()
     val orderError by orderViewModel.orderError.collectAsState()
+    val deliveryEstimate by cartViewModel.deliveryEstimate.collectAsState()
+    val deliveryLoading by cartViewModel.deliveryLoading.collectAsState()
 
     var paymentMethod by remember { mutableStateOf("cod") }
     var specialNote by remember { mutableStateOf("") }
     var addresses by remember { mutableStateOf<List<Address>>(emptyList()) }
     var selectedAddressId by remember { mutableStateOf<String?>(null) }
+    var paymentInProgress by remember { mutableStateOf(false) }
 
     // Inline address form state
     var showAddressForm by remember { mutableStateOf(false) }
@@ -63,6 +73,15 @@ fun CheckoutScreen(
     var locating by remember { mutableStateOf(false) }
     var newAddrLat by remember { mutableStateOf<Double?>(null) }
     var newAddrLng by remember { mutableStateOf<Double?>(null) }
+
+    // Auto-fetch delivery estimate when selected address changes
+    val selectedAddress = addresses.find { it.id == selectedAddressId }
+    LaunchedEffect(selectedAddressId) {
+        val addr = addresses.find { it.id == selectedAddressId }
+        if (addr?.lat != null && addr.lng != null) {
+            cartViewModel.fetchDeliveryEstimate(addr.lat, addr.lng)
+        }
+    }
 
     fun saveNewAddress() {
         if (newAddrFull.isBlank() || newAddrCity.isBlank() || newAddrPincode.isBlank()) return
@@ -124,6 +143,48 @@ fun CheckoutScreen(
         else locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
     }
 
+    /**
+     * Launch Razorpay Checkout for UPI/card payments.
+     */
+    fun launchRazorpay(orderId: String) {
+        paymentInProgress = true
+        scope.launch {
+            val orderRepo = OrderRepository()
+            val result = orderRepo.createPaymentOrder(orderId)
+            result.fold(
+                onSuccess = { rpOrder ->
+                    try {
+                        val activity = context as Activity
+                        val checkout = Checkout()
+                        // Razorpay key from backend config env
+                        val options = JSONObject().apply {
+                            put("name", "OpenBake")
+                            put("description", "Order #${orderId.takeLast(6).uppercase()}")
+                            put("order_id", rpOrder.razorpayOrderId)
+                            put("amount", rpOrder.amount)
+                            put("currency", rpOrder.currency)
+                            put("prefill", JSONObject().apply {
+                                // Could prefill email/phone from user profile
+                            })
+                            put("theme", JSONObject().apply {
+                                put("color", "#D4A574")
+                            })
+                        }
+                        checkout.open(activity, options)
+                        // Payment result handled via RazorpayPaymentCompletionListener on Activity
+                    } catch (e: Exception) {
+                        Log.e("Checkout", "Razorpay launch failed", e)
+                    }
+                    paymentInProgress = false
+                },
+                onFailure = { e ->
+                    Log.e("Checkout", "Payment order creation failed", e)
+                    paymentInProgress = false
+                }
+            )
+        }
+    }
+
     // Fetch addresses
     LaunchedEffect(Unit) {
         try {
@@ -138,9 +199,15 @@ fun CheckoutScreen(
 
     LaunchedEffect(placedOrder) {
         placedOrder?.let { order ->
-            cartViewModel.clearCart()
-            orderViewModel.clearPlacedOrder()
-            onOrderPlaced(order.id)
+            if (paymentMethod == "cod") {
+                // COD — go straight to confirmation
+                cartViewModel.clearCart()
+                orderViewModel.clearPlacedOrder()
+                onOrderPlaced(order.id)
+            } else {
+                // UPI/Card — launch Razorpay before confirming
+                launchRazorpay(order.id)
+            }
         }
     }
 
@@ -256,6 +323,59 @@ fun CheckoutScreen(
                         )
                     }
                 }
+
+                // Delivery estimate info
+                deliveryEstimate?.let { est ->
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Surface(
+                        shape = RoundedCornerShape(12.dp),
+                        color = if (est.isDeliverable) Success.copy(alpha = 0.08f)
+                        else MaterialTheme.colorScheme.error.copy(alpha = 0.08f),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Column(modifier = Modifier.padding(12.dp)) {
+                            if (est.isDeliverable) {
+                                Text(
+                                    "📍 ${String.format("%.1f", est.distanceKm)} km away • ETA ~${est.estimatedMinutes} min",
+                                    style = MaterialTheme.typography.bodyMedium.copy(
+                                        fontFamily = Nunito,
+                                        fontWeight = FontWeight.SemiBold
+                                    ),
+                                    color = Success
+                                )
+                                if (est.deliveryFee == 0.0) {
+                                    Text(
+                                        "🎉 Free delivery!",
+                                        style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito),
+                                        color = Success
+                                    )
+                                }
+                            } else {
+                                Text(
+                                    "⚠️ This address is outside our delivery area (${String.format("%.1f", est.distanceKm)} km)",
+                                    style = MaterialTheme.typography.bodyMedium.copy(
+                                        fontFamily = Nunito,
+                                        fontWeight = FontWeight.SemiBold
+                                    ),
+                                    color = MaterialTheme.colorScheme.error
+                                )
+                            }
+                        }
+                    }
+                }
+                if (deliveryLoading) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        CircularProgressIndicator(modifier = Modifier.size(14.dp), strokeWidth = 2.dp)
+                        Spacer(Modifier.width(8.dp))
+                        Text(
+                            "Calculating delivery…",
+                            style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+
                 Spacer(modifier = Modifier.height(8.dp))
             } else if (!showAddressForm) {
                 // No addresses — prompt to add one
@@ -491,8 +611,23 @@ fun CheckoutScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text("Delivery", style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito), color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(
+                            if (cartViewModel.deliveryFee == 0.0) "Delivery (Free!)" else "Delivery",
+                            style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito),
+                            color = if (cartViewModel.deliveryFee == 0.0) Success else MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                         Text("₹${cartViewModel.deliveryFee.toInt()}", style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito, fontWeight = FontWeight.SemiBold))
+                    }
+                    // Show ETA if available
+                    cartViewModel.estimatedMinutes?.let { eta ->
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text("Est. Delivery", style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito), color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text("~$eta min", style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito, fontWeight = FontWeight.SemiBold), color = MaterialTheme.colorScheme.primary)
+                        }
                     }
                     Spacer(modifier = Modifier.height(8.dp))
                     HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
@@ -608,8 +743,15 @@ fun CheckoutScreen(
 
             Spacer(modifier = Modifier.height(28.dp))
 
+            val canPlaceOrder = !placingOrder && !paymentInProgress && cartItems.isNotEmpty() && cartViewModel.isDeliverable
+
             GradientButton(
-                text = if (placingOrder) "Placing Order…" else "Place Order • ₹${cartViewModel.total.toInt()}",
+                text = when {
+                    paymentInProgress -> "Processing Payment…"
+                    placingOrder -> "Placing Order…"
+                    !cartViewModel.isDeliverable -> "Outside Delivery Area"
+                    else -> "Place Order • ₹${cartViewModel.total.toInt()}"
+                },
                 onClick = {
                     orderViewModel.placeOrder(
                         cartItems = cartItems,
@@ -618,7 +760,7 @@ fun CheckoutScreen(
                         specialNote = specialNote.ifBlank { null }
                     )
                 },
-                enabled = !placingOrder && cartItems.isNotEmpty(),
+                enabled = canPlaceOrder,
                 modifier = Modifier.fillMaxWidth()
             )
 

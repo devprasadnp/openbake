@@ -5,6 +5,7 @@ from app.database import get_db
 from app.models.user import User, Address
 from app.models.review import Review, WishlistItem
 from app.models.product import Product
+from app.models.order import Order, OrderItem
 from app.schemas.auth import UserResponse, ProfileUpdateRequest, AddressCreate, AddressResponse
 from app.schemas.order import ReviewCreate, ReviewResponse
 from app.utils.jwt import get_current_user
@@ -110,11 +111,56 @@ def submit_review(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    """Submit a product review."""
+    """Submit a product review (only for delivered orders the user owns)."""
     # Check product exists
     product = db.query(Product).filter(Product.id == data.product_id).first()
     if not product:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found")
+
+    # Verify order ownership and status
+    order = (
+        db.query(Order)
+        .filter(Order.id == data.order_id, Order.user_id == current_user.id)
+        .first()
+    )
+    if not order:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Order not found or does not belong to you",
+        )
+    if order.status != "delivered":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Reviews can only be submitted for delivered orders",
+        )
+
+    # Verify the product was part of this order
+    order_item = (
+        db.query(OrderItem)
+        .filter(OrderItem.order_id == data.order_id, OrderItem.product_id == data.product_id)
+        .first()
+    )
+    if not order_item:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="This product was not part of the specified order",
+        )
+
+    # Prevent duplicate reviews
+    existing_review = (
+        db.query(Review)
+        .filter(
+            Review.user_id == current_user.id,
+            Review.product_id == data.product_id,
+            Review.order_id == data.order_id,
+        )
+        .first()
+    )
+    if existing_review:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="You have already reviewed this product for this order",
+        )
 
     review = Review(
         user_id=current_user.id,

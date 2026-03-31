@@ -31,6 +31,12 @@ class Settings(BaseSettings):
     RAZORPAY_KEY_ID: str = ""
     RAZORPAY_KEY_SECRET: str = ""
 
+    # Bakery Location (Bangalore default)
+    BAKERY_LAT: float = 12.9716
+    BAKERY_LNG: float = 77.5946
+    FREE_DELIVERY_RADIUS_KM: float = 5.0
+    DELIVERY_FEE_DEFAULT: float = 40.0
+
     # Admin bootstrap credentials (used only by seed.py)
     ADMIN_EMAIL: str = "admin@openbake.in"
     ADMIN_PASSWORD: str = "Admin@1234"
@@ -38,7 +44,18 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
 
+    def validate_production(self):
+        """Raise if critical settings are insecure in production."""
+        if self.APP_ENV == "production":
+            if self.SECRET_KEY == "change-this-to-a-long-random-secret-in-production":
+                raise ValueError(
+                    "FATAL: SECRET_KEY must be changed from default in production. "
+                    "Set a strong random secret via the SECRET_KEY environment variable."
+                )
+
 
 @lru_cache()
 def get_settings() -> Settings:
-    return Settings()
+    s = Settings()
+    s.validate_production()
+    return s

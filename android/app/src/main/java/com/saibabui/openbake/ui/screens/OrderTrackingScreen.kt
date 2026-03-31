@@ -16,10 +16,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.gson.Gson
+import com.saibabui.openbake.BuildConfig
+import com.saibabui.openbake.data.api.RetrofitClient
+import com.saibabui.openbake.data.local.TokenManager
+import com.saibabui.openbake.data.model.OrderStatusEvent
 import com.saibabui.openbake.ui.screens.common.GradientButton
 import com.saibabui.openbake.ui.screens.common.LoadingScreen
 import com.saibabui.openbake.ui.theme.*
 import com.saibabui.openbake.ui.viewmodel.OrderViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import java.io.BufferedReader
+import java.util.concurrent.TimeUnit
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,6 +45,52 @@ fun OrderTrackingScreen(
 
     LaunchedEffect(orderId) { orderViewModel.loadOrderDetail(orderId) }
 
+    // SSE real-time status updates
+    var liveStatus by remember { mutableStateOf<String?>(null) }
+    var liveEta by remember { mutableStateOf<Int?>(null) }
+
+    LaunchedEffect(orderId) {
+        withContext(Dispatchers.IO) {
+            try {
+                val sseClient = OkHttpClient.Builder()
+                    .readTimeout(0, TimeUnit.MILLISECONDS) // Keep connection open
+                    .build()
+
+                val baseUrl = BuildConfig.BASE_URL.trimEnd('/')
+                val request = Request.Builder()
+                    .url("$baseUrl/orders/$orderId/stream")
+                    .header("Accept", "text/event-stream")
+                    .build()
+
+                val response = sseClient.newCall(request).execute()
+                val reader = response.body?.source()?.inputStream()?.bufferedReader()
+
+                if (reader != null) {
+                    var dataBuffer = ""
+                    reader.forEachLine { line ->
+                        if (!isActive) return@forEachLine
+                        when {
+                            line.startsWith("data:") -> {
+                                dataBuffer = line.removePrefix("data:").trim()
+                            }
+                            line.isBlank() && dataBuffer.isNotEmpty() -> {
+                                // Parse the JSON event
+                                try {
+                                    val event = Gson().fromJson(dataBuffer, OrderStatusEvent::class.java)
+                                    liveStatus = event.status
+                                    liveEta = event.estimatedDeliveryMinutes
+                                } catch (_: Exception) {}
+                                dataBuffer = ""
+                            }
+                        }
+                    }
+                }
+            } catch (_: Exception) {
+                // SSE connection failed — fall back to polling via loadOrderDetail
+            }
+        }
+    }
+
     if (detailState.isLoading) {
         LoadingScreen()
         return
@@ -39,8 +98,12 @@ fun OrderTrackingScreen(
 
     val order = detailState.order ?: return
 
+    // Use live status from SSE if available, otherwise use the fetched status
+    val currentStatus = liveStatus ?: order.status
+    val estimatedEta = liveEta ?: order.estimatedDeliveryMinutes
+
     val steps = listOf("Pending", "Confirmed", "Preparing", "Out for Delivery", "Delivered")
-    val currentStepIndex = when (order.status.lowercase()) {
+    val currentStepIndex = when (currentStatus.lowercase()) {
         "pending" -> 0
         "confirmed" -> 1
         "preparing" -> 2
@@ -48,7 +111,7 @@ fun OrderTrackingScreen(
         "delivered" -> 4
         else -> -1
     }
-    val isCancelled = order.status.lowercase() == "cancelled"
+    val isCancelled = currentStatus.lowercase() == "cancelled"
 
     Scaffold(
         topBar = {
@@ -101,7 +164,7 @@ fun OrderTrackingScreen(
                                 fontWeight = FontWeight.Bold
                             )
                         )
-                        StatusBadge(status = order.status)
+                        StatusBadge(status = currentStatus)
                     }
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
@@ -118,6 +181,33 @@ fun OrderTrackingScreen(
                         ),
                         color = MaterialTheme.colorScheme.primary
                     )
+                    // ETA display
+                    estimatedEta?.let { eta ->
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Surface(
+                            shape = RoundedCornerShape(8.dp),
+                            color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+                        ) {
+                            Text(
+                                "⏱ Estimated delivery: ~$eta min",
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                                style = MaterialTheme.typography.bodySmall.copy(
+                                    fontFamily = Nunito,
+                                    fontWeight = FontWeight.SemiBold
+                                ),
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    }
+                    // Live indicator
+                    if (liveStatus != null) {
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            "● Live tracking active",
+                            style = MaterialTheme.typography.labelSmall.copy(fontFamily = Nunito),
+                            color = Success
+                        )
+                    }
                 }
             }
 
@@ -243,7 +333,7 @@ fun OrderTrackingScreen(
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text(
-                                "× ${item.quantity}",
+                                "${item.productName ?: "Item"} × ${item.quantity}",
                                 style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito),
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 modifier = Modifier.weight(1f)
@@ -261,7 +351,7 @@ fun OrderTrackingScreen(
             }
 
             // Cancel button (only if pending/confirmed)
-            if (order.status.lowercase() in listOf("pending", "confirmed")) {
+            if (currentStatus.lowercase() in listOf("pending", "confirmed")) {
                 Spacer(modifier = Modifier.height(24.dp))
                 OutlinedButton(
                     onClick = { orderViewModel.cancelOrder(order.id) },

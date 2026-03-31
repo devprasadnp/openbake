@@ -12,7 +12,8 @@ class OrderRepository {
             if (response.isSuccessful) {
                 Result.success(response.body()!!)
             } else {
-                Result.failure(Exception("Failed to create order: ${response.code()}"))
+                val detail = response.errorBody()?.string() ?: "Failed: ${response.code()}"
+                Result.failure(Exception(detail))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -65,6 +66,74 @@ class OrderRepository {
                 Result.success(response.body() ?: emptyList())
             } else {
                 Result.failure(Exception("Failed to fetch addresses: ${response.code()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    // ── Delivery ──
+    suspend fun getDeliveryEstimate(lat: Double, lng: Double): Result<DeliveryEstimate> {
+        return try {
+            val response = api.getDeliveryEstimate(lat, lng)
+            if (response.isSuccessful) {
+                Result.success(response.body()!!)
+            } else {
+                Result.failure(Exception("Delivery estimate failed: ${response.code()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    // ── Payment ──
+    suspend fun createPaymentOrder(orderId: String): Result<RazorpayOrderResponse> {
+        return try {
+            val response = api.createPaymentOrder(CreatePaymentOrderRequest(orderId))
+            if (response.isSuccessful) {
+                Result.success(response.body()!!)
+            } else {
+                Result.failure(Exception("Payment order failed: ${response.code()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun verifyPayment(request: VerifyPaymentRequest): Result<PaymentVerifyResponse> {
+        return try {
+            val response = api.verifyPayment(request)
+            if (response.isSuccessful) {
+                Result.success(response.body()!!)
+            } else {
+                Result.failure(Exception("Payment verify failed: ${response.code()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    // ── Waitlist ──
+    suspend fun joinWaitlist(productId: String): Result<StockWaitlistResponse> {
+        return try {
+            val response = api.joinWaitlist(productId)
+            if (response.isSuccessful) {
+                Result.success(response.body()!!)
+            } else {
+                Result.failure(Exception("Waitlist join failed: ${response.code()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun leaveWaitlist(productId: String): Result<Unit> {
+        return try {
+            val response = api.leaveWaitlist(productId)
+            if (response.isSuccessful) {
+                Result.success(Unit)
+            } else {
+                Result.failure(Exception("Waitlist leave failed: ${response.code()}"))
             }
         } catch (e: Exception) {
             Result.failure(e)

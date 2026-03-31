@@ -35,6 +35,9 @@ class Order(Base):
     payment_status: Mapped[str] = mapped_column(
         String(20), nullable=False, default="pending"
     )  # pending | paid | failed
+    razorpay_order_id: Mapped[str] = mapped_column(String(100), nullable=True)
+    razorpay_payment_id: Mapped[str] = mapped_column(String(100), nullable=True)
+    estimated_delivery_minutes: Mapped[int] = mapped_column(Integer, nullable=True)
     scheduled_date: Mapped[date] = mapped_column(Date, nullable=True)
     time_slot: Mapped[str] = mapped_column(String(50), nullable=True)
     special_note: Mapped[str] = mapped_column(Text, nullable=True)

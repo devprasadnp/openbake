@@ -127,6 +127,9 @@ data class Order(
     @SerializedName("coupon_code") val couponCode: String? = null,
     @SerializedName("payment_method") val paymentMethod: String? = null,
     @SerializedName("payment_status") val paymentStatus: String = "pending",
+    @SerializedName("razorpay_order_id") val razorpayOrderId: String? = null,
+    @SerializedName("razorpay_payment_id") val razorpayPaymentId: String? = null,
+    @SerializedName("estimated_delivery_minutes") val estimatedDeliveryMinutes: Int? = null,
     @SerializedName("scheduled_date") val scheduledDate: String? = null,
     @SerializedName("time_slot") val timeSlot: String? = null,
     @SerializedName("special_note") val specialNote: String? = null,
@@ -180,4 +183,63 @@ data class WishlistItem(
     val id: String,
     @SerializedName("product_id") val productId: String,
     val product: Product
+)
+
+// ── Delivery Estimate ──
+data class DeliveryEstimate(
+    @SerializedName("distance_km") val distanceKm: Double,
+    @SerializedName("delivery_fee") val deliveryFee: Double,
+    @SerializedName("estimated_minutes") val estimatedMinutes: Int,
+    @SerializedName("is_deliverable") val isDeliverable: Boolean,
+    @SerializedName("free_delivery_radius_km") val freeDeliveryRadiusKm: Double? = null,
+    @SerializedName("max_delivery_radius_km") val maxDeliveryRadiusKm: Double? = null
+)
+
+// ── Payment ──
+data class CreatePaymentOrderRequest(
+    @SerializedName("order_id") val orderId: String
+)
+
+data class RazorpayOrderResponse(
+    @SerializedName("razorpay_order_id") val razorpayOrderId: String,
+    @SerializedName("amount") val amount: Int,
+    @SerializedName("currency") val currency: String,
+    @SerializedName("order_id") val orderId: String
+)
+
+data class VerifyPaymentRequest(
+    @SerializedName("order_id") val orderId: String,
+    @SerializedName("razorpay_order_id") val razorpayOrderId: String,
+    @SerializedName("razorpay_payment_id") val razorpayPaymentId: String,
+    @SerializedName("razorpay_signature") val razorpaySignature: String
+)
+
+data class PaymentVerifyResponse(
+    val status: String,
+    val message: String? = null
+)
+
+// ── Stock Waitlist ──
+data class StockWaitlistItem(
+    val id: String,
+    @SerializedName("product_id") val productId: String,
+    @SerializedName("variant_id") val variantId: String? = null,
+    val status: String,
+    @SerializedName("created_at") val createdAt: String? = null
+)
+
+data class StockWaitlistResponse(
+    val id: String,
+    @SerializedName("product_id") val productId: String,
+    @SerializedName("variant_id") val variantId: String? = null,
+    val status: String,
+    @SerializedName("created_at") val createdAt: String? = null,
+    val product: Product? = null
+)
+
+// ── SSE Order Event ──
+data class OrderStatusEvent(
+    val status: String,
+    @SerializedName("payment_status") val paymentStatus: String? = null,
+    @SerializedName("estimated_delivery_minutes") val estimatedDeliveryMinutes: Int? = null
 )

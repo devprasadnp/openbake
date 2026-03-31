@@ -1,8 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 
-from app.database import get_db
+import asyncio
+import json
+import time
+
+from app.database import get_db, SessionLocal
 from app.models.order import Order
 from app.models.user import User
 from app.models.coupon import Coupon
@@ -159,4 +164,78 @@ def apply_coupon(
         valid=True,
         discount=discount,
         message=f"Coupon applied! You save ₹{discount}",
+    )
+
+
+# --- SSE Order Tracking ---
+
+@router.get("/orders/{order_id}/stream")
+async def stream_order_status(
+    order_id: str,
+    current_user: User = Depends(get_current_user),
+):
+    """Server-Sent Events stream for real-time order status updates.
+    
+    The client connects and receives events whenever the order status changes.
+    The stream closes when the order reaches a terminal state (delivered/cancelled).
+    """
+    # Validate order ownership first
+    db = SessionLocal()
+    try:
+        order = (
+            db.query(Order)
+            .filter(Order.id == order_id, Order.user_id == current_user.id)
+            .first()
+        )
+        if not order:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Order not found")
+        initial_status = order.status
+    finally:
+        db.close()
+
+    async def event_generator():
+        last_status = initial_status
+        terminal_states = {"delivered", "cancelled"}
+        
+        # Send initial status immediately
+        data = json.dumps({"status": last_status, "order_id": order_id})
+        yield f"data: {data}\n\n"
+
+        if last_status in terminal_states:
+            return
+
+        while True:
+            await asyncio.sleep(3)  # Poll every 3 seconds
+            db_poll = SessionLocal()
+            try:
+                order_poll = db_poll.query(Order).filter(Order.id == order_id).first()
+                if not order_poll:
+                    break
+                
+                current_status = order_poll.status
+                if current_status != last_status:
+                    last_status = current_status
+                    data = json.dumps({
+                        "status": current_status,
+                        "order_id": order_id,
+                        "estimated_delivery_minutes": order_poll.estimated_delivery_minutes,
+                        "payment_status": order_poll.payment_status,
+                    })
+                    yield f"data: {data}\n\n"
+
+                if current_status in terminal_states:
+                    break
+            except Exception:
+                break
+            finally:
+                db_poll.close()
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        },
     )

@@ -12,7 +12,7 @@ from slowapi.util import get_remote_address
 
 from app.config import get_settings
 from app.database import engine, Base, SessionLocal
-from app.routers import auth, products, orders, profile, admin
+from app.routers import auth, products, orders, profile, admin, payments, delivery, waitlist
 from app.utils.logging import setup_logging, logger
 
 # ── Bootstrap ─────────────────────────────────────────────────────────────────
@@ -100,6 +100,9 @@ app.include_router(auth.router,     prefix="/api/auth",  tags=["Auth"])
 app.include_router(products.router, prefix="/api",       tags=["Products"])
 app.include_router(orders.router,   prefix="/api",       tags=["Orders"])
 app.include_router(profile.router,  prefix="/api",       tags=["Profile"])
+app.include_router(payments.router, prefix="/api",       tags=["Payments"])
+app.include_router(delivery.router, prefix="/api",       tags=["Delivery"])
+app.include_router(waitlist.router, prefix="/api",       tags=["Waitlist"])
 app.include_router(admin.router,    prefix="/api/admin", tags=["Admin"])
 
 

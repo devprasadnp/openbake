@@ -82,4 +82,32 @@ interface ApiService {
     // Reviews
     @POST("reviews")
     suspend fun addReview(@Body request: ReviewRequest): Response<Review>
+
+    // Delivery Estimate
+    @GET("delivery/estimate")
+    suspend fun getDeliveryEstimate(
+        @Query("lat") lat: Double,
+        @Query("lng") lng: Double
+    ): Response<DeliveryEstimate>
+
+    // Payments
+    @POST("payments/create-order")
+    suspend fun createPaymentOrder(@Body request: CreatePaymentOrderRequest): Response<RazorpayOrderResponse>
+
+    @POST("payments/verify")
+    suspend fun verifyPayment(@Body request: VerifyPaymentRequest): Response<PaymentVerifyResponse>
+
+    // Stock Waitlist
+    @POST("waitlist/{productId}")
+    suspend fun joinWaitlist(@Path("productId") productId: String): Response<StockWaitlistResponse>
+
+    @DELETE("waitlist/{productId}")
+    suspend fun leaveWaitlist(@Path("productId") productId: String): Response<Unit>
+
+    @GET("waitlist")
+    suspend fun getWaitlist(): Response<List<StockWaitlistResponse>>
+
+    // Auth — logout with refresh token revocation
+    @POST("auth/logout")
+    suspend fun logout(@Body request: RefreshTokenRequest): Response<Unit>
 }

@@ -15,6 +15,7 @@ from app.schemas.product import (
 )
 from app.schemas.order import OrderResponse, OrderStatusUpdate, CouponCreate, CouponResponse
 from app.utils.jwt import require_admin
+from app.services.waitlist_service import notify_waitlist_users
 
 router = APIRouter()
 
@@ -289,6 +290,42 @@ def admin_inventory(
         }
         for p in products
     ]
+
+
+@router.patch("/inventory/{product_id}")
+def admin_update_stock(
+    product_id: str,
+    stock_count: int = Query(..., ge=0),
+    db: Session = Depends(get_db),
+    _admin: User = Depends(require_admin),
+):
+    """Update product stock count. Triggers waitlist notifications on restock."""
+    product = db.query(Product).filter(Product.id == product_id).first()
+    if not product:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found")
+
+    old_stock = product.stock_count
+    product.stock_count = stock_count
+
+    # Auto-enable availability if restocked
+    if stock_count > 0 and not product.is_available:
+        product.is_available = True
+
+    db.commit()
+    db.refresh(product)
+
+    # Notify waitlist users if product went from 0 → positive stock
+    notified = 0
+    if old_stock == 0 and stock_count > 0:
+        notified = notify_waitlist_users(db, product_id)
+
+    return {
+        "id": str(product.id),
+        "name": product.name,
+        "stock_count": product.stock_count,
+        "is_available": product.is_available,
+        "waitlist_notified": notified,
+    }
 
 
 # --- Categories ---

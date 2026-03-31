@@ -18,6 +18,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "BASE_URL", "\"http://10.0.2.2:8000/api/\"")
     }
 
     buildTypes {
@@ -38,6 +40,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -79,6 +82,12 @@ dependencies {
 
     // ViewModel Compose
     implementation(libs.lifecycle.viewmodel.compose)
+
+    // Location Services
+    implementation(libs.play.services.location)
+
+    // Razorpay Payment SDK
+    implementation(libs.razorpay.checkout)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

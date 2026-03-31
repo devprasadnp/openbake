@@ -1,4 +1,4 @@
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, Field, field_validator
 from typing import Optional, List, Dict, Any
 from datetime import date, datetime
 from app.schemas.auth import AddressResponse
@@ -59,6 +59,9 @@ class OrderResponse(BaseModel):
     coupon_code: Optional[str] = None
     payment_method: Optional[str] = None
     payment_status: str
+    razorpay_order_id: Optional[str] = None
+    razorpay_payment_id: Optional[str] = None
+    estimated_delivery_minutes: Optional[int] = None
     scheduled_date: Optional[date] = None
     time_slot: Optional[str] = None
     special_note: Optional[str] = None
@@ -119,7 +122,7 @@ class CouponApplyResponse(BaseModel):
 class ReviewCreate(BaseModel):
     product_id: str
     order_id: str
-    rating: int  # 1-5
+    rating: int = Field(..., ge=1, le=5, description="Rating from 1 to 5")
     comment: Optional[str] = None
 
 

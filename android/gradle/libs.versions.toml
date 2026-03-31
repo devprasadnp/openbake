@@ -18,6 +18,8 @@ datastore = "1.0.0"
 splashscreen = "1.0.1"
 material-icons = "1.6.3"
 lifecycle-viewmodel-compose = "2.7.0"
+playServicesLocation = "21.2.0"
+razorpay = "1.6.40"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -63,6 +65,12 @@ material-icons-extended = { group = "androidx.compose.material", name = "materia
 
 # ViewModel Compose
 lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle-viewmodel-compose" }
+
+# Location
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
+
+# Razorpay
+razorpay-checkout = { group = "com.razorpay", name = "checkout", version.ref = "razorpay" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

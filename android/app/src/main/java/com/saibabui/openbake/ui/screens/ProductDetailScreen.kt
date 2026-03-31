@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
@@ -23,12 +24,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import com.saibabui.openbake.data.api.RetrofitClient
 import com.saibabui.openbake.data.model.ProductVariant
 import com.saibabui.openbake.ui.screens.common.GradientButton
 import com.saibabui.openbake.ui.screens.common.LoadingScreen
 import com.saibabui.openbake.ui.theme.*
 import com.saibabui.openbake.ui.viewmodel.CartViewModel
 import com.saibabui.openbake.ui.viewmodel.ProductViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,6 +47,11 @@ fun ProductDetailScreen(
     var quantity by remember { mutableIntStateOf(1) }
     var isEggless by remember { mutableStateOf(false) }
     val cartItems by cartViewModel.items.collectAsState()
+    val scope = rememberCoroutineScope()
+
+    // Waitlist state
+    var onWaitlist by remember { mutableStateOf(false) }
+    var waitlistLoading by remember { mutableStateOf(false) }
 
     LaunchedEffect(productId) {
         productViewModel.loadProductDetail(productId)
@@ -55,6 +63,8 @@ fun ProductDetailScreen(
     }
 
     val product = detailState.product ?: return
+
+    val isOutOfStock = product.stockCount <= 0 || !product.isAvailable
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -84,6 +94,31 @@ fun ProductDetailScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Text("🎂", fontSize = 72.sp)
+                    }
+                }
+
+                // Out of stock overlay
+                if (isOutOfStock) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(MaterialTheme.colorScheme.scrim.copy(alpha = 0.4f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Surface(
+                            shape = RoundedCornerShape(12.dp),
+                            color = MaterialTheme.colorScheme.error
+                        ) {
+                            Text(
+                                "OUT OF STOCK",
+                                modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
+                                style = MaterialTheme.typography.titleSmall.copy(
+                                    fontFamily = Nunito,
+                                    fontWeight = FontWeight.Bold
+                                ),
+                                color = MaterialTheme.colorScheme.onError
+                            )
+                        }
                     }
                 }
 
@@ -186,6 +221,17 @@ fun ProductDetailScreen(
                                 }
                             }
                         }
+                        // Stock indicator
+                        if (!isOutOfStock && product.stockCount <= 5) {
+                            Text(
+                                text = "Only ${product.stockCount} left!",
+                                style = MaterialTheme.typography.labelSmall.copy(
+                                    fontFamily = Nunito,
+                                    fontWeight = FontWeight.Bold
+                                ),
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -201,8 +247,77 @@ fun ProductDetailScreen(
                         Spacer(modifier = Modifier.height(20.dp))
                     }
 
-                    // Variants
-                    if (product.variants.isNotEmpty()) {
+                    // Waitlist section for out-of-stock products
+                    if (isOutOfStock) {
+                        Surface(
+                            shape = RoundedCornerShape(16.dp),
+                            color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(16.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Icon(
+                                    Icons.Filled.Notifications,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.size(28.dp)
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Text(
+                                    if (onWaitlist) "You'll be notified when back in stock!"
+                                    else "Get notified when this item is back in stock",
+                                    style = MaterialTheme.typography.bodyMedium.copy(
+                                        fontFamily = Nunito,
+                                        fontWeight = FontWeight.SemiBold
+                                    ),
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                                Spacer(modifier = Modifier.height(12.dp))
+                                Button(
+                                    onClick = {
+                                        waitlistLoading = true
+                                        scope.launch {
+                                            try {
+                                                if (onWaitlist) {
+                                                    val resp = RetrofitClient.apiService.leaveWaitlist(productId)
+                                                    if (resp.isSuccessful) onWaitlist = false
+                                                } else {
+                                                    val resp = RetrofitClient.apiService.joinWaitlist(productId)
+                                                    if (resp.isSuccessful) onWaitlist = true
+                                                }
+                                            } catch (_: Exception) {}
+                                            waitlistLoading = false
+                                        }
+                                    },
+                                    enabled = !waitlistLoading,
+                                    shape = RoundedCornerShape(12.dp),
+                                    colors = if (onWaitlist) ButtonDefaults.outlinedButtonColors()
+                                    else ButtonDefaults.buttonColors()
+                                ) {
+                                    if (waitlistLoading) {
+                                        CircularProgressIndicator(
+                                            modifier = Modifier.size(16.dp),
+                                            strokeWidth = 2.dp
+                                        )
+                                    } else {
+                                        Text(
+                                            if (onWaitlist) "Leave Waitlist" else "Notify Me",
+                                            style = MaterialTheme.typography.bodyMedium.copy(
+                                                fontFamily = Nunito,
+                                                fontWeight = FontWeight.Bold
+                                            )
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(20.dp))
+                    }
+
+                    // Variants (only if in stock)
+                    if (!isOutOfStock && product.variants.isNotEmpty()) {
                         Text(
                             text = "Select Size",
                             style = MaterialTheme.typography.titleSmall.copy(
@@ -235,8 +350,8 @@ fun ProductDetailScreen(
                         Spacer(modifier = Modifier.height(20.dp))
                     }
 
-                    // Eggless option
-                    if (product.isEgglessAvailable) {
+                    // Eggless option (only if in stock)
+                    if (!isOutOfStock && product.isEgglessAvailable) {
                         Surface(
                             shape = RoundedCornerShape(16.dp),
                             color = MaterialTheme.colorScheme.surfaceContainerLow,
@@ -272,60 +387,63 @@ fun ProductDetailScreen(
                         Spacer(modifier = Modifier.height(20.dp))
                     }
 
-                    // Quantity
-                    Text(
-                        text = "Quantity",
-                        style = MaterialTheme.typography.titleSmall.copy(
-                            fontFamily = Nunito,
-                            fontWeight = FontWeight.Bold
-                        ),
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        Surface(
-                            shape = CircleShape,
-                            color = MaterialTheme.colorScheme.surfaceContainerLow,
-                            modifier = Modifier
-                                .size(40.dp)
-                                .clickable { if (quantity > 1) quantity-- }
-                        ) {
-                            Box(contentAlignment = Alignment.Center) {
-                                Text(
-                                    "−",
-                                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                                    color = MaterialTheme.colorScheme.onSurface
-                                )
-                            }
-                        }
+                    // Quantity (only if in stock)
+                    if (!isOutOfStock) {
                         Text(
-                            text = "$quantity",
-                            style = MaterialTheme.typography.titleLarge.copy(
+                            text = "Quantity",
+                            style = MaterialTheme.typography.titleSmall.copy(
                                 fontFamily = Nunito,
                                 fontWeight = FontWeight.Bold
-                            )
+                            ),
+                            color = MaterialTheme.colorScheme.onBackground
                         )
-                        Surface(
-                            shape = CircleShape,
-                            color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier
-                                .size(40.dp)
-                                .clickable { quantity++ }
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
-                            Box(contentAlignment = Alignment.Center) {
-                                Text(
-                                    "+",
-                                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                                    color = MaterialTheme.colorScheme.onPrimary
+                            Surface(
+                                shape = CircleShape,
+                                color = MaterialTheme.colorScheme.surfaceContainerLow,
+                                modifier = Modifier
+                                    .size(40.dp)
+                                    .clickable { if (quantity > 1) quantity-- }
+                            ) {
+                                Box(contentAlignment = Alignment.Center) {
+                                    Text(
+                                        "−",
+                                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                }
+                            }
+                            Text(
+                                text = "$quantity",
+                                style = MaterialTheme.typography.titleLarge.copy(
+                                    fontFamily = Nunito,
+                                    fontWeight = FontWeight.Bold
                                 )
+                            )
+                            Surface(
+                                shape = CircleShape,
+                                color = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier
+                                    .size(40.dp)
+                                    .clickable {
+                                        if (quantity < product.stockCount) quantity++
+                                    }
+                            ) {
+                                Box(contentAlignment = Alignment.Center) {
+                                    Text(
+                                        "+",
+                                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                                        color = MaterialTheme.colorScheme.onPrimary
+                                    )
+                                }
                             }
                         }
+                        Spacer(modifier = Modifier.height(20.dp))
                     }
-
-                    Spacer(modifier = Modifier.height(20.dp))
 
                     // Reviews section
                     if (detailState.reviews.isNotEmpty()) {
@@ -377,43 +495,45 @@ fun ProductDetailScreen(
             }
         }
 
-        // Bottom Add to Cart bar
-        Surface(
-            modifier = Modifier.align(Alignment.BottomCenter),
-            shadowElevation = 8.dp,
-            color = MaterialTheme.colorScheme.surface,
-            shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp, vertical = 16.dp)
-                    .navigationBarsPadding(),
-                verticalAlignment = Alignment.CenterVertically
+        // Bottom Add to Cart bar (hidden when out of stock)
+        if (!isOutOfStock) {
+            Surface(
+                modifier = Modifier.align(Alignment.BottomCenter),
+                shadowElevation = 8.dp,
+                color = MaterialTheme.colorScheme.surface,
+                shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
             ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        "Total",
-                        style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Text(
-                        "₹${((product.price + (selectedVariant?.extraPrice ?: 0.0)) * quantity).toInt()}",
-                        style = MaterialTheme.typography.titleLarge.copy(
-                            fontFamily = Nunito,
-                            fontWeight = FontWeight.Bold
-                        ),
-                        color = MaterialTheme.colorScheme.primary
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp, vertical = 16.dp)
+                        .navigationBarsPadding(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            "Total",
+                            style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Text(
+                            "₹${((product.price + (selectedVariant?.extraPrice ?: 0.0)) * quantity).toInt()}",
+                            style = MaterialTheme.typography.titleLarge.copy(
+                                fontFamily = Nunito,
+                                fontWeight = FontWeight.Bold
+                            ),
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                    GradientButton(
+                        text = "Add to Cart",
+                        onClick = {
+                            cartViewModel.addItem(product, quantity, selectedVariant, isEggless)
+                            onBack()
+                        },
+                        modifier = Modifier.weight(1f)
                     )
                 }
-                GradientButton(
-                    text = "Add to Cart",
-                    onClick = {
-                        cartViewModel.addItem(product, quantity, selectedVariant, isEggless)
-                        onBack()
-                    },
-                    modifier = Modifier.weight(1f)
-                )
             }
         }
     }
