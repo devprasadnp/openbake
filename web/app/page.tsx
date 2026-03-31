@@ -31,10 +31,10 @@ export default function HomePage() {
     async function load() {
       try {
         const [prodRes, catRes] = await Promise.all([
-          api.get<Product[]>("/products?page_size=8"),
+          api.get<{ items: Product[] }>("/products?page_size=8"),
           api.get<Category[]>("/categories"),
         ]);
-        setBestsellers(prodRes.data);
+        setBestsellers(prodRes.data.items ?? prodRes.data as unknown as Product[]);
         setCategories(catRes.data);
       } catch {
         // API might not be running

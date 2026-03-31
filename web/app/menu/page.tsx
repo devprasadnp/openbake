@@ -38,8 +38,8 @@ function MenuContent() {
       if (search) params.set("search", search);
       params.set("page_size", "50");
 
-      const res = await api.get<Product[]>(`/products?${params.toString()}`);
-      let sorted = res.data;
+      const res = await api.get<{ items: Product[] }>(`/products?${params.toString()}`);
+      let sorted: Product[] = res.data.items ?? res.data;
 
       if (sortBy === "price_low") sorted.sort((a, b) => a.price - b.price);
       else if (sortBy === "price_high") sorted.sort((a, b) => b.price - a.price);
