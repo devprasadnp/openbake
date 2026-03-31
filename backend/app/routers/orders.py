@@ -10,7 +10,7 @@ from app.schemas.order import (
     OrderCreate, OrderResponse, CartValidateRequest, CartValidateResponse,
     CouponApplyRequest, CouponApplyResponse,
 )
-from app.services.order_service import place_order, calculate_order_totals
+from app.services.order_service import place_order, calculate_order_totals, restore_stock_for_order
 from app.utils.jwt import get_current_user
 
 router = APIRouter()
@@ -93,6 +93,7 @@ def cancel_order(
             detail="Order can only be cancelled when status is 'placed'",
         )
     order.status = "cancelled"
+    restore_stock_for_order(db, order)
     db.commit()
     db.refresh(order)
     return order

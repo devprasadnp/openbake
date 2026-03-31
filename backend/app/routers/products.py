@@ -1,6 +1,6 @@
 from typing import Optional
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -18,7 +18,7 @@ def list_categories(db: Session = Depends(get_db)):
     return db.query(Category).filter(Category.is_active == True).all()
 
 
-@router.get("/products", response_model=list[ProductResponse])
+@router.get("/products")
 def list_products(
     category_id: Optional[str] = Query(None),
     search: Optional[str] = Query(None),
@@ -30,7 +30,7 @@ def list_products(
     page_size: int = Query(20, ge=1, le=100),
     db: Session = Depends(get_db),
 ):
-    """List products with optional filters."""
+    """List products with optional filters. Returns paginated results with metadata."""
     query = db.query(Product).filter(Product.is_available == True)
 
     if category_id:
@@ -46,8 +46,19 @@ def list_products(
     if eggless_only:
         query = query.filter(Product.is_eggless_available == True)
 
+    total = query.count()
     offset = (page - 1) * page_size
-    return query.offset(offset).limit(page_size).all()
+    items = query.offset(offset).limit(page_size).all()
+
+    return {
+        "items": items,
+        "total": total,
+        "page": page,
+        "page_size": page_size,
+        "pages": max(1, -(-total // page_size)),  # ceiling division
+        "has_next": (page * page_size) < total,
+        "has_prev": page > 1,
+    }
 
 
 @router.get("/products/{product_id}", response_model=ProductResponse)
@@ -55,7 +66,6 @@ def get_product(product_id: str, db: Session = Depends(get_db)):
     """Get a single product by ID."""
     product = db.query(Product).filter(Product.id == product_id).first()
     if not product:
-        from fastapi import HTTPException, status
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found")
     return product
 

@@ -15,22 +15,31 @@ def calculate_order_totals(
     coupon_code: str = None,
     order_type: str = "delivery",
 ) -> dict:
-    """Calculate subtotal, discount, delivery fee, and total for an order."""
+    """Calculate subtotal, discount, delivery fee, and total for an order.
+
+    Uses SELECT FOR UPDATE to prevent race conditions on stock.
+    """
     subtotal = Decimal("0.00")
     validated_items = []
 
     for item in items:
-        product = db.query(Product).filter(Product.id == item.product_id).first()
+        # Lock the product row to prevent concurrent over-ordering
+        product = (
+            db.query(Product)
+            .filter(Product.id == item.product_id)
+            .with_for_update()
+            .first()
+        )
         if not product:
             raise ValueError(f"Product {item.product_id} not found")
         if not product.is_available:
             raise ValueError(f"Product '{product.name}' is currently unavailable")
         if product.stock_count < item.quantity:
-            raise ValueError(f"Insufficient stock for '{product.name}'")
+            raise ValueError(
+                f"Only {product.stock_count} units left for '{product.name}'"
+            )
 
         unit_price = Decimal(str(product.price))
-        # Add variant extra price if customization specifies a size/flavor
-        # (simplified — in production you'd look up the variant)
         line_total = unit_price * item.quantity
         subtotal += line_total
 
@@ -46,19 +55,23 @@ def calculate_order_totals(
     # Apply coupon
     discount = Decimal("0.00")
     if coupon_code:
-        coupon = db.query(Coupon).filter(Coupon.code == coupon_code, Coupon.is_active == True).first()
+        coupon = (
+            db.query(Coupon)
+            .filter(Coupon.code == coupon_code, Coupon.is_active == True)
+            .with_for_update()
+            .first()
+        )
         if coupon and float(subtotal) >= float(coupon.min_order_value):
             if coupon.discount_type == "flat":
                 discount = Decimal(str(coupon.discount_value))
             elif coupon.discount_type == "percent":
                 discount = subtotal * Decimal(str(coupon.discount_value)) / Decimal("100")
-            # Increment coupon used count
             coupon.used_count += 1
 
     # Delivery fee
     delivery_fee = Decimal("40.00") if order_type == "delivery" else Decimal("0.00")
 
-    total = subtotal - discount + delivery_fee
+    total = max(subtotal - discount + delivery_fee, Decimal("0.00"))
 
     return {
         "subtotal": float(subtotal),
@@ -70,7 +83,7 @@ def calculate_order_totals(
 
 
 def place_order(db: Session, user_id: str, data: OrderCreate) -> Order:
-    """Create a new order with items."""
+    """Create a new order with items and atomically decrement stock."""
     totals = calculate_order_totals(
         db, data.items, data.coupon_code, data.order_type
     )
@@ -104,11 +117,19 @@ def place_order(db: Session, user_id: str, data: OrderCreate) -> Order:
         order_item.customization = item_data["customization"]
         db.add(order_item)
 
-        # Decrement stock
+        # Decrement stock (row is already locked via SELECT FOR UPDATE above)
         product = db.query(Product).filter(Product.id == item_data["product_id"]).first()
         if product:
-            product.stock_count -= item_data["quantity"]
+            product.stock_count = max(0, product.stock_count - item_data["quantity"])
 
     db.commit()
     db.refresh(order)
     return order
+
+
+def restore_stock_for_order(db: Session, order: Order) -> None:
+    """Restore product stock when an order is cancelled."""
+    for item in order.items:
+        product = db.query(Product).filter(Product.id == item.product_id).with_for_update().first()
+        if product:
+            product.stock_count += item.quantity
