@@ -4,20 +4,23 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { Star, Minus, Plus, Heart, ShoppingBag } from "lucide-react";
+import { Star, Minus, Plus, Heart, ShoppingBag, Bell, BellOff } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Button from "@/components/ui/Button";
 import Badge from "@/components/ui/Badge";
 import { useCartStore } from "@/store/cartStore";
+import { useAuthStore } from "@/store/authStore";
 import { formatPrice } from "@/lib/utils";
 import api from "@/lib/api";
+import toast from "react-hot-toast";
 import type { Product, Review } from "@/types";
 
 export default function ProductDetailPage() {
   const params = useParams();
   const router = useRouter();
   const addItem = useCartStore((s) => s.addItem);
+  const { isAuthenticated } = useAuthStore();
 
   const [product, setProduct] = useState<Product | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -28,6 +31,12 @@ export default function ProductDetailPage() {
   const [cakeMessage, setCakeMessage] = useState("");
   const [isEggless, setIsEggless] = useState(false);
   const [activeImage, setActiveImage] = useState(0);
+
+  // Waitlist state
+  const [onWaitlist, setOnWaitlist] = useState(false);
+  const [waitlistLoading, setWaitlistLoading] = useState(false);
+
+  const isOutOfStock = product ? product.stock_count <= 0 || !product.is_available : false;
 
   useEffect(() => {
     async function load() {
@@ -51,6 +60,41 @@ export default function ProductDetailPage() {
     }
     load();
   }, [params.id]);
+
+  // Check if user is already on waitlist for this product
+  useEffect(() => {
+    if (!isAuthenticated || !product || !isOutOfStock) return;
+    api.get("/waitlist")
+      .then((res) => {
+        const items = res.data as Array<{ product_id: string }>;
+        setOnWaitlist(items.some((w) => w.product_id === product.id));
+      })
+      .catch(() => {});
+  }, [isAuthenticated, product, isOutOfStock]);
+
+  const toggleWaitlist = async () => {
+    if (!isAuthenticated) {
+      toast.error("Please login to join the waitlist");
+      return;
+    }
+    if (!product) return;
+    setWaitlistLoading(true);
+    try {
+      if (onWaitlist) {
+        await api.delete(`/waitlist/${product.id}`);
+        setOnWaitlist(false);
+        toast.success("Removed from waitlist");
+      } else {
+        await api.post(`/waitlist/${product.id}`);
+        setOnWaitlist(true);
+        toast.success("You'll be notified when this is back in stock!");
+      }
+    } catch {
+      toast.error("Failed to update waitlist");
+    } finally {
+      setWaitlistLoading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -93,6 +137,7 @@ export default function ProductDetailPage() {
   const totalPrice = (product.price + sizeExtra + flavorExtra) * quantity;
 
   const handleAddToCart = () => {
+    if (isOutOfStock) return;
     addItem(product, quantity, {
       size: selectedSize || undefined,
       flavor: selectedFlavor || undefined,
@@ -102,6 +147,7 @@ export default function ProductDetailPage() {
   };
 
   const handleBuyNow = () => {
+    if (isOutOfStock) return;
     handleAddToCart();
     router.push("/cart");
   };
@@ -121,7 +167,7 @@ export default function ProductDetailPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Image Section */}
           <div>
-            <div className="bg-white rounded-2xl overflow-hidden shadow-sm">
+            <div className="bg-white rounded-2xl overflow-hidden shadow-sm relative">
               <div className="relative aspect-square">
                 {product.images?.[activeImage] ? (
                   <Image
@@ -135,6 +181,14 @@ export default function ProductDetailPage() {
                   <div className="w-full h-full bg-cream flex items-center justify-center text-8xl">🧁</div>
                 )}
               </div>
+              {/* Out of stock overlay */}
+              {isOutOfStock && (
+                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                  <span className="bg-red-600 text-white text-lg font-bold px-6 py-2 rounded-full">
+                    OUT OF STOCK
+                  </span>
+                </div>
+              )}
             </div>
             {product.images.length > 1 && (
               <div className="flex gap-2 mt-3">
@@ -154,10 +208,11 @@ export default function ProductDetailPage() {
           {/* Details Section */}
           <div className="space-y-6">
             <div>
-              <div className="flex items-center gap-2 mb-2">
+              <div className="flex items-center gap-2 mb-2 flex-wrap">
+                {isOutOfStock && <Badge variant="error">Out of Stock</Badge>}
                 {product.is_eggless_available && <Badge variant="success">Eggless Available</Badge>}
                 {product.customizable && <Badge variant="info">Customizable</Badge>}
-                {product.stock_count <= 5 && product.stock_count > 0 && (
+                {!isOutOfStock && product.stock_count <= 5 && product.stock_count > 0 && (
                   <Badge variant="warning">Only {product.stock_count} left!</Badge>
                 )}
               </div>
@@ -172,8 +227,27 @@ export default function ProductDetailPage() {
             <p className="text-2xl font-bold text-primary">{formatPrice(totalPrice)}</p>
             <p className="text-text-secondary leading-relaxed">{product.description}</p>
 
-            {/* Customization */}
-            {(sizes.length > 0 || flavors.length > 0 || product.is_eggless_available) && (
+            {/* Waitlist UI for out-of-stock products */}
+            {isOutOfStock && (
+              <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 space-y-3">
+                <h3 className="font-semibold text-amber-900">This item is currently unavailable</h3>
+                <p className="text-sm text-amber-700">
+                  Get notified when it&apos;s back in stock.
+                </p>
+                <Button
+                  onClick={toggleWaitlist}
+                  disabled={waitlistLoading}
+                  variant={onWaitlist ? "outline" : "primary"}
+                  className="gap-2"
+                >
+                  {onWaitlist ? <BellOff size={16} /> : <Bell size={16} />}
+                  {waitlistLoading ? "Updating…" : onWaitlist ? "Leave Waitlist" : "Notify Me When Available"}
+                </Button>
+              </div>
+            )}
+
+            {/* Customization — only when in stock */}
+            {!isOutOfStock && (sizes.length > 0 || flavors.length > 0 || product.is_eggless_available) && (
               <div className="bg-cream rounded-2xl p-6 space-y-4">
                 <h3 className="font-semibold">Customize Your Order</h3>
 
@@ -249,31 +323,33 @@ export default function ProductDetailPage() {
               </div>
             )}
 
-            {/* Quantity + Actions */}
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 bg-white border border-border rounded-full">
-                <button
-                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="w-10 h-10 flex items-center justify-center hover:bg-cream rounded-full"
-                >
-                  <Minus size={16} />
-                </button>
-                <span className="w-8 text-center font-semibold">{quantity}</span>
-                <button
-                  onClick={() => setQuantity(quantity + 1)}
-                  className="w-10 h-10 flex items-center justify-center hover:bg-cream rounded-full"
-                >
-                  <Plus size={16} />
-                </button>
-              </div>
+            {/* Quantity + Actions — only when in stock */}
+            {!isOutOfStock && (
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 bg-white border border-border rounded-full">
+                  <button
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    className="w-10 h-10 flex items-center justify-center hover:bg-cream rounded-full"
+                  >
+                    <Minus size={16} />
+                  </button>
+                  <span className="w-8 text-center font-semibold">{quantity}</span>
+                  <button
+                    onClick={() => setQuantity(Math.min(product.stock_count, quantity + 1))}
+                    className="w-10 h-10 flex items-center justify-center hover:bg-cream rounded-full"
+                  >
+                    <Plus size={16} />
+                  </button>
+                </div>
 
-              <Button onClick={handleAddToCart} variant="outline" className="flex-1 gap-2">
-                <ShoppingBag size={18} /> Add to Cart
-              </Button>
-              <Button onClick={handleBuyNow} className="flex-1">
-                Buy Now
-              </Button>
-            </div>
+                <Button onClick={handleAddToCart} variant="outline" className="flex-1 gap-2">
+                  <ShoppingBag size={18} /> Add to Cart
+                </Button>
+                <Button onClick={handleBuyNow} className="flex-1">
+                  Buy Now
+                </Button>
+              </div>
+            )}
           </div>
         </div>
 

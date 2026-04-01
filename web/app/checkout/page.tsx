@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -11,8 +11,14 @@ import { useAuthStore } from "@/store/authStore";
 import { formatPrice } from "@/lib/utils";
 import api from "@/lib/api";
 import toast from "react-hot-toast";
-import { MapPin, Loader2 } from "lucide-react";
-import type { Address } from "@/types";
+import { MapPin, Loader2, Truck } from "lucide-react";
+import type { Address, DeliveryEstimate, RazorpayOrderResponse } from "@/types";
+
+declare global {
+  interface Window {
+    Razorpay: new (options: Record<string, unknown>) => { open: () => void };
+  }
+}
 
 const paymentMethods = [
   { id: "cod", label: "Cash on Delivery", icon: "💵" },
@@ -48,8 +54,44 @@ export default function CheckoutPage() {
   const [showNewAddress, setShowNewAddress] = useState(false);
   const [locating, setLocating] = useState(false);
 
-  const deliveryFee = orderType === "delivery" ? 40 : 0;
+  // ── Delivery estimate state ──────────────────────────────────────────────────
+  const [deliveryEstimate, setDeliveryEstimate] = useState<DeliveryEstimate | null>(null);
+  const [estimateLoading, setEstimateLoading] = useState(false);
+
+  const deliveryFee =
+    orderType === "pickup"
+      ? 0
+      : deliveryEstimate
+        ? deliveryEstimate.delivery_fee
+        : 40; // fallback while loading
+  const isDeliverable = orderType === "pickup" || !deliveryEstimate || deliveryEstimate.is_deliverable;
   const total = subtotal() - discount + deliveryFee;
+
+  // Fetch delivery estimate when selected address changes
+  const fetchDeliveryEstimate = useCallback(async (lat: number, lng: number) => {
+    setEstimateLoading(true);
+    try {
+      const res = await api.get<DeliveryEstimate>("/delivery/estimate", { params: { lat, lng } });
+      setDeliveryEstimate(res.data);
+    } catch {
+      setDeliveryEstimate(null);
+    } finally {
+      setEstimateLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (orderType !== "delivery" || !selectedAddress) {
+      setDeliveryEstimate(null);
+      return;
+    }
+    const addr = addresses.find((a) => a.id === selectedAddress);
+    if (addr?.lat && addr?.lng) {
+      fetchDeliveryEstimate(addr.lat, addr.lng);
+    } else {
+      setDeliveryEstimate(null);
+    }
+  }, [selectedAddress, orderType, addresses, fetchDeliveryEstimate]);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -147,7 +189,66 @@ export default function CheckoutPage() {
     );
   };
 
+  // ── Razorpay payment flow ────────────────────────────────────────────────────
+  const launchRazorpay = async (orderId: string) => {
+    try {
+      const res = await api.post<RazorpayOrderResponse>("/payments/create-order", { order_id: orderId });
+      const { razorpay_order_id, amount, currency } = res.data;
+
+      const options: Record<string, unknown> = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_placeholder",
+        amount,
+        currency,
+        name: "OpenBake",
+        description: `Order #${orderId.slice(0, 8)}`,
+        order_id: razorpay_order_id,
+        handler: async (response: { razorpay_order_id: string; razorpay_payment_id: string; razorpay_signature: string }) => {
+          try {
+            await api.post("/payments/verify", {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            });
+            clearCart();
+            toast.success("Payment successful! Order confirmed.");
+            router.push("/orders");
+          } catch {
+            toast.error("Payment verification failed. Please contact support.");
+            router.push("/orders");
+          }
+        },
+        prefill: {
+          name: user?.name || "",
+          email: user?.email || "",
+          contact: user?.phone || "",
+        },
+        theme: { color: "#8B4513" },
+        modal: {
+          ondismiss: () => {
+            toast("Payment cancelled. Your order is saved — you can pay later.", { icon: "ℹ️" });
+            router.push("/orders");
+          },
+        },
+      };
+
+      if (typeof window.Razorpay === "undefined") {
+        toast.error("Razorpay SDK not loaded. Please refresh the page.");
+        return;
+      }
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    } catch {
+      toast.error("Failed to initiate payment. Please retry.");
+    }
+  };
+
   const placeOrder = async () => {
+    if (orderType === "delivery" && !isDeliverable) {
+      toast.error("Selected address is outside our delivery area.");
+      return;
+    }
+
     setPlacing(true);
     try {
       const orderItems = items.map((item) => ({
@@ -166,9 +267,16 @@ export default function CheckoutPage() {
         special_note: specialNote || null,
       });
 
-      clearCart();
-      toast.success("Order placed successfully!");
-      router.push("/orders");
+      const orderId: string = res.data.id;
+
+      // For UPI / card, open Razorpay. For COD, go straight to orders.
+      if (paymentMethod === "upi" || paymentMethod === "card") {
+        await launchRazorpay(orderId);
+      } else {
+        clearCart();
+        toast.success("Order placed successfully!");
+        router.push("/orders");
+      }
     } catch {
       toast.error("Failed to place order");
     } finally {
@@ -248,6 +356,42 @@ export default function CheckoutPage() {
                       ))}
                     </div>
 
+                    {/* Delivery estimate info badge */}
+                    {selectedAddress && (
+                      <div className="mt-4">
+                        {estimateLoading ? (
+                          <div className="flex items-center gap-2 text-sm text-text-secondary bg-cream rounded-xl px-4 py-3">
+                            <Loader2 size={16} className="animate-spin" />
+                            Calculating delivery estimate…
+                          </div>
+                        ) : deliveryEstimate ? (
+                          deliveryEstimate.is_deliverable ? (
+                            <div className="flex items-center gap-3 text-sm bg-green-50 text-green-800 rounded-xl px-4 py-3">
+                              <Truck size={18} />
+                              <div>
+                                <span className="font-semibold">
+                                  {deliveryEstimate.distance_km.toFixed(1)} km away
+                                </span>
+                                {" · "}
+                                ETA ~{deliveryEstimate.estimated_minutes} min
+                                {" · "}
+                                {deliveryEstimate.delivery_fee === 0 ? (
+                                  <span className="text-green-600 font-semibold">Free delivery!</span>
+                                ) : (
+                                  <span>Delivery fee: {formatPrice(deliveryEstimate.delivery_fee)}</span>
+                                )}
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-3 text-sm bg-red-50 text-red-700 rounded-xl px-4 py-3">
+                              <MapPin size={18} />
+                              <span>This address is outside our delivery area ({deliveryEstimate.distance_km.toFixed(1)} km). Please choose a different address or select Pickup.</span>
+                            </div>
+                          )
+                        ) : null}
+                      </div>
+                    )}
+
                     {showNewAddress ? (
                       <div className="mt-4 space-y-3 border border-border rounded-xl p-4">
                         <button
@@ -278,7 +422,9 @@ export default function CheckoutPage() {
                 )}
 
                 <div className="mt-6 flex justify-end">
-                  <Button onClick={() => setStep(2)}>Continue</Button>
+                  <Button onClick={() => setStep(2)} disabled={orderType === "delivery" && !isDeliverable}>
+                    Continue
+                  </Button>
                 </div>
               </div>
             )}
@@ -370,13 +516,20 @@ export default function CheckoutPage() {
                   <p><span className="text-text-secondary">Type:</span> {orderType === "delivery" ? "Delivery" : "Pickup"}</p>
                   <p><span className="text-text-secondary">Time:</span> {selectedSlot}</p>
                   <p><span className="text-text-secondary">Payment:</span> {paymentMethods.find((p) => p.id === paymentMethod)?.label}</p>
+                  {deliveryEstimate && orderType === "delivery" && (
+                    <p><span className="text-text-secondary">ETA:</span> ~{deliveryEstimate.estimated_minutes} min</p>
+                  )}
                   {specialNote && <p><span className="text-text-secondary">Note:</span> {specialNote}</p>}
                 </div>
 
                 <div className="mt-6 flex justify-between">
                   <Button variant="ghost" onClick={() => setStep(3)}>Back</Button>
                   <Button onClick={placeOrder} disabled={placing}>
-                    {placing ? "Placing Order..." : "Place Order"}
+                    {placing
+                      ? "Processing…"
+                      : paymentMethod === "cod"
+                        ? "Place Order"
+                        : "Place Order & Pay"}
                   </Button>
                 </div>
               </div>
@@ -406,7 +559,13 @@ export default function CheckoutPage() {
                 )}
                 <div className="flex justify-between">
                   <span className="text-text-secondary">Delivery</span>
-                  <span>{deliveryFee > 0 ? formatPrice(deliveryFee) : "Free"}</span>
+                  <span>
+                    {estimateLoading
+                      ? "Calculating…"
+                      : deliveryFee > 0
+                        ? formatPrice(deliveryFee)
+                        : "Free"}
+                  </span>
                 </div>
               </div>
               <div className="border-t border-border pt-2 mt-2 flex justify-between font-bold text-lg">

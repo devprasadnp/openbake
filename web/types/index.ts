@@ -91,6 +91,9 @@ export interface Order {
   coupon_code?: string;
   payment_method?: string;
   payment_status: "pending" | "paid" | "failed";
+  razorpay_order_id?: string;
+  razorpay_payment_id?: string;
+  estimated_delivery_minutes?: number;
   scheduled_date?: string;
   time_slot?: string;
   special_note?: string;
@@ -132,4 +135,43 @@ export interface WishlistItem {
   id: string;
   product_id: string;
   product: Product;
+}
+
+// ── Delivery ───────────────────────────────────────────────────────────────────
+export interface DeliveryEstimate {
+  distance_km: number;
+  delivery_fee: number;
+  estimated_minutes: number;
+  is_deliverable: boolean;
+}
+
+// ── Razorpay / Payments ────────────────────────────────────────────────────────
+export interface RazorpayOrderResponse {
+  razorpay_order_id: string;
+  amount: number;
+  currency: string;
+  order_id: string;
+}
+
+export interface PaymentVerifyResponse {
+  status: string;
+  message: string;
+  order_id: string;
+}
+
+// ── Stock Waitlist ─────────────────────────────────────────────────────────────
+export interface StockWaitlistItem {
+  id: string;
+  product_id: string;
+  variant_id?: string;
+  status: "waiting" | "notified" | "purchased";
+  created_at: string;
+}
+
+// ── SSE Order Tracking ─────────────────────────────────────────────────────────
+export interface OrderStatusEvent {
+  order_id: string;
+  status: OrderStatus;
+  estimated_minutes?: number;
+  updated_at: string;
 }

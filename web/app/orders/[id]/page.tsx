@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/layout/Navbar";
@@ -11,7 +11,10 @@ import { useAuthStore } from "@/store/authStore";
 import { formatPrice, formatDate } from "@/lib/utils";
 import api from "@/lib/api";
 import toast from "react-hot-toast";
-import type { Order, OrderStatus } from "@/types";
+import type { Order, OrderStatus, OrderStatusEvent } from "@/types";
+
+const BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
 
 const ALL_STATUSES: OrderStatus[] = ["placed", "accepted", "preparing", "dispatched", "delivered"];
 
@@ -33,15 +36,21 @@ export default function OrderTrackingPage() {
   const [refreshing, setRefreshing] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
-  const isTerminal = order?.status === "delivered" || order?.status === "cancelled";
+  // SSE live tracking state
+  const [sseConnected, setSseConnected] = useState(false);
+  const [liveStatus, setLiveStatus] = useState<OrderStatus | null>(null);
+  const [liveEta, setLiveEta] = useState<number | null>(null);
+  const eventSourceRef = useRef<EventSource | null>(null);
+
+  const currentStatus: OrderStatus = liveStatus ?? order?.status ?? "placed";
+  const isTerminal = currentStatus === "delivered" || currentStatus === "cancelled";
 
   const fetchOrder = useCallback(async (silent = false) => {
     if (!silent) setRefreshing(true);
     try {
       const res = await api.get<Order>(`/orders/${params.id}`);
       setOrder((prev) => {
-        // Show toast if status changed during a background poll
-        if (prev && prev.status !== res.data.status) {
+        if (prev && prev.status !== res.data.status && !liveStatus) {
           toast.success(`Order status updated to: ${res.data.status}`);
         }
         return res.data;
@@ -52,14 +61,13 @@ export default function OrderTrackingPage() {
     } finally {
       if (!silent) setRefreshing(false);
     }
-  }, [params.id]);
+  }, [params.id, liveStatus]);
 
   useEffect(() => {
     if (!isAuthenticated) {
       router.push("/login");
       return;
     }
-    // Initial load
     api.get<Order>(`/orders/${params.id}`)
       .then((res) => {
         setOrder(res.data);
@@ -69,19 +77,64 @@ export default function OrderTrackingPage() {
       .finally(() => setLoading(false));
   }, [isAuthenticated, params.id, router]);
 
-  // Poll every 30 seconds until the order reaches a terminal state
+  // ── SSE real-time tracking ───────────────────────────────────────────────────
   useEffect(() => {
-    if (loading || isTerminal) return;
-    const timer = setInterval(() => {
-      fetchOrder(true);
-    }, 30_000);
+    if (loading || isTerminal || !order) return;
+
+    const token = localStorage.getItem("access_token");
+    const url = `${BASE_URL}/orders/${params.id}/stream${token ? `?token=${encodeURIComponent(token)}` : ""}`;
+
+    const es = new EventSource(url);
+    eventSourceRef.current = es;
+
+    es.onopen = () => setSseConnected(true);
+
+    es.onmessage = (event) => {
+      try {
+        const data: OrderStatusEvent = JSON.parse(event.data);
+        setLiveStatus(data.status);
+        if (data.estimated_minutes != null) setLiveEta(data.estimated_minutes);
+        setLastUpdated(new Date());
+
+        // Show toast on status change
+        if (order && data.status !== order.status) {
+          toast.success(`Order status: ${data.status}`);
+        }
+
+        // Terminal — close stream
+        if (data.status === "delivered" || data.status === "cancelled") {
+          es.close();
+          setSseConnected(false);
+          fetchOrder(true); // refresh full order
+        }
+      } catch {
+        // ignore malformed events
+      }
+    };
+
+    es.onerror = () => {
+      setSseConnected(false);
+      // EventSource auto-reconnects; no manual action needed
+    };
+
+    return () => {
+      es.close();
+      setSseConnected(false);
+    };
+  }, [loading, isTerminal, order?.id]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Fallback poll every 60s in case SSE drops
+  useEffect(() => {
+    if (loading || isTerminal || sseConnected) return;
+    const timer = setInterval(() => fetchOrder(true), 60_000);
     return () => clearInterval(timer);
-  }, [loading, isTerminal, fetchOrder]);
+  }, [loading, isTerminal, sseConnected, fetchOrder]);
 
   const cancelOrder = async () => {
     try {
       const res = await api.patch<Order>(`/orders/${params.id}/cancel`);
       setOrder(res.data);
+      setLiveStatus(null);
       setLastUpdated(new Date());
       toast.success("Order cancelled");
     } catch {
@@ -119,7 +172,8 @@ export default function OrderTrackingPage() {
     );
   }
 
-  const currentIndex = order.status === "cancelled" ? -1 : ALL_STATUSES.indexOf(order.status);
+  const currentIndex = currentStatus === "cancelled" ? -1 : ALL_STATUSES.indexOf(currentStatus);
+  const eta = liveEta ?? order.estimated_delivery_minutes;
 
   return (
     <>
@@ -127,46 +181,57 @@ export default function OrderTrackingPage() {
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-start justify-between mb-2">
           <h1 className="font-playfair text-2xl font-bold">Order Tracking</h1>
-          <button
-            onClick={() => fetchOrder(false)}
-            disabled={refreshing}
-            className="flex items-center gap-1.5 text-sm text-primary hover:underline disabled:opacity-50"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="15"
-              height="15"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className={refreshing ? "animate-spin" : ""}
+          <div className="flex items-center gap-3">
+            {sseConnected && (
+              <span className="flex items-center gap-1.5 text-xs text-green-600 font-medium">
+                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                Live
+              </span>
+            )}
+            <button
+              onClick={() => fetchOrder(false)}
+              disabled={refreshing}
+              className="flex items-center gap-1.5 text-sm text-primary hover:underline disabled:opacity-50"
             >
-              <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
-              <path d="M21 3v5h-5" />
-            </svg>
-            {refreshing ? "Refreshing…" : "Refresh"}
-          </button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className={refreshing ? "animate-spin" : ""}
+              >
+                <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
+                <path d="M21 3v5h-5" />
+              </svg>
+              {refreshing ? "Refreshing…" : "Refresh"}
+            </button>
+          </div>
         </div>
         <p className="text-text-secondary mb-1">Order #{order.id.slice(0, 8)} &middot; {formatDate(order.created_at)}</p>
         {lastUpdated && !isTerminal && (
           <p className="text-xs text-text-secondary mb-6">
-            Auto-refreshes every 30 s &mdash; last updated {lastUpdated.toLocaleTimeString()}
+            {sseConnected ? "Live tracking active" : "Polling every 60 s"} &mdash; last updated {lastUpdated.toLocaleTimeString()}
           </p>
         )}
         {isTerminal && <div className="mb-6" />}
 
         <div className="bg-white rounded-2xl p-6 shadow-sm mb-6">
-          <div className="flex items-center gap-2 mb-6">
+          <div className="flex items-center gap-2 mb-6 flex-wrap">
             <span className="font-semibold">Status:</span>
-            <Badge variant={statusVariant[order.status]}>
-              {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+            <Badge variant={statusVariant[currentStatus]}>
+              {currentStatus.charAt(0).toUpperCase() + currentStatus.slice(1)}
             </Badge>
+            {eta != null && !isTerminal && (
+              <span className="text-sm text-text-secondary ml-2">ETA ~{eta} min</span>
+            )}
           </div>
 
-          {order.status !== "cancelled" ? (
+          {currentStatus !== "cancelled" ? (
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-0">
               {ALL_STATUSES.map((status, i) => (
                 <div key={status} className="flex items-center gap-2 sm:flex-1">
@@ -197,7 +262,7 @@ export default function OrderTrackingPage() {
               {order.items.map((item) => (
                 <div key={item.id} className="flex items-center justify-between py-2 border-b border-border last:border-0">
                   <div>
-                    <p className="font-medium">Product</p>
+                    <p className="font-medium">{item.product_name || "Product"}</p>
                     <p className="text-sm text-text-secondary">Qty: {item.quantity} &times; {formatPrice(item.unit_price)}</p>
                   </div>
                   <p className="font-semibold">{formatPrice(item.unit_price * item.quantity)}</p>
@@ -236,7 +301,7 @@ export default function OrderTrackingPage() {
               {order.special_note && <p><span className="text-text-secondary">Note:</span> {order.special_note}</p>}
             </div>
 
-            {order.status === "placed" && (
+            {currentStatus === "placed" && (
               <Button variant="danger" className="w-full mt-4" onClick={cancelOrder}>
                 Cancel Order
               </Button>

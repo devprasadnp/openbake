@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Playfair_Display, Nunito } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import AuthInitializer from "@/components/AuthInitializer";
@@ -33,6 +34,10 @@ export default function RootLayout({
       className={`${playfair.variable} ${nunito.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-nunito bg-cream text-primary">
+        <Script
+          src="https://checkout.razorpay.com/v1/checkout.js"
+          strategy="lazyOnload"
+        />
         <AuthInitializer>
           <Toaster position="top-right" />
           {children}
