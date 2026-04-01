@@ -41,10 +41,12 @@ const nextConfig: NextConfig = {
   },
 
   async headers() {
+    // Don't register the route at all in dev (empty headers array is invalid in Next.js)
+    if (isDev) return [];
     return [
       {
         source: "/(.*)",
-        headers: isDev ? [] : securityHeaders,
+        headers: securityHeaders,
       },
     ];
   },
