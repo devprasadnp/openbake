@@ -141,22 +141,24 @@ export interface WishlistItem {
 export interface DeliveryEstimate {
   distance_km: number;
   delivery_fee: number;
-  estimated_minutes: number;
+  estimated_time_minutes: number;
+  is_free_delivery: boolean;
   is_deliverable: boolean;
 }
 
 // ── Razorpay / Payments ────────────────────────────────────────────────────────
 export interface RazorpayOrderResponse {
   razorpay_order_id: string;
+  razorpay_key_id: string;
   amount: number;
   currency: string;
   order_id: string;
 }
 
 export interface PaymentVerifyResponse {
-  status: string;
-  message: string;
   order_id: string;
+  payment_status: string;
+  message: string;
 }
 
 // ── Stock Waitlist ─────────────────────────────────────────────────────────────
@@ -172,6 +174,6 @@ export interface StockWaitlistItem {
 export interface OrderStatusEvent {
   order_id: string;
   status: OrderStatus;
-  estimated_minutes?: number;
-  updated_at: string;
+  payment_status?: string;
+  estimated_delivery_minutes?: number;
 }

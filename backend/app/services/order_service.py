@@ -21,6 +21,7 @@ def calculate_order_totals(
     coupon_code: str = None,
     order_type: str = "delivery",
     address_id: str = None,
+    user_id: str = None,
 ) -> dict:
     """Calculate subtotal, discount, delivery fee, and total for an order.
 
@@ -80,7 +81,12 @@ def calculate_order_totals(
     if order_type == "delivery":
         address = None
         if address_id:
-            address = db.query(Address).filter(Address.id == address_id).first()
+            addr_query = db.query(Address).filter(Address.id == address_id)
+            if user_id:
+                addr_query = addr_query.filter(Address.user_id == user_id)
+            address = addr_query.first()
+            if not address:
+                raise ValueError("Address not found or does not belong to you.")
 
         if address and address.lat and address.lng:
             delivery_info = calculate_delivery_fee(db, address.lat, address.lng)
@@ -107,7 +113,7 @@ def calculate_order_totals(
 def place_order(db: Session, user_id: str, data: OrderCreate) -> Order:
     """Create a new order with items and atomically decrement stock."""
     totals = calculate_order_totals(
-        db, data.items, data.coupon_code, data.order_type, data.address_id
+        db, data.items, data.coupon_code, data.order_type, data.address_id, user_id
     )
 
     order = Order(

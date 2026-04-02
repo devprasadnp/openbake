@@ -65,6 +65,17 @@ data class AddressRequest(
     val lng: Double? = null
 )
 
+// ── Paginated Response ──
+data class PaginatedProductResponse(
+    val items: List<Product>,
+    val total: Int,
+    val page: Int,
+    @SerializedName("page_size") val pageSize: Int,
+    val pages: Int,
+    @SerializedName("has_next") val hasNext: Boolean,
+    @SerializedName("has_prev") val hasPrev: Boolean
+)
+
 // ── Product ──
 data class Category(
     val id: String,
@@ -117,6 +128,8 @@ data class OrderItemRequest(
 data class Order(
     val id: String,
     @SerializedName("user_id") val userId: String,
+    @SerializedName("address_id") val addressId: String? = null,
+    val address: Address? = null,
     @SerializedName("order_type") val orderType: String,
     val status: String,
     val items: List<OrderItem> = emptyList(),
@@ -189,10 +202,9 @@ data class WishlistItem(
 data class DeliveryEstimate(
     @SerializedName("distance_km") val distanceKm: Double,
     @SerializedName("delivery_fee") val deliveryFee: Double,
-    @SerializedName("estimated_minutes") val estimatedMinutes: Int,
-    @SerializedName("is_deliverable") val isDeliverable: Boolean,
-    @SerializedName("free_delivery_radius_km") val freeDeliveryRadiusKm: Double? = null,
-    @SerializedName("max_delivery_radius_km") val maxDeliveryRadiusKm: Double? = null
+    @SerializedName("estimated_time_minutes") val estimatedTimeMinutes: Int,
+    @SerializedName("is_free_delivery") val isFreeDelivery: Boolean = false,
+    @SerializedName("is_deliverable") val isDeliverable: Boolean
 )
 
 // ── Payment ──
@@ -202,6 +214,7 @@ data class CreatePaymentOrderRequest(
 
 data class RazorpayOrderResponse(
     @SerializedName("razorpay_order_id") val razorpayOrderId: String,
+    @SerializedName("razorpay_key_id") val razorpayKeyId: String,
     @SerializedName("amount") val amount: Int,
     @SerializedName("currency") val currency: String,
     @SerializedName("order_id") val orderId: String
@@ -215,7 +228,8 @@ data class VerifyPaymentRequest(
 )
 
 data class PaymentVerifyResponse(
-    val status: String,
+    @SerializedName("order_id") val orderId: String,
+    @SerializedName("payment_status") val paymentStatus: String,
     val message: String? = null
 )
 

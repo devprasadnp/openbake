@@ -30,7 +30,7 @@ class ProductRepository {
         return try {
             val response = api.getProducts(categoryId, search, isEggless, sortBy, page, pageSize)
             if (response.isSuccessful) {
-                Result.success(response.body() ?: emptyList())
+                Result.success(response.body()?.items ?: emptyList())
             } else {
                 Result.failure(Exception("Failed to fetch products: ${response.code()}"))
             }

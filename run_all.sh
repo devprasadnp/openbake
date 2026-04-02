@@ -88,12 +88,20 @@ fi
 sep
 log "Starting FastAPI backend on port $BACKEND_PORT…"
 
-VENV_PYTHON="$BACKEND_DIR/venv/bin/python"
-VENV_UVICORN="$BACKEND_DIR/venv/bin/uvicorn"
+# Prefer root .venv, fall back to backend/venv
+if [[ -f "$SCRIPT_DIR/.venv/bin/python" ]]; then
+  VENV_PYTHON="$SCRIPT_DIR/.venv/bin/python"
+  VENV_UVICORN="$SCRIPT_DIR/.venv/bin/uvicorn"
+else
+  VENV_PYTHON="$BACKEND_DIR/venv/bin/python"
+  VENV_UVICORN="$BACKEND_DIR/venv/bin/uvicorn"
+fi
 
 if [[ ! -f "$VENV_PYTHON" ]]; then
-  warn "venv not found at $BACKEND_DIR/venv. Creating…"
-  python3 -m venv "$BACKEND_DIR/venv"
+  warn "venv not found. Creating at $SCRIPT_DIR/.venv…"
+  python3 -m venv "$SCRIPT_DIR/.venv"
+  VENV_PYTHON="$SCRIPT_DIR/.venv/bin/python"
+  VENV_UVICORN="$SCRIPT_DIR/.venv/bin/uvicorn"
   "$VENV_PYTHON" -m pip install -q -r "$BACKEND_DIR/requirements.txt"
   ok "venv created and packages installed."
 fi
@@ -152,7 +160,7 @@ if $NGROK_AVAILABLE; then
   # Poll ngrok API for the public URL (up to 15 s)
   for i in {1..15}; do
     NGROK_URL=$(
-      curl -s "$NGROK_API" 2>/dev/null |
+      curl -sf "$NGROK_API" 2>/dev/null |
       python3 -c "
 import sys, json
 try:
@@ -162,8 +170,8 @@ try:
     print(https[0] if https else '', end='')
 except Exception:
     print('', end='')
-"
-    )
+" 2>/dev/null
+    ) || NGROK_URL=""
     [[ -n "$NGROK_URL" ]] && break
     sleep 1
   done
@@ -267,9 +275,12 @@ if $BUILD_ANDROID; then
     exit 1
   fi
 
-  # Check if any emulator / device is connected
+  # Determine Gradle targets based on whether a device is connected
+  GRADLE_TARGETS="assembleDebug"
+  DEVICE_CONNECTED=false
+
   if ! command -v adb &>/dev/null; then
-    warn "adb not found — skipping install. Install Android SDK platform-tools and add to PATH."
+    warn "adb not found — APK will be built but not installed. Install Android SDK platform-tools and add to PATH."
   else
     DEVICE_COUNT=$(adb devices 2>/dev/null | tail -n +2 | grep -c "device$" || true)
     if [[ "$DEVICE_COUNT" -lt 1 ]]; then
@@ -286,34 +297,50 @@ if $BUILD_ANDROID; then
           log "Waiting for Android emulator to boot (up to 120 s)…"
           adb wait-for-device
           # Wait for boot animation to finish
+          BOOT=""
           for i in {1..60}; do
-            BOOT=$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')
+            BOOT=$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r') || BOOT=""
             [[ "$BOOT" == "1" ]] && break
             sleep 2
           done
-          [[ "$BOOT" == "1" ]] && ok "Emulator booted." || warn "Emulator may not be fully booted."
+          if [[ "$BOOT" == "1" ]]; then
+            ok "Emulator booted."
+            GRADLE_TARGETS="assembleDebug installDebug"
+            DEVICE_CONNECTED=true
+          else
+            warn "Emulator may not be fully booted. Installing APK will be skipped."
+          fi
         else
           warn "No AVDs found. Create one in Android Studio and re-run with --android."
         fi
       else
         warn "'emulator' command not in PATH. Start an emulator/device manually and re-run."
       fi
+    else
+      GRADLE_TARGETS="assembleDebug installDebug"
+      DEVICE_CONNECTED=true
     fi
   fi
 
-  log "Running: ./gradlew assembleDebug installDebug"
+  log "Running: ./gradlew $GRADLE_TARGETS"
+  GRADLE_RC=0
   (
     cd "$ANDROID_DIR"
-    ./gradlew assembleDebug installDebug 2>&1 | tee /tmp/openbake_gradle.log
-  )
+    # shellcheck disable=SC2086
+    ./gradlew $GRADLE_TARGETS 2>&1 | tee /tmp/openbake_gradle.log
+  ) || GRADLE_RC=$?
 
-  if [[ $? -eq 0 ]]; then
-    ok "Android APK built and installed."
-    # Launch the app
-    adb shell am start -n "com.saibabui.openbake/.MainActivity" 2>/dev/null || true
-    ok "OpenBake launched on device."
+  if [[ $GRADLE_RC -eq 0 ]]; then
+    ok "Android APK built${DEVICE_CONNECTED:+ and installed} successfully."
+    if $DEVICE_CONNECTED; then
+      adb shell am start -n "com.saibabui.openbake/.MainActivity" 2>/dev/null || true
+      ok "OpenBake launched on device."
+    else
+      APK_PATH=$(find "$ANDROID_DIR/app/build/outputs/apk/debug" -name "*.apk" 2>/dev/null | head -n 1 || true)
+      [[ -n "$APK_PATH" ]] && ok "APK ready at: $APK_PATH"
+    fi
   else
-    err "Gradle build failed. See /tmp/openbake_gradle.log"
+    err "Gradle build failed (exit $GRADLE_RC). See /tmp/openbake_gradle.log"
   fi
 fi
 

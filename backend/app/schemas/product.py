@@ -82,6 +82,16 @@ class ProductUpdate(BaseModel):
     stock_count: Optional[int] = None
 
 
+class PaginatedProductResponse(BaseModel):
+    items: List[ProductResponse]
+    total: int
+    page: int
+    page_size: int
+    pages: int
+    has_next: bool
+    has_prev: bool
+
+
 class ProductListParams(BaseModel):
     category_id: Optional[str] = None
     search: Optional[str] = None

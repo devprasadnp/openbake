@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.product import Category, Product
 from app.models.review import Review
-from app.schemas.product import CategoryResponse, ProductResponse
+from app.schemas.product import CategoryResponse, ProductResponse, PaginatedProductResponse
 from app.schemas.order import ReviewResponse
 
 router = APIRouter()
@@ -18,7 +18,7 @@ def list_categories(db: Session = Depends(get_db)):
     return db.query(Category).filter(Category.is_active == True).all()
 
 
-@router.get("/products")
+@router.get("/products", response_model=PaginatedProductResponse)
 def list_products(
     category_id: Optional[str] = Query(None),
     search: Optional[str] = Query(None),

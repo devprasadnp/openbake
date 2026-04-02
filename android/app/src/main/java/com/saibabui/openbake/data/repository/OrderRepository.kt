@@ -12,7 +12,12 @@ class OrderRepository {
             if (response.isSuccessful) {
                 Result.success(response.body()!!)
             } else {
-                val detail = response.errorBody()?.string() ?: "Failed: ${response.code()}"
+                val rawError = response.errorBody()?.string() ?: "Failed: ${response.code()}"
+                val detail = try {
+                    org.json.JSONObject(rawError).optString("detail", rawError)
+                } catch (_: Exception) {
+                    rawError
+                }
                 Result.failure(Exception(detail))
             }
         } catch (e: Exception) {

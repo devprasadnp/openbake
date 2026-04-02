@@ -31,7 +31,7 @@ interface ApiService {
         @Query("sort_by") sortBy: String? = null,
         @Query("page") page: Int = 1,
         @Query("page_size") pageSize: Int = 20
-    ): Response<List<Product>>
+    ): Response<PaginatedProductResponse>
 
     @GET("products/{id}")
     suspend fun getProductById(@Path("id") id: String): Response<Product>

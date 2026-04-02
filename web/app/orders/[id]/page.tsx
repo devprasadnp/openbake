@@ -93,7 +93,7 @@ export default function OrderTrackingPage() {
       try {
         const data: OrderStatusEvent = JSON.parse(event.data);
         setLiveStatus(data.status);
-        if (data.estimated_minutes != null) setLiveEta(data.estimated_minutes);
+        if (data.estimated_delivery_minutes != null) setLiveEta(data.estimated_delivery_minutes);
         setLastUpdated(new Date());
 
         // Show toast on status change

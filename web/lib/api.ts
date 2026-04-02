@@ -22,6 +22,9 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// Shared refresh promise to prevent concurrent refresh token rotation races
+let refreshPromise: Promise<{ access_token: string; refresh_token: string }> | null = null;
+
 // Auto-refresh on 401
 api.interceptors.response.use(
   (res) => res,
@@ -38,13 +41,20 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const refreshToken = localStorage.getItem("refresh_token");
-        if (!refreshToken) throw new Error("No refresh token");
+        // If a refresh is already in-flight, reuse the same promise
+        if (!refreshPromise) {
+          const refreshToken = localStorage.getItem("refresh_token");
+          if (!refreshToken) throw new Error("No refresh token");
 
-        const res = await axios.post(`${BASE_URL}/auth/refresh`, {
-          refresh_token: refreshToken,
-        });
-        const { access_token, refresh_token } = res.data;
+          refreshPromise = axios
+            .post(`${BASE_URL}/auth/refresh`, { refresh_token: refreshToken })
+            .then((res) => res.data)
+            .finally(() => {
+              refreshPromise = null;
+            });
+        }
+
+        const { access_token, refresh_token } = await refreshPromise;
         localStorage.setItem("access_token", access_token);
         localStorage.setItem("refresh_token", refresh_token);
 

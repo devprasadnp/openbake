@@ -193,10 +193,10 @@ export default function CheckoutPage() {
   const launchRazorpay = async (orderId: string) => {
     try {
       const res = await api.post<RazorpayOrderResponse>("/payments/create-order", { order_id: orderId });
-      const { razorpay_order_id, amount, currency } = res.data;
+      const { razorpay_order_id, razorpay_key_id, amount, currency } = res.data;
 
       const options: Record<string, unknown> = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_placeholder",
+        key: razorpay_key_id || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_placeholder",
         amount,
         currency,
         name: "OpenBake",
@@ -373,7 +373,7 @@ export default function CheckoutPage() {
                                   {deliveryEstimate.distance_km.toFixed(1)} km away
                                 </span>
                                 {" · "}
-                                ETA ~{deliveryEstimate.estimated_minutes} min
+                                ETA ~{deliveryEstimate.estimated_time_minutes} min
                                 {" · "}
                                 {deliveryEstimate.delivery_fee === 0 ? (
                                   <span className="text-green-600 font-semibold">Free delivery!</span>
@@ -471,21 +471,90 @@ export default function CheckoutPage() {
                 <h2 className="font-semibold text-lg mb-4">Payment Method</h2>
                 <div className="space-y-3">
                   {paymentMethods.map((pm) => (
-                    <label
-                      key={pm.id}
-                      className={`flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                        paymentMethod === pm.id ? "border-primary bg-primary/5" : "border-border"
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        name="payment"
-                        checked={paymentMethod === pm.id}
-                        onChange={() => setPaymentMethod(pm.id)}
-                      />
-                      <span className="text-xl">{pm.icon}</span>
-                      <span className="font-medium">{pm.label}</span>
-                    </label>
+                    <div key={pm.id}>
+                      <label
+                        className={`flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${
+                          paymentMethod === pm.id ? "border-primary bg-primary/5" : "border-border"
+                        }`}
+                      >
+                        <input
+                          type="radio"
+                          name="payment"
+                          checked={paymentMethod === pm.id}
+                          onChange={() => setPaymentMethod(pm.id)}
+                        />
+                        <span className="text-xl">{pm.icon}</span>
+                        <div className="flex-1">
+                          <span className="font-medium">{pm.label}</span>
+                          {pm.id === "cod" && (
+                            <p className="text-xs text-text-secondary mt-0.5">Pay when your order is delivered</p>
+                          )}
+                          {pm.id === "upi" && (
+                            <p className="text-xs text-text-secondary mt-0.5">Google Pay, PhonePe, Paytm & more</p>
+                          )}
+                          {pm.id === "card" && (
+                            <p className="text-xs text-text-secondary mt-0.5">Visa, Mastercard, RuPay — secured by Razorpay</p>
+                          )}
+                        </div>
+                      </label>
+
+                      {/* UPI details — expanded when selected */}
+                      {pm.id === "upi" && paymentMethod === "upi" && (
+                        <div className="mt-2 ml-11 p-4 bg-blue-50/50 rounded-xl border border-blue-100 space-y-3">
+                          <p className="text-sm font-medium text-text-primary">How UPI payment works:</p>
+                          <div className="flex items-start gap-3 text-sm text-text-secondary">
+                            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">1</span>
+                            <p>Click &quot;Place Order &amp; Pay&quot; on the next step</p>
+                          </div>
+                          <div className="flex items-start gap-3 text-sm text-text-secondary">
+                            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">2</span>
+                            <p>Razorpay checkout opens — choose your UPI app or enter your UPI ID (e.g. name@upi, name@ybl)</p>
+                          </div>
+                          <div className="flex items-start gap-3 text-sm text-text-secondary">
+                            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">3</span>
+                            <p>Approve the payment in your UPI app — your order is confirmed instantly!</p>
+                          </div>
+                          <div className="flex items-center gap-2 mt-1">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/UPI-Logo-vector.svg/120px-UPI-Logo-vector.svg.png" alt="UPI" className="h-5" />
+                            <span className="text-xs text-text-secondary">Secure UPI payment via Razorpay</span>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Card details — expanded when selected */}
+                      {pm.id === "card" && paymentMethod === "card" && (
+                        <div className="mt-2 ml-11 p-4 bg-purple-50/30 rounded-xl border border-purple-100 space-y-3">
+                          <p className="text-sm font-medium text-text-primary">How card payment works:</p>
+                          <div className="flex items-start gap-3 text-sm text-text-secondary">
+                            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">1</span>
+                            <p>Click &quot;Place Order &amp; Pay&quot; on the next step</p>
+                          </div>
+                          <div className="flex items-start gap-3 text-sm text-text-secondary">
+                            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">2</span>
+                            <p>Enter your card details (number, expiry, CVV) securely in the Razorpay window</p>
+                          </div>
+                          <div className="flex items-start gap-3 text-sm text-text-secondary">
+                            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">3</span>
+                            <p>Complete 3D Secure / OTP verification — your order is confirmed!</p>
+                          </div>
+                          <div className="flex items-center gap-3 mt-1">
+                            <div className="flex gap-1">
+                              <span className="px-2 py-0.5 bg-white rounded text-[10px] font-bold border text-blue-700">VISA</span>
+                              <span className="px-2 py-0.5 bg-white rounded text-[10px] font-bold border text-red-600">MC</span>
+                              <span className="px-2 py-0.5 bg-white rounded text-[10px] font-bold border text-green-700">RuPay</span>
+                            </div>
+                            <span className="text-xs text-text-secondary">PCI-DSS compliant via Razorpay</span>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* COD details — expanded when selected */}
+                      {pm.id === "cod" && paymentMethod === "cod" && (
+                        <div className="mt-2 ml-11 p-4 bg-green-50/50 rounded-xl border border-green-100">
+                          <p className="text-sm text-text-secondary">Pay with cash or UPI QR when your order arrives. No advance payment needed.</p>
+                        </div>
+                      )}
+                    </div>
                   ))}
                 </div>
 
@@ -517,7 +586,7 @@ export default function CheckoutPage() {
                   <p><span className="text-text-secondary">Time:</span> {selectedSlot}</p>
                   <p><span className="text-text-secondary">Payment:</span> {paymentMethods.find((p) => p.id === paymentMethod)?.label}</p>
                   {deliveryEstimate && orderType === "delivery" && (
-                    <p><span className="text-text-secondary">ETA:</span> ~{deliveryEstimate.estimated_minutes} min</p>
+                    <p><span className="text-text-secondary">ETA:</span> ~{deliveryEstimate.estimated_time_minutes} min</p>
                   )}
                   {specialNote && <p><span className="text-text-secondary">Note:</span> {specialNote}</p>}
                 </div>

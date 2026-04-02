@@ -21,6 +21,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -336,7 +337,7 @@ fun CheckoutScreen(
                         Column(modifier = Modifier.padding(12.dp)) {
                             if (est.isDeliverable) {
                                 Text(
-                                    "📍 ${String.format("%.1f", est.distanceKm)} km away • ETA ~${est.estimatedMinutes} min",
+                                    "📍 ${String.format("%.1f", est.distanceKm)} km away • ETA ~${est.estimatedTimeMinutes} min",
                                     style = MaterialTheme.typography.bodyMedium.copy(
                                         fontFamily = Nunito,
                                         fontWeight = FontWeight.SemiBold
@@ -664,37 +665,115 @@ fun CheckoutScreen(
                 Triple("card", "💳", "Card Payment")
             ).forEach { (value, emoji, label) ->
                 val isSelected = paymentMethod == value
-                Surface(
-                    shape = RoundedCornerShape(16.dp),
-                    color = if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
-                    else MaterialTheme.colorScheme.surfaceContainerLowest,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 8.dp)
-                        .clickable { paymentMethod = value },
-                    border = if (isSelected) ButtonDefaults.outlinedButtonBorder(enabled = true) else null
-                ) {
-                    Row(
-                        modifier = Modifier.padding(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                val subtitle = when (value) {
+                    "cod" -> "Pay when your order is delivered"
+                    "upi" -> "Google Pay, PhonePe, Paytm & more"
+                    "card" -> "Visa, Mastercard, RuPay — secured by Razorpay"
+                    else -> ""
+                }
+                Column(modifier = Modifier.padding(bottom = 8.dp)) {
+                    Surface(
+                        shape = RoundedCornerShape(16.dp),
+                        color = if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
+                        else MaterialTheme.colorScheme.surfaceContainerLowest,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { paymentMethod = value },
+                        border = if (isSelected) ButtonDefaults.outlinedButtonBorder(enabled = true) else null
                     ) {
-                        Text(emoji, fontSize = 24.sp)
-                        Spacer(modifier = Modifier.width(16.dp))
-                        Text(
-                            label,
-                            style = MaterialTheme.typography.bodyLarge.copy(
-                                fontFamily = Nunito,
-                                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
-                            ),
-                            modifier = Modifier.weight(1f)
-                        )
-                        if (isSelected) {
-                            Icon(
-                                Icons.Filled.Check,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.size(20.dp)
-                            )
+                        Row(
+                            modifier = Modifier.padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(emoji, fontSize = 24.sp)
+                            Spacer(modifier = Modifier.width(16.dp))
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    label,
+                                    style = MaterialTheme.typography.bodyLarge.copy(
+                                        fontFamily = Nunito,
+                                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
+                                    )
+                                )
+                                Text(
+                                    subtitle,
+                                    style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito),
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            if (isSelected) {
+                                Icon(
+                                    Icons.Filled.Check,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                            }
+                        }
+                    }
+
+                    // Expanded details when selected
+                    if (isSelected) {
+                        Surface(
+                            shape = RoundedCornerShape(12.dp),
+                            color = when (value) {
+                                "upi" -> Color(0xFFF0F7FF)
+                                "card" -> Color(0xFFF5F0FF)
+                                else -> Color(0xFFF0FFF4)
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 40.dp, top = 4.dp)
+                        ) {
+                            Column(modifier = Modifier.padding(14.dp)) {
+                                when (value) {
+                                    "cod" -> {
+                                        Text(
+                                            "Pay with cash or UPI QR when your order arrives. No advance payment needed.",
+                                            style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito),
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
+                                    "upi" -> {
+                                        Text(
+                                            "How UPI payment works:",
+                                            style = MaterialTheme.typography.labelMedium.copy(
+                                                fontFamily = Nunito,
+                                                fontWeight = FontWeight.SemiBold
+                                            )
+                                        )
+                                        Spacer(modifier = Modifier.height(8.dp))
+                                        PaymentStep("1", "Click \"Place Order\" below")
+                                        PaymentStep("2", "Razorpay opens — choose your UPI app or enter your UPI ID (e.g. name@upi)")
+                                        PaymentStep("3", "Approve in your UPI app — order confirmed instantly!")
+                                        Spacer(modifier = Modifier.height(4.dp))
+                                        Text(
+                                            "🔒 Secure UPI payment via Razorpay",
+                                            style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito),
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
+                                    "card" -> {
+                                        Text(
+                                            "How card payment works:",
+                                            style = MaterialTheme.typography.labelMedium.copy(
+                                                fontFamily = Nunito,
+                                                fontWeight = FontWeight.SemiBold
+                                            )
+                                        )
+                                        Spacer(modifier = Modifier.height(8.dp))
+                                        PaymentStep("1", "Click \"Place Order\" below")
+                                        PaymentStep("2", "Enter card details securely in the Razorpay window")
+                                        PaymentStep("3", "Complete 3D Secure / OTP verification — order confirmed!")
+                                        Spacer(modifier = Modifier.height(4.dp))
+                                        Text(
+                                            "🔒 PCI-DSS compliant • Visa / MC / RuPay",
+                                            style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito),
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -815,4 +894,37 @@ private fun StepLine(isActive: Boolean) {
                 else MaterialTheme.colorScheme.surfaceContainerLow
             )
     )
+}
+
+@Composable
+private fun PaymentStep(number: String, description: String) {
+    Row(
+        modifier = Modifier.padding(bottom = 6.dp),
+        verticalAlignment = Alignment.Top
+    ) {
+        Box(
+            modifier = Modifier
+                .size(20.dp)
+                .background(
+                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                    shape = CircleShape
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                number,
+                style = MaterialTheme.typography.labelSmall.copy(
+                    fontFamily = Nunito,
+                    fontWeight = FontWeight.Bold
+                ),
+                color = MaterialTheme.colorScheme.primary
+            )
+        }
+        Spacer(modifier = Modifier.width(10.dp))
+        Text(
+            description,
+            style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito),
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
 }

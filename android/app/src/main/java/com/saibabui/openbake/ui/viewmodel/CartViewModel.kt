@@ -30,7 +30,7 @@ class CartViewModel : ViewModel() {
         get() = _deliveryEstimate.value?.deliveryFee ?: if (_items.value.isEmpty()) 0.0 else 40.0
 
     val estimatedMinutes: Int?
-        get() = _deliveryEstimate.value?.estimatedMinutes
+        get() = _deliveryEstimate.value?.estimatedTimeMinutes
 
     val isDeliverable: Boolean
         get() = _deliveryEstimate.value?.isDeliverable ?: true

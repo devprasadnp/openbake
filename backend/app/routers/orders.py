@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
@@ -16,7 +16,7 @@ from app.schemas.order import (
     CouponApplyRequest, CouponApplyResponse,
 )
 from app.services.order_service import place_order, calculate_order_totals, restore_stock_for_order
-from app.utils.jwt import get_current_user
+from app.utils.jwt import get_current_user, verify_token
 
 router = APIRouter()
 
@@ -172,19 +172,29 @@ def apply_coupon(
 @router.get("/orders/{order_id}/stream")
 async def stream_order_status(
     order_id: str,
-    current_user: User = Depends(get_current_user),
+    token: str = Query(..., description="JWT access token (EventSource cannot send headers)"),
 ):
     """Server-Sent Events stream for real-time order status updates.
     
     The client connects and receives events whenever the order status changes.
     The stream closes when the order reaches a terminal state (delivered/cancelled).
+    Auth via query param because EventSource does not support custom headers.
     """
-    # Validate order ownership first
+    # Authenticate from query-param token
+    payload = verify_token(token, token_type="access")
+    user_id = payload.get("sub")
+    if not user_id:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token payload")
+
+    # Validate order ownership
     db = SessionLocal()
     try:
+        user = db.query(User).filter(User.id == user_id).first()
+        if not user:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found")
         order = (
             db.query(Order)
-            .filter(Order.id == order_id, Order.user_id == current_user.id)
+            .filter(Order.id == order_id, Order.user_id == user.id)
             .first()
         )
         if not order:
