@@ -155,12 +155,37 @@ fun CheckoutScreen(
             result.fold(
                 onSuccess = { rpOrder ->
                     try {
+                        // Dev mock mode — skip Razorpay SDK entirely
+                        if (rpOrder.razorpayOrderId.startsWith("order_dev_")) {
+                            Log.d("Checkout", "Dev mock order — auto-verifying payment")
+                            val verifyResult = orderRepo.verifyPayment(
+                                VerifyPaymentRequest(
+                                    orderId = orderId,
+                                    razorpayOrderId = rpOrder.razorpayOrderId,
+                                    razorpayPaymentId = "pay_dev_${System.currentTimeMillis()}",
+                                    razorpaySignature = "dev_mock_signature"
+                                )
+                            )
+                            verifyResult.fold(
+                                onSuccess = {
+                                    cartViewModel.clearCart()
+                                    onOrderPlaced(orderId)
+                                },
+                                onFailure = { err ->
+                                    Log.e("Checkout", "Dev mock verify failed", err)
+                                }
+                            )
+                            paymentInProgress = false
+                            return@launch
+                        }
+
                         val activity = context as Activity
                         val checkout = Checkout()
-                        // Razorpay key from backend config env
+                        checkout.setKeyID(rpOrder.razorpayKeyId)
                         val options = JSONObject().apply {
                             put("name", "OpenBake")
                             put("description", "Order #${orderId.takeLast(6).uppercase()}")
+                            put("image", "https://ui-avatars.com/api/?name=OB&background=D4A574&color=fff&size=128")
                             put("order_id", rpOrder.razorpayOrderId)
                             put("amount", rpOrder.amount)
                             put("currency", rpOrder.currency)
@@ -170,6 +195,7 @@ fun CheckoutScreen(
                             put("theme", JSONObject().apply {
                                 put("color", "#D4A574")
                             })
+                            // Let Razorpay show all enabled methods including UPI
                         }
                         checkout.open(activity, options)
                         // Payment result handled via RazorpayPaymentCompletionListener on Activity

@@ -19,7 +19,23 @@ export const useCartStore = create<CartState>()(
       items: [],
 
       addItem: (product, quantity = 1, customization) => {
+        // Block adding out-of-stock or unavailable items
+        if (!product.is_available) {
+          toast.error(`${product.name} is currently unavailable`);
+          return;
+        }
+        if (product.stock_count <= 0) {
+          toast.error(`${product.name} is out of stock`);
+          return;
+        }
+
         const existing = get().items.find((i) => i.product.id === product.id);
+        const currentQty = existing ? existing.quantity : 0;
+        if (currentQty + quantity > product.stock_count) {
+          toast.error(`Only ${product.stock_count} units available for ${product.name}`);
+          return;
+        }
+
         if (existing) {
           set({
             items: get().items.map((i) =>
@@ -41,6 +57,12 @@ export const useCartStore = create<CartState>()(
       updateQuantity: (productId, quantity) => {
         if (quantity <= 0) {
           get().removeItem(productId);
+          return;
+        }
+        // Check stock limit
+        const item = get().items.find((i) => i.product.id === productId);
+        if (item && quantity > item.product.stock_count) {
+          toast.error(`Only ${item.product.stock_count} units available`);
           return;
         }
         set({

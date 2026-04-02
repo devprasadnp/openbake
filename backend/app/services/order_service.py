@@ -54,8 +54,11 @@ def calculate_order_totals(
         validated_items.append(
             {
                 "product_id": product.id,
+                "product_name": product.name,
                 "quantity": item.quantity,
                 "unit_price": float(unit_price),
+                "stock_count": product.stock_count,
+                "is_available": product.is_available,
                 "customization": item.customization,
             }
         )

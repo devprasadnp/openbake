@@ -11,7 +11,7 @@ import { useAuthStore } from "@/store/authStore";
 import { formatPrice } from "@/lib/utils";
 import api from "@/lib/api";
 import toast from "react-hot-toast";
-import { MapPin, Loader2, Truck } from "lucide-react";
+import { MapPin, Loader2, Truck, AlertCircle } from "lucide-react";
 import type { Address, DeliveryEstimate, RazorpayOrderResponse } from "@/types";
 
 declare global {
@@ -21,9 +21,9 @@ declare global {
 }
 
 const paymentMethods = [
-  { id: "cod", label: "Cash on Delivery", icon: "💵" },
   { id: "upi", label: "UPI", icon: "📱" },
   { id: "card", label: "Card", icon: "💳" },
+  { id: "cod", label: "Cash on Delivery", icon: "💵" },
 ];
 
 const timeSlots = [
@@ -50,9 +50,20 @@ export default function CheckoutPage() {
   const [discount, setDiscount] = useState(0);
   const [couponMessage, setCouponMessage] = useState("");
   const [placing, setPlacing] = useState(false);
-  const [newAddress, setNewAddress] = useState({ full_address: "", city: "", pincode: "", label: "Home", lat: undefined as number | undefined, lng: undefined as number | undefined });
+  const [newAddress, setNewAddress] = useState({
+    full_address: "",
+    landmark: "",
+    city: "",
+    state: "",
+    pincode: "",
+    label: "Home",
+    phone: "",
+    lat: undefined as number | undefined,
+    lng: undefined as number | undefined,
+  });
   const [showNewAddress, setShowNewAddress] = useState(false);
   const [locating, setLocating] = useState(false);
+  const [addrErrors, setAddrErrors] = useState<Record<string, string>>({});
 
   // ── Delivery estimate state ──────────────────────────────────────────────────
   const [deliveryEstimate, setDeliveryEstimate] = useState<DeliveryEstimate | null>(null);
@@ -103,6 +114,17 @@ export default function CheckoutPage() {
       router.push("/cart");
       return;
     }
+
+    // Validate stock before allowing checkout
+    api.post<{ valid: boolean; errors: string[] }>("/cart/validate", {
+      items: items.map((i) => ({ product_id: i.product.id, quantity: i.quantity })),
+    }).then((res) => {
+      if (!res.data.valid) {
+        toast.error(res.data.errors?.[0] || "Some items are out of stock");
+        router.push("/cart");
+      }
+    }).catch(() => {});
+
     api.get<Address[]>("/addresses").then((res) => {
       setAddresses(res.data);
       const defaultAddr = res.data.find((a) => a.is_default);
@@ -129,12 +151,41 @@ export default function CheckoutPage() {
     }
   };
 
+  const validateAddress = (): boolean => {
+    const errors: Record<string, string> = {};
+    if (!newAddress.full_address.trim()) errors.full_address = "Address is required";
+    else if (newAddress.full_address.trim().length < 10) errors.full_address = "Please enter a complete address";
+    if (!newAddress.city.trim()) errors.city = "City is required";
+    if (!newAddress.pincode.trim()) errors.pincode = "Pincode is required";
+    else if (!/^\d{6}$/.test(newAddress.pincode.trim())) errors.pincode = "Enter a valid 6-digit pincode";
+    if (!newAddress.label.trim()) errors.label = "Label is required";
+    if (newAddress.phone && !/^[6-9]\d{9}$/.test(newAddress.phone.trim())) errors.phone = "Enter a valid 10-digit mobile number";
+    if (!newAddress.lat || !newAddress.lng) errors.location = "Please use 'Current Location' or enter a valid address so we can calculate delivery";
+
+    setAddrErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const addNewAddress = async () => {
+    if (!validateAddress()) return;
     try {
-      const res = await api.post<Address>("/addresses", newAddress);
+      // Combine landmark into full_address for the backend
+      const fullAddr = newAddress.landmark
+        ? `${newAddress.full_address.trim()}, Near ${newAddress.landmark.trim()}, ${newAddress.state || ""}`.trim().replace(/,\s*$/, "")
+        : `${newAddress.full_address.trim()}${newAddress.state ? ", " + newAddress.state : ""}`;
+      const res = await api.post<Address>("/addresses", {
+        full_address: fullAddr,
+        city: newAddress.city.trim(),
+        pincode: newAddress.pincode.trim(),
+        label: newAddress.label.trim(),
+        lat: newAddress.lat,
+        lng: newAddress.lng,
+        is_default: addresses.length === 0, // first address is default
+      });
       setAddresses([...addresses, res.data]);
       setSelectedAddress(res.data.id);
       setShowNewAddress(false);
+      setAddrErrors({});
       toast.success("Address added");
     } catch {
       toast.error("Failed to add address");
@@ -146,31 +197,52 @@ export default function CheckoutPage() {
       toast.error("Geolocation is not supported by your browser");
       return;
     }
+
+    // Check if we're in a secure context (HTTPS or localhost)
+    if (window.location.protocol !== "https:" && window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1") {
+      toast.error("Location requires HTTPS. Try accessing via localhost or enable HTTPS.");
+      return;
+    }
+
     setLocating(true);
     navigator.geolocation.getCurrentPosition(
       async (position) => {
-        const { latitude, longitude } = position.coords;
+        const { latitude, longitude, accuracy } = position.coords;
         try {
           const res = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`,
-            { headers: { "Accept-Language": "en" } }
+            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json&addressdetails=1&zoom=18`,
+            { headers: { "Accept-Language": "en", "User-Agent": "OpenBake/1.0" } }
           );
           const data = await res.json();
           const addr = data.address || {};
           const road = addr.road || addr.suburb || addr.neighbourhood || "";
           const houseNumber = addr.house_number ? `${addr.house_number}, ` : "";
-          const fullAddress = `${houseNumber}${road}${addr.suburb ? ", " + addr.suburb : ""}`.trim();
+          const area = addr.suburb || addr.neighbourhood || addr.quarter || "";
+          const fullAddress = `${houseNumber}${road}${area && !road.includes(area) ? ", " + area : ""}`.trim().replace(/^,\s*/, "");
           setNewAddress((prev) => ({
             ...prev,
-            full_address: fullAddress || data.display_name?.split(",").slice(0, 2).join(",").trim() || "",
+            full_address: fullAddress || data.display_name?.split(",").slice(0, 3).join(",").trim() || "",
             city: addr.city || addr.town || addr.village || addr.county || "",
+            state: addr.state || "",
             pincode: addr.postcode || "",
             lat: latitude,
             lng: longitude,
           }));
-          toast.success("Location detected!");
+          setAddrErrors((prev) => {
+            const next = { ...prev };
+            delete next.location;
+            return next;
+          });
+          toast.success(`Location detected! (±${Math.round(accuracy)}m accuracy)`);
         } catch {
-          toast.error("Could not fetch address for your location");
+          // Even if geocoding fails, save the coordinates
+          setNewAddress((prev) => ({ ...prev, lat: latitude, lng: longitude }));
+          setAddrErrors((prev) => {
+            const next = { ...prev };
+            delete next.location;
+            return next;
+          });
+          toast.error("Got coordinates but couldn't fetch address. Please type it manually.");
         } finally {
           setLocating(false);
         }
@@ -178,14 +250,16 @@ export default function CheckoutPage() {
       (err) => {
         setLocating(false);
         if (err.code === 1) {
-          toast.error("Location permission denied. Please allow access in browser settings.");
+          toast.error("Location permission denied. Please allow access in browser settings, then refresh.");
         } else if (err.code === 2) {
-          toast.error("Location unavailable. Make sure GPS / Location Services are on.");
+          toast.error("Location unavailable. Make sure GPS / Location Services are turned on.");
+        } else if (err.code === 3) {
+          toast.error("Location request timed out. Try again or enter address manually.");
         } else {
           toast.error("Could not get your location. Try again.");
         }
       },
-      { timeout: 15000, enableHighAccuracy: true, maximumAge: 0 }
+      { timeout: 20000, enableHighAccuracy: true, maximumAge: 30000 }
     );
   };
 
@@ -193,7 +267,32 @@ export default function CheckoutPage() {
   const launchRazorpay = async (orderId: string) => {
     try {
       const res = await api.post<RazorpayOrderResponse>("/payments/create-order", { order_id: orderId });
-      const { razorpay_order_id, razorpay_key_id, amount, currency } = res.data;
+      const { razorpay_order_id, razorpay_key_id, amount, currency, order_id: backendOrderId } = res.data;
+
+      // ── Dev mock mode ── when backend returns a mock order (no valid Razorpay creds),
+      // skip the SDK entirely and directly verify with placeholder values.
+      if (razorpay_order_id.startsWith("order_dev_")) {
+        try {
+          await api.post("/payments/verify", {
+            order_id: backendOrderId || orderId,
+            razorpay_order_id,
+            razorpay_payment_id: `pay_dev_${Date.now()}`,
+            razorpay_signature: "dev_mock_signature",
+          });
+          clearCart();
+          toast.success("(Dev) Payment simulated — order confirmed!");
+          router.push("/orders");
+        } catch {
+          toast.error("Dev payment verification failed. Check backend logs.");
+          router.push("/orders");
+        }
+        return;
+      }
+
+      if (typeof window.Razorpay === "undefined") {
+        toast.error("Razorpay SDK not loaded. Please refresh the page.");
+        return;
+      }
 
       const options: Record<string, unknown> = {
         key: razorpay_key_id || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_placeholder",
@@ -201,10 +300,13 @@ export default function CheckoutPage() {
         currency,
         name: "OpenBake",
         description: `Order #${orderId.slice(0, 8)}`,
+        image: "/logo.png",
         order_id: razorpay_order_id,
+        // Let Razorpay show all enabled payment methods (UPI, Cards, etc.)
         handler: async (response: { razorpay_order_id: string; razorpay_payment_id: string; razorpay_signature: string }) => {
           try {
             await api.post("/payments/verify", {
+              order_id: backendOrderId || orderId,
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
@@ -230,11 +332,6 @@ export default function CheckoutPage() {
           },
         },
       };
-
-      if (typeof window.Razorpay === "undefined") {
-        toast.error("Razorpay SDK not loaded. Please refresh the page.");
-        return;
-      }
 
       const rzp = new window.Razorpay(options);
       rzp.open();
@@ -398,19 +495,96 @@ export default function CheckoutPage() {
                           type="button"
                           onClick={getCurrentLocation}
                           disabled={locating}
-                          className="w-full flex items-center justify-center gap-2 py-2 px-4 rounded-xl border-2 border-dashed border-primary/40 text-primary text-sm font-medium hover:bg-primary/5 transition-colors disabled:opacity-50"
+                          className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl border-2 border-dashed border-primary/40 text-primary text-sm font-medium hover:bg-primary/5 transition-colors disabled:opacity-50"
                         >
                           {locating ? <Loader2 size={15} className="animate-spin" /> : <MapPin size={15} />}
-                          {locating ? "Detecting location..." : "Use My Current Location"}
+                          {locating ? "Detecting location..." : "📍 Use My Current Location"}
                         </button>
-                        <Input id="addr" label="Full Address" value={newAddress.full_address} onChange={(e) => setNewAddress({ ...newAddress, full_address: e.target.value })} />
+                        {addrErrors.location && (
+                          <div className="flex items-center gap-2 text-xs text-amber-600 bg-amber-50 px-3 py-2 rounded-lg">
+                            <AlertCircle size={14} />
+                            {addrErrors.location}
+                          </div>
+                        )}
+                        {newAddress.lat && newAddress.lng && (
+                          <div className="flex items-center gap-2 text-xs text-green-600 bg-green-50 px-3 py-2 rounded-lg">
+                            <MapPin size={14} />
+                            Location set ({newAddress.lat.toFixed(4)}, {newAddress.lng.toFixed(4)})
+                          </div>
+                        )}
                         <div className="grid grid-cols-2 gap-3">
-                          <Input id="city" label="City" value={newAddress.city} onChange={(e) => setNewAddress({ ...newAddress, city: e.target.value })} />
-                          <Input id="pin" label="Pincode" value={newAddress.pincode} onChange={(e) => setNewAddress({ ...newAddress, pincode: e.target.value })} />
+                          <div>
+                            <label className="block text-xs font-medium text-text-primary mb-1">
+                              Label <span className="text-error">*</span>
+                            </label>
+                            <div className="flex gap-2">
+                              {["Home", "Work", "Other"].map((l) => (
+                                <button
+                                  key={l}
+                                  type="button"
+                                  onClick={() => { setNewAddress({ ...newAddress, label: l }); setAddrErrors((p) => { const n = {...p}; delete n.label; return n; }); }}
+                                  className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+                                    newAddress.label === l
+                                      ? "border-primary bg-primary/10 text-primary"
+                                      : "border-border text-text-secondary hover:border-primary/30"
+                                  }`}
+                                >
+                                  {l === "Home" ? "🏠" : l === "Work" ? "💼" : "📍"} {l}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                          <Input
+                            id="phone"
+                            label="Contact Phone"
+                            value={newAddress.phone}
+                            onChange={(e) => { setNewAddress({ ...newAddress, phone: e.target.value }); setAddrErrors((p) => { const n = {...p}; delete n.phone; return n; }); }}
+                            placeholder="9876543210"
+                            error={addrErrors.phone}
+                          />
                         </div>
-                        <div className="flex gap-2">
+                        <Input
+                          id="addr"
+                          label="House / Flat / Floor, Building Name, Street *"
+                          value={newAddress.full_address}
+                          onChange={(e) => { setNewAddress({ ...newAddress, full_address: e.target.value }); setAddrErrors((p) => { const n = {...p}; delete n.full_address; return n; }); }}
+                          placeholder="e.g. Flat 302, Sai Residency, MG Road"
+                          error={addrErrors.full_address}
+                        />
+                        <Input
+                          id="landmark"
+                          label="Landmark (optional)"
+                          value={newAddress.landmark}
+                          onChange={(e) => setNewAddress({ ...newAddress, landmark: e.target.value })}
+                          placeholder="e.g. Near City Mall, Opposite SBI Bank"
+                        />
+                        <div className="grid grid-cols-3 gap-3">
+                          <Input
+                            id="city"
+                            label="City *"
+                            value={newAddress.city}
+                            onChange={(e) => { setNewAddress({ ...newAddress, city: e.target.value }); setAddrErrors((p) => { const n = {...p}; delete n.city; return n; }); }}
+                            error={addrErrors.city}
+                          />
+                          <Input
+                            id="state"
+                            label="State"
+                            value={newAddress.state}
+                            onChange={(e) => setNewAddress({ ...newAddress, state: e.target.value })}
+                            placeholder="e.g. Maharashtra"
+                          />
+                          <Input
+                            id="pin"
+                            label="Pincode *"
+                            value={newAddress.pincode}
+                            onChange={(e) => { setNewAddress({ ...newAddress, pincode: e.target.value.replace(/\D/g, "").slice(0, 6) }); setAddrErrors((p) => { const n = {...p}; delete n.pincode; return n; }); }}
+                            placeholder="560001"
+                            error={addrErrors.pincode}
+                          />
+                        </div>
+                        <div className="flex gap-2 pt-1">
                           <Button size="sm" onClick={addNewAddress}>Save Address</Button>
-                          <Button size="sm" variant="ghost" onClick={() => setShowNewAddress(false)}>Cancel</Button>
+                          <Button size="sm" variant="ghost" onClick={() => { setShowNewAddress(false); setAddrErrors({}); }}>Cancel</Button>
                         </div>
                       </div>
                     ) : (
@@ -422,7 +596,16 @@ export default function CheckoutPage() {
                 )}
 
                 <div className="mt-6 flex justify-end">
-                  <Button onClick={() => setStep(2)} disabled={orderType === "delivery" && !isDeliverable}>
+                  <Button
+                    onClick={() => {
+                      if (orderType === "delivery" && !selectedAddress) {
+                        toast.error("Please select or add a delivery address");
+                        return;
+                      }
+                      setStep(2);
+                    }}
+                    disabled={orderType === "delivery" && !isDeliverable}
+                  >
                     Continue
                   </Button>
                 </div>

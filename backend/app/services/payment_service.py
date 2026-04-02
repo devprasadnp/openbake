@@ -11,33 +11,27 @@ logger = logging.getLogger(__name__)
 
 # Razorpay client (lazy init)
 _razorpay_client = None
-_razorpay_available = None  # None = not checked yet
 
 
 def _get_razorpay_client():
-    """Lazily initialize the Razorpay client. Returns None if credentials are invalid."""
-    global _razorpay_client, _razorpay_available
-    if _razorpay_available is False:
-        return None
+    """Lazily initialize the Razorpay client. Returns None only if credentials are missing/placeholder."""
+    global _razorpay_client
     if _razorpay_client is not None:
         return _razorpay_client
-    
+
     key_id = settings.RAZORPAY_KEY_ID
     key_secret = settings.RAZORPAY_KEY_SECRET
-    
+
     if not key_id or not key_secret or "placeholder" in key_id or "placeholder" in key_secret:
         logger.warning("Razorpay credentials not configured — using dev mock mode")
-        _razorpay_available = False
         return None
-    
+
     try:
         import razorpay
         _razorpay_client = razorpay.Client(auth=(key_id, key_secret))
-        _razorpay_available = True
         return _razorpay_client
     except Exception as e:
         logger.warning(f"Failed to init Razorpay client: {e} — using dev mock mode")
-        _razorpay_available = False
         return None
 
 

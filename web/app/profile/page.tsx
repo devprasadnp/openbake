@@ -12,6 +12,7 @@ import { useWishlistStore } from "@/store/wishlistStore";
 import ProductCard from "@/components/product/ProductCard";
 import api from "@/lib/api";
 import toast from "react-hot-toast";
+import { MapPin, Loader2 } from "lucide-react";
 import type { Address } from "@/types";
 
 type Tab = "profile" | "addresses" | "wishlist";
@@ -36,7 +37,11 @@ function ProfileContent() {
   const [saving, setSaving] = useState(false);
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [showNewAddr, setShowNewAddr] = useState(false);
-  const [newAddr, setNewAddr] = useState({ full_address: "", city: "", pincode: "", label: "Home" });
+  const [newAddr, setNewAddr] = useState({ full_address: "", landmark: "", city: "", state: "", pincode: "", label: "Home" });
+  const [newAddrLat, setNewAddrLat] = useState<number | undefined>();
+  const [newAddrLng, setNewAddrLng] = useState<number | undefined>();
+  const [locating, setLocating] = useState(false);
+  const [addrErrors, setAddrErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -71,12 +76,70 @@ function ProfileContent() {
     }
   };
 
+  const getLocation = () => {
+    if (!navigator.geolocation) { toast.error("Geolocation not supported"); return; }
+    setLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      async ({ coords }) => {
+        try {
+          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${coords.latitude}&lon=${coords.longitude}&format=json&addressdetails=1&zoom=18`, { headers: { "Accept-Language": "en", "User-Agent": "OpenBake/1.0" } });
+          const data = await res.json();
+          const a = data.address || {};
+          const road = a.road || a.suburb || a.neighbourhood || "";
+          const hn = a.house_number ? `${a.house_number}, ` : "";
+          const area = a.suburb || a.neighbourhood || "";
+          setNewAddr((p) => ({
+            ...p,
+            full_address: `${hn}${road}${area && !road.includes(area) ? ", " + area : ""}`.trim().replace(/^,\s*/, "") || data.display_name?.split(",").slice(0, 3).join(",").trim() || "",
+            city: a.city || a.town || a.village || a.county || "",
+            state: a.state || "",
+            pincode: a.postcode || "",
+          }));
+          setNewAddrLat(coords.latitude);
+          setNewAddrLng(coords.longitude);
+          toast.success(`Location detected! (±${Math.round(coords.accuracy)}m)`);
+        } catch {
+          setNewAddrLat(coords.latitude);
+          setNewAddrLng(coords.longitude);
+          toast.error("Got coordinates but couldn't fetch address details.");
+        } finally { setLocating(false); }
+      },
+      (err) => {
+        setLocating(false);
+        toast.error(err.code === 1 ? "Location permission denied. Allow access in browser settings." : err.code === 3 ? "Location timed out. Try again." : "Could not get location.");
+      },
+      { timeout: 20000, enableHighAccuracy: true, maximumAge: 30000 }
+    );
+  };
+
   const addAddress = async () => {
+    const errors: Record<string, string> = {};
+    if (!newAddr.full_address.trim()) errors.full_address = "Required";
+    if (!newAddr.city.trim()) errors.city = "Required";
+    if (!newAddr.pincode.trim()) errors.pincode = "Required";
+    else if (!/^\d{6}$/.test(newAddr.pincode.trim())) errors.pincode = "Must be 6 digits";
+    setAddrErrors(errors);
+    if (Object.keys(errors).length > 0) return;
+
     try {
-      const res = await api.post<Address>("/addresses", newAddr);
+      const fullAddr = newAddr.landmark
+        ? `${newAddr.full_address.trim()}, Near ${newAddr.landmark.trim()}${newAddr.state ? ", " + newAddr.state : ""}`
+        : `${newAddr.full_address.trim()}${newAddr.state ? ", " + newAddr.state : ""}`;
+      const res = await api.post<Address>("/addresses", {
+        full_address: fullAddr,
+        city: newAddr.city.trim(),
+        pincode: newAddr.pincode.trim(),
+        label: newAddr.label.trim() || "Home",
+        lat: newAddrLat,
+        lng: newAddrLng,
+        is_default: addresses.length === 0,
+      });
       setAddresses([...addresses, res.data]);
       setShowNewAddr(false);
-      setNewAddr({ full_address: "", city: "", pincode: "", label: "Home" });
+      setNewAddr({ full_address: "", landmark: "", city: "", state: "", pincode: "", label: "Home" });
+      setNewAddrLat(undefined);
+      setNewAddrLng(undefined);
+      setAddrErrors({});
       toast.success("Address added");
     } catch {
       toast.error("Failed to add address");
@@ -171,11 +234,44 @@ function ProfileContent() {
 
                 {showNewAddr && (
                   <div className="border border-border rounded-xl p-4 mb-4 space-y-3">
-                    <Input id="label" label="Label" value={newAddr.label} onChange={(e) => setNewAddr({ ...newAddr, label: e.target.value })} placeholder="Home / Work" />
-                    <Input id="address" label="Full Address" value={newAddr.full_address} onChange={(e) => setNewAddr({ ...newAddr, full_address: e.target.value })} />
-                    <div className="grid grid-cols-2 gap-3">
-                      <Input id="city" label="City" value={newAddr.city} onChange={(e) => setNewAddr({ ...newAddr, city: e.target.value })} />
-                      <Input id="pincode" label="Pincode" value={newAddr.pincode} onChange={(e) => setNewAddr({ ...newAddr, pincode: e.target.value })} />
+                    <button
+                      type="button"
+                      onClick={getLocation}
+                      disabled={locating}
+                      className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl border-2 border-dashed border-primary/40 text-primary text-sm font-medium hover:bg-primary/5 transition-colors disabled:opacity-50"
+                    >
+                      {locating ? <Loader2 size={15} className="animate-spin" /> : <MapPin size={15} />}
+                      {locating ? "Detecting location..." : "📍 Use My Current Location"}
+                    </button>
+                    {newAddrLat && newAddrLng && (
+                      <div className="flex items-center gap-2 text-xs text-green-600 bg-green-50 px-3 py-2 rounded-lg">
+                        <MapPin size={14} />
+                        Location set ({newAddrLat.toFixed(4)}, {newAddrLng.toFixed(4)})
+                      </div>
+                    )}
+                    <div>
+                      <label className="block text-xs font-medium text-text-primary mb-1">Label</label>
+                      <div className="flex gap-2">
+                        {["Home", "Work", "Other"].map((l) => (
+                          <button
+                            key={l}
+                            type="button"
+                            onClick={() => setNewAddr({ ...newAddr, label: l })}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+                              newAddr.label === l ? "border-primary bg-primary/10 text-primary" : "border-border text-text-secondary hover:border-primary/30"
+                            }`}
+                          >
+                            {l === "Home" ? "🏠" : l === "Work" ? "💼" : "📍"} {l}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    <Input id="address" label="House / Flat / Floor, Building, Street *" value={newAddr.full_address} onChange={(e) => { setNewAddr({ ...newAddr, full_address: e.target.value }); setAddrErrors((p) => { const n = {...p}; delete n.full_address; return n; }); }} placeholder="e.g. Flat 302, Sai Residency, MG Road" error={addrErrors.full_address} />
+                    <Input id="landmark" label="Landmark (optional)" value={newAddr.landmark} onChange={(e) => setNewAddr({ ...newAddr, landmark: e.target.value })} placeholder="Near City Mall, Opposite SBI Bank" />
+                    <div className="grid grid-cols-3 gap-3">
+                      <Input id="city" label="City *" value={newAddr.city} onChange={(e) => { setNewAddr({ ...newAddr, city: e.target.value }); setAddrErrors((p) => { const n = {...p}; delete n.city; return n; }); }} error={addrErrors.city} />
+                      <Input id="state" label="State" value={newAddr.state} onChange={(e) => setNewAddr({ ...newAddr, state: e.target.value })} placeholder="e.g. Karnataka" />
+                      <Input id="pincode" label="Pincode *" value={newAddr.pincode} onChange={(e) => { setNewAddr({ ...newAddr, pincode: e.target.value.replace(/\D/g, "").slice(0, 6) }); setAddrErrors((p) => { const n = {...p}; delete n.pincode; return n; }); }} placeholder="560001" error={addrErrors.pincode} />
                     </div>
                     <Button size="sm" onClick={addAddress}>Save Address</Button>
                   </div>
