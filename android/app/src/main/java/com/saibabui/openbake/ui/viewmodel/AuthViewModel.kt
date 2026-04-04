@@ -126,6 +126,27 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun uploadAvatar(filePart: okhttp3.MultipartBody.Part) {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true, error = null)
+            val result = authRepo.uploadAvatar(filePart)
+            result.fold(
+                onSuccess = { updatedUser ->
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        user = updatedUser
+                    )
+                },
+                onFailure = { e ->
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        error = e.message ?: "Failed to upload avatar"
+                    )
+                }
+            )
+        }
+    }
+
     fun clearError() {
         _uiState.value = _uiState.value.copy(error = null)
     }

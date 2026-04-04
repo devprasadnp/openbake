@@ -155,6 +155,7 @@ fun AddressManagementScreen(onBack: () -> Unit) {
         if (fullAddress.isBlank() || city.isBlank() || pincode.isBlank()) return
         scope.launch {
             saving = true
+            errorMsg = null
             runCatching {
                 RetrofitClient.apiService.addAddress(
                     AddressRequest(
@@ -172,7 +173,16 @@ fun AddressManagementScreen(onBack: () -> Unit) {
                     resp.body()?.let { addresses = addresses + it }
                     showAddForm = false
                     resetForm()
+                } else {
+                    val body = resp.errorBody()?.string()
+                    errorMsg = try {
+                        org.json.JSONObject(body ?: "").optString("detail", "Failed to save address")
+                    } catch (_: Exception) {
+                        "Failed to save address (${resp.code()})"
+                    }
                 }
+            }.onFailure { e ->
+                errorMsg = e.message ?: "Network error"
             }
             saving = false
         }

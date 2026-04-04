@@ -61,7 +61,24 @@ class AuthRepository(private val tokenManager: TokenManager) {
             if (response.isSuccessful) {
                 Result.success(response.body()!!)
             } else {
-                Result.failure(Exception("Failed to update profile: ${response.code()}"))
+                val errorBody = response.errorBody()?.string()
+                val msg = parseErrorDetail(errorBody) ?: "Failed to update profile: ${response.code()}"
+                Result.failure(Exception(msg))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun uploadAvatar(filePart: okhttp3.MultipartBody.Part): Result<User> {
+        return try {
+            val response = api.uploadAvatar(filePart)
+            if (response.isSuccessful) {
+                Result.success(response.body()!!)
+            } else {
+                val errorBody = response.errorBody()?.string()
+                val msg = parseErrorDetail(errorBody) ?: "Failed to upload avatar: ${response.code()}"
+                Result.failure(Exception(msg))
             }
         } catch (e: Exception) {
             Result.failure(e)

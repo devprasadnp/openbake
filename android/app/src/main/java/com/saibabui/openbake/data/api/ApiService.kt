@@ -59,12 +59,19 @@ interface ApiService {
     @PATCH("profile")
     suspend fun updateProfile(@Body request: UpdateProfileRequest): Response<User>
 
+    @Multipart
+    @POST("profile/avatar")
+    suspend fun uploadAvatar(@Part file: okhttp3.MultipartBody.Part): Response<User>
+
     // Addresses
     @GET("addresses")
     suspend fun getAddresses(): Response<List<Address>>
 
     @POST("addresses")
     suspend fun addAddress(@Body request: AddressRequest): Response<Address>
+
+    @PATCH("addresses/{id}")
+    suspend fun updateAddress(@Path("id") id: String, @Body request: AddressRequest): Response<Address>
 
     @DELETE("addresses/{id}")
     suspend fun deleteAddress(@Path("id") id: String): Response<Unit>
@@ -96,6 +103,10 @@ interface ApiService {
 
     @POST("payments/verify")
     suspend fun verifyPayment(@Body request: VerifyPaymentRequest): Response<PaymentVerifyResponse>
+
+    // Coupons
+    @POST("coupons/apply")
+    suspend fun applyCoupon(@Body request: CouponApplyRequest): Response<CouponApplyResponse>
 
     // Stock Waitlist
     @POST("waitlist/{productId}")
