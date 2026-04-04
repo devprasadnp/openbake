@@ -21,6 +21,7 @@ class User(Base):
     role: Mapped[str] = mapped_column(
         String(20), nullable=False, default="customer"
     )  # customer | admin
+    profile_image_url: Mapped[str] = mapped_column(String(500), nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime, server_default=func.now()
     )
@@ -42,8 +43,14 @@ class Address(Base):
         String(36), ForeignKey("users.id"), nullable=False
     )
     label: Mapped[str] = mapped_column(String(50), nullable=False, default="Home")
+    recipient_name: Mapped[str] = mapped_column(String(255), nullable=True)
+    recipient_phone: Mapped[str] = mapped_column(String(20), nullable=True)
+    house_number: Mapped[str] = mapped_column(String(100), nullable=True)
+    street: Mapped[str] = mapped_column(String(255), nullable=True)
+    landmark: Mapped[str] = mapped_column(String(255), nullable=True)
     full_address: Mapped[str] = mapped_column(String(500), nullable=False)
     city: Mapped[str] = mapped_column(String(100), nullable=False)
+    state: Mapped[str] = mapped_column(String(100), nullable=True)
     pincode: Mapped[str] = mapped_column(String(10), nullable=False)
     lat: Mapped[float] = mapped_column(Float, nullable=True)
     lng: Mapped[float] = mapped_column(Float, nullable=True)

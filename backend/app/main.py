@@ -1,11 +1,13 @@
 """OpenBake FastAPI application — production-ready entry point."""
 import logging
+import os
 import time
 import uuid
 
 from fastapi import FastAPI, Request, Response, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.util import get_remote_address
@@ -86,10 +88,12 @@ async def unhandled_exception_handler(request: Request, exc: Exception) -> JSONR
         exc_info=exc,
         extra={"request_id": request_id, "path": request.url.path},
     )
+    # In development, include the actual error message for easier debugging
+    detail = str(exc) if settings.APP_ENV == "development" else "An internal server error occurred."
     return JSONResponse(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         content={
-            "detail": "An internal server error occurred.",
+            "detail": detail,
             "request_id": request_id,
         },
     )
@@ -104,6 +108,11 @@ app.include_router(payments.router, prefix="/api",       tags=["Payments"])
 app.include_router(delivery.router, prefix="/api",       tags=["Delivery"])
 app.include_router(waitlist.router, prefix="/api",       tags=["Waitlist"])
 app.include_router(admin.router,    prefix="/api/admin", tags=["Admin"])
+
+# ── Static files (media uploads) ───────────────────────────────────────────────
+_media_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "media")
+os.makedirs(_media_dir, exist_ok=True)
+app.mount("/media", StaticFiles(directory=_media_dir), name="media")
 
 
 # ── Health & root ──────────────────────────────────────────────────────────────

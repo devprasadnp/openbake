@@ -33,6 +33,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.BufferedReader
 import java.util.concurrent.TimeUnit
+import kotlin.jvm.java
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -102,12 +103,12 @@ fun OrderTrackingScreen(
     val currentStatus = liveStatus ?: order.status
     val estimatedEta = liveEta ?: order.estimatedDeliveryMinutes
 
-    val steps = listOf("Pending", "Confirmed", "Preparing", "Out for Delivery", "Delivered")
+    val steps = listOf("Placed", "Accepted", "Preparing", "Dispatched", "Delivered")
     val currentStepIndex = when (currentStatus.lowercase()) {
-        "pending" -> 0
-        "confirmed" -> 1
+        "placed" -> 0
+        "accepted" -> 1
         "preparing" -> 2
-        "out_for_delivery" -> 3
+        "dispatched" -> 3
         "delivered" -> 4
         else -> -1
     }
@@ -350,8 +351,8 @@ fun OrderTrackingScreen(
                 }
             }
 
-            // Cancel button (only if pending/confirmed)
-            if (currentStatus.lowercase() in listOf("pending", "confirmed")) {
+            // Cancel button (only if placed or accepted, within cancellation window)
+            if (currentStatus.lowercase() in listOf("placed", "accepted")) {
                 Spacer(modifier = Modifier.height(24.dp))
                 OutlinedButton(
                     onClick = { orderViewModel.cancelOrder(order.id) },
@@ -364,9 +365,9 @@ fun OrderTrackingScreen(
                         style = MaterialTheme.typography.labelLarge.copy(fontFamily = Nunito, fontWeight = FontWeight.Bold)
                     )
                 }
+                }
             }
 
             Spacer(modifier = Modifier.height(32.dp))
         }
     }
-}

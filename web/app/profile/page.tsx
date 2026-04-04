@@ -122,12 +122,11 @@ function ProfileContent() {
     if (Object.keys(errors).length > 0) return;
 
     try {
-      const fullAddr = newAddr.landmark
-        ? `${newAddr.full_address.trim()}, Near ${newAddr.landmark.trim()}${newAddr.state ? ", " + newAddr.state : ""}`
-        : `${newAddr.full_address.trim()}${newAddr.state ? ", " + newAddr.state : ""}`;
       const res = await api.post<Address>("/addresses", {
-        full_address: fullAddr,
+        full_address: newAddr.full_address.trim(),
+        landmark: newAddr.landmark?.trim() || null,
         city: newAddr.city.trim(),
+        state: newAddr.state?.trim() || null,
         pincode: newAddr.pincode.trim(),
         label: newAddr.label.trim() || "Home",
         lat: newAddrLat,
@@ -204,9 +203,17 @@ function ProfileContent() {
             {activeTab === "profile" && (
               <div className="bg-white rounded-2xl p-6 shadow-sm">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-16 h-16 rounded-full bg-primary/10 text-primary flex items-center justify-center text-2xl font-bold">
-                    {user?.name?.charAt(0) || "?"}
-                  </div>
+                  {user?.profile_image_url ? (
+                    <img
+                      src={user.profile_image_url.startsWith("http") ? user.profile_image_url : `${process.env.NEXT_PUBLIC_API_URL?.replace("/api", "")}${user.profile_image_url}`}
+                      alt="Profile"
+                      className="w-16 h-16 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-16 h-16 rounded-full bg-primary/10 text-primary flex items-center justify-center text-2xl font-bold">
+                      {user?.name?.charAt(0) || "?"}
+                    </div>
+                  )}
                   <div>
                     <h2 className="font-semibold text-lg">{user?.name}</h2>
                     <p className="text-text-secondary text-sm">{user?.email}</p>

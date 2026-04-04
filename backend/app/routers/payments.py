@@ -199,7 +199,11 @@ async def razorpay_webhook(request: Request, db: Session = Depends(get_db)):
             order = db.query(Order).filter(Order.razorpay_order_id == razorpay_order_id).first()
             if order and order.payment_status == "pending":
                 order.payment_status = "failed"
+                # Restore stock for failed payment orders
+                from app.services.order_service import restore_stock_for_order
+                order.status = "cancelled"
+                restore_stock_for_order(db, order)
                 db.commit()
-                logger.info("webhook_payment_failed", extra={"order_id": order.id})
+                logger.info("webhook_payment_failed_order_cancelled", extra={"order_id": order.id})
 
     return {"status": "ok"}

@@ -37,6 +37,7 @@ class Order(Base):
     )  # pending | paid | failed
     razorpay_order_id: Mapped[str] = mapped_column(String(100), nullable=True)
     razorpay_payment_id: Mapped[str] = mapped_column(String(100), nullable=True)
+    idempotency_key: Mapped[str] = mapped_column(String(64), nullable=True, unique=True, index=True)
     estimated_delivery_minutes: Mapped[int] = mapped_column(Integer, nullable=True)
     scheduled_date: Mapped[date] = mapped_column(Date, nullable=True)
     time_slot: Mapped[str] = mapped_column(String(50), nullable=True)

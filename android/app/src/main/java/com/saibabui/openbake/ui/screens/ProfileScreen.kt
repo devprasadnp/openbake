@@ -19,12 +19,16 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
+import com.saibabui.openbake.data.api.RetrofitClient
 import com.saibabui.openbake.ui.theme.*
 import com.saibabui.openbake.ui.viewmodel.AuthViewModel
 
@@ -42,6 +46,13 @@ fun ProfileScreen(
     val authState by authViewModel.uiState.collectAsState()
     val user = authState.user
 
+    // Reload profile if logged in but user data is missing (e.g. previous fetch failed)
+    LaunchedEffect(authState.isLoggedIn, user) {
+        if (authState.isLoggedIn && user == null && !authState.isLoading) {
+            authViewModel.checkAuthState()
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -57,20 +68,35 @@ fun ProfileScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Avatar
+            val avatarUrl = user?.profileImageUrl?.let { url ->
+                if (url.startsWith("http")) url
+                else RetrofitClient.getBaseUrl().trimEnd('/') + url
+            }
             Box(
                 modifier = Modifier
                     .size(88.dp)
                     .background(MaterialTheme.colorScheme.primary, CircleShape),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = user?.name?.firstOrNull()?.uppercase() ?: "?",
-                    style = MaterialTheme.typography.headlineLarge.copy(
-                        fontFamily = PlayfairDisplay,
-                        fontWeight = FontWeight.Bold
-                    ),
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
+                if (avatarUrl != null) {
+                    AsyncImage(
+                        model = avatarUrl,
+                        contentDescription = "Profile photo",
+                        modifier = Modifier
+                            .size(88.dp)
+                            .clip(CircleShape),
+                        contentScale = ContentScale.Crop
+                    )
+                } else {
+                    Text(
+                        text = user?.name?.firstOrNull()?.uppercase() ?: "?",
+                        style = MaterialTheme.typography.headlineLarge.copy(
+                            fontFamily = PlayfairDisplay,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
             }
             Spacer(modifier = Modifier.height(16.dp))
             Text(
@@ -161,7 +187,7 @@ fun ProfileScreen(
             Spacer(modifier = Modifier.height(32.dp))
 
             Text(
-                text = "OpenBake v1.0",
+                text = "Sri Vinayaka Bakery v1.0",
                 style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito),
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
                 modifier = Modifier.fillMaxWidth(),

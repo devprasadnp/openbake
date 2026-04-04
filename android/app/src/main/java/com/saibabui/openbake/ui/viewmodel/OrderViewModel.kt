@@ -10,6 +10,7 @@ import com.saibabui.openbake.data.repository.OrderRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 data class OrderListUiState(
     val isLoading: Boolean = true,
@@ -76,6 +77,7 @@ class OrderViewModel : ViewModel() {
         paymentMethod: String = "cod",
         orderType: String = "delivery",
         addressId: String? = null,
+        couponCode: String? = null,
         scheduledDate: String? = null,
         timeSlot: String? = null,
         specialNote: String? = null
@@ -97,9 +99,11 @@ class OrderViewModel : ViewModel() {
                 orderType = orderType,
                 items = items,
                 paymentMethod = paymentMethod,
+                couponCode = couponCode,
                 scheduledDate = scheduledDate,
                 timeSlot = timeSlot,
-                specialNote = specialNote
+                specialNote = specialNote,
+                idempotencyKey = UUID.randomUUID().toString()
             )
 
             val result = orderRepo.createOrder(request)
@@ -133,5 +137,9 @@ class OrderViewModel : ViewModel() {
 
     fun clearPlacedOrder() {
         _placedOrder.value = null
+    }
+
+    fun clearOrderError() {
+        _orderError.value = null
     }
 }

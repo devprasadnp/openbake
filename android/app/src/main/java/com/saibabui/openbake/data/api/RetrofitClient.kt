@@ -21,6 +21,8 @@ object RetrofitClient {
     private val BASE_URL: String
         get() = BuildConfig.BASE_URL
 
+    fun getBaseUrl(): String = BASE_URL
+
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY
         else HttpLoggingInterceptor.Level.NONE

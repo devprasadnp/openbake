@@ -6,10 +6,11 @@ from sqlalchemy.exc import IntegrityError
 import asyncio
 import json
 import time
+import logging
 
 from app.database import get_db, SessionLocal
 from app.models.order import Order
-from app.models.user import User
+from app.models.user import User, Address
 from app.models.coupon import Coupon
 from app.schemas.order import (
     OrderCreate, OrderResponse, CartValidateRequest, CartValidateResponse,
@@ -18,6 +19,7 @@ from app.schemas.order import (
 from app.services.order_service import place_order, calculate_order_totals, restore_stock_for_order
 from app.utils.jwt import get_current_user, verify_token
 
+logger = logging.getLogger(__name__)
 router = APIRouter()
 
 
@@ -27,19 +29,57 @@ def create_order(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    """Place a new order."""
+    """Place a new order with validation and idempotency protection."""
+    # --- Idempotency check ---
+    if data.idempotency_key:
+        existing = db.query(Order).filter(Order.idempotency_key == data.idempotency_key).first()
+        if existing:
+            logger.info("Idempotent order returned", extra={"order_id": existing.id, "key": data.idempotency_key})
+            return existing
+
+    # --- Address validation for delivery orders ---
+    if data.order_type == "delivery":
+        if not data.address_id:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Delivery address is required for delivery orders",
+            )
+        address = (
+            db.query(Address)
+            .filter(Address.id == data.address_id, Address.user_id == current_user.id)
+            .first()
+        )
+        if not address:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Address not found or does not belong to you",
+            )
+        # Validate address completeness
+        if not address.full_address or not address.city or not address.pincode:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Address is incomplete — full_address, city, and pincode are required",
+            )
+
     try:
         order = place_order(db, current_user.id, data)
+        logger.info("Order placed", extra={"order_id": order.id, "user_id": current_user.id, "total": order.total, "method": order.payment_method})
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
     except IntegrityError as e:
         db.rollback()
+        # Could be duplicate idempotency_key from race condition — re-check
+        if data.idempotency_key:
+            existing = db.query(Order).filter(Order.idempotency_key == data.idempotency_key).first()
+            if existing:
+                return existing
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid address or order data. Please check your delivery address.",
         )
     except Exception as e:
         db.rollback()
+        logger.error("Order creation failed", extra={"error": str(e), "user_id": current_user.id})
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to place order: {str(e)}",
@@ -84,7 +124,9 @@ def cancel_order(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    """Cancel an order (only if status is 'placed')."""
+    """Cancel an order (only if status is 'placed' or 'accepted' and within 10-minute window)."""
+    from datetime import datetime, timezone, timedelta
+
     order = (
         db.query(Order)
         .filter(Order.id == order_id, Order.user_id == current_user.id)
@@ -92,10 +134,18 @@ def cancel_order(
     )
     if not order:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Order not found")
-    if order.status != "placed":
+    if order.status not in ("placed", "accepted"):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Order can only be cancelled when status is 'placed'",
+            detail="Order can only be cancelled when status is 'placed' or 'accepted'",
+        )
+    # Time window check: 10 minutes from order creation
+    now = datetime.now(timezone.utc)
+    created = order.created_at.replace(tzinfo=timezone.utc) if order.created_at.tzinfo is None else order.created_at
+    if (now - created) > timedelta(minutes=10):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Cancellation window has expired (10 minutes). Please contact support.",
         )
     order.status = "cancelled"
     restore_stock_for_order(db, order)

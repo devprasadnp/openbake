@@ -9,6 +9,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Star
@@ -53,8 +55,21 @@ fun ProductDetailScreen(
     var onWaitlist by remember { mutableStateOf(false) }
     var waitlistLoading by remember { mutableStateOf(false) }
 
+    // Wishlist state
+    var isInWishlist by remember { mutableStateOf(false) }
+    var wishlistLoading by remember { mutableStateOf(false) }
+
     LaunchedEffect(productId) {
         productViewModel.loadProductDetail(productId)
+        // Check if product is in wishlist
+        scope.launch {
+            try {
+                val resp = RetrofitClient.apiService.getWishlist()
+                if (resp.isSuccessful) {
+                    isInWishlist = resp.body()?.any { it.product.id == productId } == true
+                }
+            } catch (_: Exception) {}
+        }
     }
 
     if (detailState.isLoading) {
@@ -137,27 +152,72 @@ fun ProductDetailScreen(
                     Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                 }
 
-                // Cart button
-                if (cartItems.isNotEmpty()) {
+                // Cart button + Wishlist button
+                Row(
+                    modifier = Modifier
+                        .statusBarsPadding()
+                        .padding(8.dp)
+                        .align(Alignment.TopEnd),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    // Wishlist button
                     IconButton(
-                        onClick = onCartClick,
+                        onClick = {
+                            if (!wishlistLoading) {
+                                wishlistLoading = true
+                                scope.launch {
+                                    try {
+                                        if (isInWishlist) {
+                                            val resp = RetrofitClient.apiService.removeFromWishlist(productId)
+                                            if (resp.isSuccessful) isInWishlist = false
+                                        } else {
+                                            val resp = RetrofitClient.apiService.addToWishlist(productId)
+                                            if (resp.isSuccessful) isInWishlist = true
+                                        }
+                                    } catch (_: Exception) {}
+                                    wishlistLoading = false
+                                }
+                            }
+                        },
                         modifier = Modifier
-                            .statusBarsPadding()
-                            .padding(8.dp)
-                            .align(Alignment.TopEnd)
                             .background(
                                 MaterialTheme.colorScheme.surface.copy(alpha = 0.85f),
                                 CircleShape
                             )
                     ) {
-                        BadgedBox(
-                            badge = {
-                                Badge(containerColor = MaterialTheme.colorScheme.error) {
-                                    Text("${cartViewModel.totalItems}")
-                                }
-                            }
+                        if (wishlistLoading) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(20.dp),
+                                strokeWidth = 2.dp
+                            )
+                        } else {
+                            Icon(
+                                if (isInWishlist) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                                contentDescription = if (isInWishlist) "Remove from Wishlist" else "Add to Wishlist",
+                                tint = if (isInWishlist) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                    }
+
+                    // Cart button
+                    if (cartItems.isNotEmpty()) {
+                        IconButton(
+                            onClick = onCartClick,
+                            modifier = Modifier
+                                .background(
+                                    MaterialTheme.colorScheme.surface.copy(alpha = 0.85f),
+                                    CircleShape
+                                )
                         ) {
-                            Icon(Icons.Filled.ShoppingCart, contentDescription = "Cart")
+                            BadgedBox(
+                                badge = {
+                                    Badge(containerColor = MaterialTheme.colorScheme.error) {
+                                        Text("${cartViewModel.totalItems}")
+                                    }
+                                }
+                            ) {
+                                Icon(Icons.Filled.ShoppingCart, contentDescription = "Cart")
+                            }
                         }
                     }
                 }

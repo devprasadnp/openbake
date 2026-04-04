@@ -36,7 +36,8 @@ data class User(
     val email: String? = null,
     val phone: String? = null,
     @SerializedName("auth_provider") val authProvider: String = "email",
-    val role: String = "customer"
+    val role: String = "customer",
+    @SerializedName("profile_image_url") val profileImageUrl: String? = null
 )
 
 data class UpdateProfileRequest(
@@ -47,8 +48,14 @@ data class UpdateProfileRequest(
 data class Address(
     val id: String,
     val label: String,
+    @SerializedName("recipient_name") val recipientName: String? = null,
+    @SerializedName("recipient_phone") val recipientPhone: String? = null,
+    @SerializedName("house_number") val houseNumber: String? = null,
+    val street: String? = null,
+    val landmark: String? = null,
     @SerializedName("full_address") val fullAddress: String,
     val city: String,
+    val state: String? = null,
     val pincode: String,
     val lat: Double? = null,
     val lng: Double? = null,
@@ -57,8 +64,14 @@ data class Address(
 
 data class AddressRequest(
     val label: String,
+    @SerializedName("recipient_name") val recipientName: String? = null,
+    @SerializedName("recipient_phone") val recipientPhone: String? = null,
+    @SerializedName("house_number") val houseNumber: String? = null,
+    val street: String? = null,
+    val landmark: String? = null,
     @SerializedName("full_address") val fullAddress: String,
     val city: String,
+    val state: String? = null,
     val pincode: String,
     @SerializedName("is_default") val isDefault: Boolean = false,
     val lat: Double? = null,
@@ -115,7 +128,8 @@ data class CreateOrderRequest(
     @SerializedName("coupon_code") val couponCode: String? = null,
     @SerializedName("scheduled_date") val scheduledDate: String? = null,
     @SerializedName("time_slot") val timeSlot: String? = null,
-    @SerializedName("special_note") val specialNote: String? = null
+    @SerializedName("special_note") val specialNote: String? = null,
+    @SerializedName("idempotency_key") val idempotencyKey: String? = null
 )
 
 data class OrderItemRequest(
@@ -249,6 +263,18 @@ data class StockWaitlistResponse(
     val status: String,
     @SerializedName("created_at") val createdAt: String? = null,
     val product: Product? = null
+)
+
+// ── Coupon ──
+data class CouponApplyRequest(
+    val code: String,
+    val subtotal: Double
+)
+
+data class CouponApplyResponse(
+    val valid: Boolean,
+    val discount: Double = 0.0,
+    val message: String = ""
 )
 
 // ── SSE Order Event ──

@@ -5,6 +5,7 @@ export interface User {
   name: string;
   email?: string;
   phone?: string;
+  profile_image_url?: string;
   auth_provider: string;
   role: "customer" | "admin";
 }
@@ -12,8 +13,14 @@ export interface User {
 export interface Address {
   id: string;
   label: string;
+  recipient_name?: string;
+  recipient_phone?: string;
+  house_number?: string;
+  street?: string;
   full_address: string;
+  landmark?: string;
   city: string;
+  state?: string;
   pincode: string;
   lat?: number;
   lng?: number;

@@ -1,5 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, status
 from sqlalchemy.orm import Session
+import os
+import uuid as uuid_mod
 
 from app.database import get_db
 from app.models.user import User, Address
@@ -9,6 +11,8 @@ from app.models.order import Order, OrderItem
 from app.schemas.auth import UserResponse, ProfileUpdateRequest, AddressCreate, AddressResponse
 from app.schemas.order import ReviewCreate, ReviewResponse
 from app.utils.jwt import get_current_user
+
+MEDIA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "media", "avatars")
 
 router = APIRouter()
 
@@ -32,6 +36,43 @@ def update_profile(
         current_user.name = data.name
     if data.phone is not None:
         current_user.phone = data.phone
+    if data.profile_image_url is not None:
+        current_user.profile_image_url = data.profile_image_url
+    db.commit()
+    db.refresh(current_user)
+    return current_user
+
+
+@router.post("/profile/avatar", response_model=UserResponse)
+def upload_avatar(
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Upload a profile avatar image. Accepts JPEG/PNG, max 5MB."""
+    if file.content_type not in ("image/jpeg", "image/png", "image/webp"):
+        raise HTTPException(status_code=400, detail="Only JPEG, PNG, and WebP images are allowed")
+
+    contents = file.read()
+    if len(contents) > 5 * 1024 * 1024:
+        raise HTTPException(status_code=400, detail="Image must be smaller than 5MB")
+
+    ext = file.filename.rsplit(".", 1)[-1] if file.filename and "." in file.filename else "jpg"
+    filename = f"{current_user.id}_{uuid_mod.uuid4().hex[:8]}.{ext}"
+    filepath = os.path.join(MEDIA_DIR, filename)
+    os.makedirs(MEDIA_DIR, exist_ok=True)
+
+    # Remove old avatar file if it exists
+    if current_user.profile_image_url:
+        old_filename = current_user.profile_image_url.rsplit("/", 1)[-1]
+        old_path = os.path.join(MEDIA_DIR, old_filename)
+        if os.path.exists(old_path):
+            os.remove(old_path)
+
+    with open(filepath, "wb") as f:
+        f.write(contents)
+
+    current_user.profile_image_url = f"/media/avatars/{filename}"
     db.commit()
     db.refresh(current_user)
     return current_user
@@ -55,11 +96,18 @@ def add_address(
     current_user: User = Depends(get_current_user),
 ):
     """Add a new address."""
-    address = Address(user_id=current_user.id, **data.model_dump())
-    db.add(address)
-    db.commit()
-    db.refresh(address)
-    return address
+    try:
+        address = Address(user_id=current_user.id, **data.model_dump())
+        db.add(address)
+        db.commit()
+        db.refresh(address)
+        return address
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Failed to save address: {str(e)}",
+        )
 
 
 @router.patch("/addresses/{address_id}", response_model=AddressResponse)

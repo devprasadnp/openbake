@@ -12,6 +12,7 @@ export default function RegisterPage() {
   const { register, isLoading } = useAuthStore();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
@@ -19,7 +20,7 @@ export default function RegisterPage() {
     e.preventDefault();
     setError("");
     try {
-      await register(name, email, password);
+      await register(name, email, password, phone || undefined);
       router.push("/");
     } catch {
       setError("Registration failed. Please try again.");
@@ -66,6 +67,14 @@ export default function RegisterPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+            />
+            <Input
+              id="phone"
+              label="Phone Number"
+              type="tel"
+              placeholder="+91 98765 43210"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
             />
             <Input
               id="password"

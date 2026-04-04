@@ -8,7 +8,7 @@ from app.schemas.auth import AddressResponse
 
 class OrderItemCreate(BaseModel):
     product_id: str
-    quantity: int = 1
+    quantity: int = Field(default=1, ge=1, le=50, description="Quantity between 1 and 50")
     customization: Optional[Dict[str, Any]] = None  # {eggless, size, flavor, cake_message}
 
 
@@ -35,6 +35,7 @@ class OrderCreate(BaseModel):
     scheduled_date: Optional[date] = None
     time_slot: Optional[str] = None
     special_note: Optional[str] = None
+    idempotency_key: Optional[str] = None  # Client-generated UUID to prevent duplicate orders
 
     @field_validator("address_id", mode="before")
     @classmethod
@@ -42,6 +43,28 @@ class OrderCreate(BaseModel):
         """Convert empty string to None so FK constraint doesn't fail."""
         if v == "" or v is None:
             return None
+        return v
+
+    @field_validator("payment_method")
+    @classmethod
+    def validate_payment_method(cls, v):
+        allowed = {"upi", "card", "wallet", "cod"}
+        if v not in allowed:
+            raise ValueError(f"Invalid payment method '{v}'. Must be one of: {', '.join(sorted(allowed))}")
+        return v
+
+    @field_validator("order_type")
+    @classmethod
+    def validate_order_type(cls, v):
+        if v not in ("delivery", "pickup"):
+            raise ValueError("order_type must be 'delivery' or 'pickup'")
+        return v
+
+    @field_validator("items")
+    @classmethod
+    def validate_items_not_empty(cls, v):
+        if not v or len(v) == 0:
+            raise ValueError("Order must contain at least one item")
         return v
 
 
@@ -61,6 +84,7 @@ class OrderResponse(BaseModel):
     payment_status: str
     razorpay_order_id: Optional[str] = None
     razorpay_payment_id: Optional[str] = None
+    idempotency_key: Optional[str] = None
     estimated_delivery_minutes: Optional[int] = None
     scheduled_date: Optional[date] = None
     time_slot: Optional[str] = None

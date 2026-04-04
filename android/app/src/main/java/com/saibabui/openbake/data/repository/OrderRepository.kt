@@ -6,19 +6,23 @@ import com.saibabui.openbake.data.model.*
 class OrderRepository {
     private val api = RetrofitClient.apiService
 
+    /** Extract "detail" from a JSON error body, or return a fallback message. */
+    private fun parseError(errorBody: okhttp3.ResponseBody?, fallback: String): String {
+        val raw = errorBody?.string() ?: return fallback
+        return try {
+            org.json.JSONObject(raw).optString("detail", fallback)
+        } catch (_: Exception) {
+            fallback
+        }
+    }
+
     suspend fun createOrder(request: CreateOrderRequest): Result<Order> {
         return try {
             val response = api.createOrder(request)
             if (response.isSuccessful) {
                 Result.success(response.body()!!)
             } else {
-                val rawError = response.errorBody()?.string() ?: "Failed: ${response.code()}"
-                val detail = try {
-                    org.json.JSONObject(rawError).optString("detail", rawError)
-                } catch (_: Exception) {
-                    rawError
-                }
-                Result.failure(Exception(detail))
+                Result.failure(Exception(parseError(response.errorBody(), "Failed to place order")))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -31,7 +35,7 @@ class OrderRepository {
             if (response.isSuccessful) {
                 Result.success(response.body() ?: emptyList())
             } else {
-                Result.failure(Exception("Failed to fetch orders: ${response.code()}"))
+                Result.failure(Exception(parseError(response.errorBody(), "Failed to fetch orders")))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -44,7 +48,7 @@ class OrderRepository {
             if (response.isSuccessful) {
                 Result.success(response.body()!!)
             } else {
-                Result.failure(Exception("Failed to fetch order: ${response.code()}"))
+                Result.failure(Exception(parseError(response.errorBody(), "Failed to fetch order")))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -57,7 +61,7 @@ class OrderRepository {
             if (response.isSuccessful) {
                 Result.success(response.body()!!)
             } else {
-                Result.failure(Exception("Failed to cancel order: ${response.code()}"))
+                Result.failure(Exception(parseError(response.errorBody(), "Failed to cancel order")))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -70,7 +74,7 @@ class OrderRepository {
             if (response.isSuccessful) {
                 Result.success(response.body() ?: emptyList())
             } else {
-                Result.failure(Exception("Failed to fetch addresses: ${response.code()}"))
+                Result.failure(Exception(parseError(response.errorBody(), "Failed to fetch addresses")))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -84,7 +88,7 @@ class OrderRepository {
             if (response.isSuccessful) {
                 Result.success(response.body()!!)
             } else {
-                Result.failure(Exception("Delivery estimate failed: ${response.code()}"))
+                Result.failure(Exception(parseError(response.errorBody(), "Delivery estimate failed")))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -98,7 +102,7 @@ class OrderRepository {
             if (response.isSuccessful) {
                 Result.success(response.body()!!)
             } else {
-                Result.failure(Exception("Payment order failed: ${response.code()}"))
+                Result.failure(Exception(parseError(response.errorBody(), "Payment order creation failed")))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -111,7 +115,7 @@ class OrderRepository {
             if (response.isSuccessful) {
                 Result.success(response.body()!!)
             } else {
-                Result.failure(Exception("Payment verify failed: ${response.code()}"))
+                Result.failure(Exception(parseError(response.errorBody(), "Payment verification failed")))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -125,7 +129,7 @@ class OrderRepository {
             if (response.isSuccessful) {
                 Result.success(response.body()!!)
             } else {
-                Result.failure(Exception("Waitlist join failed: ${response.code()}"))
+                Result.failure(Exception(parseError(response.errorBody(), "Failed to join waitlist")))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -138,7 +142,7 @@ class OrderRepository {
             if (response.isSuccessful) {
                 Result.success(Unit)
             } else {
-                Result.failure(Exception("Waitlist leave failed: ${response.code()}"))
+                Result.failure(Exception(parseError(response.errorBody(), "Failed to leave waitlist")))
             }
         } catch (e: Exception) {
             Result.failure(e)

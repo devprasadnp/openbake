@@ -37,7 +37,7 @@ const timeSlots = [
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, subtotal, clearCart } = useCartStore();
-  const { isAuthenticated, user } = useAuthStore();
+  const { isAuthenticated, user, initialized: authInitialized } = useAuthStore();
 
   const [step, setStep] = useState(1);
   const [addresses, setAddresses] = useState<Address[]>([]);
@@ -105,6 +105,7 @@ export default function CheckoutPage() {
   }, [selectedAddress, orderType, addresses, fetchDeliveryEstimate]);
 
   useEffect(() => {
+    if (!authInitialized) return; // Wait for auth hydration before guarding
     if (!isAuthenticated) {
       toast.error("Please login to checkout");
       router.push("/login");
@@ -131,7 +132,7 @@ export default function CheckoutPage() {
       if (defaultAddr) setSelectedAddress(defaultAddr.id);
       else if (res.data.length > 0) setSelectedAddress(res.data[0].id);
     }).catch(() => {});
-  }, [isAuthenticated, items.length, router]);
+  }, [isAuthenticated, authInitialized, items.length, router]);
 
   const applyCoupon = async () => {
     if (!couponCode.trim()) return;
@@ -169,15 +170,14 @@ export default function CheckoutPage() {
   const addNewAddress = async () => {
     if (!validateAddress()) return;
     try {
-      // Combine landmark into full_address for the backend
-      const fullAddr = newAddress.landmark
-        ? `${newAddress.full_address.trim()}, Near ${newAddress.landmark.trim()}, ${newAddress.state || ""}`.trim().replace(/,\s*$/, "")
-        : `${newAddress.full_address.trim()}${newAddress.state ? ", " + newAddress.state : ""}`;
       const res = await api.post<Address>("/addresses", {
-        full_address: fullAddr,
+        full_address: newAddress.full_address.trim(),
+        landmark: newAddress.landmark?.trim() || null,
         city: newAddress.city.trim(),
+        state: newAddress.state?.trim() || null,
         pincode: newAddress.pincode.trim(),
         label: newAddress.label.trim(),
+        recipient_phone: newAddress.phone?.trim() || null,
         lat: newAddress.lat,
         lng: newAddress.lng,
         is_default: addresses.length === 0, // first address is default
@@ -362,6 +362,7 @@ export default function CheckoutPage() {
         payment_method: paymentMethod,
         time_slot: selectedSlot,
         special_note: specialNote || null,
+        idempotency_key: crypto.randomUUID(),
       });
 
       const orderId: string = res.data.id;

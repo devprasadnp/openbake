@@ -135,6 +135,7 @@ def place_order(db: Session, user_id: str, data: OrderCreate) -> Order:
         scheduled_date=data.scheduled_date,
         time_slot=data.time_slot,
         special_note=data.special_note,
+        idempotency_key=data.idempotency_key,
     )
     db.add(order)
     db.flush()  # get order.id
