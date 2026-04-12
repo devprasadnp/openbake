@@ -118,8 +118,14 @@ fun AddressManagementScreen(onBack: () -> Unit) {
 
     // Form fields
     var label by remember { mutableStateOf("Home") }
+    var recipientName by remember { mutableStateOf("") }
+    var recipientPhone by remember { mutableStateOf("") }
+    var houseNumber by remember { mutableStateOf("") }
+    var street by remember { mutableStateOf("") }
     var fullAddress by remember { mutableStateOf("") }
+    var landmark by remember { mutableStateOf("") }
     var city by remember { mutableStateOf("") }
+    var state by remember { mutableStateOf("") }
     var pincode by remember { mutableStateOf("") }
     var isDefault by remember { mutableStateOf(false) }
     var saving by remember { mutableStateOf(false) }
@@ -147,7 +153,9 @@ fun AddressManagementScreen(onBack: () -> Unit) {
     }
 
     fun resetForm() {
-        label = "Home"; fullAddress = ""; city = ""; pincode = ""
+        label = "Home"; recipientName = ""; recipientPhone = ""
+        houseNumber = ""; street = ""; fullAddress = ""; landmark = ""
+        city = ""; state = ""; pincode = ""
         isDefault = false; locationLat = null; locationLng = null; errorMsg = null
     }
 
@@ -160,8 +168,14 @@ fun AddressManagementScreen(onBack: () -> Unit) {
                 RetrofitClient.apiService.addAddress(
                     AddressRequest(
                         label = label,
+                        recipientName = recipientName.ifBlank { null },
+                        recipientPhone = recipientPhone.ifBlank { null },
+                        houseNumber = houseNumber.ifBlank { null },
+                        street = street.ifBlank { null },
                         fullAddress = fullAddress,
+                        landmark = landmark.ifBlank { null },
                         city = city,
+                        state = state.ifBlank { null },
                         pincode = pincode,
                         isDefault = isDefault,
                         lat = locationLat,
@@ -336,6 +350,68 @@ fun AddressManagementScreen(onBack: () -> Unit) {
                             }
 
                             OutlinedTextField(
+                                value = recipientName,
+                                onValueChange = { recipientName = it },
+                                label = {
+                                    Text(
+                                        "Recipient Name",
+                                        style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito)
+                                    )
+                                },
+                                modifier = Modifier.fillMaxWidth(),
+                                shape = RoundedCornerShape(12.dp),
+                                singleLine = true,
+                                colors = OutlinedTextFieldDefaults.colors(
+                                    unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
+                                    focusedBorderColor = MaterialTheme.colorScheme.primary
+                                )
+                            )
+                            OutlinedTextField(
+                                value = recipientPhone,
+                                onValueChange = { recipientPhone = it },
+                                label = {
+                                    Text(
+                                        "Recipient Phone",
+                                        style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito)
+                                    )
+                                },
+                                modifier = Modifier.fillMaxWidth(),
+                                shape = RoundedCornerShape(12.dp),
+                                singleLine = true,
+                                colors = OutlinedTextFieldDefaults.colors(
+                                    unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
+                                    focusedBorderColor = MaterialTheme.colorScheme.primary
+                                )
+                            )
+                            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                                OutlinedTextField(
+                                    value = houseNumber,
+                                    onValueChange = { houseNumber = it },
+                                    label = {
+                                        Text(
+                                            "House / Flat No.",
+                                            style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)
+                                        )
+                                    },
+                                    modifier = Modifier.weight(1f),
+                                    shape = RoundedCornerShape(12.dp),
+                                    singleLine = true
+                                )
+                                OutlinedTextField(
+                                    value = street,
+                                    onValueChange = { street = it },
+                                    label = {
+                                        Text(
+                                            "Street / Colony",
+                                            style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)
+                                        )
+                                    },
+                                    modifier = Modifier.weight(1f),
+                                    shape = RoundedCornerShape(12.dp),
+                                    singleLine = true
+                                )
+                            }
+                            OutlinedTextField(
                                 value = fullAddress,
                                 onValueChange = { fullAddress = it },
                                 label = {
@@ -352,6 +428,23 @@ fun AddressManagementScreen(onBack: () -> Unit) {
                                     focusedBorderColor = MaterialTheme.colorScheme.primary
                                 )
                             )
+                            OutlinedTextField(
+                                value = landmark,
+                                onValueChange = { landmark = it },
+                                label = {
+                                    Text(
+                                        "Landmark",
+                                        style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito)
+                                    )
+                                },
+                                modifier = Modifier.fillMaxWidth(),
+                                shape = RoundedCornerShape(12.dp),
+                                singleLine = true,
+                                colors = OutlinedTextFieldDefaults.colors(
+                                    unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
+                                    focusedBorderColor = MaterialTheme.colorScheme.primary
+                                )
+                            )
                             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                                 OutlinedTextField(
                                     value = city,
@@ -359,6 +452,18 @@ fun AddressManagementScreen(onBack: () -> Unit) {
                                     label = {
                                         Text(
                                             "City",
+                                            style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)
+                                        )
+                                    },
+                                    modifier = Modifier.weight(1f),
+                                    shape = RoundedCornerShape(12.dp)
+                                )
+                                OutlinedTextField(
+                                    value = state,
+                                    onValueChange = { state = it },
+                                    label = {
+                                        Text(
+                                            "State",
                                             style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)
                                         )
                                     },

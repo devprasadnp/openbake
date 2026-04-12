@@ -82,7 +82,7 @@ def create_order(
         logger.error("Order creation failed", extra={"error": str(e), "user_id": current_user.id})
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to place order: {str(e)}",
+            detail="Something went wrong while placing your order. Please try again.",
         )
     return order
 

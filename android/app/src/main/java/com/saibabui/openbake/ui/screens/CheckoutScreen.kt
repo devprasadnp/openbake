@@ -89,11 +89,20 @@ fun CheckoutScreen(
     )
     var selectedTimeSlot by remember { mutableStateOf<String?>(null) }
 
+    // Stable idempotency key per checkout session — prevents duplicate orders on back-nav
+    val idempotencyKey = remember { java.util.UUID.randomUUID().toString() }
+
     // Inline address form state
     var showAddressForm by remember { mutableStateOf(false) }
     var newAddrLabel by remember { mutableStateOf("Home") }
+    var newAddrRecipientName by remember { mutableStateOf("") }
+    var newAddrRecipientPhone by remember { mutableStateOf("") }
+    var newAddrHouseNumber by remember { mutableStateOf("") }
+    var newAddrStreet by remember { mutableStateOf("") }
     var newAddrFull by remember { mutableStateOf("") }
+    var newAddrLandmark by remember { mutableStateOf("") }
     var newAddrCity by remember { mutableStateOf("") }
+    var newAddrState by remember { mutableStateOf("") }
     var newAddrPincode by remember { mutableStateOf("") }
     var savingAddr by remember { mutableStateOf(false) }
     var locating by remember { mutableStateOf(false) }
@@ -124,8 +133,14 @@ fun CheckoutScreen(
                 RetrofitClient.apiService.addAddress(
                     AddressRequest(
                         label = newAddrLabel,
+                        recipientName = newAddrRecipientName.ifBlank { null },
+                        recipientPhone = newAddrRecipientPhone.ifBlank { null },
+                        houseNumber = newAddrHouseNumber.ifBlank { null },
+                        street = newAddrStreet.ifBlank { null },
                         fullAddress = newAddrFull,
+                        landmark = newAddrLandmark.ifBlank { null },
                         city = newAddrCity,
+                        state = newAddrState.ifBlank { null },
                         pincode = newAddrPincode,
                         lat = newAddrLat,
                         lng = newAddrLng
@@ -140,6 +155,8 @@ fun CheckoutScreen(
                     }
                     showAddressForm = false
                     newAddrFull = ""; newAddrCity = ""; newAddrPincode = ""
+                    newAddrRecipientName = ""; newAddrRecipientPhone = ""
+                    newAddrHouseNumber = ""; newAddrStreet = ""; newAddrLandmark = ""; newAddrState = ""
                     newAddrLat = null; newAddrLng = null
                 }
             }
@@ -239,7 +256,7 @@ fun CheckoutScreen(
                                 },
                                 onFailure = { err ->
                                     Log.e("Checkout", "Dev mock verify failed", err)
-                                    paymentError = "Payment verification failed: ${err.message}"
+                                    paymentError = "Payment verification failed. Please contact support."
                                     paymentInProgress = false
                                     orderPlacementInFlight = false
                                 }
@@ -266,14 +283,14 @@ fun CheckoutScreen(
                         // Result comes via MainActivity.paymentResultFlow — do NOT reset paymentInProgress here
                     } catch (e: Exception) {
                         Log.e("Checkout", "Razorpay launch failed", e)
-                        paymentError = "Failed to launch payment: ${e.message}"
+                        paymentError = "Failed to launch payment. Please try again."
                         paymentInProgress = false
                         orderPlacementInFlight = false
                     }
                 },
                 onFailure = { e ->
                     Log.e("Checkout", "Payment order creation failed", e)
-                    paymentError = "Failed to create payment: ${e.message}"
+                    paymentError = "Failed to initiate payment. Please try again."
                     paymentInProgress = false
                     orderPlacementInFlight = false
                 }
@@ -564,9 +581,17 @@ fun CheckoutScreen(
                                 FilterChip(selected = newAddrLabel == l, onClick = { newAddrLabel = l }, label = { Text(l, style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) })
                             }
                         }
+                        OutlinedTextField(value = newAddrRecipientName, onValueChange = { newAddrRecipientName = it }, label = { Text("Recipient Name", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), singleLine = true)
+                        OutlinedTextField(value = newAddrRecipientPhone, onValueChange = { newAddrRecipientPhone = it }, label = { Text("Recipient Phone", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), singleLine = true)
+                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                            OutlinedTextField(value = newAddrHouseNumber, onValueChange = { newAddrHouseNumber = it }, label = { Text("House / Flat No.", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp), singleLine = true)
+                            OutlinedTextField(value = newAddrStreet, onValueChange = { newAddrStreet = it }, label = { Text("Street / Colony", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp), singleLine = true)
+                        }
                         OutlinedTextField(value = newAddrFull, onValueChange = { newAddrFull = it }, label = { Text("Full Address", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), minLines = 2)
+                        OutlinedTextField(value = newAddrLandmark, onValueChange = { newAddrLandmark = it }, label = { Text("Landmark", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), singleLine = true)
                         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                             OutlinedTextField(value = newAddrCity, onValueChange = { newAddrCity = it }, label = { Text("City", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp))
+                            OutlinedTextField(value = newAddrState, onValueChange = { newAddrState = it }, label = { Text("State", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp))
                             OutlinedTextField(value = newAddrPincode, onValueChange = { newAddrPincode = it }, label = { Text("Pincode", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp))
                         }
                         Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
@@ -606,54 +631,55 @@ fun CheckoutScreen(
                 Spacer(modifier = Modifier.height(24.dp))
             }
 
-            // ── Time Slot ──
-            Text(
-                text = "Preferred Time Slot",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontFamily = PlayfairDisplay,
-                    fontWeight = FontWeight.Bold
+            // ── Time Slot (delivery only) ──
+            if (orderType == "delivery") {
+                Text(
+                    text = "Preferred Time Slot",
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        fontFamily = PlayfairDisplay,
+                        fontWeight = FontWeight.Bold
+                    )
                 )
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                "Optional — leave empty for earliest available",
-                style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito),
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                timeSlots.forEach { slot ->
-                    val sel = selectedTimeSlot == slot
-                    Surface(
-                        shape = RoundedCornerShape(12.dp),
-                        color = if (sel) MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
-                        else MaterialTheme.colorScheme.surfaceContainerLowest,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                selectedTimeSlot = if (sel) null else slot
-                            },
-                        border = if (sel) ButtonDefaults.outlinedButtonBorder(enabled = true) else null
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp),
-                            verticalAlignment = Alignment.CenterVertically
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    "Optional — leave empty for earliest available",
+                    style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    timeSlots.forEach { slot ->
+                        val sel = selectedTimeSlot == slot
+                        Surface(
+                            shape = RoundedCornerShape(12.dp),
+                            color = if (sel) MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
+                            else MaterialTheme.colorScheme.surfaceContainerLowest,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    selectedTimeSlot = if (sel) null else slot
+                                },
+                            border = if (sel) ButtonDefaults.outlinedButtonBorder(enabled = true) else null
                         ) {
-                            RadioButton(selected = sel, onClick = { selectedTimeSlot = if (sel) null else slot }, modifier = Modifier.size(20.dp))
-                            Spacer(modifier = Modifier.width(10.dp))
-                            Text(
-                                slot,
-                                style = MaterialTheme.typography.bodyMedium.copy(
-                                    fontFamily = Nunito,
-                                    fontWeight = if (sel) FontWeight.SemiBold else FontWeight.Normal
+                            Row(
+                                modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                RadioButton(selected = sel, onClick = { selectedTimeSlot = if (sel) null else slot }, modifier = Modifier.size(20.dp))
+                                Spacer(modifier = Modifier.width(10.dp))
+                                Text(
+                                    slot,
+                                    style = MaterialTheme.typography.bodyMedium.copy(
+                                        fontFamily = Nunito,
+                                        fontWeight = if (sel) FontWeight.SemiBold else FontWeight.Normal
+                                    )
                                 )
-                            )
+                            }
                         }
                     }
                 }
+                Spacer(modifier = Modifier.height(24.dp))
             }
-
-            Spacer(modifier = Modifier.height(24.dp))
 
             // ── Coupon Code ──
             Text(
@@ -886,8 +912,9 @@ fun CheckoutScreen(
                             orderType = orderType,
                             addressId = if (isDelivery) selectedAddressId else null,
                             couponCode = if (couponValid) couponCode.trim() else null,
-                            timeSlot = selectedTimeSlot,
-                            specialNote = specialNote.ifBlank { null }
+                            timeSlot = if (orderType == "delivery") selectedTimeSlot else null,
+                            specialNote = specialNote.ifBlank { null },
+                            idempotencyKey = idempotencyKey
                         )
                     }
                 },

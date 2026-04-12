@@ -80,7 +80,8 @@ class OrderViewModel : ViewModel() {
         couponCode: String? = null,
         scheduledDate: String? = null,
         timeSlot: String? = null,
-        specialNote: String? = null
+        specialNote: String? = null,
+        idempotencyKey: String = UUID.randomUUID().toString()
     ) {
         viewModelScope.launch {
             _placingOrder.value = true
@@ -103,7 +104,7 @@ class OrderViewModel : ViewModel() {
                 scheduledDate = scheduledDate,
                 timeSlot = timeSlot,
                 specialNote = specialNote,
-                idempotencyKey = UUID.randomUUID().toString()
+                idempotencyKey = idempotencyKey
             )
 
             val result = orderRepo.createOrder(request)
@@ -113,7 +114,14 @@ class OrderViewModel : ViewModel() {
                     _placingOrder.value = false
                 },
                 onFailure = { e ->
-                    _orderError.value = e.message
+                    // Sanitize error message for display
+                    val raw = e.message ?: "Something went wrong"
+                    _orderError.value = when {
+                        raw.contains("address", ignoreCase = true) -> "Invalid address. Please select a valid delivery address."
+                        raw.contains("stock", ignoreCase = true) || raw.contains("inventory", ignoreCase = true) -> "Some items are out of stock. Please update your cart."
+                        raw.contains("timeout", ignoreCase = true) || raw.contains("connect", ignoreCase = true) -> "Network error. Please check your connection and try again."
+                        else -> "Something went wrong while placing your order. Please try again."
+                    }
                     _placingOrder.value = false
                 }
             )

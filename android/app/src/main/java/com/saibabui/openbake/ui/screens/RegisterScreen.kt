@@ -102,7 +102,7 @@ fun RegisterScreen(
                     Spacer(modifier = Modifier.height(16.dp))
 
                     FormField(label = "Email", value = email, onValueChange = { email = it },
-                        placeholder = "hello@openbake.com", keyboardType = KeyboardType.Email, imeAction = ImeAction.Next)
+                        placeholder = "hello@example.com", keyboardType = KeyboardType.Email, imeAction = ImeAction.Next)
 
                     Spacer(modifier = Modifier.height(16.dp))
 

@@ -365,9 +365,9 @@ fun OrderTrackingScreen(
                         style = MaterialTheme.typography.labelLarge.copy(fontFamily = Nunito, fontWeight = FontWeight.Bold)
                     )
                 }
-                }
             }
 
             Spacer(modifier = Modifier.height(32.dp))
         }
     }
+}

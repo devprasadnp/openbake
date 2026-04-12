@@ -132,13 +132,13 @@ fun SplashScreen(
                         )
                     )
                 }
-                Text(text = "🥐", fontSize = 48.sp)
+                Text(text = "🍰", fontSize = 48.sp)
             }
 
             Spacer(modifier = Modifier.height(32.dp))
 
             Text(
-                text = "OpenBake",
+                text = "Sri Vinayaka\nBakery",
                 fontFamily = PlayfairDisplay,
                 fontWeight = FontWeight.Bold,
                 fontSize = 42.sp,

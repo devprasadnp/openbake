@@ -88,7 +88,7 @@ fun SettingsScreen(onBack: () -> Unit) {
 
             SettingsInfoRow("App Version", "1.0.0")
             SettingsInfoRow("Build", "2025.1")
-            SettingsInfoRow("Contact Support", "hello@openbake.in")
+            SettingsInfoRow("Contact Support", "hello@srivinayakabakery.in")
 
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 

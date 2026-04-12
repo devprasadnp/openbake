@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "OpenBake"
+rootProject.name = "SriVinayakaBakery"
 include(":app")
  

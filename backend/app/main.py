@@ -29,7 +29,7 @@ limiter = Limiter(key_func=get_remote_address, default_limits=["200/minute"])
 
 # ── App ────────────────────────────────────────────────────────────────────────
 app = FastAPI(
-    title="OpenBake API",
+    title="Sri Vinayaka Bakery API",
     description="Bakery Ordering System REST API",
     version="1.0.0",
     docs_url="/docs" if settings.APP_ENV != "production" else None,
@@ -118,7 +118,7 @@ app.mount("/media", StaticFiles(directory=_media_dir), name="media")
 # ── Health & root ──────────────────────────────────────────────────────────────
 @app.get("/", include_in_schema=False)
 def root():
-    return {"message": "OpenBake API is running 🥐"}
+    return {"message": "Sri Vinayaka Bakery API is running 🍰"}
 
 
 @app.get("/health", tags=["Health"])

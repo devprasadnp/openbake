@@ -87,7 +87,7 @@ fun HomeScreen(
                 ) {
                     Column {
                         Text(
-                            text = "OpenBake 🥐",
+                            text = "Sri Vinayaka Bakery 🍰",
                             style = MaterialTheme.typography.headlineSmall.copy(
                                 fontFamily = PlayfairDisplay,
                                 fontWeight = FontWeight.Bold
@@ -229,7 +229,7 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             // ── Why choose us ─────────────────────────────────────────────────
-            SectionHeader(title = "Why OpenBake?")
+            SectionHeader(title = "Why Sri Vinayaka Bakery?")
             Spacer(modifier = Modifier.height(12.dp))
             LazyRow(
                 contentPadding = PaddingValues(horizontal = 20.dp),

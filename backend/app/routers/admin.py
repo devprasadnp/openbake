@@ -13,7 +13,7 @@ from app.schemas.product import (
     ProductCreate, ProductUpdate, ProductResponse,
     CategoryCreate, CategoryResponse,
 )
-from app.schemas.order import OrderResponse, OrderStatusUpdate, CouponCreate, CouponResponse
+from app.schemas.order import OrderResponse, OrderStatusUpdate, AdminOrderDetailResponse, CouponCreate, CouponResponse
 from app.utils.jwt import require_admin
 from app.services.waitlist_service import notify_waitlist_users
 
@@ -186,6 +186,30 @@ def admin_update_order_status(
     db.commit()
     db.refresh(order)
     return order
+
+
+@router.get("/orders/{order_id}", response_model=AdminOrderDetailResponse)
+def admin_get_order_detail(
+    order_id: str,
+    db: Session = Depends(get_db),
+    _admin: User = Depends(require_admin),
+):
+    """Get full order details including customer info for admin."""
+    order = db.query(Order).filter(Order.id == str(order_id)).first()
+    if not order:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Order not found")
+
+    # Build enriched response with customer details
+    order_data = AdminOrderDetailResponse.model_validate(order)
+    if order.user:
+        order_data.customer = {
+            "id": order.user.id,
+            "name": order.user.name,
+            "email": order.user.email,
+            "phone": order.user.phone,
+            "profile_image_url": order.user.profile_image_url,
+        }
+    return order_data
 
 
 # --- Products Management ---

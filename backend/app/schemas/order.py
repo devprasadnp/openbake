@@ -97,6 +97,23 @@ class OrderResponse(BaseModel):
         from_attributes = True
 
 
+class OrderCustomerInfo(BaseModel):
+    """Minimal user info exposed to admin for order context."""
+    id: str
+    name: Optional[str] = None
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    profile_image_url: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+
+class AdminOrderDetailResponse(OrderResponse):
+    """Enriched order response that includes customer details for admin views."""
+    customer: Optional[OrderCustomerInfo] = None
+
+
 class OrderStatusUpdate(BaseModel):
     status: str  # placed | accepted | preparing | dispatched | delivered | cancelled
 

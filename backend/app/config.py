@@ -38,7 +38,7 @@ class Settings(BaseSettings):
     DELIVERY_FEE_DEFAULT: float = 40.0
 
     # Admin bootstrap credentials (used only by seed.py)
-    ADMIN_EMAIL: str = "admin@openbake.in"
+    ADMIN_EMAIL: str = "admin@srivinayakabakery.in"
     ADMIN_PASSWORD: str = "Admin@1234"
 
     class Config:
