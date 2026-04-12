@@ -69,8 +69,8 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="font-semibold">Email</p>
-                    <a href="mailto:hello@openbake.in" className="text-primary text-sm hover:underline">
-                      hello@openbake.in
+                    <a href="mailto:hello@srivinayakabakery.in" className="text-primary text-sm hover:underline">
+                      hello@srivinayakabakery.in
                     </a>
                   </div>
                 </div>

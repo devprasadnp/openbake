@@ -71,8 +71,12 @@ api.interceptors.response.use(
 
     // Don't toast on 401 (handled above) or cancelled requests
     if (error.response?.status !== 401 && !axios.isCancel(error)) {
-      const message =
-        error.response?.data?.detail || "Something went wrong";
+      const raw = error.response?.data?.detail || "Something went wrong";
+      // Sanitize backend errors — never show raw exception details to users
+      let message = raw;
+      if (typeof raw === "string" && (raw.includes("sqlalchemy") || raw.includes("Traceback") || raw.includes("IntegrityError"))) {
+        message = "Something went wrong. Please try again.";
+      }
       toast.error(message);
     }
 

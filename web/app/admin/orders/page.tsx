@@ -96,6 +96,8 @@ export default function AdminOrdersPage() {
               <th className="text-left px-4 py-3 font-medium text-text-secondary">Delivery Address</th>
               <th className="text-left px-4 py-3 font-medium text-text-secondary">Items</th>
               <th className="text-left px-4 py-3 font-medium text-text-secondary">Total</th>
+              <th className="text-left px-4 py-3 font-medium text-text-secondary">Payment</th>
+              <th className="text-left px-4 py-3 font-medium text-text-secondary">Time Slot</th>
               <th className="text-left px-4 py-3 font-medium text-text-secondary">Status</th>
               <th className="text-left px-4 py-3 font-medium text-text-secondary">Action</th>
             </tr>
@@ -103,15 +105,19 @@ export default function AdminOrdersPage() {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={8} className="text-center py-12 text-text-secondary">Loading...</td>
+                <td colSpan={10} className="text-center py-12 text-text-secondary">Loading...</td>
               </tr>
             ) : filtered.length === 0 ? (
               <tr>
-                <td colSpan={8} className="text-center py-12 text-text-secondary">No orders to display.</td>
+                <td colSpan={10} className="text-center py-12 text-text-secondary">No orders to display.</td>
               </tr>
             ) : (
               filtered.map((order) => (
-                <tr key={order.id} className="border-b border-border last:border-0">
+                <tr
+                  key={order.id}
+                  className="border-b border-border last:border-0 hover:bg-cream/50 cursor-pointer"
+                  onClick={() => router.push(`/admin/orders/${order.id}`)}
+                >
                   <td className="px-4 py-3 font-medium">#{order.id.slice(0, 8)}</td>
                   <td className="px-4 py-3 text-text-secondary">{formatDate(order.created_at)}</td>
                   <td className="px-4 py-3">
@@ -138,9 +144,21 @@ export default function AdminOrdersPage() {
                   <td className="px-4 py-3">{order.items.length}</td>
                   <td className="px-4 py-3 font-semibold">{formatPrice(order.total)}</td>
                   <td className="px-4 py-3">
-                    <Badge variant={statusVariant[order.status]}>{order.status}</Badge>
+                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                      order.payment_status === "paid" ? "bg-green-50 text-green-600" :
+                      order.payment_status === "failed" ? "bg-red-50 text-red-600" :
+                      "bg-yellow-50 text-yellow-600"
+                    }`}>
+                      {order.payment_status || "pending"}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 text-xs text-text-secondary">
+                    {order.time_slot || "—"}
                   </td>
                   <td className="px-4 py-3">
+                    <Badge variant={statusVariant[order.status]}>{order.status}</Badge>
+                  </td>
+                  <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
                     {NEXT_STATUS[order.status] ? (
                       <button
                         onClick={() => updateStatus(order.id, NEXT_STATUS[order.status])}

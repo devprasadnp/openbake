@@ -8,9 +8,9 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <span className="text-2xl">🥐</span>
+              <span className="text-2xl">🍰</span>
               <span className="font-playfair text-xl font-bold text-primary">
-                OpenBake
+                Sri Vinayaka Bakery
               </span>
             </div>
             <p className="text-text-secondary text-sm">
@@ -36,7 +36,7 @@ export default function Footer() {
             <ul className="space-y-2 text-sm text-text-secondary">
               <li>123 Bakery Street</li>
               <li>Hyderabad, India 500001</li>
-              <li>hello@openbake.com</li>
+              <li>hello@srivinayakabakery.in</li>
               <li>+91 98765 43210</li>
             </ul>
           </div>
@@ -53,7 +53,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-border mt-8 pt-6 flex flex-col md:flex-row items-center justify-between text-sm text-text-secondary">
-          <p>&copy; {new Date().getFullYear()} OpenBake. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Sri Vinayaka Bakery. All rights reserved.</p>
           <div className="flex gap-4 mt-2 md:mt-0">
             <Link href="/privacy" className="hover:text-primary">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-primary">Terms of Service</Link>

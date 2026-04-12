@@ -18,7 +18,7 @@ const nunito = Nunito({
 });
 
 export const metadata: Metadata = {
-  title: "OpenBake — Fresh. Warm. Delivered.",
+  title: "Sri Vinayaka Bakery — Fresh. Warm. Delivered.",
   description:
     "Order freshly baked cakes, pastries, breads, and snacks online. Customize your order and get it delivered to your doorstep.",
 };

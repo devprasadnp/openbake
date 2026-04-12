@@ -33,7 +33,7 @@ const team = [
     name: "Arjun Mehta",
     role: "Head Baker & Founder",
     emoji: "👨‍🍳",
-    bio: "With 15 years of experience in artisan baking across Mumbai and Paris, Arjun started OpenBake to bring world-class bakes to your doorstep.",
+    bio: "With 15 years of experience in artisan baking across Mumbai and Paris, Arjun started Sri Vinayaka Bakery to bring world-class bakes to your doorstep.",
   },
   {
     name: "Priya Nair",
@@ -68,7 +68,7 @@ export default function AboutPage() {
               Our Story
             </h1>
             <p className="text-lg md:text-xl text-text-secondary max-w-2xl mx-auto leading-relaxed">
-              OpenBake was born out of a simple belief — everyone deserves access to truly great,
+              Sri Vinayaka Bakery was born out of a simple belief — everyone deserves access to truly great,
               freshly baked food without having to wait for a special occasion or travel far.
             </p>
             <p className="mt-4 text-text-secondary max-w-2xl mx-auto leading-relaxed">
@@ -175,9 +175,9 @@ export default function AboutPage() {
                 <Users size={24} className="text-primary mx-auto mb-3" />
                 <h3 className="font-semibold mb-1">Get in Touch</h3>
                 <p className="text-sm text-text-secondary">
-                  hello@openbake.com<br />
+                  hello@srivinayakabakery.in<br />
                   +91 98765 43210<br />
-                  @openbake on Instagram
+                  @srivinayakabakery on Instagram
                 </p>
               </div>
             </div>

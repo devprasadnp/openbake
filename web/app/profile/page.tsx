@@ -37,7 +37,7 @@ function ProfileContent() {
   const [saving, setSaving] = useState(false);
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [showNewAddr, setShowNewAddr] = useState(false);
-  const [newAddr, setNewAddr] = useState({ full_address: "", landmark: "", city: "", state: "", pincode: "", label: "Home" });
+  const [newAddr, setNewAddr] = useState({ recipient_name: "", recipient_phone: "", house_number: "", street: "", full_address: "", landmark: "", city: "", state: "", pincode: "", label: "Home" });
   const [newAddrLat, setNewAddrLat] = useState<number | undefined>();
   const [newAddrLng, setNewAddrLng] = useState<number | undefined>();
   const [locating, setLocating] = useState(false);
@@ -123,6 +123,10 @@ function ProfileContent() {
 
     try {
       const res = await api.post<Address>("/addresses", {
+        recipient_name: newAddr.recipient_name?.trim() || null,
+        recipient_phone: newAddr.recipient_phone?.trim() || null,
+        house_number: newAddr.house_number?.trim() || null,
+        street: newAddr.street?.trim() || null,
         full_address: newAddr.full_address.trim(),
         landmark: newAddr.landmark?.trim() || null,
         city: newAddr.city.trim(),
@@ -135,7 +139,7 @@ function ProfileContent() {
       });
       setAddresses([...addresses, res.data]);
       setShowNewAddr(false);
-      setNewAddr({ full_address: "", landmark: "", city: "", state: "", pincode: "", label: "Home" });
+      setNewAddr({ recipient_name: "", recipient_phone: "", house_number: "", street: "", full_address: "", landmark: "", city: "", state: "", pincode: "", label: "Home" });
       setNewAddrLat(undefined);
       setNewAddrLng(undefined);
       setAddrErrors({});
@@ -273,7 +277,15 @@ function ProfileContent() {
                         ))}
                       </div>
                     </div>
-                    <Input id="address" label="House / Flat / Floor, Building, Street *" value={newAddr.full_address} onChange={(e) => { setNewAddr({ ...newAddr, full_address: e.target.value }); setAddrErrors((p) => { const n = {...p}; delete n.full_address; return n; }); }} placeholder="e.g. Flat 302, Sai Residency, MG Road" error={addrErrors.full_address} />
+                    <Input id="address" label="Full Address *" value={newAddr.full_address} onChange={(e) => { setNewAddr({ ...newAddr, full_address: e.target.value }); setAddrErrors((p) => { const n = {...p}; delete n.full_address; return n; }); }} placeholder="e.g. Flat 302, Sai Residency, MG Road" error={addrErrors.full_address} />
+                    <div className="grid grid-cols-2 gap-3">
+                      <Input id="recipient_name" label="Recipient Name" value={newAddr.recipient_name} onChange={(e) => setNewAddr({ ...newAddr, recipient_name: e.target.value })} placeholder="e.g. Ravi Kumar" />
+                      <Input id="recipient_phone" label="Recipient Phone" value={newAddr.recipient_phone} onChange={(e) => setNewAddr({ ...newAddr, recipient_phone: e.target.value })} placeholder="9876543210" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <Input id="house_number" label="House / Flat No." value={newAddr.house_number} onChange={(e) => setNewAddr({ ...newAddr, house_number: e.target.value })} placeholder="e.g. Flat 302, 2nd Floor" />
+                      <Input id="street" label="Street / Colony" value={newAddr.street} onChange={(e) => setNewAddr({ ...newAddr, street: e.target.value })} placeholder="e.g. MG Road, Jubilee Hills" />
+                    </div>
                     <Input id="landmark" label="Landmark (optional)" value={newAddr.landmark} onChange={(e) => setNewAddr({ ...newAddr, landmark: e.target.value })} placeholder="Near City Mall, Opposite SBI Bank" />
                     <div className="grid grid-cols-3 gap-3">
                       <Input id="city" label="City *" value={newAddr.city} onChange={(e) => { setNewAddr({ ...newAddr, city: e.target.value }); setAddrErrors((p) => { const n = {...p}; delete n.city; return n; }); }} error={addrErrors.city} />

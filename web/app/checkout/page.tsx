@@ -50,7 +50,13 @@ export default function CheckoutPage() {
   const [discount, setDiscount] = useState(0);
   const [couponMessage, setCouponMessage] = useState("");
   const [placing, setPlacing] = useState(false);
+  const [orderPlaced, setOrderPlaced] = useState(false);
+  const [idempotencyKey] = useState(() => crypto.randomUUID());
   const [newAddress, setNewAddress] = useState({
+    recipient_name: "",
+    recipient_phone: "",
+    house_number: "",
+    street: "",
     full_address: "",
     landmark: "",
     city: "",
@@ -171,13 +177,16 @@ export default function CheckoutPage() {
     if (!validateAddress()) return;
     try {
       const res = await api.post<Address>("/addresses", {
+        recipient_name: newAddress.recipient_name?.trim() || null,
+        recipient_phone: newAddress.recipient_phone?.trim() || newAddress.phone?.trim() || null,
+        house_number: newAddress.house_number?.trim() || null,
+        street: newAddress.street?.trim() || null,
         full_address: newAddress.full_address.trim(),
         landmark: newAddress.landmark?.trim() || null,
         city: newAddress.city.trim(),
         state: newAddress.state?.trim() || null,
         pincode: newAddress.pincode.trim(),
         label: newAddress.label.trim(),
-        recipient_phone: newAddress.phone?.trim() || null,
         lat: newAddress.lat,
         lng: newAddress.lng,
         is_default: addresses.length === 0, // first address is default
@@ -298,7 +307,7 @@ export default function CheckoutPage() {
         key: razorpay_key_id || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_placeholder",
         amount,
         currency,
-        name: "OpenBake",
+        name: "Sri Vinayaka Bakery",
         description: `Order #${orderId.slice(0, 8)}`,
         image: "/logo.png",
         order_id: razorpay_order_id,
@@ -346,6 +355,12 @@ export default function CheckoutPage() {
       return;
     }
 
+    if (orderPlaced) {
+      toast.error("Order already placed. Redirecting to orders...");
+      router.push("/orders");
+      return;
+    }
+
     setPlacing(true);
     try {
       const orderItems = items.map((item) => ({
@@ -360,12 +375,14 @@ export default function CheckoutPage() {
         items: orderItems,
         coupon_code: discount > 0 ? couponCode : null,
         payment_method: paymentMethod,
-        time_slot: selectedSlot,
+        time_slot: orderType === "delivery" ? selectedSlot : null,
         special_note: specialNote || null,
-        idempotency_key: crypto.randomUUID(),
+        idempotency_key: idempotencyKey,
       });
 
       const orderId: string = res.data.id;
+
+      setOrderPlaced(true);
 
       // For UPI / card, open Razorpay. For COD, go straight to orders.
       if (paymentMethod === "upi" || paymentMethod === "card") {
@@ -376,7 +393,8 @@ export default function CheckoutPage() {
         router.push("/orders");
       }
     } catch {
-      toast.error("Failed to place order");
+      // Don't double-toast — the axios interceptor already shows the backend error
+      // toast.error("Failed to place order");
     } finally {
       setPlacing(false);
     }
@@ -537,19 +555,51 @@ export default function CheckoutPage() {
                           </div>
                           <Input
                             id="phone"
-                            label="Contact Phone"
+                            label="Contact Phone *"
                             value={newAddress.phone}
                             onChange={(e) => { setNewAddress({ ...newAddress, phone: e.target.value }); setAddrErrors((p) => { const n = {...p}; delete n.phone; return n; }); }}
                             placeholder="9876543210"
                             error={addrErrors.phone}
                           />
                         </div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <Input
+                            id="recipient_name"
+                            label="Recipient Name"
+                            value={newAddress.recipient_name}
+                            onChange={(e) => setNewAddress({ ...newAddress, recipient_name: e.target.value })}
+                            placeholder="e.g. Ravi Kumar"
+                          />
+                          <Input
+                            id="recipient_phone"
+                            label="Recipient Phone (if different)"
+                            value={newAddress.recipient_phone}
+                            onChange={(e) => setNewAddress({ ...newAddress, recipient_phone: e.target.value })}
+                            placeholder="9876543210"
+                          />
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <Input
+                            id="house_number"
+                            label="House / Flat No."
+                            value={newAddress.house_number}
+                            onChange={(e) => setNewAddress({ ...newAddress, house_number: e.target.value })}
+                            placeholder="e.g. Flat 302, 2nd Floor"
+                          />
+                          <Input
+                            id="street"
+                            label="Street / Colony"
+                            value={newAddress.street}
+                            onChange={(e) => setNewAddress({ ...newAddress, street: e.target.value })}
+                            placeholder="e.g. MG Road, Jubilee Hills"
+                          />
+                        </div>
                         <Input
                           id="addr"
-                          label="House / Flat / Floor, Building Name, Street *"
+                          label="Full Address *"
                           value={newAddress.full_address}
                           onChange={(e) => { setNewAddress({ ...newAddress, full_address: e.target.value }); setAddrErrors((p) => { const n = {...p}; delete n.full_address; return n; }); }}
-                          placeholder="e.g. Flat 302, Sai Residency, MG Road"
+                          placeholder="e.g. Sai Residency, Near City Mall"
                           error={addrErrors.full_address}
                         />
                         <Input
@@ -616,20 +666,28 @@ export default function CheckoutPage() {
             {/* Step 2: Delivery Slot */}
             {step === 2 && (
               <div className="bg-white rounded-2xl p-6 shadow-sm">
-                <h2 className="font-semibold text-lg mb-4">Delivery Time Slot</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {timeSlots.map((slot) => (
-                    <button
-                      key={slot}
-                      onClick={() => setSelectedSlot(slot)}
-                      className={`py-3 px-4 rounded-xl border-2 text-sm font-medium transition-all ${
-                        selectedSlot === slot ? "border-primary bg-primary/5 text-primary" : "border-border text-text-secondary"
-                      }`}
-                    >
-                      {slot}
-                    </button>
-                  ))}
-                </div>
+                {orderType === "delivery" ? (
+                  <>
+                    <h2 className="font-semibold text-lg mb-4">Delivery Time Slot</h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {timeSlots.map((slot) => (
+                        <button
+                          key={slot}
+                          onClick={() => setSelectedSlot(slot)}
+                          className={`py-3 px-4 rounded-xl border-2 text-sm font-medium transition-all ${
+                            selectedSlot === slot ? "border-primary bg-primary/5 text-primary" : "border-border text-text-secondary"
+                          }`}
+                        >
+                          {slot}
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <div className="text-center py-4">
+                    <p className="text-text-secondary text-sm">Time slot selection is not required for pickup orders.</p>
+                  </div>
+                )}
 
                 <div className="mt-6">
                   <label className="text-sm font-medium text-text-primary mb-2 block">Special Note (optional)</label>

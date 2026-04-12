@@ -35,9 +35,9 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2">
-            <span className="text-3xl">🥐</span>
+            <span className="text-3xl">🍰</span>
             <span className="font-playfair text-2xl font-bold text-primary">
-              OpenBake
+              Sri Vinayaka Bakery
             </span>
           </Link>
         </div>

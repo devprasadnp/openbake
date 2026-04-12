@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutDashboard, Package, ShoppingCart, Tag, BarChart3, Boxes, LogOut } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingCart, Tag, BarChart3, Boxes, LogOut, Settings } from "lucide-react";
 import { useAuthStore } from "@/store/authStore";
 
 const sidebarLinks = [
@@ -13,6 +13,7 @@ const sidebarLinks = [
   { href: "/admin/coupons", label: "Coupons", icon: Tag },
   { href: "/admin/inventory", label: "Inventory", icon: Boxes },
   { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
+  { href: "/admin/settings", label: "Settings", icon: Settings },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -50,9 +51,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <aside className="w-60 bg-white border-r border-border flex flex-col">
         <div className="px-6 py-5 border-b border-border">
           <Link href="/admin/dashboard" className="flex items-center gap-2">
-            <span className="text-xl">🥐</span>
+            <span className="text-xl">🍰</span>
             <span className="font-playfair text-lg font-bold text-primary">
-              OpenBake Admin
+              SVB Admin
             </span>
           </Link>
         </div>

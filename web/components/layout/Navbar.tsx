@@ -51,7 +51,7 @@ export default function Navbar() {
               <ChefHat size={18} className="text-white" />
             </div>
             <span className="font-playfair text-xl font-bold text-primary">
-              OpenBake
+              Sri Vinayaka Bakery
             </span>
           </Link>
 
