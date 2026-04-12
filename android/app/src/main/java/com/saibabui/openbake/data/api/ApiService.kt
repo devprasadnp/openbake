@@ -99,10 +99,13 @@ interface ApiService {
 
     // Payments
     @POST("payments/create-order")
-    suspend fun createPaymentOrder(@Body request: CreatePaymentOrderRequest): Response<RazorpayOrderResponse>
+    suspend fun createPaymentOrder(@Body request: CreatePaymentOrderRequest): Response<PaymentInitResponse>
 
     @POST("payments/verify")
     suspend fun verifyPayment(@Body request: VerifyPaymentRequest): Response<PaymentVerifyResponse>
+
+    @GET("payments/status/{orderId}")
+    suspend fun getPaymentStatus(@Path("orderId") orderId: String): Response<PaymentStatusResponse>
 
     // Coupons
     @POST("coupons/apply")

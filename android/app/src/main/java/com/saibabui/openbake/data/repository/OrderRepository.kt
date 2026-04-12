@@ -96,7 +96,7 @@ class OrderRepository {
     }
 
     // ── Payment ──
-    suspend fun createPaymentOrder(orderId: String): Result<RazorpayOrderResponse> {
+    suspend fun createPaymentOrder(orderId: String): Result<PaymentInitResponse> {
         return try {
             val response = api.createPaymentOrder(CreatePaymentOrderRequest(orderId))
             if (response.isSuccessful) {
@@ -116,6 +116,19 @@ class OrderRepository {
                 Result.success(response.body()!!)
             } else {
                 Result.failure(Exception(parseError(response.errorBody(), "Payment verification failed")))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun getPaymentStatus(orderId: String): Result<PaymentStatusResponse> {
+        return try {
+            val response = api.getPaymentStatus(orderId)
+            if (response.isSuccessful) {
+                Result.success(response.body()!!)
+            } else {
+                Result.failure(Exception(parseError(response.errorBody(), "Failed to fetch payment status")))
             }
         } catch (e: Exception) {
             Result.failure(e)

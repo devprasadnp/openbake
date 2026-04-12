@@ -27,9 +27,22 @@ class Settings(BaseSettings):
     CLOUDINARY_API_KEY: str = ""
     CLOUDINARY_API_SECRET: str = ""
 
-    # Razorpay
+    # Razorpay (legacy fallback)
     RAZORPAY_KEY_ID: str = ""
     RAZORPAY_KEY_SECRET: str = ""
+
+    # PayU
+    PAYU_MERCHANT_KEY: str = "PgFuTw"
+    PAYU_MERCHANT_SALT: str = "vVRWH3BsZiAezWr1xEsFHvdcs9zf6m2j"
+    PAYU_CLIENT_ID: str = "62caa8f1511e0d506cb3c5a5babadf5aecea698911f8621159127b820ece1610"
+    PAYU_CLIENT_SECRET: str = "c039351a08f886523344d6693a88ac542d158922f7cdd56cd4e0187aeb4084d5"
+    PAYU_PAYMENT_URL: str = "https://test.payu.in/_payment"
+    PAYU_STATUS_API_URL: str = "https://test.payu.in/merchant/postservice?form=2"
+    PAYU_CALLBACK_BASE_URL: str = ""
+
+    # Redirect targets
+    WEB_BASE_URL: str = "http://localhost:3000"
+    ANDROID_DEEP_LINK_BASE: str = "openbake://payment-result"
 
     # Bakery Location (Bangalore default)
     BAKERY_LAT: float = 12.9716

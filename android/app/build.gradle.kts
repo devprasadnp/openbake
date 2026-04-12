@@ -86,9 +86,6 @@ dependencies {
     // Location Services
     implementation(libs.play.services.location)
 
-    // Razorpay Payment SDK
-    implementation(libs.razorpay.checkout)
-
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

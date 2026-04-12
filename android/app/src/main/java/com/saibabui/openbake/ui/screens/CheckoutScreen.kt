@@ -1,7 +1,8 @@
 package com.saibabui.openbake.ui.screens
 
 import android.Manifest
-import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.content.pm.PackageManager
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -27,10 +28,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
-import com.razorpay.Checkout
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.saibabui.openbake.BuildConfig
 import com.saibabui.openbake.MainActivity
-import com.saibabui.openbake.PaymentResult
 import com.saibabui.openbake.data.api.RetrofitClient
 import com.saibabui.openbake.data.model.Address
 import com.saibabui.openbake.data.model.AddressRequest
@@ -42,7 +44,6 @@ import com.saibabui.openbake.ui.theme.*
 import com.saibabui.openbake.ui.viewmodel.CartViewModel
 import com.saibabui.openbake.ui.viewmodel.OrderViewModel
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,6 +54,7 @@ fun CheckoutScreen(
     onBack: () -> Unit
 ) {
     val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
     val scope = rememberCoroutineScope()
     val cartItems by cartViewModel.items.collectAsState()
     val placingOrder by orderViewModel.placingOrder.collectAsState()
@@ -68,6 +70,7 @@ fun CheckoutScreen(
     var selectedAddressId by remember { mutableStateOf<String?>(null) }
     var paymentInProgress by remember { mutableStateOf(false) }
     var paymentError by remember { mutableStateOf<String?>(null) }
+    var pendingPaymentOrderId by remember { mutableStateOf<String?>(null) }
 
     // Prevent duplicate order placement via double-tap
     var orderPlacementInFlight by remember { mutableStateOf(false) }
@@ -226,28 +229,71 @@ fun CheckoutScreen(
         else locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
     }
 
+    fun checkPaymentStatus(orderId: String) {
+        scope.launch {
+            val orderRepo = OrderRepository()
+            orderRepo.getPaymentStatus(orderId).fold(
+                onSuccess = { status ->
+                    when (status.paymentStatus.lowercase()) {
+                        "paid" -> {
+                            cartViewModel.clearCart()
+                            orderViewModel.clearPlacedOrder()
+                            paymentInProgress = false
+                            paymentError = null
+                            pendingPaymentOrderId = null
+                            orderPlacementInFlight = false
+                            onOrderPlaced(orderId)
+                        }
+
+                        "failed" -> {
+                            paymentInProgress = false
+                            paymentError = "Payment failed. Please try again."
+                            pendingPaymentOrderId = null
+                            orderPlacementInFlight = false
+                        }
+
+                        else -> {
+                            paymentInProgress = false
+                            paymentError = "Payment is pending. Complete it in PayU and retry status check."
+                            orderPlacementInFlight = false
+                        }
+                    }
+                },
+                onFailure = {
+                    paymentInProgress = false
+                    paymentError = "Unable to check payment status. Please refresh and retry."
+                    orderPlacementInFlight = false
+                }
+            )
+        }
+    }
+
     /**
-     * Launch Razorpay Checkout for UPI/card payments.
+     * Launch PayU hosted checkout for UPI/card payments.
      * Called AFTER order is created on backend with payment_status=pending.
      */
-    fun launchRazorpay(orderId: String) {
+    fun launchPayU(orderId: String) {
         paymentInProgress = true
         paymentError = null
         scope.launch {
             val orderRepo = OrderRepository()
             val result = orderRepo.createPaymentOrder(orderId)
             result.fold(
-                onSuccess = { rpOrder ->
+                onSuccess = { payuOrder ->
                     try {
-                        // Dev mock mode — skip Razorpay SDK entirely
-                        if (rpOrder.razorpayOrderId.startsWith("order_dev_")) {
+                        if (payuOrder.mode == "mock") {
                             Log.d("Checkout", "Dev mock order — auto-verifying payment")
                             val verifyResult = orderRepo.verifyPayment(
                                 VerifyPaymentRequest(
                                     orderId = orderId,
-                                    razorpayOrderId = rpOrder.razorpayOrderId,
-                                    razorpayPaymentId = "pay_dev_${System.currentTimeMillis()}",
-                                    razorpaySignature = "dev_mock_signature"
+                                    txnid = payuOrder.txnid,
+                                    status = "success",
+                                    mihpayid = "payu_dev_${System.currentTimeMillis()}",
+                                    rawPayload = mapOf(
+                                        "txnid" to payuOrder.txnid,
+                                        "status" to "success",
+                                        "udf1" to orderId,
+                                    ),
                                 )
                             )
                             verifyResult.fold(
@@ -267,25 +313,20 @@ fun CheckoutScreen(
                             return@launch
                         }
 
-                        val activity = context as Activity
-                        val checkout = Checkout()
-                        checkout.setKeyID(rpOrder.razorpayKeyId)
-                        val options = JSONObject().apply {
-                            put("name", "Sri Vinayaka Bakery")
-                            put("description", "Order #${orderId.takeLast(6).uppercase()}")
-                            put("image", "https://ui-avatars.com/api/?name=SVB&background=D4A574&color=fff&size=128")
-                            put("order_id", rpOrder.razorpayOrderId)
-                            put("amount", rpOrder.amount)
-                            put("currency", rpOrder.currency)
-                            put("prefill", JSONObject())
-                            put("theme", JSONObject().apply {
-                                put("color", "#D4A574")
-                            })
+                        if (payuOrder.checkoutUrl.isBlank()) {
+                            paymentError = "Failed to prepare payment page. Please try again."
+                            paymentInProgress = false
+                            orderPlacementInFlight = false
+                            return@launch
                         }
-                        checkout.open(activity, options)
-                        // Result comes via MainActivity.paymentResultFlow — do NOT reset paymentInProgress here
+
+                        pendingPaymentOrderId = orderId
+                        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(payuOrder.checkoutUrl))
+                        context.startActivity(browserIntent)
+                        paymentInProgress = false
+                        paymentError = "Complete payment in PayU and return to app."
                     } catch (e: Exception) {
-                        Log.e("Checkout", "Razorpay launch failed", e)
+                        Log.e("Checkout", "PayU launch failed", e)
                         paymentError = "Failed to launch payment. Please try again."
                         paymentInProgress = false
                         orderPlacementInFlight = false
@@ -301,43 +342,26 @@ fun CheckoutScreen(
         }
     }
 
-    // Listen to Razorpay payment callbacks from MainActivity
+    // Listen for PayU deep-link callback and refresh payment status from backend
     LaunchedEffect(Unit) {
         MainActivity.paymentResultFlow.collect { result ->
-            val currentOrder = placedOrder ?: return@collect
-            when (result) {
-                is PaymentResult.Success -> {
-                    Log.d("Checkout", "Payment success — verifying with backend")
-                    val orderRepo = OrderRepository()
-                    val verifyResult = orderRepo.verifyPayment(
-                        VerifyPaymentRequest(
-                            orderId = currentOrder.id,
-                            razorpayOrderId = result.razorpayOrderId,
-                            razorpayPaymentId = result.razorpayPaymentId,
-                            razorpaySignature = result.razorpaySignature
-                        )
-                    )
-                    verifyResult.fold(
-                        onSuccess = {
-                            cartViewModel.clearCart()
-                            orderViewModel.clearPlacedOrder()
-                            paymentInProgress = false
-                            orderPlacementInFlight = false
-                            onOrderPlaced(currentOrder.id)
-                        },
-                        onFailure = { err ->
-                            paymentError = "Payment verification failed: ${err.message}"
-                            paymentInProgress = false
-                            orderPlacementInFlight = false
-                        }
-                    )
-                }
-                is PaymentResult.Failure -> {
-                    paymentError = "Payment failed: ${result.description}. You can retry."
-                    paymentInProgress = false
-                    orderPlacementInFlight = false
-                }
+            val pendingOrder = pendingPaymentOrderId
+            if (pendingOrder == null || pendingOrder == result.orderId) {
+                checkPaymentStatus(result.orderId)
             }
+        }
+    }
+
+    // Fallback: if deep-link is missed, re-check payment status when user returns to app.
+    DisposableEffect(lifecycleOwner, pendingPaymentOrderId) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                pendingPaymentOrderId?.let { checkPaymentStatus(it) }
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
 
@@ -353,7 +377,7 @@ fun CheckoutScreen(
         } catch (_: Exception) {}
     }
 
-    // Handle placed order: COD → confirmation, online → Razorpay
+    // Handle placed order: COD → confirmation, online → PayU
     LaunchedEffect(placedOrder) {
         placedOrder?.let { order ->
             if (paymentMethod == "cod") {
@@ -361,7 +385,7 @@ fun CheckoutScreen(
                 orderViewModel.clearPlacedOrder()
                 onOrderPlaced(order.id)
             } else {
-                launchRazorpay(order.id)
+                launchPayU(order.id)
             }
         }
     }
@@ -814,7 +838,7 @@ fun CheckoutScreen(
                 val subtitle = when (value) {
                     "cod" -> "Pay when your order is delivered"
                     "upi" -> "Google Pay, PhonePe, Paytm & more"
-                    "card" -> "Visa, Mastercard, RuPay — secured by Razorpay"
+                    "card" -> "Visa, Mastercard, RuPay — secured by PayU"
                     else -> ""
                 }
                 Column(modifier = Modifier.padding(bottom = 8.dp)) {
@@ -847,16 +871,16 @@ fun CheckoutScreen(
                                         Text("How UPI payment works:", style = MaterialTheme.typography.labelMedium.copy(fontFamily = Nunito, fontWeight = FontWeight.SemiBold))
                                         Spacer(modifier = Modifier.height(8.dp))
                                         PaymentStep("1", "Click \"Place Order\" below")
-                                        PaymentStep("2", "Razorpay opens — choose your UPI app or enter UPI ID")
+                                        PaymentStep("2", "PayU opens — choose your UPI app or enter UPI ID")
                                         PaymentStep("3", "Approve in your UPI app — order confirmed!")
                                         Spacer(modifier = Modifier.height(4.dp))
-                                        Text("🔒 Secure UPI payment via Razorpay", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito), color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                        Text("🔒 Secure UPI payment via PayU", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito), color = MaterialTheme.colorScheme.onSurfaceVariant)
                                     }
                                     "card" -> {
                                         Text("How card payment works:", style = MaterialTheme.typography.labelMedium.copy(fontFamily = Nunito, fontWeight = FontWeight.SemiBold))
                                         Spacer(modifier = Modifier.height(8.dp))
                                         PaymentStep("1", "Click \"Place Order\" below")
-                                        PaymentStep("2", "Enter card details securely in Razorpay")
+                                        PaymentStep("2", "Enter card details securely in PayU")
                                         PaymentStep("3", "Complete 3D Secure / OTP — order confirmed!")
                                         Spacer(modifier = Modifier.height(4.dp))
                                         Text("🔒 PCI-DSS compliant • Visa / MC / RuPay", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito), color = MaterialTheme.colorScheme.onSurfaceVariant)

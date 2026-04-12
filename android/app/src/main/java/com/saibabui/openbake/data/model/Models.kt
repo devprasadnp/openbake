@@ -224,25 +224,41 @@ data class DeliveryEstimate(
 
 // ── Payment ──
 data class CreatePaymentOrderRequest(
-    @SerializedName("order_id") val orderId: String
+    @SerializedName("order_id") val orderId: String,
+    @SerializedName("platform") val platform: String = "android"
 )
 
-data class RazorpayOrderResponse(
-    @SerializedName("razorpay_order_id") val razorpayOrderId: String,
-    @SerializedName("razorpay_key_id") val razorpayKeyId: String,
-    @SerializedName("amount") val amount: Int,
+data class PaymentInitResponse(
+    @SerializedName("provider") val provider: String,
+    @SerializedName("mode") val mode: String,
+    @SerializedName("txnid") val txnid: String,
+    @SerializedName("amount") val amount: String,
     @SerializedName("currency") val currency: String,
-    @SerializedName("order_id") val orderId: String
+    @SerializedName("order_id") val orderId: String,
+    @SerializedName("payment_url") val paymentUrl: String,
+    @SerializedName("checkout_url") val checkoutUrl: String,
+    @SerializedName("method") val method: String,
+    @SerializedName("fields") val fields: Map<String, String> = emptyMap(),
+    @SerializedName("payment_options") val paymentOptions: List<String> = emptyList(),
+    @SerializedName("upi_intent_supported") val upiIntentSupported: Boolean = false
 )
 
 data class VerifyPaymentRequest(
     @SerializedName("order_id") val orderId: String,
-    @SerializedName("razorpay_order_id") val razorpayOrderId: String,
-    @SerializedName("razorpay_payment_id") val razorpayPaymentId: String,
-    @SerializedName("razorpay_signature") val razorpaySignature: String
+    @SerializedName("txnid") val txnid: String? = null,
+    @SerializedName("status") val status: String? = null,
+    @SerializedName("mihpayid") val mihpayid: String? = null,
+    @SerializedName("hash") val hash: String? = null,
+    @SerializedName("raw_payload") val rawPayload: Map<String, String>? = null
 )
 
 data class PaymentVerifyResponse(
+    @SerializedName("order_id") val orderId: String,
+    @SerializedName("payment_status") val paymentStatus: String,
+    val message: String? = null
+)
+
+data class PaymentStatusResponse(
     @SerializedName("order_id") val orderId: String,
     @SerializedName("payment_status") val paymentStatus: String,
     val message: String? = null

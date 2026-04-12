@@ -154,13 +154,19 @@ export interface DeliveryEstimate {
   is_deliverable: boolean;
 }
 
-// ── Razorpay / Payments ────────────────────────────────────────────────────────
-export interface RazorpayOrderResponse {
-  razorpay_order_id: string;
-  razorpay_key_id: string;
-  amount: number;
+// ── Payments (PayU hosted checkout) ───────────────────────────────────────────
+export interface PaymentInitResponse {
+  provider: string;
+  mode: "live" | "mock";
+  txnid: string;
+  amount: string;
   currency: string;
   order_id: string;
+  payment_url: string;
+  method: "POST" | "GET";
+  fields: Record<string, string>;
+  payment_options: string[];
+  upi_intent_supported: boolean;
 }
 
 export interface PaymentVerifyResponse {

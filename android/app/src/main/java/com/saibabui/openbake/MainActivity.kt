@@ -1,5 +1,7 @@
 package com.saibabui.openbake
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -9,27 +11,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
-import com.razorpay.PaymentData
-import com.razorpay.PaymentResultWithDataListener
 import com.saibabui.openbake.navigation.AppNavGraph
 import com.saibabui.openbake.ui.theme.OpenBakeTheme
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 
 /**
- * Sealed class representing Razorpay payment callback results.
+ * Payment callback from PayU browser/app deep-link return.
  */
-sealed class PaymentResult {
-    data class Success(
-        val razorpayPaymentId: String,
-        val razorpayOrderId: String,
-        val razorpaySignature: String
-    ) : PaymentResult()
+data class PaymentResult(
+    val orderId: String,
+    val paymentStatus: String,
+)
 
-    data class Failure(val code: Int, val description: String) : PaymentResult()
-}
-
-class MainActivity : ComponentActivity(), PaymentResultWithDataListener {
+class MainActivity : ComponentActivity() {
 
     companion object {
         private val _paymentResultFlow = MutableSharedFlow<PaymentResult>(extraBufferCapacity = 1)
@@ -38,6 +33,7 @@ class MainActivity : ComponentActivity(), PaymentResultWithDataListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        handlePaymentDeepLink(intent)
         enableEdgeToEdge()
         setContent {
             OpenBakeTheme {
@@ -51,22 +47,19 @@ class MainActivity : ComponentActivity(), PaymentResultWithDataListener {
         }
     }
 
-    override fun onPaymentSuccess(razorpayPaymentId: String?, paymentData: PaymentData?) {
-        Log.d("Payment", "Success: paymentId=$razorpayPaymentId orderId=${paymentData?.orderId}")
-        val result = PaymentResult.Success(
-            razorpayPaymentId = razorpayPaymentId ?: "",
-            razorpayOrderId = paymentData?.orderId ?: "",
-            razorpaySignature = paymentData?.signature ?: ""
-        )
-        _paymentResultFlow.tryEmit(result)
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handlePaymentDeepLink(intent)
     }
 
-    override fun onPaymentError(code: Int, description: String?, paymentData: PaymentData?) {
-        Log.e("Payment", "Error: code=$code desc=$description")
-        val result = PaymentResult.Failure(
-            code = code,
-            description = description ?: "Payment failed"
-        )
-        _paymentResultFlow.tryEmit(result)
+    private fun handlePaymentDeepLink(intent: Intent?) {
+        val data: Uri = intent?.data ?: return
+        if (data.scheme != "openbake" || data.host != "payment-result") return
+
+        val orderId = data.getQueryParameter("order_id") ?: return
+        val paymentStatus = data.getQueryParameter("payment_status") ?: "pending"
+        Log.d("Payment", "Deep link payment result: order=$orderId status=$paymentStatus")
+        _paymentResultFlow.tryEmit(PaymentResult(orderId = orderId, paymentStatus = paymentStatus))
     }
 }

@@ -12,13 +12,7 @@ import { formatPrice } from "@/lib/utils";
 import api from "@/lib/api";
 import toast from "react-hot-toast";
 import { MapPin, Loader2, Truck, AlertCircle } from "lucide-react";
-import type { Address, DeliveryEstimate, RazorpayOrderResponse } from "@/types";
-
-declare global {
-  interface Window {
-    Razorpay: new (options: Record<string, unknown>) => { open: () => void };
-  }
-}
+import type { Address, DeliveryEstimate, PaymentInitResponse } from "@/types";
 
 const paymentMethods = [
   { id: "upi", label: "UPI", icon: "📱" },
@@ -37,7 +31,7 @@ const timeSlots = [
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, subtotal, clearCart } = useCartStore();
-  const { isAuthenticated, user, initialized: authInitialized } = useAuthStore();
+  const { isAuthenticated, initialized: authInitialized } = useAuthStore();
 
   const [step, setStep] = useState(1);
   const [addresses, setAddresses] = useState<Address[]>([]);
@@ -274,21 +268,28 @@ export default function CheckoutPage() {
     );
   };
 
-  // ── Razorpay payment flow ────────────────────────────────────────────────────
-  const launchRazorpay = async (orderId: string) => {
+  // ── PayU hosted payment flow ─────────────────────────────────────────────────
+  const launchPayU = async (orderId: string) => {
     try {
-      const res = await api.post<RazorpayOrderResponse>("/payments/create-order", { order_id: orderId });
-      const { razorpay_order_id, razorpay_key_id, amount, currency, order_id: backendOrderId } = res.data;
+      const res = await api.post<PaymentInitResponse>("/payments/create-order", {
+        order_id: orderId,
+        platform: "web",
+      });
+      const payment = res.data;
 
-      // ── Dev mock mode ── when backend returns a mock order (no valid Razorpay creds),
-      // skip the SDK entirely and directly verify with placeholder values.
-      if (razorpay_order_id.startsWith("order_dev_")) {
+      // Dev mock mode — verify directly through backend
+      if (payment.mode === "mock") {
         try {
           await api.post("/payments/verify", {
-            order_id: backendOrderId || orderId,
-            razorpay_order_id,
-            razorpay_payment_id: `pay_dev_${Date.now()}`,
-            razorpay_signature: "dev_mock_signature",
+            order_id: payment.order_id || orderId,
+            txnid: payment.txnid,
+            status: "success",
+            mihpayid: `payu_dev_${Date.now()}`,
+            raw_payload: {
+              txnid: payment.txnid,
+              status: "success",
+              udf1: payment.order_id || orderId,
+            },
           });
           clearCart();
           toast.success("(Dev) Payment simulated — order confirmed!");
@@ -300,52 +301,26 @@ export default function CheckoutPage() {
         return;
       }
 
-      if (typeof window.Razorpay === "undefined") {
-        toast.error("Razorpay SDK not loaded. Please refresh the page.");
+      if (!payment.payment_url || !payment.fields) {
+        toast.error("Unable to start payment. Please retry.");
         return;
       }
 
-      const options: Record<string, unknown> = {
-        key: razorpay_key_id || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_placeholder",
-        amount,
-        currency,
-        name: "Sri Vinayaka Bakery",
-        description: `Order #${orderId.slice(0, 8)}`,
-        image: "/logo.png",
-        order_id: razorpay_order_id,
-        // Let Razorpay show all enabled payment methods (UPI, Cards, etc.)
-        handler: async (response: { razorpay_order_id: string; razorpay_payment_id: string; razorpay_signature: string }) => {
-          try {
-            await api.post("/payments/verify", {
-              order_id: backendOrderId || orderId,
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature: response.razorpay_signature,
-            });
-            clearCart();
-            toast.success("Payment successful! Order confirmed.");
-            router.push("/orders");
-          } catch {
-            toast.error("Payment verification failed. Please contact support.");
-            router.push("/orders");
-          }
-        },
-        prefill: {
-          name: user?.name || "",
-          email: user?.email || "",
-          contact: user?.phone || "",
-        },
-        theme: { color: "#8B4513" },
-        modal: {
-          ondismiss: () => {
-            toast("Payment cancelled. Your order is saved — you can pay later.", { icon: "ℹ️" });
-            router.push("/orders");
-          },
-        },
-      };
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = payment.payment_url;
+      form.style.display = "none";
 
-      const rzp = new window.Razorpay(options);
-      rzp.open();
+      Object.entries(payment.fields).forEach(([key, value]) => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = value;
+        form.appendChild(input);
+      });
+
+      document.body.appendChild(form);
+      form.submit();
     } catch {
       toast.error("Failed to initiate payment. Please retry.");
     }
@@ -360,12 +335,6 @@ export default function CheckoutPage() {
     if (orderPlaced) {
       toast.error("Order already placed. Redirecting to orders...");
       router.push("/orders");
-      return;
-    }
-
-    // For online payment, verify Razorpay SDK is loaded before creating order
-    if ((paymentMethod === "upi" || paymentMethod === "card") && typeof window.Razorpay === "undefined") {
-      toast.error("Payment gateway is loading. Please wait a moment and try again.");
       return;
     }
 
@@ -392,9 +361,9 @@ export default function CheckoutPage() {
 
       setOrderPlaced(true);
 
-      // For UPI / card, open Razorpay. For COD, go straight to orders.
+      // For UPI / card, redirect to PayU hosted checkout. For COD, go straight to orders.
       if (paymentMethod === "upi" || paymentMethod === "card") {
-        await launchRazorpay(orderId);
+        await launchPayU(orderId);
       } else {
         clearCart();
         toast.success("Order placed successfully!");
@@ -743,7 +712,7 @@ export default function CheckoutPage() {
                             <p className="text-xs text-text-secondary mt-0.5">Google Pay, PhonePe, Paytm & more</p>
                           )}
                           {pm.id === "card" && (
-                            <p className="text-xs text-text-secondary mt-0.5">Visa, Mastercard, RuPay — secured by Razorpay</p>
+                            <p className="text-xs text-text-secondary mt-0.5">Visa, Mastercard, RuPay — secured by PayU</p>
                           )}
                         </div>
                       </label>
@@ -758,7 +727,7 @@ export default function CheckoutPage() {
                           </div>
                           <div className="flex items-start gap-3 text-sm text-text-secondary">
                             <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">2</span>
-                            <p>Razorpay checkout opens — choose your UPI app or enter your UPI ID (e.g. name@upi, name@ybl)</p>
+                            <p>PayU checkout opens — choose your UPI app or enter your UPI ID (e.g. name@upi, name@ybl)</p>
                           </div>
                           <div className="flex items-start gap-3 text-sm text-text-secondary">
                             <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">3</span>
@@ -766,7 +735,7 @@ export default function CheckoutPage() {
                           </div>
                           <div className="flex items-center gap-2 mt-1">
                             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/UPI-Logo-vector.svg/120px-UPI-Logo-vector.svg.png" alt="UPI" className="h-5" />
-                            <span className="text-xs text-text-secondary">Secure UPI payment via Razorpay</span>
+                            <span className="text-xs text-text-secondary">Secure UPI payment via PayU</span>
                           </div>
                         </div>
                       )}
@@ -781,7 +750,7 @@ export default function CheckoutPage() {
                           </div>
                           <div className="flex items-start gap-3 text-sm text-text-secondary">
                             <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">2</span>
-                            <p>Enter your card details (number, expiry, CVV) securely in the Razorpay window</p>
+                            <p>Enter your card details (number, expiry, CVV) securely in the PayU window</p>
                           </div>
                           <div className="flex items-start gap-3 text-sm text-text-secondary">
                             <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">3</span>
@@ -793,7 +762,7 @@ export default function CheckoutPage() {
                               <span className="px-2 py-0.5 bg-white rounded text-[10px] font-bold border text-red-600">MC</span>
                               <span className="px-2 py-0.5 bg-white rounded text-[10px] font-bold border text-green-700">RuPay</span>
                             </div>
-                            <span className="text-xs text-text-secondary">PCI-DSS compliant via Razorpay</span>
+                            <span className="text-xs text-text-secondary">PCI-DSS compliant via PayU</span>
                           </div>
                         </div>
                       )}
