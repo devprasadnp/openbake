@@ -38,6 +38,7 @@ private val CreamMuted  = Color(0xFFD4B896)
 fun SplashScreen(
     onNavigateToLogin: () -> Unit,
     onNavigateToHome: () -> Unit,
+    onNavigateToAdminDashboard: () -> Unit = {},
     authViewModel: AuthViewModel = viewModel()
 ) {
     val authState by authViewModel.uiState.collectAsState()
@@ -54,10 +55,15 @@ fun SplashScreen(
         delay(2400)
     }
 
-    LaunchedEffect(authState.isLoggedIn, authState.isLoading) {
+    LaunchedEffect(authState.isLoggedIn, authState.isLoading, authState.user) {
         if (!authState.isLoading) {
             delay(300)
-            if (authState.isLoggedIn) onNavigateToHome() else onNavigateToLogin()
+            if (authState.isLoggedIn) {
+                if (authState.user?.role == "admin") onNavigateToAdminDashboard()
+                else onNavigateToHome()
+            } else {
+                onNavigateToLogin()
+            }
         }
     }
 

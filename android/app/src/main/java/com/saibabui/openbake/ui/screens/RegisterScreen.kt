@@ -82,7 +82,8 @@ fun RegisterScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 24.dp)
-                .statusBarsPadding(),
+                .statusBarsPadding()
+                .imePadding(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(60.dp))

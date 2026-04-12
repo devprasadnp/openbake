@@ -128,4 +128,66 @@ interface ApiService {
     // Auth — logout with refresh token revocation
     @POST("auth/logout")
     suspend fun logout(@Body request: RefreshTokenRequest): Response<Unit>
+
+    // ── Admin ──
+
+    @GET("admin/dashboard")
+    suspend fun getAdminDashboard(): Response<DashboardStats>
+
+    @GET("admin/analytics")
+    suspend fun getAdminAnalytics(): Response<AnalyticsData>
+
+    @GET("admin/orders")
+    suspend fun getAdminOrders(@Query("status_filter") status: String? = null): Response<List<Order>>
+
+    @GET("admin/orders/{id}")
+    suspend fun getAdminOrderDetail(@Path("id") id: String): Response<AdminOrderDetail>
+
+    @PATCH("admin/orders/{id}")
+    suspend fun updateOrderStatus(@Path("id") id: String, @Body body: OrderStatusUpdateRequest): Response<Order>
+
+    @GET("admin/products")
+    suspend fun getAdminProducts(): Response<List<Product>>
+
+    @POST("admin/products")
+    suspend fun createProduct(@Body body: ProductCreateRequest): Response<Product>
+
+    @PATCH("admin/products/{id}")
+    suspend fun updateProduct(@Path("id") id: String, @Body body: ProductUpdateRequest): Response<Product>
+
+    @DELETE("admin/products/{id}")
+    suspend fun deleteProduct(@Path("id") id: String): Response<MessageResponse>
+
+    @GET("admin/inventory")
+    suspend fun getAdminInventory(@Query("threshold") threshold: Int = 10): Response<List<InventoryItem>>
+
+    @PATCH("admin/inventory/{id}")
+    suspend fun updateInventoryStock(@Path("id") id: String, @Query("stock_count") stockCount: Int): Response<InventoryUpdateResponse>
+
+    @GET("admin/categories")
+    suspend fun getAdminCategories(): Response<List<Category>>
+
+    @POST("admin/categories")
+    suspend fun createCategory(@Body body: CategoryCreateRequest): Response<Category>
+
+    @PATCH("admin/categories/{id}")
+    suspend fun updateCategory(@Path("id") id: String, @Body body: CategoryCreateRequest): Response<Category>
+
+    @DELETE("admin/categories/{id}")
+    suspend fun deleteCategory(@Path("id") id: String): Response<MessageResponse>
+
+    @GET("admin/coupons")
+    suspend fun getAdminCoupons(): Response<List<Coupon>>
+
+    @POST("admin/coupons")
+    suspend fun createCoupon(@Body body: CouponCreateRequest): Response<Coupon>
+
+    @PATCH("admin/coupons/{id}")
+    suspend fun updateCoupon(@Path("id") id: String, @Body body: CouponCreateRequest): Response<Coupon>
+
+    @GET("admin/delivery-config")
+    suspend fun getDeliveryConfig(): Response<DeliveryConfig>
+
+    @PATCH("admin/delivery-config")
+    suspend fun updateDeliveryConfig(@Body body: DeliveryConfigUpdateRequest): Response<DeliveryConfig>
 }

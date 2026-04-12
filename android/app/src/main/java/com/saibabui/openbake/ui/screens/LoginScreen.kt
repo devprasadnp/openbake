@@ -34,6 +34,7 @@ import com.saibabui.openbake.ui.viewmodel.AuthViewModel
 fun LoginScreen(
     onNavigateToRegister: () -> Unit,
     onLoginSuccess: () -> Unit,
+    onAdminLoginSuccess: () -> Unit = {},
     authViewModel: AuthViewModel = viewModel()
 ) {
     val authState by authViewModel.uiState.collectAsState()
@@ -45,8 +46,11 @@ fun LoginScreen(
     val emailValid = email.isBlank() || android.util.Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches()
     val passwordValid = password.isEmpty() || password.length >= 6
 
-    LaunchedEffect(authState.isLoggedIn) {
-        if (authState.isLoggedIn) onLoginSuccess()
+    LaunchedEffect(authState.isLoggedIn, authState.user) {
+        if (authState.isLoggedIn) {
+            if (authState.user?.role == "admin") onAdminLoginSuccess()
+            else onLoginSuccess()
+        }
     }
 
     Box(
@@ -76,7 +80,8 @@ fun LoginScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 24.dp)
-                .statusBarsPadding(),
+                .statusBarsPadding()
+                .imePadding(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(80.dp))

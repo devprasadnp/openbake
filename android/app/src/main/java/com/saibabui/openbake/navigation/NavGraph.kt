@@ -14,7 +14,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.saibabui.openbake.ui.screens.*
+import com.saibabui.openbake.ui.screens.admin.*
 import com.saibabui.openbake.ui.screens.common.OpenBakeBottomBar
+import com.saibabui.openbake.ui.viewmodel.AuthViewModel
 import com.saibabui.openbake.ui.viewmodel.CartViewModel
 import com.saibabui.openbake.ui.viewmodel.OrderViewModel
 
@@ -23,6 +25,10 @@ fun AppNavGraph() {
     val navController = rememberNavController()
     val cartViewModel: CartViewModel = viewModel()
     val orderViewModel: OrderViewModel = viewModel()
+    val authViewModel: AuthViewModel = viewModel()
+
+    val authState by authViewModel.uiState.collectAsState()
+    val isAdmin = authState.user?.role == "admin"
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -30,7 +36,7 @@ fun AppNavGraph() {
     val cartItems by cartViewModel.items.collectAsState()
     val cartCount = cartItems.sumOf { it.quantity }
 
-    val showBottomBar = currentRoute != null && currentRoute in listOf(
+    val customerRoutes = listOf(
         Screen.Home.route,
         Screen.OrderHistory.route,
         Screen.Wishlist.route,
@@ -38,7 +44,23 @@ fun AppNavGraph() {
         Screen.Cart.route,
         Screen.Search.route,
         Screen.AddressManagement.route
-    ) || (currentRoute?.startsWith("product_list") == true)
+    )
+    val adminRoutes = listOf(
+        Screen.AdminDashboard.route,
+        Screen.AdminOrders.route,
+        Screen.AdminProducts.route,
+        Screen.AdminMore.route,
+        Screen.AdminInventory.route,
+        Screen.AdminCoupons.route,
+        Screen.AdminAnalytics.route,
+        Screen.AdminSettings.route,
+        Screen.AdminCategories.route
+    )
+
+    val showBottomBar = currentRoute != null && (
+        (isAdmin && currentRoute in adminRoutes) ||
+        (!isAdmin && (currentRoute in customerRoutes || currentRoute?.startsWith("product_list") == true))
+    )
 
     Scaffold(
         bottomBar = {
@@ -46,9 +68,11 @@ fun AppNavGraph() {
                 OpenBakeBottomBar(
                     currentRoute = currentRoute,
                     cartItemCount = cartCount,
+                    isAdmin = isAdmin,
                     onItemSelected = { route ->
+                        val startRoute = if (isAdmin) Screen.AdminDashboard.route else Screen.Home.route
                         navController.navigate(route) {
-                            popUpTo(Screen.Home.route) { saveState = true }
+                            popUpTo(startRoute) { saveState = true }
                             launchSingleTop = true
                             restoreState = true
                         }
@@ -73,7 +97,13 @@ fun AppNavGraph() {
                         navController.navigate(Screen.Home.route) {
                             popUpTo(Screen.Splash.route) { inclusive = true }
                         }
-                    }
+                    },
+                    onNavigateToAdminDashboard = {
+                        navController.navigate(Screen.AdminDashboard.route) {
+                            popUpTo(Screen.Splash.route) { inclusive = true }
+                        }
+                    },
+                    authViewModel = authViewModel
                 )
             }
 
@@ -84,7 +114,13 @@ fun AppNavGraph() {
                         navController.navigate(Screen.Home.route) {
                             popUpTo(Screen.Login.route) { inclusive = true }
                         }
-                    }
+                    },
+                    onAdminLoginSuccess = {
+                        navController.navigate(Screen.AdminDashboard.route) {
+                            popUpTo(Screen.Login.route) { inclusive = true }
+                        }
+                    },
+                    authViewModel = authViewModel
                 )
             }
 
@@ -95,7 +131,8 @@ fun AppNavGraph() {
                         navController.navigate(Screen.Home.route) {
                             popUpTo(Screen.Login.route) { inclusive = true }
                         }
-                    }
+                    },
+                    authViewModel = authViewModel
                 )
             }
 
@@ -231,6 +268,7 @@ fun AppNavGraph() {
             composable(Screen.Profile.route) {
                 ProfileScreen(
                     onLogout = {
+                        authViewModel.logout()
                         navController.navigate(Screen.Login.route) {
                             popUpTo(0) { inclusive = true }
                         }
@@ -275,6 +313,128 @@ fun AppNavGraph() {
 
             composable(Screen.Settings.route) {
                 SettingsScreen(
+                    onBack = { navController.popBackStack() }
+                )
+            }
+
+            // ── Admin Routes ──
+
+            composable(Screen.AdminDashboard.route) {
+                AdminDashboardScreen(
+                    onNavigateToOrders = { navController.navigate(Screen.AdminOrders.route) },
+                    onNavigateToProducts = { navController.navigate(Screen.AdminProducts.route) }
+                )
+            }
+
+            composable(Screen.AdminOrders.route) {
+                AdminOrdersScreen(
+                    onOrderClick = { orderId ->
+                        navController.navigate(Screen.AdminOrderDetail.createRoute(orderId))
+                    }
+                )
+            }
+
+            composable(
+                route = Screen.AdminOrderDetail.route,
+                arguments = listOf(
+                    navArgument("orderId") { type = NavType.StringType }
+                )
+            ) { backStackEntry ->
+                val orderId = backStackEntry.arguments?.getString("orderId") ?: return@composable
+                AdminOrderDetailScreen(
+                    orderId = orderId,
+                    onBack = { navController.popBackStack() }
+                )
+            }
+
+            composable(Screen.AdminProducts.route) {
+                AdminProductsScreen(
+                    onAddProduct = { navController.navigate(Screen.AdminProductEdit.createRoute(null)) },
+                    onProductClick = { productId ->
+                        navController.navigate(Screen.AdminProductEdit.createRoute(productId))
+                    }
+                )
+            }
+
+            composable(
+                route = Screen.AdminProductEdit.route,
+                arguments = listOf(
+                    navArgument("productId") {
+                        type = NavType.StringType
+                        nullable = true
+                        defaultValue = null
+                    }
+                )
+            ) { backStackEntry ->
+                val productId = backStackEntry.arguments?.getString("productId")
+                AdminProductEditScreen(
+                    productId = productId,
+                    onBack = { navController.popBackStack() }
+                )
+            }
+
+            composable(Screen.AdminMore.route) {
+                AdminMoreScreen(
+                    onInventory = { navController.navigate(Screen.AdminInventory.route) },
+                    onCoupons = { navController.navigate(Screen.AdminCoupons.route) },
+                    onAnalytics = { navController.navigate(Screen.AdminAnalytics.route) },
+                    onCategories = { navController.navigate(Screen.AdminCategories.route) },
+                    onSettings = { navController.navigate(Screen.AdminSettings.route) },
+                    onLogout = {
+                        authViewModel.logout()
+                        navController.navigate(Screen.Login.route) {
+                            popUpTo(0) { inclusive = true }
+                        }
+                    }
+                )
+            }
+
+            composable(Screen.AdminInventory.route) {
+                AdminInventoryScreen(
+                    onBack = { navController.popBackStack() }
+                )
+            }
+
+            composable(Screen.AdminCoupons.route) {
+                AdminCouponsScreen(
+                    onBack = { navController.popBackStack() },
+                    onCouponClick = { couponId ->
+                        navController.navigate(Screen.AdminCouponEdit.createRoute(couponId))
+                    }
+                )
+            }
+
+            composable(
+                route = Screen.AdminCouponEdit.route,
+                arguments = listOf(
+                    navArgument("couponId") {
+                        type = NavType.StringType
+                        nullable = true
+                        defaultValue = null
+                    }
+                )
+            ) { backStackEntry ->
+                val couponId = backStackEntry.arguments?.getString("couponId")
+                AdminCouponEditScreen(
+                    couponId = couponId,
+                    onBack = { navController.popBackStack() }
+                )
+            }
+
+            composable(Screen.AdminAnalytics.route) {
+                AdminAnalyticsScreen(
+                    onBack = { navController.popBackStack() }
+                )
+            }
+
+            composable(Screen.AdminSettings.route) {
+                AdminSettingsScreen(
+                    onBack = { navController.popBackStack() }
+                )
+            }
+
+            composable(Screen.AdminCategories.route) {
+                AdminCategoriesScreen(
                     onBack = { navController.popBackStack() }
                 )
             }

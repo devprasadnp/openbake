@@ -300,3 +300,165 @@ data class OtpVerifyRequest(
     val otp: String,
     val name: String? = null
 )
+
+// ── Admin Dashboard ──
+data class DashboardStats(
+    @SerializedName("today_orders") val todayOrders: Int = 0,
+    @SerializedName("today_revenue") val todayRevenue: Double = 0.0,
+    @SerializedName("week_orders") val weekOrders: Int = 0,
+    @SerializedName("week_revenue") val weekRevenue: Double = 0.0,
+    @SerializedName("month_orders") val monthOrders: Int = 0,
+    @SerializedName("month_revenue") val monthRevenue: Double = 0.0,
+    @SerializedName("pending_orders") val pendingOrders: Int = 0
+)
+
+// ── Admin Analytics ──
+data class AnalyticsData(
+    @SerializedName("daily_trend") val dailyTrend: List<DailyStat> = emptyList(),
+    @SerializedName("status_breakdown") val statusBreakdown: List<StatusCount> = emptyList(),
+    @SerializedName("order_type_split") val orderTypeSplit: List<TypeCount> = emptyList(),
+    @SerializedName("top_products") val topProducts: List<TopProduct> = emptyList(),
+    @SerializedName("payment_split") val paymentSplit: List<PaymentCount> = emptyList()
+)
+
+data class DailyStat(val date: String, val orders: Int = 0, val revenue: Double = 0.0)
+data class StatusCount(val status: String, val count: Int = 0)
+data class TypeCount(val type: String, val count: Int = 0)
+data class TopProduct(val name: String, val units: Int = 0, val revenue: Double = 0.0)
+data class PaymentCount(val method: String, val count: Int = 0)
+
+// ── Admin Order Detail (with customer info) ──
+data class AdminOrderDetail(
+    val id: String,
+    @SerializedName("user_id") val userId: String,
+    @SerializedName("address_id") val addressId: String? = null,
+    val address: Address? = null,
+    @SerializedName("order_type") val orderType: String = "delivery",
+    val status: String = "placed",
+    val items: List<OrderItem> = emptyList(),
+    val subtotal: Double = 0.0,
+    @SerializedName("delivery_fee") val deliveryFee: Double = 0.0,
+    val discount: Double = 0.0,
+    val total: Double = 0.0,
+    @SerializedName("coupon_code") val couponCode: String? = null,
+    @SerializedName("payment_method") val paymentMethod: String? = null,
+    @SerializedName("payment_status") val paymentStatus: String = "pending",
+    @SerializedName("estimated_delivery_minutes") val estimatedDeliveryMinutes: Int? = null,
+    @SerializedName("scheduled_date") val scheduledDate: String? = null,
+    @SerializedName("time_slot") val timeSlot: String? = null,
+    @SerializedName("special_note") val specialNote: String? = null,
+    @SerializedName("created_at") val createdAt: String = "",
+    @SerializedName("updated_at") val updatedAt: String? = null,
+    @SerializedName("status_timestamps") val statusTimestamps: Map<String, String>? = null,
+    val customer: CustomerInfo? = null
+)
+
+data class CustomerInfo(
+    val id: String,
+    val name: String,
+    val email: String? = null,
+    val phone: String? = null,
+    @SerializedName("profile_image_url") val profileImageUrl: String? = null
+)
+
+// ── Admin Order Status Update ──
+data class OrderStatusUpdateRequest(val status: String)
+
+// ── Admin Product Create/Update ──
+data class ProductCreateRequest(
+    @SerializedName("category_id") val categoryId: String,
+    val name: String,
+    val description: String? = null,
+    val price: Double,
+    val images: List<String> = emptyList(),
+    @SerializedName("is_available") val isAvailable: Boolean = true,
+    @SerializedName("is_eggless_available") val isEgglessAvailable: Boolean = false,
+    val customizable: Boolean = false,
+    @SerializedName("stock_count") val stockCount: Int = 0,
+    val variants: List<VariantRequest> = emptyList()
+)
+
+data class ProductUpdateRequest(
+    val name: String? = null,
+    val description: String? = null,
+    val price: Double? = null,
+    val images: List<String>? = null,
+    @SerializedName("is_available") val isAvailable: Boolean? = null,
+    @SerializedName("is_eggless_available") val isEgglessAvailable: Boolean? = null,
+    val customizable: Boolean? = null,
+    @SerializedName("stock_count") val stockCount: Int? = null
+)
+
+data class VariantRequest(
+    @SerializedName("variant_type") val variantType: String,
+    val value: String,
+    @SerializedName("extra_price") val extraPrice: Double = 0.0
+)
+
+// ── Admin Inventory ──
+data class InventoryItem(
+    val id: String,
+    val name: String,
+    @SerializedName("stock_count") val stockCount: Int = 0,
+    @SerializedName("is_available") val isAvailable: Boolean = true
+)
+
+data class InventoryUpdateResponse(
+    val id: String,
+    val name: String,
+    @SerializedName("stock_count") val stockCount: Int = 0,
+    @SerializedName("is_available") val isAvailable: Boolean = true,
+    @SerializedName("waitlist_notified") val waitlistNotified: Int = 0
+)
+
+// ── Admin Coupon ──
+data class Coupon(
+    val id: String,
+    val code: String,
+    @SerializedName("discount_type") val discountType: String,
+    @SerializedName("discount_value") val discountValue: Double,
+    @SerializedName("min_order_value") val minOrderValue: Double = 0.0,
+    @SerializedName("max_uses") val maxUses: Int = 100,
+    @SerializedName("used_count") val usedCount: Int = 0,
+    @SerializedName("valid_from") val validFrom: String,
+    @SerializedName("valid_until") val validUntil: String,
+    @SerializedName("is_active") val isActive: Boolean = true
+)
+
+data class CouponCreateRequest(
+    val code: String,
+    @SerializedName("discount_type") val discountType: String,
+    @SerializedName("discount_value") val discountValue: Double,
+    @SerializedName("min_order_value") val minOrderValue: Double = 0.0,
+    @SerializedName("max_uses") val maxUses: Int = 100,
+    @SerializedName("valid_from") val validFrom: String,
+    @SerializedName("valid_until") val validUntil: String,
+    @SerializedName("is_active") val isActive: Boolean = true
+)
+
+// ── Admin Delivery Config ──
+data class DeliveryConfig(
+    @SerializedName("bakery_lat") val bakeryLat: Double = 0.0,
+    @SerializedName("bakery_lng") val bakeryLng: Double = 0.0,
+    @SerializedName("free_delivery_radius_km") val freeDeliveryRadiusKm: Double = 0.0,
+    @SerializedName("delivery_fee_default") val deliveryFeeDefault: Double = 0.0,
+    @SerializedName("speed_min_per_km") val speedMinPerKm: Double = 0.0
+)
+
+data class DeliveryConfigUpdateRequest(
+    @SerializedName("bakery_lat") val bakeryLat: Double? = null,
+    @SerializedName("bakery_lng") val bakeryLng: Double? = null,
+    @SerializedName("free_delivery_radius_km") val freeDeliveryRadiusKm: Double? = null,
+    @SerializedName("delivery_fee_default") val deliveryFeeDefault: Double? = null,
+    @SerializedName("speed_min_per_km") val speedMinPerKm: Double? = null
+)
+
+// ── Admin Category Create ──
+data class CategoryCreateRequest(
+    val name: String,
+    @SerializedName("image_url") val imageUrl: String? = null,
+    @SerializedName("is_active") val isActive: Boolean = true
+)
+
+// ── Generic message response ──
+data class MessageResponse(val message: String)
