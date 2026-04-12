@@ -104,6 +104,7 @@ export interface Order {
   scheduled_date?: string;
   time_slot?: string;
   special_note?: string;
+  status_timestamps?: Record<string, string>;
   created_at: string;
   updated_at: string;
   items: OrderItem[];

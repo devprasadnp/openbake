@@ -49,6 +49,21 @@ class Order(Base):
         DateTime, server_default=func.now(), onupdate=func.now()
     )
 
+    _status_timestamps: Mapped[str] = mapped_column(
+        "status_timestamps", Text, nullable=True
+    )
+
+    @property
+    def status_timestamps(self) -> dict | None:
+        try:
+            return json.loads(self._status_timestamps) if self._status_timestamps else None
+        except (json.JSONDecodeError, TypeError):
+            return None
+
+    @status_timestamps.setter
+    def status_timestamps(self, value):
+        self._status_timestamps = json.dumps(value) if value else None
+
     # Relationships
     user = relationship("User", back_populates="orders")
     address = relationship("Address", lazy="joined")

@@ -126,7 +126,10 @@ fun CheckoutScreen(
     }
 
     fun saveNewAddress() {
-        if (newAddrFull.isBlank() || newAddrCity.isBlank() || newAddrPincode.isBlank()) return
+        val pincodeDigits = newAddrPincode.filter { it.isDigit() }
+        val phoneDigits = newAddrRecipientPhone.filter { it.isDigit() }
+        if (newAddrFull.isBlank() || newAddrCity.isBlank() || pincodeDigits.length != 6) return
+        if (newAddrRecipientPhone.isNotBlank() && (phoneDigits.length != 10 || phoneDigits.first() !in '6'..'9')) return
         scope.launch {
             savingAddr = true
             runCatching {
@@ -582,7 +585,7 @@ fun CheckoutScreen(
                             }
                         }
                         OutlinedTextField(value = newAddrRecipientName, onValueChange = { newAddrRecipientName = it }, label = { Text("Recipient Name", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), singleLine = true)
-                        OutlinedTextField(value = newAddrRecipientPhone, onValueChange = { newAddrRecipientPhone = it }, label = { Text("Recipient Phone", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), singleLine = true)
+                        OutlinedTextField(value = newAddrRecipientPhone, onValueChange = { newAddrRecipientPhone = it.filter { c -> c.isDigit() }.take(10) }, label = { Text("Recipient Phone", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), singleLine = true)
                         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                             OutlinedTextField(value = newAddrHouseNumber, onValueChange = { newAddrHouseNumber = it }, label = { Text("House / Flat No.", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp), singleLine = true)
                             OutlinedTextField(value = newAddrStreet, onValueChange = { newAddrStreet = it }, label = { Text("Street / Colony", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp), singleLine = true)
@@ -592,13 +595,13 @@ fun CheckoutScreen(
                         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                             OutlinedTextField(value = newAddrCity, onValueChange = { newAddrCity = it }, label = { Text("City", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp))
                             OutlinedTextField(value = newAddrState, onValueChange = { newAddrState = it }, label = { Text("State", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp))
-                            OutlinedTextField(value = newAddrPincode, onValueChange = { newAddrPincode = it }, label = { Text("Pincode", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp))
+                            OutlinedTextField(value = newAddrPincode, onValueChange = { newAddrPincode = it.filter { c -> c.isDigit() }.take(6) }, label = { Text("Pincode", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp))
                         }
                         Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
                             OutlinedButton(onClick = { showAddressForm = false }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp)) {
                                 Text("Cancel", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito))
                             }
-                            Button(onClick = { saveNewAddress() }, modifier = Modifier.weight(1f), enabled = !savingAddr && newAddrFull.isNotBlank() && newAddrCity.isNotBlank() && newAddrPincode.isNotBlank(), shape = RoundedCornerShape(12.dp)) {
+                            Button(onClick = { saveNewAddress() }, modifier = Modifier.weight(1f), enabled = !savingAddr && newAddrFull.isNotBlank() && newAddrCity.isNotBlank() && newAddrPincode.filter { it.isDigit() }.length == 6, shape = RoundedCornerShape(12.dp)) {
                                 if (savingAddr) CircularProgressIndicator(modifier = Modifier.size(14.dp), strokeWidth = 2.dp, color = MaterialTheme.colorScheme.onPrimary)
                                 else Text("Save", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito, fontWeight = FontWeight.Bold))
                             }
@@ -755,8 +758,15 @@ fun CheckoutScreen(
                     Spacer(modifier = Modifier.height(4.dp))
                     if (orderType == "delivery") {
                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                            Text(if (cartViewModel.deliveryFee == 0.0) "Delivery (Free!)" else "Delivery", style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito), color = if (cartViewModel.deliveryFee == 0.0) Success else MaterialTheme.colorScheme.onSurfaceVariant)
-                            Text("₹${cartViewModel.deliveryFee.toInt()}", style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito, fontWeight = FontWeight.SemiBold))
+                            Text(if (cartViewModel.deliveryFee == 0.0 && cartViewModel.subtotal >= 500) "Delivery (Free!)" else "Delivery", style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito), color = if (cartViewModel.deliveryFee == 0.0 && cartViewModel.subtotal >= 500) Success else MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text(if (cartViewModel.deliveryFee == 0.0 && cartViewModel.subtotal >= 500) "FREE" else "₹${cartViewModel.deliveryFee.toInt()}", style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito, fontWeight = FontWeight.SemiBold), color = if (cartViewModel.deliveryFee == 0.0 && cartViewModel.subtotal >= 500) Success else MaterialTheme.colorScheme.onSurface)
+                        }
+                        if (cartViewModel.subtotal > 0 && cartViewModel.subtotal < 500) {
+                            Text(
+                                "Add ₹${(500 - cartViewModel.subtotal).toInt()} more for free delivery",
+                                style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito),
+                                color = MaterialTheme.colorScheme.primary
+                            )
                         }
                     } else {
                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {

@@ -28,6 +28,7 @@ import com.saibabui.openbake.ui.screens.common.EmptyState
 import com.saibabui.openbake.ui.screens.common.LoadingScreen
 import com.saibabui.openbake.ui.theme.*
 import com.saibabui.openbake.ui.viewmodel.ProductViewModel
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,6 +42,13 @@ fun SearchScreen(
 
     LaunchedEffect(Unit) {
         productViewModel.loadProducts()
+    }
+
+    // Debounce search: wait 300ms after last keystroke before firing API call
+    LaunchedEffect(query) {
+        if (query.isBlank()) return@LaunchedEffect
+        delay(300)
+        productViewModel.loadProducts(search = query.ifBlank { null })
     }
 
     Scaffold(
@@ -76,7 +84,7 @@ fun SearchScreen(
                 value = query,
                 onValueChange = {
                     query = it
-                    productViewModel.loadProducts(search = it.ifBlank { null })
+                    if (it.isBlank()) productViewModel.loadProducts()
                 },
                 modifier = Modifier
                     .fillMaxWidth()

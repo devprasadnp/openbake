@@ -242,7 +242,19 @@ export default function OrderTrackingPage() {
                   >
                     {i <= currentIndex ? "✓" : i + 1}
                   </div>
-                  <span className="text-sm capitalize">{status}</span>
+                  <div className="flex flex-col">
+                    <span className="text-sm capitalize">{status}</span>
+                    {i <= currentIndex && order.status_timestamps?.[status] && (
+                      <span className="text-[10px] text-text-secondary">
+                        {new Date(order.status_timestamps[status]).toLocaleString("en-IN", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
+                      </span>
+                    )}
+                    {i === 0 && i <= currentIndex && !order.status_timestamps?.placed && (
+                      <span className="text-[10px] text-text-secondary">
+                        {new Date(order.created_at).toLocaleString("en-IN", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
+                      </span>
+                    )}
+                  </div>
                   {i < ALL_STATUSES.length - 1 && (
                     <div className={`hidden sm:block flex-1 h-px mx-2 ${i < currentIndex ? "bg-success" : "bg-border"}`} />
                   )}
@@ -301,7 +313,7 @@ export default function OrderTrackingPage() {
               {order.special_note && <p><span className="text-text-secondary">Note:</span> {order.special_note}</p>}
             </div>
 
-            {currentStatus === "placed" && (
+            {(currentStatus === "placed" || currentStatus === "accepted") && (
               <Button variant="danger" className="w-full mt-4" onClick={cancelOrder}>
                 Cancel Order
               </Button>

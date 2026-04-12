@@ -75,12 +75,14 @@ export default function CheckoutPage() {
   const [deliveryEstimate, setDeliveryEstimate] = useState<DeliveryEstimate | null>(null);
   const [estimateLoading, setEstimateLoading] = useState(false);
 
-  const deliveryFee =
+  const FREE_DELIVERY_THRESHOLD = 500;
+  const rawDeliveryFee =
     orderType === "pickup"
       ? 0
       : deliveryEstimate
         ? deliveryEstimate.delivery_fee
         : 40; // fallback while loading
+  const deliveryFee = orderType === "pickup" ? 0 : subtotal() >= FREE_DELIVERY_THRESHOLD ? 0 : rawDeliveryFee;
   const isDeliverable = orderType === "pickup" || !deliveryEstimate || deliveryEstimate.is_deliverable;
   const total = subtotal() - discount + deliveryFee;
 
@@ -361,6 +363,12 @@ export default function CheckoutPage() {
       return;
     }
 
+    // For online payment, verify Razorpay SDK is loaded before creating order
+    if ((paymentMethod === "upi" || paymentMethod === "card") && typeof window.Razorpay === "undefined") {
+      toast.error("Payment gateway is loading. Please wait a moment and try again.");
+      return;
+    }
+
     setPlacing(true);
     try {
       const orderItems = items.map((item) => ({
@@ -405,7 +413,7 @@ export default function CheckoutPage() {
   return (
     <>
       <Navbar />
-      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 overflow-y-auto">
         <h1 className="font-playfair text-2xl font-bold mb-8">Checkout</h1>
 
         {/* Progress Steps */}
@@ -792,8 +800,13 @@ export default function CheckoutPage() {
 
                       {/* COD details — expanded when selected */}
                       {pm.id === "cod" && paymentMethod === "cod" && (
-                        <div className="mt-2 ml-11 p-4 bg-green-50/50 rounded-xl border border-green-100">
-                          <p className="text-sm text-text-secondary">Pay with cash or UPI QR when your order arrives. No advance payment needed.</p>
+                        <div className="mt-2 ml-11 p-4 bg-gray-900 rounded-xl border border-gray-700">
+                          <p className="text-sm font-medium text-white mb-2">Cash on Delivery Instructions</p>
+                          <ul className="text-sm text-gray-300 space-y-1.5">
+                            <li>• Keep the exact amount ready at the time of delivery</li>
+                            <li>• You can also pay via UPI QR shown by the delivery person</li>
+                            <li>• No advance payment needed</li>
+                          </ul>
                         </div>
                       )}
                     </div>
@@ -878,6 +891,12 @@ export default function CheckoutPage() {
                         : "Free"}
                   </span>
                 </div>
+                {orderType === "delivery" && subtotal() >= FREE_DELIVERY_THRESHOLD && rawDeliveryFee > 0 && (
+                  <p className="text-xs text-success font-medium mt-0.5">Free delivery on orders above {formatPrice(FREE_DELIVERY_THRESHOLD)}!</p>
+                )}
+                {orderType === "delivery" && subtotal() < FREE_DELIVERY_THRESHOLD && (
+                  <p className="text-xs text-text-secondary mt-0.5">Add {formatPrice(FREE_DELIVERY_THRESHOLD - subtotal())} more for free delivery</p>
+                )}
               </div>
               <div className="border-t border-border pt-2 mt-2 flex justify-between font-bold text-lg">
                 <span>Total</span>

@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -41,41 +43,55 @@ fun OrderHistoryScreen(
                         )
                     )
                 },
+                actions = {
+                    IconButton(
+                        onClick = { orderViewModel.loadOrders() },
+                        enabled = !listState.isLoading
+                    ) {
+                        Icon(Icons.Filled.Refresh, contentDescription = "Refresh")
+                    }
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.background
                 )
             )
         }
     ) { padding ->
-        when {
-            listState.isLoading -> LoadingScreen()
-            listState.error != null -> {
-                EmptyState(
-                    emoji = "😕",
-                    title = "Something went wrong",
-                    subtitle = listState.error ?: "Please try again",
-                    actionLabel = "Retry",
-                    onAction = { orderViewModel.loadOrders() }
-                )
-            }
-            listState.orders.isEmpty() -> {
-                EmptyState(
-                    emoji = "📦",
-                    title = "No orders yet",
-                    subtitle = "Your order history will appear here"
-                )
-            }
-            else -> {
-                LazyColumn(
-                    contentPadding = PaddingValues(
-                        start = 20.dp, end = 20.dp,
-                        top = padding.calculateTopPadding() + 8.dp,
-                        bottom = 16.dp
-                    ),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    items(listState.orders) { order ->
-                        OrderCard(order = order, onClick = { onOrderClick(order.id) })
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = padding.calculateTopPadding())
+        ) {
+            when {
+                listState.isLoading -> LoadingScreen()
+                listState.error != null -> {
+                    EmptyState(
+                        emoji = "😕",
+                        title = "Something went wrong",
+                        subtitle = listState.error ?: "Please try again",
+                        actionLabel = "Retry",
+                        onAction = { orderViewModel.loadOrders() }
+                    )
+                }
+                listState.orders.isEmpty() -> {
+                    EmptyState(
+                        emoji = "📦",
+                        title = "No orders yet",
+                        subtitle = "Your order history will appear here"
+                    )
+                }
+                else -> {
+                    LazyColumn(
+                        contentPadding = PaddingValues(
+                            start = 20.dp, end = 20.dp,
+                            top = 8.dp,
+                            bottom = 16.dp
+                        ),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        items(listState.orders) { order ->
+                            OrderCard(order = order, onClick = { onOrderClick(order.id) })
+                        }
                     }
                 }
             }
@@ -162,10 +178,10 @@ private fun OrderCard(order: Order, onClick: () -> Unit) {
 @Composable
 fun StatusBadge(status: String) {
     val (bgColor, textColor, label) = when (status.lowercase()) {
-        "pending" -> Triple(Caramel.copy(alpha = 0.12f), Caramel, "Pending")
-        "confirmed" -> Triple(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f), MaterialTheme.colorScheme.primary, "Confirmed")
+        "placed" -> Triple(Caramel.copy(alpha = 0.12f), Caramel, "Placed")
+        "accepted" -> Triple(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f), MaterialTheme.colorScheme.primary, "Accepted")
         "preparing" -> Triple(Caramel.copy(alpha = 0.12f), Caramel, "Preparing")
-        "out_for_delivery" -> Triple(Success.copy(alpha = 0.12f), Success, "On the way")
+        "dispatched" -> Triple(Success.copy(alpha = 0.12f), Success, "On the way")
         "delivered" -> Triple(Success.copy(alpha = 0.12f), Success, "Delivered")
         "cancelled" -> Triple(MaterialTheme.colorScheme.error.copy(alpha = 0.12f), MaterialTheme.colorScheme.error, "Cancelled")
         else -> Triple(MaterialTheme.colorScheme.surfaceContainerLow, MaterialTheme.colorScheme.onSurfaceVariant, status)

@@ -1,17 +1,21 @@
-"""One-time migration: add missing columns to addresses and orders tables."""
+"""Migration: add missing columns to addresses and orders tables."""
 from app.database import SessionLocal
 from sqlalchemy import text
 
 db = SessionLocal()
 
 alter_stmts = [
+    # v1: address extra fields
     "ALTER TABLE addresses ADD COLUMN recipient_name VARCHAR(255)",
     "ALTER TABLE addresses ADD COLUMN recipient_phone VARCHAR(20)",
     "ALTER TABLE addresses ADD COLUMN house_number VARCHAR(100)",
     "ALTER TABLE addresses ADD COLUMN street VARCHAR(255)",
     "ALTER TABLE addresses ADD COLUMN landmark VARCHAR(255)",
     "ALTER TABLE addresses ADD COLUMN state VARCHAR(100)",
+    # v1: order idempotency
     "ALTER TABLE orders ADD COLUMN idempotency_key VARCHAR(64)",
+    # v2: order status timestamps (JSON dict: {status: iso_timestamp})
+    "ALTER TABLE orders ADD COLUMN status_timestamps TEXT",
 ]
 
 for stmt in alter_stmts:

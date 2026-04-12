@@ -40,6 +40,10 @@ fun LoginScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
+    var emailTouched by remember { mutableStateOf(false) }
+    var passwordTouched by remember { mutableStateOf(false) }
+    val emailValid = email.isBlank() || android.util.Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches()
+    val passwordValid = password.isEmpty() || password.length >= 6
 
     LaunchedEffect(authState.isLoggedIn) {
         if (authState.isLoggedIn) onLoginSuccess()
@@ -118,7 +122,7 @@ fun LoginScreen(
                     Spacer(modifier = Modifier.height(6.dp))
                     OutlinedTextField(
                         value = email,
-                        onValueChange = { email = it },
+                        onValueChange = { email = it; emailTouched = true },
                         modifier = Modifier.fillMaxWidth(),
                         placeholder = { Text("hello@openbake.com", style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito)) },
                         shape = RoundedCornerShape(14.dp),
@@ -127,6 +131,10 @@ fun LoginScreen(
                             imeAction = ImeAction.Next
                         ),
                         singleLine = true,
+                        isError = emailTouched && !emailValid,
+                        supportingText = if (emailTouched && !emailValid) {
+                            { Text("Enter a valid email address", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }
+                        } else null,
                         colors = OutlinedTextFieldDefaults.colors(
                             unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
                             focusedBorderColor = MaterialTheme.colorScheme.primary,
@@ -145,7 +153,7 @@ fun LoginScreen(
                     Spacer(modifier = Modifier.height(6.dp))
                     OutlinedTextField(
                         value = password,
-                        onValueChange = { password = it },
+                        onValueChange = { password = it; passwordTouched = true },
                         modifier = Modifier.fillMaxWidth(),
                         placeholder = { Text("••••••••", style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito)) },
                         shape = RoundedCornerShape(14.dp),
@@ -155,6 +163,10 @@ fun LoginScreen(
                             imeAction = ImeAction.Done
                         ),
                         singleLine = true,
+                        isError = passwordTouched && !passwordValid,
+                        supportingText = if (passwordTouched && !passwordValid) {
+                            { Text("Password must be at least 6 characters", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }
+                        } else null,
                         trailingIcon = {
                             IconButton(onClick = { passwordVisible = !passwordVisible }) {
                                 Icon(
@@ -187,7 +199,7 @@ fun LoginScreen(
                     GradientButton(
                         text = if (authState.isLoading) "Signing in…" else "Sign In",
                         onClick = { authViewModel.login(email.trim(), password) },
-                        enabled = email.isNotBlank() && password.isNotBlank() && !authState.isLoading,
+                        enabled = email.isNotBlank() && password.length >= 6 && emailValid && !authState.isLoading,
                         modifier = Modifier.fillMaxWidth()
                     )
                 }

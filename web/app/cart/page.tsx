@@ -174,11 +174,17 @@ export default function CartPage() {
               </div>
               <div className="flex justify-between">
                 <span className="text-text-secondary">Delivery Fee</span>
-                <span>{formatPrice(40)}</span>
+                <span>{subtotal() >= 500 ? <span className="text-success font-medium">Free</span> : formatPrice(40)}</span>
               </div>
+              {subtotal() < 500 && (
+                <p className="text-xs text-text-secondary">Add {formatPrice(500 - subtotal())} more for free delivery</p>
+              )}
+              {subtotal() >= 500 && (
+                <p className="text-xs text-success font-medium">Free delivery on orders above {formatPrice(500)}!</p>
+              )}
               <div className="border-t border-border pt-2 mt-2 flex justify-between font-bold text-lg">
                 <span>Total</span>
-                <span className="text-primary">{formatPrice(subtotal() + 40)}</span>
+                <span className="text-primary">{formatPrice(subtotal() + (subtotal() >= 500 ? 0 : 40))}</span>
               </div>
             </div>
             {hasStockIssues && (

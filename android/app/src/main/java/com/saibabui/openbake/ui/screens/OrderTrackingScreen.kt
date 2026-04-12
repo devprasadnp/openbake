@@ -104,6 +104,7 @@ fun OrderTrackingScreen(
     val estimatedEta = liveEta ?: order.estimatedDeliveryMinutes
 
     val steps = listOf("Placed", "Accepted", "Preparing", "Dispatched", "Delivered")
+    val stepKeys = listOf("placed", "accepted", "preparing", "dispatched", "delivered")
     val currentStepIndex = when (currentStatus.lowercase()) {
         "placed" -> 0
         "accepted" -> 1
@@ -254,6 +255,7 @@ fun OrderTrackingScreen(
                 steps.forEachIndexed { index, step ->
                     val isComplete = index <= currentStepIndex
                     val isCurrent = index == currentStepIndex
+                    val timestamp = order.statusTimestamps?.get(stepKeys[index])
 
                     Row(modifier = Modifier.fillMaxWidth()) {
                         // Dot + line
@@ -304,6 +306,13 @@ fun OrderTrackingScreen(
                                 color = if (isComplete) MaterialTheme.colorScheme.onSurface
                                 else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                             )
+                            if (timestamp != null) {
+                                Text(
+                                    text = formatTimestamp(timestamp),
+                                    style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito),
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
                         }
                     }
                 }
@@ -370,4 +379,22 @@ fun OrderTrackingScreen(
             Spacer(modifier = Modifier.height(32.dp))
         }
     }
+}
+
+/** Format ISO timestamp like "2024-01-15T14:30:00" to "Jan 15, 2:30 PM" */
+private fun formatTimestamp(iso: String): String {
+    return try {
+        val parts = iso.replace("T", " ").take(16).split(" ")
+        if (parts.size < 2) return iso
+        val dateParts = parts[0].split("-")
+        val timeParts = parts[1].split(":")
+        val months = listOf("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+        val month = months.getOrElse(dateParts[1].toInt() - 1) { "?" }
+        val day = dateParts[2].toInt()
+        val hour = timeParts[0].toInt()
+        val minute = timeParts[1]
+        val amPm = if (hour >= 12) "PM" else "AM"
+        val hour12 = if (hour == 0) 12 else if (hour > 12) hour - 12 else hour
+        "$month $day, $hour12:$minute $amPm"
+    } catch (_: Exception) { iso }
 }

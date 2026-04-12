@@ -161,7 +161,8 @@ data class Order(
     @SerializedName("time_slot") val timeSlot: String? = null,
     @SerializedName("special_note") val specialNote: String? = null,
     @SerializedName("created_at") val createdAt: String,
-    @SerializedName("updated_at") val updatedAt: String? = null
+    @SerializedName("updated_at") val updatedAt: String? = null,
+    @SerializedName("status_timestamps") val statusTimestamps: Map<String, String>? = null
 )
 
 data class OrderItem(
@@ -282,4 +283,20 @@ data class OrderStatusEvent(
     val status: String,
     @SerializedName("payment_status") val paymentStatus: String? = null,
     @SerializedName("estimated_delivery_minutes") val estimatedDeliveryMinutes: Int? = null
+)
+
+// ── OTP Auth ──
+data class OtpSendRequest(
+    val phone: String
+)
+
+data class OtpSendResponse(
+    val message: String,
+    @SerializedName("expires_in") val expiresIn: Int? = null
+)
+
+data class OtpVerifyRequest(
+    val phone: String,
+    val otp: String,
+    val name: String? = null
 )

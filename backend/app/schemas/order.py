@@ -91,6 +91,7 @@ class OrderResponse(BaseModel):
     special_note: Optional[str] = None
     created_at: datetime
     updated_at: datetime
+    status_timestamps: Optional[Dict[str, Any]] = None
     items: List[OrderItemResponse] = []
 
     class Config:

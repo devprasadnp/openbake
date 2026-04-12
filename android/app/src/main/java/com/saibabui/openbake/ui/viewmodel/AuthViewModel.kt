@@ -5,6 +5,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.saibabui.openbake.data.api.RetrofitClient
 import com.saibabui.openbake.data.local.TokenManager
+import com.saibabui.openbake.data.model.OtpSendRequest
+import com.saibabui.openbake.data.model.OtpVerifyRequest
 import com.saibabui.openbake.data.model.User
 import com.saibabui.openbake.data.repository.AuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +19,9 @@ data class AuthUiState(
     val isLoggedIn: Boolean = false,
     val user: User? = null,
     val error: String? = null,
-    val updateSuccess: Boolean = false
+    val updateSuccess: Boolean = false,
+    val otpSent: Boolean = false,
+    val otpSending: Boolean = false
 )
 
 class AuthViewModel(application: Application) : AndroidViewModel(application) {
@@ -149,5 +153,53 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     fun clearError() {
         _uiState.value = _uiState.value.copy(error = null)
+    }
+
+    fun sendOtp(phone: String) {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(otpSending = true, error = null)
+            try {
+                val resp = RetrofitClient.apiService.sendOtp(OtpSendRequest(phone))
+                if (resp.isSuccessful) {
+                    _uiState.value = _uiState.value.copy(otpSending = false, otpSent = true)
+                } else {
+                    _uiState.value = _uiState.value.copy(otpSending = false, error = "Failed to send OTP")
+                }
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(otpSending = false, error = e.message ?: "Network error")
+            }
+        }
+    }
+
+    fun verifyOtp(phone: String, otp: String, name: String?) {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true, error = null)
+            try {
+                val resp = RetrofitClient.apiService.verifyOtp(OtpVerifyRequest(phone, otp, name))
+                if (resp.isSuccessful) {
+                    val tokens = resp.body()
+                    if (tokens != null) {
+                        tokenManager.saveTokens(tokens.accessToken, tokens.refreshToken)
+                        val profileResult = authRepo.getProfile()
+                        profileResult.fold(
+                            onSuccess = { user ->
+                                _uiState.value = AuthUiState(isLoggedIn = true, user = user)
+                            },
+                            onFailure = {
+                                _uiState.value = AuthUiState(isLoggedIn = true)
+                            }
+                        )
+                    }
+                } else {
+                    _uiState.value = _uiState.value.copy(isLoading = false, error = "Invalid OTP. Please try again.")
+                }
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(isLoading = false, error = e.message ?: "Verification failed")
+            }
+        }
+    }
+
+    fun resetOtpState() {
+        _uiState.value = _uiState.value.copy(otpSent = false, otpSending = false)
     }
 }

@@ -160,3 +160,72 @@ def logout(data: RefreshTokenRequest, db: Session = Depends(get_db)):
         # Still return success (don't leak whether token existed)
         pass
     return {"message": "Logged out successfully"}
+
+
+# --- OTP-based Phone Signup ---
+
+# In-memory OTP store (for production, use Redis or a DB table)
+_otp_store: dict[str, dict] = {}
+
+@router.post("/otp/send")
+def send_otp(data: dict, db: Session = Depends(get_db)):
+    """Send OTP to a phone number for registration/login."""
+    import random
+    phone = data.get("phone", "").strip()
+    if not phone or len(phone) != 10 or not phone.isdigit():
+        raise HTTPException(status_code=400, detail="Enter a valid 10-digit phone number")
+    
+    otp = str(random.randint(100000, 999999))
+    _otp_store[phone] = {
+        "otp": otp,
+        "expires": datetime.now(timezone.utc) + timedelta(minutes=5),
+    }
+    # In production, send via SMS gateway (e.g., Twilio, MSG91)
+    # For now, return it in response for development
+    return {"message": f"OTP sent to {phone[:3]}****{phone[-3:]}", "dev_otp": otp}
+
+
+@router.post("/otp/verify", response_model=TokenResponse)
+def verify_otp(data: dict, db: Session = Depends(get_db)):
+    """Verify OTP and login/register the user."""
+    from app.models.user import User
+    
+    phone = data.get("phone", "").strip()
+    otp = data.get("otp", "").strip()
+    name = data.get("name", "").strip()
+    
+    if not phone or not otp:
+        raise HTTPException(status_code=400, detail="Phone and OTP are required")
+    
+    stored = _otp_store.get(phone)
+    if not stored:
+        raise HTTPException(status_code=400, detail="No OTP was sent to this number. Please request a new one.")
+    
+    if datetime.now(timezone.utc) > stored["expires"]:
+        del _otp_store[phone]
+        raise HTTPException(status_code=400, detail="OTP has expired. Please request a new one.")
+    
+    if stored["otp"] != otp:
+        raise HTTPException(status_code=400, detail="Invalid OTP")
+    
+    # OTP verified — clean up
+    del _otp_store[phone]
+    
+    # Find or create user
+    user = db.query(User).filter(User.phone == phone).first()
+    if not user:
+        if not name:
+            raise HTTPException(status_code=400, detail="Name is required for new users")
+        user = User(
+            name=name,
+            phone=phone,
+            auth_provider="phone",
+            role="customer",
+        )
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+    
+    tokens = create_tokens(user)
+    _store_refresh_token(db, user.id, tokens.refresh_token)
+    return tokens

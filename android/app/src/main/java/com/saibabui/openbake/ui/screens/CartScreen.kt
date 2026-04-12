@@ -103,13 +103,22 @@ fun CartScreen(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            "Delivery",
+                            if (cartViewModel.subtotal >= 500) "Delivery (Free!)" else "Delivery",
                             style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito),
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = if (cartViewModel.subtotal >= 500) Success else MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Text(
-                            "₹${cartViewModel.deliveryFee.toInt()}",
-                            style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito, fontWeight = FontWeight.SemiBold)
+                            if (cartViewModel.deliveryFee == 0.0 && cartViewModel.subtotal >= 500) "FREE"
+                            else "₹${cartViewModel.deliveryFee.toInt()}",
+                            style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito, fontWeight = FontWeight.SemiBold),
+                            color = if (cartViewModel.subtotal >= 500) Success else MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                    if (cartViewModel.subtotal > 0 && cartViewModel.subtotal < 500) {
+                        Text(
+                            "Add ₹${(500 - cartViewModel.subtotal).toInt()} more for free delivery",
+                            style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito),
+                            color = MaterialTheme.colorScheme.primary
                         )
                     }
                     Spacer(modifier = Modifier.height(8.dp))
@@ -245,7 +254,7 @@ private fun CartItemCard(
                             color = MaterialTheme.colorScheme.surface,
                             modifier = Modifier
                                 .size(28.dp)
-                                .clickable { if (item.quantity > 1) onQuantityChange(item.quantity - 1) }
+                                .clickable { onQuantityChange(item.quantity - 1) }
                         ) {
                             Box(contentAlignment = Alignment.Center) {
                                 Text("−", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold))

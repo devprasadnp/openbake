@@ -183,6 +183,11 @@ def admin_update_order_status(
         )
 
     order.status = data.status
+    # Record status timestamp
+    from datetime import datetime, timezone
+    timestamps = order.status_timestamps or {}
+    timestamps[data.status] = datetime.now(timezone.utc).isoformat()
+    order.status_timestamps = timestamps
     db.commit()
     db.refresh(order)
     return order

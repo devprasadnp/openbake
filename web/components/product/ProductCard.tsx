@@ -74,7 +74,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                 EGGLESS
               </span>
             )}
-            {!product.is_available && (
+            {(!product.is_available || product.stock_count <= 0) && (
               <span className="bg-error/90 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
                 SOLD OUT
               </span>
@@ -108,7 +108,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
           <button
             onClick={handleAddToCart}
-            disabled={!product.is_available}
+            disabled={!product.is_available || product.stock_count <= 0}
             className="w-10 h-10 rounded-full bg-gradient-to-br from-secondary to-primary text-white flex items-center justify-center hover:shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Plus size={20} />

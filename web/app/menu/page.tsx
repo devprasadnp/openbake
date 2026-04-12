@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState, useCallback } from "react";
+import { Suspense, useEffect, useState, useCallback, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -27,6 +27,8 @@ function MenuContent() {
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [egglessOnly, setEgglessOnly] = useState(false);
   const [search, setSearch] = useState(initialSearch);
+  const [searchInput, setSearchInput] = useState(initialSearch);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [sortBy, setSortBy] = useState("popularity");
 
   const fetchProducts = useCallback(async () => {
@@ -81,8 +83,12 @@ function MenuContent() {
                 <input
                   type="text"
                   placeholder="Search products..."
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
+                  value={searchInput}
+                  onChange={(e) => {
+                    setSearchInput(e.target.value);
+                    if (debounceRef.current) clearTimeout(debounceRef.current);
+                    debounceRef.current = setTimeout(() => setSearch(e.target.value), 300);
+                  }}
                   className="w-full border border-border rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
                 />
               </div>

@@ -180,8 +180,9 @@ def validate_cart(
 def apply_coupon(
     data: CouponApplyRequest,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    """Validate and apply a coupon code."""
+    """Validate and apply a coupon code. Checks per-user usage to prevent double use."""
     from datetime import date as date_type
 
     coupon = db.query(Coupon).filter(
@@ -198,6 +199,19 @@ def apply_coupon(
 
     if coupon.used_count >= coupon.max_uses:
         return CouponApplyResponse(valid=False, message="Coupon usage limit reached")
+
+    # Per-user check: prevent same user from using the same coupon more than once
+    already_used = (
+        db.query(Order)
+        .filter(
+            Order.user_id == current_user.id,
+            Order.coupon_code == data.code.upper(),
+            Order.status != "cancelled",
+        )
+        .first()
+    )
+    if already_used:
+        return CouponApplyResponse(valid=False, message="You have already used this coupon")
 
     if data.subtotal < coupon.min_order_value:
         return CouponApplyResponse(

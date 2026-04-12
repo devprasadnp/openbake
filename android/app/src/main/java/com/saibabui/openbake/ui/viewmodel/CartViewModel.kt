@@ -27,7 +27,10 @@ class CartViewModel : ViewModel() {
         get() = _items.value.sumOf { it.totalPrice }
 
     val deliveryFee: Double
-        get() = _deliveryEstimate.value?.deliveryFee ?: if (_items.value.isEmpty()) 0.0 else 40.0
+        get() {
+            if (subtotal >= 500) return 0.0
+            return _deliveryEstimate.value?.deliveryFee ?: if (_items.value.isEmpty()) 0.0 else 40.0
+        }
 
     val estimatedMinutes: Int?
         get() = _deliveryEstimate.value?.estimatedTimeMinutes

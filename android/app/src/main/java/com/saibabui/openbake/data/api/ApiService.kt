@@ -118,6 +118,13 @@ interface ApiService {
     @GET("waitlist")
     suspend fun getWaitlist(): Response<List<StockWaitlistResponse>>
 
+    // OTP Auth
+    @POST("auth/otp/send")
+    suspend fun sendOtp(@Body request: OtpSendRequest): Response<OtpSendResponse>
+
+    @POST("auth/otp/verify")
+    suspend fun verifyOtp(@Body request: OtpVerifyRequest): Response<TokenResponse>
+
     // Auth — logout with refresh token revocation
     @POST("auth/logout")
     suspend fun logout(@Body request: RefreshTokenRequest): Response<Unit>

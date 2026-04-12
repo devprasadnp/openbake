@@ -72,6 +72,20 @@ def calculate_order_totals(
         coupon = coupon_query.first()
 
         if coupon and float(subtotal) >= float(coupon.min_order_value):
+            # Check per-user usage — prevent the same user from using a coupon twice
+            if user_id:
+                already_used = (
+                    db.query(Order)
+                    .filter(
+                        Order.user_id == user_id,
+                        Order.coupon_code == coupon_code,
+                        Order.status != "cancelled",
+                    )
+                    .first()
+                )
+                if already_used:
+                    raise ValueError("You have already used this coupon")
+
             if coupon.discount_type == "flat":
                 discount = Decimal(str(coupon.discount_value))
             elif coupon.discount_type == "percent":
@@ -137,6 +151,8 @@ def place_order(db: Session, user_id: str, data: OrderCreate) -> Order:
         special_note=data.special_note,
         idempotency_key=data.idempotency_key,
     )
+    from datetime import datetime, timezone
+    order.status_timestamps = {"placed": datetime.now(timezone.utc).isoformat()}
     db.add(order)
     db.flush()  # get order.id
 

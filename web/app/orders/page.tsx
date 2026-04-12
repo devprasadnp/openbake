@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/layout/Navbar";
@@ -10,6 +10,7 @@ import Button from "@/components/ui/Button";
 import { useAuthStore } from "@/store/authStore";
 import { formatPrice, formatDate } from "@/lib/utils";
 import api from "@/lib/api";
+import { RefreshCw } from "lucide-react";
 import type { Order, OrderStatus } from "@/types";
 
 const statusVariant: Record<OrderStatus, "success" | "warning" | "error" | "info" | "default"> = {
@@ -26,22 +27,46 @@ export default function OrdersPage() {
   const { isAuthenticated } = useAuthStore();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fetchOrders = useCallback(async (silent = false) => {
+    if (!silent) setRefreshing(true);
+    try {
+      const res = await api.get<Order[]>("/orders");
+      setOrders(res.data);
+    } catch {
+      // silently ignore
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  }, []);
 
   useEffect(() => {
     if (!isAuthenticated) {
       router.push("/login");
       return;
     }
-    api.get<Order[]>("/orders").then((res) => {
-      setOrders(res.data);
-    }).catch(() => {}).finally(() => setLoading(false));
-  }, [isAuthenticated, router]);
+    fetchOrders(true);
+  }, [isAuthenticated, router, fetchOrders]);
 
   return (
     <>
       <Navbar />
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h1 className="font-playfair text-2xl font-bold mb-8">My Orders</h1>
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="font-playfair text-2xl font-bold">My Orders</h1>
+          {orders.length > 0 && (
+            <button
+              onClick={() => fetchOrders()}
+              disabled={refreshing}
+              className="flex items-center gap-1.5 text-sm text-primary hover:underline disabled:opacity-50"
+            >
+              <RefreshCw size={15} className={refreshing ? "animate-spin" : ""} />
+              {refreshing ? "Refreshing..." : "Refresh"}
+            </button>
+          )}
+        </div>
 
         {loading ? (
           <div className="space-y-4">

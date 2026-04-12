@@ -46,6 +46,10 @@ fun EditProfileScreen(
     var name by remember(user) { mutableStateOf(user?.name ?: "") }
     var phone by remember(user) { mutableStateOf(user?.phone ?: "") }
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+    var nameTouched by remember { mutableStateOf(false) }
+    var phoneTouched by remember { mutableStateOf(false) }
+    val nameValid = name.isBlank() || name.trim().length >= 2
+    val phoneValid = phone.isBlank() || phone.filter { it.isDigit() }.let { digits -> digits.length == 10 && digits.first() in '6'..'9' }
 
     // Navigate back on success
     LaunchedEffect(authState.updateSuccess) {
@@ -195,22 +199,30 @@ fun EditProfileScreen(
             // Name field
             OutlinedTextField(
                 value = name,
-                onValueChange = { name = it },
+                onValueChange = { name = it; nameTouched = true },
                 label = { Text("Full Name", fontFamily = Nunito) },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(12.dp),
+                isError = nameTouched && !nameValid,
+                supportingText = if (nameTouched && !nameValid) {
+                    { Text("Name must be at least 2 characters", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }
+                } else null
             )
 
             // Phone field
             OutlinedTextField(
                 value = phone,
-                onValueChange = { phone = it },
+                onValueChange = { phone = it.filter { c -> c.isDigit() }.take(10); phoneTouched = true },
                 label = { Text("Phone Number", fontFamily = Nunito) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(12.dp),
+                isError = phoneTouched && !phoneValid,
+                supportingText = if (phoneTouched && !phoneValid) {
+                    { Text("Enter a valid 10-digit Indian mobile number", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }
+                } else null
             )
 
             // Error
@@ -232,7 +244,7 @@ fun EditProfileScreen(
                         phone = phone.trim().takeIf { it.isNotBlank() }
                     )
                 },
-                enabled = !authState.isLoading,
+                enabled = !authState.isLoading && name.trim().isNotBlank() && nameValid && (phone.isBlank() || phoneValid),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(52.dp),

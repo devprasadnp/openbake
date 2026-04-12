@@ -115,9 +115,11 @@ function ProfileContent() {
   const addAddress = async () => {
     const errors: Record<string, string> = {};
     if (!newAddr.full_address.trim()) errors.full_address = "Required";
+    else if (newAddr.full_address.trim().length < 10) errors.full_address = "Please enter a complete address";
     if (!newAddr.city.trim()) errors.city = "Required";
     if (!newAddr.pincode.trim()) errors.pincode = "Required";
     else if (!/^\d{6}$/.test(newAddr.pincode.trim())) errors.pincode = "Must be 6 digits";
+    if (newAddr.recipient_phone.trim() && !/^[6-9]\d{9}$/.test(newAddr.recipient_phone.trim())) errors.recipient_phone = "Enter a valid 10-digit mobile number";
     setAddrErrors(errors);
     if (Object.keys(errors).length > 0) return;
 
@@ -226,8 +228,11 @@ function ProfileContent() {
 
                 <div className="space-y-4 max-w-md">
                   <Input id="name" label="Full Name" value={name} onChange={(e) => setName(e.target.value)} />
-                  <Input id="phone" label="Phone" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="9876543210" />
-                  <Button onClick={updateProfile} disabled={saving}>
+                  <Input id="phone" label="Phone" value={phone} onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))} placeholder="9876543210" />
+                  {phone && !/^[6-9]\d{9}$/.test(phone) && (
+                    <p className="text-xs text-error -mt-2">Enter a valid 10-digit mobile number</p>
+                  )}
+                  <Button onClick={updateProfile} disabled={saving || !name.trim() || (!!phone && !/^[6-9]\d{9}$/.test(phone))}>
                     {saving ? "Saving..." : "Save Changes"}
                   </Button>
                 </div>
@@ -280,7 +285,7 @@ function ProfileContent() {
                     <Input id="address" label="Full Address *" value={newAddr.full_address} onChange={(e) => { setNewAddr({ ...newAddr, full_address: e.target.value }); setAddrErrors((p) => { const n = {...p}; delete n.full_address; return n; }); }} placeholder="e.g. Flat 302, Sai Residency, MG Road" error={addrErrors.full_address} />
                     <div className="grid grid-cols-2 gap-3">
                       <Input id="recipient_name" label="Recipient Name" value={newAddr.recipient_name} onChange={(e) => setNewAddr({ ...newAddr, recipient_name: e.target.value })} placeholder="e.g. Ravi Kumar" />
-                      <Input id="recipient_phone" label="Recipient Phone" value={newAddr.recipient_phone} onChange={(e) => setNewAddr({ ...newAddr, recipient_phone: e.target.value })} placeholder="9876543210" />
+                      <Input id="recipient_phone" label="Recipient Phone" value={newAddr.recipient_phone} onChange={(e) => { setNewAddr({ ...newAddr, recipient_phone: e.target.value.replace(/\D/g, "").slice(0, 10) }); setAddrErrors((p) => { const n = {...p}; delete n.recipient_phone; return n; }); }} placeholder="9876543210" error={addrErrors.recipient_phone} />
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                       <Input id="house_number" label="House / Flat No." value={newAddr.house_number} onChange={(e) => setNewAddr({ ...newAddr, house_number: e.target.value })} placeholder="e.g. Flat 302, 2nd Floor" />
