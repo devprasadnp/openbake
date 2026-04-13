@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Header, status
 from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
@@ -236,7 +236,8 @@ def apply_coupon(
 @router.get("/orders/{order_id}/stream")
 async def stream_order_status(
     order_id: str,
-    token: str = Query(..., description="JWT access token (EventSource cannot send headers)"),
+    token: str | None = Query(None, description="JWT access token (optional if Authorization header is sent)"),
+    authorization: str | None = Header(None, alias="Authorization"),
 ):
     """Server-Sent Events stream for real-time order status updates.
     
@@ -244,8 +245,21 @@ async def stream_order_status(
     The stream closes when the order reaches a terminal state (delivered/cancelled).
     Auth via query param because EventSource does not support custom headers.
     """
-    # Authenticate from query-param token
-    payload = verify_token(token, token_type="access")
+    # Authenticate from query token or Authorization header (Bearer <token>)
+    access_token = token
+    if not access_token and authorization:
+        if authorization.lower().startswith("bearer "):
+            access_token = authorization[7:].strip()
+        else:
+            access_token = authorization.strip()
+
+    if not access_token:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Access token is required (query `token` or Authorization Bearer header)",
+        )
+
+    payload = verify_token(access_token, token_type="access")
     user_id = payload.get("sub")
     if not user_id:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token payload")

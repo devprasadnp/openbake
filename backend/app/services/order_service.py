@@ -151,8 +151,8 @@ def place_order(db: Session, user_id: str, data: OrderCreate) -> Order:
         special_note=data.special_note,
         idempotency_key=data.idempotency_key,
     )
-    from datetime import datetime, timezone
-    order.status_timestamps = {"placed": datetime.now(timezone.utc).isoformat()}
+    from app.utils.timezone import to_ist_iso, now_utc
+    order.status_timestamps = {"placed": to_ist_iso(now_utc())}
     db.add(order)
     db.flush()  # get order.id
 

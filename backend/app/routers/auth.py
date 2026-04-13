@@ -14,6 +14,7 @@ from app.schemas.auth import (
 )
 from app.services.auth_service import register_user, authenticate_user, create_tokens
 from app.utils.jwt import verify_token, create_access_token, create_refresh_token
+from app.utils.timezone import now_utc, ensure_aware_utc
 from app.config import get_settings
 
 settings = get_settings()
@@ -30,7 +31,7 @@ def _store_refresh_token(db: Session, user_id: str, raw_token: str) -> None:
     db.add(RefreshToken(
         user_id=user_id,
         token_hash=_hash_token(raw_token),
-        expires_at=datetime.now(timezone.utc) + timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS),
+        expires_at=now_utc() + timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS),
     ))
     db.commit()
 
@@ -125,7 +126,8 @@ def refresh_token(data: RefreshTokenRequest, db: Session = Depends(get_db)):
         )
 
     # Check expiry
-    if token_row.expires_at < datetime.now(timezone.utc):
+    token_expiry = ensure_aware_utc(token_row.expires_at)
+    if token_expiry and token_expiry < now_utc():
         token_row.revoked = True
         db.commit()
         raise HTTPException(
@@ -178,7 +180,7 @@ def send_otp(data: dict, db: Session = Depends(get_db)):
     otp = str(random.randint(100000, 999999))
     _otp_store[phone] = {
         "otp": otp,
-        "expires": datetime.now(timezone.utc) + timedelta(minutes=5),
+        "expires": now_utc() + timedelta(minutes=5),
     }
     # In production, send via SMS gateway (e.g., Twilio, MSG91)
     # For now, return it in response for development
@@ -201,7 +203,8 @@ def verify_otp(data: dict, db: Session = Depends(get_db)):
     if not stored:
         raise HTTPException(status_code=400, detail="No OTP was sent to this number. Please request a new one.")
     
-    if datetime.now(timezone.utc) > stored["expires"]:
+    stored_expiry = ensure_aware_utc(stored.get("expires"))
+    if stored_expiry and now_utc() > stored_expiry:
         del _otp_store[phone]
         raise HTTPException(status_code=400, detail="OTP has expired. Please request a new one.")
     

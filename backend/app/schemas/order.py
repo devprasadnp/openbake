@@ -1,7 +1,8 @@
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, field_serializer
 from typing import Optional, List, Dict, Any
 from datetime import date, datetime
 from app.schemas.auth import AddressResponse
+from app.utils.timezone import to_ist
 
 
 # --- Order Item Schemas ---
@@ -97,6 +98,28 @@ class OrderResponse(BaseModel):
     class Config:
         from_attributes = True
 
+    @field_serializer("created_at", "updated_at")
+    def serialize_datetimes_ist(self, value: datetime):
+        converted = to_ist(value)
+        return converted.isoformat() if converted else None
+
+    @field_serializer("status_timestamps")
+    def serialize_status_timestamps_ist(self, value: Optional[Dict[str, Any]]):
+        if not value:
+            return value
+        normalized: Dict[str, Any] = {}
+        for key, raw in value.items():
+            if isinstance(raw, str):
+                try:
+                    parsed = datetime.fromisoformat(raw.replace("Z", "+00:00"))
+                    converted = to_ist(parsed)
+                    normalized[key] = converted.isoformat() if converted else raw
+                except ValueError:
+                    normalized[key] = raw
+            else:
+                normalized[key] = raw
+        return normalized
+
 
 class OrderCustomerInfo(BaseModel):
     """Minimal user info exposed to admin for order context."""
@@ -179,6 +202,11 @@ class ReviewResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+    @field_serializer("created_at")
+    def serialize_review_created_at_ist(self, value: datetime):
+        converted = to_ist(value)
+        return converted.isoformat() if converted else None
 
 
 # --- Cart Validation ---

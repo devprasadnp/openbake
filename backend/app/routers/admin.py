@@ -15,6 +15,7 @@ from app.schemas.product import (
 )
 from app.schemas.order import OrderResponse, OrderStatusUpdate, AdminOrderDetailResponse, CouponCreate, CouponResponse
 from app.utils.jwt import require_admin
+from app.utils.timezone import to_ist_iso, now_utc
 from app.services.waitlist_service import notify_waitlist_users
 
 router = APIRouter()
@@ -184,9 +185,8 @@ def admin_update_order_status(
 
     order.status = data.status
     # Record status timestamp
-    from datetime import datetime, timezone
     timestamps = order.status_timestamps or {}
-    timestamps[data.status] = datetime.now(timezone.utc).isoformat()
+    timestamps[data.status] = to_ist_iso(now_utc())
     order.status_timestamps = timestamps
     db.commit()
     db.refresh(order)
