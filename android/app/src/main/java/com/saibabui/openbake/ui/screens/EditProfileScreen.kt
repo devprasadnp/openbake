@@ -124,13 +124,14 @@ fun EditProfileScreen(
                 contentAlignment = Alignment.Center
             ) {
                 if (avatarUrl != null) {
-                    AsyncImage(
+                    com.saibabui.openbake.ui.screens.common.OpenBakeImage(
                         model = avatarUrl,
                         contentDescription = "Profile photo",
-                        modifier = Modifier
-                            .size(100.dp)
-                            .clip(CircleShape),
-                        contentScale = ContentScale.Crop
+                        modifier = Modifier.size(100.dp),
+                        shape = CircleShape,
+                        contentScale = ContentScale.Crop,
+                        placeholderEmoji = "👤",
+                        emojiFontSize = 40
                     )
                 } else {
                     Box(
@@ -182,7 +183,7 @@ fun EditProfileScreen(
                 )
                 Spacer(modifier = Modifier.height(6.dp))
                 Surface(
-                    shape = RoundedCornerShape(12.dp),
+                    shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small,
                     color = MaterialTheme.colorScheme.surfaceContainerLowest
                 ) {
                     Text(
@@ -197,13 +198,13 @@ fun EditProfileScreen(
             }
 
             // Name field
-            OutlinedTextField(
+            com.saibabui.openbake.ui.screens.common.OpenBakeTextField(
                 value = name,
                 onValueChange = { name = it; nameTouched = true },
                 label = { Text("Full Name", fontFamily = Nunito) },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
+                shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small,
                 isError = nameTouched && !nameValid,
                 supportingText = if (nameTouched && !nameValid) {
                     { Text("Name must be at least 2 characters", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }
@@ -211,14 +212,14 @@ fun EditProfileScreen(
             )
 
             // Phone field
-            OutlinedTextField(
+            com.saibabui.openbake.ui.screens.common.OpenBakeTextField(
                 value = phone,
                 onValueChange = { phone = it.filter { c -> c.isDigit() }.take(10); phoneTouched = true },
                 label = { Text("Phone Number", fontFamily = Nunito) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
+                shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small,
                 isError = phoneTouched && !phoneValid,
                 supportingText = if (phoneTouched && !phoneValid) {
                     { Text("Enter a valid 10-digit Indian mobile number", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }
@@ -248,7 +249,7 @@ fun EditProfileScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(52.dp),
-                shape = RoundedCornerShape(14.dp),
+                shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.input,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primary
                 )

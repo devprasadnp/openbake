@@ -12,7 +12,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -111,6 +110,7 @@ fun CheckoutScreen(
     var locating by remember { mutableStateOf(false) }
     var newAddrLat by remember { mutableStateOf<Double?>(null) }
     var newAddrLng by remember { mutableStateOf<Double?>(null) }
+    var addressFormError by remember { mutableStateOf<String?>(null) }
 
     // Reset stale order state on entering checkout (fixes back-navigation bug)
     LaunchedEffect(Unit) {
@@ -131,23 +131,69 @@ fun CheckoutScreen(
     fun saveNewAddress() {
         val pincodeDigits = newAddrPincode.filter { it.isDigit() }
         val phoneDigits = newAddrRecipientPhone.filter { it.isDigit() }
-        if (newAddrFull.isBlank() || newAddrCity.isBlank() || pincodeDigits.length != 6) return
-        if (newAddrRecipientPhone.isNotBlank() && (phoneDigits.length != 10 || phoneDigits.first() !in '6'..'9')) return
+        when {
+            newAddrLabel.trim().isEmpty() -> {
+                addressFormError = "Address label is required"
+                return
+            }
+
+            newAddrRecipientName.trim().isEmpty() -> {
+                addressFormError = "Recipient name is required"
+                return
+            }
+
+            phoneDigits.length != 10 || phoneDigits.firstOrNull() !in '6'..'9' -> {
+                addressFormError = "Enter a valid 10-digit recipient phone"
+                return
+            }
+
+            newAddrHouseNumber.trim().isEmpty() -> {
+                addressFormError = "House / Flat number is required"
+                return
+            }
+
+            newAddrStreet.trim().isEmpty() -> {
+                addressFormError = "Street / Colony is required"
+                return
+            }
+
+            newAddrFull.trim().isEmpty() -> {
+                addressFormError = "Full address is required"
+                return
+            }
+
+            newAddrCity.trim().isEmpty() -> {
+                addressFormError = "City is required"
+                return
+            }
+
+            newAddrState.trim().isEmpty() -> {
+                addressFormError = "State is required"
+                return
+            }
+
+            pincodeDigits.length != 6 -> {
+                addressFormError = "Pincode must be exactly 6 digits"
+                return
+            }
+        }
+
         scope.launch {
             savingAddr = true
+            addressFormError = null
             runCatching {
                 RetrofitClient.apiService.addAddress(
                     AddressRequest(
-                        label = newAddrLabel,
-                        recipientName = newAddrRecipientName.ifBlank { null },
-                        recipientPhone = newAddrRecipientPhone.ifBlank { null },
-                        houseNumber = newAddrHouseNumber.ifBlank { null },
-                        street = newAddrStreet.ifBlank { null },
-                        fullAddress = newAddrFull,
+                        label = newAddrLabel.trim(),
+                        recipientName = newAddrRecipientName.trim(),
+                        recipientPhone = phoneDigits,
+                        houseNumber = newAddrHouseNumber.trim(),
+                        street = newAddrStreet.trim(),
+                        fullAddress = newAddrFull.trim(),
                         landmark = newAddrLandmark.ifBlank { null },
-                        city = newAddrCity,
-                        state = newAddrState.ifBlank { null },
-                        pincode = newAddrPincode,
+                        city = newAddrCity.trim(),
+                        state = newAddrState.trim(),
+                        pincode = pincodeDigits,
                         lat = newAddrLat,
                         lng = newAddrLng
                     )
@@ -164,7 +210,10 @@ fun CheckoutScreen(
                     newAddrRecipientName = ""; newAddrRecipientPhone = ""
                     newAddrHouseNumber = ""; newAddrStreet = ""; newAddrLandmark = ""; newAddrState = ""
                     newAddrLat = null; newAddrLng = null
+                    addressFormError = null
                 }
+            }.onFailure {
+                addressFormError = "Failed to save address. Please try again."
             }
             savingAddr = false
         }
@@ -172,6 +221,7 @@ fun CheckoutScreen(
 
     fun fetchLocation() {
         locating = true
+        addressFormError = null
         scope.launch {
             val loc = getDeviceLocation(context)
             if (loc != null) {
@@ -453,7 +503,7 @@ fun CheckoutScreen(
                 listOf("delivery" to "🚚 Delivery", "pickup" to "🏪 Pickup").forEach { (value, label) ->
                     val sel = orderType == value
                     Surface(
-                        shape = RoundedCornerShape(14.dp),
+                        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.input,
                         color = if (sel) MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
                         else MaterialTheme.colorScheme.surfaceContainerLowest,
                         modifier = Modifier.weight(1f).clickable { orderType = value },
@@ -493,7 +543,7 @@ fun CheckoutScreen(
                 addresses.forEach { addr ->
                     val isSelected = selectedAddressId == addr.id
                     Surface(
-                        shape = RoundedCornerShape(16.dp),
+                        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.medium,
                         color = if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
                         else MaterialTheme.colorScheme.surfaceContainerLowest,
                         modifier = Modifier
@@ -537,7 +587,7 @@ fun CheckoutScreen(
                 deliveryEstimate?.let { est ->
                     Spacer(modifier = Modifier.height(8.dp))
                     Surface(
-                        shape = RoundedCornerShape(12.dp),
+                        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small,
                         color = if (est.isDeliverable) Success.copy(alpha = 0.08f) else MaterialTheme.colorScheme.error.copy(alpha = 0.08f),
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -572,13 +622,13 @@ fun CheckoutScreen(
                 Spacer(modifier = Modifier.height(8.dp))
             } else if (orderType == "delivery" && !showAddressForm) {
                 // No addresses
-                Surface(shape = RoundedCornerShape(16.dp), color = MaterialTheme.colorScheme.surfaceContainerLowest, modifier = Modifier.fillMaxWidth()) {
+                Surface(shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.medium, color = MaterialTheme.colorScheme.surfaceContainerLowest, modifier = Modifier.fillMaxWidth()) {
                     Column(modifier = Modifier.padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                         Text("No delivery address saved", style = MaterialTheme.typography.bodyLarge.copy(fontFamily = PlayfairDisplay, fontWeight = FontWeight.Bold))
                         Spacer(modifier = Modifier.height(8.dp))
                         Text("Add an address to proceed with delivery", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito), color = MaterialTheme.colorScheme.onSurfaceVariant)
                         Spacer(modifier = Modifier.height(16.dp))
-                        Button(onClick = { showAddressForm = true }, shape = RoundedCornerShape(12.dp)) {
+                        Button(onClick = { showAddressForm = true }, shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small) {
                             Text("Add Address", style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito, fontWeight = FontWeight.Bold))
                         }
                     }
@@ -589,10 +639,10 @@ fun CheckoutScreen(
             // ── Inline Add Address Form ──
             if (orderType == "delivery" && showAddressForm) {
                 Spacer(modifier = Modifier.height(8.dp))
-                Surface(shape = RoundedCornerShape(20.dp), color = MaterialTheme.colorScheme.surfaceContainerLowest, modifier = Modifier.fillMaxWidth()) {
+                Surface(shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.large, color = MaterialTheme.colorScheme.surfaceContainerLowest, modifier = Modifier.fillMaxWidth()) {
                     Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                         Text("Add Delivery Address", style = MaterialTheme.typography.titleSmall.copy(fontFamily = PlayfairDisplay, fontWeight = FontWeight.Bold))
-                        OutlinedButton(onClick = { requestLocation() }, modifier = Modifier.fillMaxWidth(), enabled = !locating, shape = RoundedCornerShape(12.dp)) {
+                        OutlinedButton(onClick = { requestLocation() }, modifier = Modifier.fillMaxWidth(), enabled = !locating, shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small) {
                             if (locating) {
                                 CircularProgressIndicator(modifier = Modifier.size(15.dp), strokeWidth = 2.dp)
                                 Spacer(Modifier.width(8.dp))
@@ -608,24 +658,46 @@ fun CheckoutScreen(
                                 FilterChip(selected = newAddrLabel == l, onClick = { newAddrLabel = l }, label = { Text(l, style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) })
                             }
                         }
-                        OutlinedTextField(value = newAddrRecipientName, onValueChange = { newAddrRecipientName = it }, label = { Text("Recipient Name", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), singleLine = true)
-                        OutlinedTextField(value = newAddrRecipientPhone, onValueChange = { newAddrRecipientPhone = it.filter { c -> c.isDigit() }.take(10) }, label = { Text("Recipient Phone", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), singleLine = true)
-                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                            OutlinedTextField(value = newAddrHouseNumber, onValueChange = { newAddrHouseNumber = it }, label = { Text("House / Flat No.", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp), singleLine = true)
-                            OutlinedTextField(value = newAddrStreet, onValueChange = { newAddrStreet = it }, label = { Text("Street / Colony", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp), singleLine = true)
+                        addressFormError?.let { msg ->
+                            Text(
+                                text = msg,
+                                style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito),
+                                color = MaterialTheme.colorScheme.error,
+                            )
                         }
-                        OutlinedTextField(value = newAddrFull, onValueChange = { newAddrFull = it }, label = { Text("Full Address", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), minLines = 2)
-                        OutlinedTextField(value = newAddrLandmark, onValueChange = { newAddrLandmark = it }, label = { Text("Landmark", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), singleLine = true)
+                        com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = newAddrRecipientName, onValueChange = { newAddrRecipientName = it }, label = { Text("Recipient Name", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.fillMaxWidth(), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, singleLine = true)
+                        com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = newAddrRecipientPhone, onValueChange = { newAddrRecipientPhone = it.filter { c -> c.isDigit() }.take(10) }, label = { Text("Recipient Phone", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.fillMaxWidth(), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, singleLine = true)
                         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                            OutlinedTextField(value = newAddrCity, onValueChange = { newAddrCity = it }, label = { Text("City", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp))
-                            OutlinedTextField(value = newAddrState, onValueChange = { newAddrState = it }, label = { Text("State", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp))
-                            OutlinedTextField(value = newAddrPincode, onValueChange = { newAddrPincode = it.filter { c -> c.isDigit() }.take(6) }, label = { Text("Pincode", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp))
+                            com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = newAddrHouseNumber, onValueChange = { newAddrHouseNumber = it }, label = { Text("House / Flat No.", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.weight(1f), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, singleLine = true)
+                            com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = newAddrStreet, onValueChange = { newAddrStreet = it }, label = { Text("Street / Colony", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.weight(1f), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, singleLine = true)
+                        }
+                        com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = newAddrFull, onValueChange = { newAddrFull = it }, label = { Text("Full Address", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.fillMaxWidth(), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, minLines = 2)
+                        com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = newAddrLandmark, onValueChange = { newAddrLandmark = it }, label = { Text("Landmark", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.fillMaxWidth(), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, singleLine = true)
+                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                            com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = newAddrCity, onValueChange = { newAddrCity = it }, label = { Text("City", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.weight(1f), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small)
+                            com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = newAddrState, onValueChange = { newAddrState = it }, label = { Text("State", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.weight(1f), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small)
+                            com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = newAddrPincode, onValueChange = { newAddrPincode = it.filter { c -> c.isDigit() }.take(6) }, label = { Text("Pincode", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.weight(1f), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small)
                         }
                         Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
-                            OutlinedButton(onClick = { showAddressForm = false }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp)) {
+                            OutlinedButton(onClick = { showAddressForm = false; addressFormError = null }, modifier = Modifier.weight(1f), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small) {
                                 Text("Cancel", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito))
                             }
-                            Button(onClick = { saveNewAddress() }, modifier = Modifier.weight(1f), enabled = !savingAddr && newAddrFull.isNotBlank() && newAddrCity.isNotBlank() && newAddrPincode.filter { it.isDigit() }.length == 6, shape = RoundedCornerShape(12.dp)) {
+                            Button(
+                                onClick = { saveNewAddress() },
+                                modifier = Modifier.weight(1f),
+                                enabled = !savingAddr &&
+                                    newAddrLabel.trim().isNotEmpty() &&
+                                    newAddrRecipientName.trim().isNotEmpty() &&
+                                    newAddrRecipientPhone.filter { it.isDigit() }.length == 10 &&
+                                    newAddrRecipientPhone.filter { it.isDigit() }.firstOrNull() in '6'..'9' &&
+                                    newAddrHouseNumber.trim().isNotEmpty() &&
+                                    newAddrStreet.trim().isNotEmpty() &&
+                                    newAddrFull.trim().isNotEmpty() &&
+                                    newAddrCity.trim().isNotEmpty() &&
+                                    newAddrState.trim().isNotEmpty() &&
+                                    newAddrPincode.filter { it.isDigit() }.length == 6,
+                                shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small
+                            ) {
                                 if (savingAddr) CircularProgressIndicator(modifier = Modifier.size(14.dp), strokeWidth = 2.dp, color = MaterialTheme.colorScheme.onPrimary)
                                 else Text("Save", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito, fontWeight = FontWeight.Bold))
                             }
@@ -638,7 +710,7 @@ fun CheckoutScreen(
             // ── Pickup Info ──
             if (orderType == "pickup") {
                 Surface(
-                    shape = RoundedCornerShape(16.dp),
+                    shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.medium,
                     color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f),
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -678,7 +750,7 @@ fun CheckoutScreen(
                     timeSlots.forEach { slot ->
                         val sel = selectedTimeSlot == slot
                         Surface(
-                            shape = RoundedCornerShape(12.dp),
+                            shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small,
                             color = if (sel) MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
                             else MaterialTheme.colorScheme.surfaceContainerLowest,
                             modifier = Modifier
@@ -722,7 +794,7 @@ fun CheckoutScreen(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                OutlinedTextField(
+                com.saibabui.openbake.ui.screens.common.OpenBakeTextField(
                     value = couponCode,
                     onValueChange = {
                         couponCode = it.uppercase()
@@ -734,13 +806,13 @@ fun CheckoutScreen(
                     },
                     placeholder = { Text("Enter code", style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito)) },
                     modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(12.dp),
+                    shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small,
                     singleLine = true
                 )
                 Button(
                     onClick = { applyCoupon() },
                     enabled = !applyingCoupon && couponCode.isNotBlank() && !couponValid,
-                    shape = RoundedCornerShape(12.dp),
+                    shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small,
                     modifier = Modifier.height(56.dp)
                 ) {
                     if (applyingCoupon) {
@@ -764,7 +836,7 @@ fun CheckoutScreen(
             // ── Order Summary ──
             Text(text = "Order Summary", style = MaterialTheme.typography.titleMedium.copy(fontFamily = PlayfairDisplay, fontWeight = FontWeight.Bold))
             Spacer(modifier = Modifier.height(12.dp))
-            Surface(shape = RoundedCornerShape(20.dp), color = MaterialTheme.colorScheme.surfaceContainerLowest, modifier = Modifier.fillMaxWidth()) {
+            Surface(shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.large, color = MaterialTheme.colorScheme.surfaceContainerLowest, modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     cartItems.forEach { item ->
                         Row(modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp), horizontalArrangement = Arrangement.SpaceBetween) {
@@ -831,19 +903,17 @@ fun CheckoutScreen(
 
             listOf(
                 Triple("cod", "💵", "Cash on Delivery"),
-                Triple("upi", "📱", "UPI Payment"),
-                Triple("card", "💳", "Card Payment")
+                Triple("upi", "📱", "UPI Payment")
             ).forEach { (value, emoji, label) ->
                 val isSelected = paymentMethod == value
                 val subtitle = when (value) {
                     "cod" -> "Pay when your order is delivered"
                     "upi" -> "Google Pay, PhonePe, Paytm & more"
-                    "card" -> "Visa, Mastercard, RuPay — secured by PayU"
                     else -> ""
                 }
                 Column(modifier = Modifier.padding(bottom = 8.dp)) {
                     Surface(
-                        shape = RoundedCornerShape(16.dp),
+                        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.medium,
                         color = if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.08f) else MaterialTheme.colorScheme.surfaceContainerLowest,
                         modifier = Modifier.fillMaxWidth().clickable { paymentMethod = value },
                         border = if (isSelected) ButtonDefaults.outlinedButtonBorder(enabled = true) else null
@@ -860,7 +930,7 @@ fun CheckoutScreen(
                     }
                     if (isSelected) {
                         Surface(
-                            shape = RoundedCornerShape(12.dp),
+                            shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small,
                             color = when (value) { "upi" -> Color(0xFFF0F7FF); "card" -> Color(0xFFF5F0FF); else -> Color(0xFFF0FFF4) },
                             modifier = Modifier.fillMaxWidth().padding(start = 40.dp, top = 4.dp)
                         ) {
@@ -876,15 +946,6 @@ fun CheckoutScreen(
                                         Spacer(modifier = Modifier.height(4.dp))
                                         Text("🔒 Secure UPI payment via PayU", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito), color = MaterialTheme.colorScheme.onSurfaceVariant)
                                     }
-                                    "card" -> {
-                                        Text("How card payment works:", style = MaterialTheme.typography.labelMedium.copy(fontFamily = Nunito, fontWeight = FontWeight.SemiBold))
-                                        Spacer(modifier = Modifier.height(8.dp))
-                                        PaymentStep("1", "Click \"Place Order\" below")
-                                        PaymentStep("2", "Enter card details securely in PayU")
-                                        PaymentStep("3", "Complete 3D Secure / OTP — order confirmed!")
-                                        Spacer(modifier = Modifier.height(4.dp))
-                                        Text("🔒 PCI-DSS compliant • Visa / MC / RuPay", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito), color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                    }
                                 }
                             }
                         }
@@ -897,11 +958,11 @@ fun CheckoutScreen(
             // ── Special Note ──
             Text(text = "Special Note", style = MaterialTheme.typography.titleMedium.copy(fontFamily = PlayfairDisplay, fontWeight = FontWeight.Bold))
             Spacer(modifier = Modifier.height(8.dp))
-            OutlinedTextField(
+            com.saibabui.openbake.ui.screens.common.OpenBakeTextField(
                 value = specialNote, onValueChange = { specialNote = it },
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = { Text("Any special instructions...", style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito)) },
-                shape = RoundedCornerShape(14.dp), minLines = 3,
+                shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.input, minLines = 3,
                 colors = OutlinedTextFieldDefaults.colors(
                     unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
@@ -914,7 +975,7 @@ fun CheckoutScreen(
             val displayError = paymentError ?: orderError
             displayError?.let { error ->
                 Spacer(modifier = Modifier.height(12.dp))
-                Surface(shape = RoundedCornerShape(12.dp), color = MaterialTheme.colorScheme.error.copy(alpha = 0.08f), modifier = Modifier.fillMaxWidth()) {
+                Surface(shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, color = MaterialTheme.colorScheme.error.copy(alpha = 0.08f), modifier = Modifier.fillMaxWidth()) {
                     Text(error, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito), modifier = Modifier.padding(12.dp))
                 }
             }

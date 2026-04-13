@@ -2,9 +2,11 @@
 
 import { Suspense, useEffect, useState, useCallback, useRef } from "react";
 import { useSearchParams } from "next/navigation";
+import { SearchX } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import ProductCard from "@/components/product/ProductCard";
+import Skeleton from "@/components/ui/Skeleton";
 import api from "@/lib/api";
 import type { Product, Category } from "@/types";
 
@@ -41,7 +43,7 @@ function MenuContent() {
       params.set("page_size", "50");
 
       const res = await api.get<{ items: Product[] }>(`/products?${params.toString()}`);
-      let sorted: Product[] = res.data.items ?? res.data;
+      const sorted: Product[] = res.data.items ?? res.data;
 
       if (sortBy === "price_low") sorted.sort((a, b) => a.price - b.price);
       else if (sortBy === "price_high") sorted.sort((a, b) => b.price - a.price);
@@ -77,7 +79,7 @@ function MenuContent() {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar Filters */}
           <aside className="lg:w-64 shrink-0">
-            <div className="bg-white rounded-2xl p-6 shadow-sm space-y-6">
+            <div className="bg-surface rounded-2xl border border-border/70 p-6 shadow-sm space-y-6">
               {/* Search */}
               <div>
                 <input
@@ -89,7 +91,8 @@ function MenuContent() {
                     if (debounceRef.current) clearTimeout(debounceRef.current);
                     debounceRef.current = setTimeout(() => setSearch(e.target.value), 300);
                   }}
-                  className="w-full border border-border rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  aria-label="Search products"
+                  className="w-full rounded-xl border border-border bg-white px-3 py-2 text-sm shadow-sm focus-visible:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
                 />
               </div>
 
@@ -99,7 +102,7 @@ function MenuContent() {
                   <li>
                     <button
                       onClick={() => setSelectedCategory("")}
-                      className={`hover:text-primary transition-colors ${!selectedCategory ? "text-primary font-semibold" : ""}`}
+                      className={`rounded-lg px-2 py-1 transition-colors hover:text-primary ${!selectedCategory ? "bg-surface-muted text-primary font-semibold" : ""}`}
                     >
                       All
                     </button>
@@ -108,7 +111,7 @@ function MenuContent() {
                     <li key={c.id}>
                       <button
                         onClick={() => setSelectedCategory(c.id)}
-                        className={`hover:text-primary transition-colors ${selectedCategory === c.id ? "text-primary font-semibold" : ""}`}
+                        className={`rounded-lg px-2 py-1 transition-colors hover:text-primary ${selectedCategory === c.id ? "bg-surface-muted text-primary font-semibold" : ""}`}
                       >
                         {c.name}
                       </button>
@@ -133,7 +136,7 @@ function MenuContent() {
               <div>
                 <h3 className="font-semibold text-text-primary mb-3">Sort By</h3>
                 <select
-                  className="w-full border border-border rounded-xl px-3 py-2 text-sm"
+                  className="w-full rounded-xl border border-border bg-white px-3 py-2 text-sm shadow-sm focus-visible:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
                 >
@@ -156,12 +159,12 @@ function MenuContent() {
             {loading ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                 {[1, 2, 3, 4, 5, 6].map((i) => (
-                  <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-sm animate-pulse">
-                    <div className="aspect-[4/3] bg-border/30" />
+                  <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-sm">
+                    <Skeleton className="aspect-[4/3] rounded-none" />
                     <div className="p-4 space-y-3">
-                      <div className="h-4 bg-border/30 rounded w-3/4" />
-                      <div className="h-3 bg-border/30 rounded w-1/2" />
-                      <div className="h-5 bg-border/30 rounded w-1/3" />
+                      <Skeleton className="h-4 w-3/4" />
+                      <Skeleton className="h-3 w-1/2" />
+                      <Skeleton className="h-5 w-1/3" />
                     </div>
                   </div>
                 ))}
@@ -174,7 +177,9 @@ function MenuContent() {
               </div>
             ) : (
               <div className="text-center py-16">
-                <div className="text-5xl mb-4">🔍</div>
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-surface-muted text-primary">
+                  <SearchX size={28} />
+                </div>
                 <p className="text-text-secondary">No products found matching your filters.</p>
               </div>
             )}

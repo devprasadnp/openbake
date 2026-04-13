@@ -79,13 +79,14 @@ fun ProfileScreen(
                 contentAlignment = Alignment.Center
             ) {
                 if (avatarUrl != null) {
-                    AsyncImage(
+                    com.saibabui.openbake.ui.screens.common.OpenBakeImage(
                         model = avatarUrl,
                         contentDescription = "Profile photo",
-                        modifier = Modifier
-                            .size(88.dp)
-                            .clip(CircleShape),
-                        contentScale = ContentScale.Crop
+                        modifier = Modifier.size(88.dp),
+                        shape = CircleShape,
+                        contentScale = ContentScale.Crop,
+                        placeholderEmoji = "👤",
+                        emojiFontSize = 36
                     )
                 } else {
                     Text(
@@ -153,12 +154,11 @@ fun ProfileScreen(
 
             // Logout
             Surface(
-                shape = RoundedCornerShape(16.dp),
+                shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.medium,
                 color = MaterialTheme.colorScheme.error.copy(alpha = 0.06f),
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        authViewModel.logout()
                         onLogout()
                     }
             ) {
@@ -207,7 +207,7 @@ private fun ProfileMenuItem(
     onClick: () -> Unit = {}
 ) {
     Surface(
-        shape = RoundedCornerShape(16.dp),
+        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.medium,
         color = MaterialTheme.colorScheme.surfaceContainerLowest,
         modifier = Modifier
             .fillMaxWidth()

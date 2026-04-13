@@ -47,14 +47,14 @@ fun AdminAnalyticsScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Text("7-Day Trend", fontFamily = Nunito, fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.titleMedium)
-                Card(shape = RoundedCornerShape(16.dp)) {
+                Card(shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.medium) {
                     Column(Modifier.padding(16.dp)) {
                         val maxRevenue = data.dailyTrend.maxOfOrNull { it.revenue } ?: 1.0
                         data.dailyTrend.forEach { day ->
                             Row(Modifier.fillMaxWidth().padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
                                 Text(day.date, fontFamily = Nunito, modifier = Modifier.width(50.dp), style = MaterialTheme.typography.bodySmall)
-                                Box(Modifier.weight(1f).height(20.dp).background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(4.dp))) {
-                                    Box(Modifier.fillMaxHeight().fillMaxWidth(fraction = (day.revenue / maxRevenue).toFloat().coerceIn(0f, 1f)).background(MaterialTheme.colorScheme.primary, RoundedCornerShape(4.dp)))
+                                Box(Modifier.weight(1f).height(20.dp).background(MaterialTheme.colorScheme.surfaceVariant, com.saibabui.openbake.ui.theme.OpenBakeShapes.micro)) {
+                                    Box(Modifier.fillMaxHeight().fillMaxWidth(fraction = (day.revenue / maxRevenue).toFloat().coerceIn(0f, 1f)).background(MaterialTheme.colorScheme.primary, com.saibabui.openbake.ui.theme.OpenBakeShapes.micro))
                                 }
                                 Spacer(Modifier.width(8.dp))
                                 Text("₹${String.format("%.0f", day.revenue)}", fontFamily = Nunito, style = MaterialTheme.typography.bodySmall, modifier = Modifier.width(60.dp))
@@ -65,7 +65,7 @@ fun AdminAnalyticsScreen(
 
                 if (data.topProducts.isNotEmpty()) {
                     Text("Top Products", fontFamily = Nunito, fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.titleMedium)
-                    Card(shape = RoundedCornerShape(16.dp)) {
+                    Card(shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.medium) {
                         Column(Modifier.padding(16.dp)) {
                             data.topProducts.forEachIndexed { i, p ->
                                 Row(Modifier.fillMaxWidth().padding(vertical = 4.dp), horizontalArrangement = Arrangement.SpaceBetween) {
@@ -79,7 +79,7 @@ fun AdminAnalyticsScreen(
 
                 if (data.statusBreakdown.isNotEmpty()) {
                     Text("Order Status", fontFamily = Nunito, fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.titleMedium)
-                    Card(shape = RoundedCornerShape(16.dp)) {
+                    Card(shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.medium) {
                         Column(Modifier.padding(16.dp)) {
                             data.statusBreakdown.forEach { s ->
                                 Row(Modifier.fillMaxWidth().padding(vertical = 2.dp), horizontalArrangement = Arrangement.SpaceBetween) {

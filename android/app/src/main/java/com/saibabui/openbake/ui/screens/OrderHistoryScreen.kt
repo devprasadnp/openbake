@@ -102,7 +102,7 @@ fun OrderHistoryScreen(
 @Composable
 private fun OrderCard(order: Order, onClick: () -> Unit) {
     Surface(
-        shape = RoundedCornerShape(20.dp),
+        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.large,
         color = MaterialTheme.colorScheme.surfaceContainerLowest,
         modifier = Modifier
             .fillMaxWidth()
@@ -157,7 +157,7 @@ private fun OrderCard(order: Order, onClick: () -> Unit) {
                     color = MaterialTheme.colorScheme.primary
                 )
                 Surface(
-                    shape = RoundedCornerShape(50),
+                    shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.pill,
                     color = MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
                 ) {
                     Text(
@@ -188,7 +188,7 @@ fun StatusBadge(status: String) {
     }
 
     Surface(
-        shape = RoundedCornerShape(50),
+        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.pill,
         color = bgColor
     ) {
         Text(

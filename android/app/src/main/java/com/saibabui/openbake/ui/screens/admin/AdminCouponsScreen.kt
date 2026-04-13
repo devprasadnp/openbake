@@ -44,7 +44,7 @@ fun AdminCouponsScreen(
         } else {
             LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(padding)) {
                 items(state.coupons) { coupon ->
-                    Card(shape = RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth().clickable { onCouponClick(coupon.id) }) {
+                    Card(shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, modifier = Modifier.fillMaxWidth().clickable { onCouponClick(coupon.id) }) {
                         Row(Modifier.padding(16.dp).fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                             Column(Modifier.weight(1f)) {
                                 Text(coupon.code, fontFamily = Nunito, fontWeight = FontWeight.Bold)

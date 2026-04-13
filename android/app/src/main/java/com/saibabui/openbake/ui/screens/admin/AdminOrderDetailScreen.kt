@@ -54,7 +54,7 @@ fun AdminOrderDetailScreen(
                 Modifier.fillMaxSize().padding(padding).verticalScroll(rememberScrollState()).padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Card(shape = RoundedCornerShape(16.dp)) {
+                Card(shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.medium) {
                     Column(Modifier.padding(16.dp).fillMaxWidth()) {
                         Text("Status", fontFamily = Nunito, style = MaterialTheme.typography.labelMedium)
                         Text(order.status.replaceFirstChar { it.uppercase() }, fontFamily = Nunito, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.headlineSmall)
@@ -62,7 +62,7 @@ fun AdminOrderDetailScreen(
                 }
 
                 order.customer?.let { customer ->
-                    Card(shape = RoundedCornerShape(16.dp)) {
+                    Card(shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.medium) {
                         Column(Modifier.padding(16.dp).fillMaxWidth()) {
                             Text("Customer", fontFamily = Nunito, fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.titleMedium)
                             Spacer(Modifier.height(8.dp))
@@ -73,7 +73,7 @@ fun AdminOrderDetailScreen(
                     }
                 }
 
-                Card(shape = RoundedCornerShape(16.dp)) {
+                Card(shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.medium) {
                     Column(Modifier.padding(16.dp).fillMaxWidth()) {
                         Text("Items", fontFamily = Nunito, fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.titleMedium)
                         Spacer(Modifier.height(8.dp))
@@ -93,7 +93,7 @@ fun AdminOrderDetailScreen(
 
                 val actions = validTransitions[order.status] ?: emptyList()
                 if (actions.isNotEmpty()) {
-                    Card(shape = RoundedCornerShape(16.dp)) {
+                    Card(shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.medium) {
                         Column(Modifier.padding(16.dp).fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             Text("Update Status", fontFamily = Nunito, fontWeight = FontWeight.SemiBold)
                             actions.forEach { action ->

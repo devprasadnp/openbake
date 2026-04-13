@@ -2,13 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Star, Plus, Heart } from "lucide-react";
+import { Star, Plus, Heart, ChefHat } from "lucide-react";
 import type { Product } from "@/types";
 import { formatPrice } from "@/lib/utils";
 import { useCartStore } from "@/store/cartStore";
 import { useWishlistStore } from "@/store/wishlistStore";
 import { useAuthStore } from "@/store/authStore";
 import toast from "react-hot-toast";
+import Badge from "@/components/ui/Badge";
 
 interface ProductCardProps {
   product: Product;
@@ -41,7 +42,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <div className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-transparent hover:border-primary/10">
+    <div className="group overflow-hidden rounded-2xl border border-border/80 bg-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-lg">
       <Link href={`/menu/${product.id}`}>
         <div className="relative aspect-[4/3] overflow-hidden">
           {product.images?.[0] ? (
@@ -52,14 +53,17 @@ export default function ProductCard({ product }: ProductCardProps) {
               className="object-cover group-hover:scale-105 transition-transform duration-500"
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-cream to-secondary/10 flex items-center justify-center text-5xl">
-              🧁
+            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-surface-muted to-secondary/20">
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/80 shadow-sm">
+                <ChefHat size={30} className="text-primary" />
+              </div>
             </div>
           )}
           {/* Wishlist heart */}
           <button
             onClick={handleWishlist}
-            className={`absolute top-3 right-3 w-9 h-9 rounded-full flex items-center justify-center transition-all shadow-md ${
+            aria-label={wishlisted ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
+            className={`absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full shadow-md transition-all ${
               wishlisted
                 ? "bg-error/90 text-white"
                 : "bg-white/90 text-text-secondary hover:bg-error/10 hover:text-error"
@@ -68,16 +72,16 @@ export default function ProductCard({ product }: ProductCardProps) {
             <Heart size={16} className={wishlisted ? "fill-current" : ""} />
           </button>
           {/* Badges */}
-          <div className="absolute top-3 left-3 flex flex-col gap-1">
+          <div className="absolute left-3 top-3 flex flex-col gap-1.5">
             {product.is_eggless_available && (
-              <span className="bg-success/90 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+              <Badge variant="success" className="border-0 bg-success/90 text-white">
                 EGGLESS
-              </span>
+              </Badge>
             )}
             {(!product.is_available || product.stock_count <= 0) && (
-              <span className="bg-error/90 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+              <Badge variant="error" className="border-0 bg-error/90 text-white">
                 SOLD OUT
-              </span>
+              </Badge>
             )}
           </div>
         </div>
@@ -85,7 +89,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
       <div className="p-4">
         <Link href={`/menu/${product.id}`}>
-          <h3 className="font-semibold text-text-primary hover:text-primary transition-colors line-clamp-1 text-[15px]">
+          <h3 className="line-clamp-1 text-[15px] font-semibold text-text-primary transition-colors hover:text-primary">
             {product.name}
           </h3>
         </Link>
@@ -95,12 +99,12 @@ export default function ProductCard({ product }: ProductCardProps) {
           </p>
         )}
 
-        <div className="flex items-center justify-between mt-3">
+        <div className="mt-3 flex items-center justify-between">
           <div>
-            <p className="font-bold text-primary text-lg leading-tight">
+            <p className="text-lg font-bold leading-tight text-primary">
               {formatPrice(product.price)}
             </p>
-            <div className="flex items-center gap-1 mt-0.5">
+            <div className="mt-0.5 flex items-center gap-1">
               <Star size={12} className="fill-secondary text-secondary" />
               <span className="text-xs text-text-secondary font-medium">{product.rating.toFixed(1)}</span>
             </div>
@@ -109,7 +113,8 @@ export default function ProductCard({ product }: ProductCardProps) {
           <button
             onClick={handleAddToCart}
             disabled={!product.is_available || product.stock_count <= 0}
-            className="w-10 h-10 rounded-full bg-gradient-to-br from-secondary to-primary text-white flex items-center justify-center hover:shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            aria-label={`Add ${product.name} to cart`}
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-secondary to-primary text-white transition-all hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50"
           >
             <Plus size={20} />
           </button>

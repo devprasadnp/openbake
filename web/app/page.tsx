@@ -7,6 +7,7 @@ import { ArrowRight, Clock, Truck, Star, ChefHat, Sparkles } from "lucide-react"
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import ProductCard from "@/components/product/ProductCard";
+import Skeleton from "@/components/ui/Skeleton";
 import api from "@/lib/api";
 import type { Product, Category } from "@/types";
 
@@ -132,7 +133,9 @@ export default function HomePage() {
                   {cat.image_url ? (
                     <Image src={cat.image_url} alt={cat.name} width={64} height={64} className="object-cover w-full h-full" />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-2xl">🧁</div>
+                    <div className="flex h-full w-full items-center justify-center bg-surface-muted">
+                      <ChefHat size={22} className="text-primary" />
+                    </div>
                   )}
                 </div>
                 <span className="text-sm font-medium text-text-secondary group-hover:text-primary transition-colors">
@@ -157,12 +160,12 @@ export default function HomePage() {
             {loading ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="bg-cream rounded-2xl overflow-hidden animate-pulse">
-                    <div className="aspect-[4/3] bg-border/30" />
+                  <div key={i} className="bg-cream rounded-2xl overflow-hidden">
+                    <Skeleton className="aspect-[4/3] rounded-none" />
                     <div className="p-4 space-y-3">
-                      <div className="h-4 bg-border/30 rounded w-3/4" />
-                      <div className="h-3 bg-border/30 rounded w-1/2" />
-                      <div className="h-5 bg-border/30 rounded w-1/3" />
+                      <Skeleton className="h-4 w-3/4" />
+                      <Skeleton className="h-3 w-1/2" />
+                      <Skeleton className="h-5 w-1/3" />
                     </div>
                   </div>
                 ))}

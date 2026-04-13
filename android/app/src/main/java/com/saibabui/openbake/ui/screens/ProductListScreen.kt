@@ -138,7 +138,7 @@ private fun GridProductCard(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() },
-        shape = RoundedCornerShape(20.dp),
+        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.large,
         color = MaterialTheme.colorScheme.surfaceContainerLowest
     ) {
         Column {
@@ -148,13 +148,14 @@ private fun GridProductCard(
                     .height(150.dp)
             ) {
                 if (product.images.isNotEmpty()) {
-                    AsyncImage(
+                    com.saibabui.openbake.ui.screens.common.OpenBakeImage(
                         model = product.images.first(),
                         contentDescription = product.name,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)),
-                        contentScale = ContentScale.Crop
+                        modifier = Modifier.fillMaxSize(),
+                        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.mediaTop,
+                        contentScale = ContentScale.Crop,
+                        placeholderEmoji = "🎂",
+                        emojiFontSize = 40
                     )
                 } else {
                     Box(
@@ -168,7 +169,7 @@ private fun GridProductCard(
                 }
                 if (product.rating > 0) {
                     Surface(
-                        shape = RoundedCornerShape(10.dp),
+                        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.compact,
                         color = MaterialTheme.colorScheme.surfaceContainerLowest.copy(alpha = 0.9f),
                         modifier = Modifier
                             .align(Alignment.TopEnd)
@@ -183,7 +184,7 @@ private fun GridProductCard(
                 }
                 if (product.isEgglessAvailable) {
                     Surface(
-                        shape = RoundedCornerShape(8.dp),
+                        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.xSmall,
                         color = Success.copy(alpha = 0.9f),
                         modifier = Modifier
                             .align(Alignment.TopStart)

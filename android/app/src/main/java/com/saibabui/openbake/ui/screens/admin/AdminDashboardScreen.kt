@@ -84,7 +84,7 @@ fun AdminDashboardScreen(
                 }
 
                 Card(
-                    shape = RoundedCornerShape(16.dp),
+                    shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.medium,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer)
                 ) {
                     Row(
@@ -108,7 +108,7 @@ fun AdminDashboardScreen(
 
 @Composable
 private fun StatCard(label: String, value: String, modifier: Modifier = Modifier) {
-    Card(shape = RoundedCornerShape(16.dp), modifier = modifier) {
+    Card(shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.medium, modifier = modifier) {
         Column(Modifier.padding(16.dp)) {
             Text(label, fontFamily = Nunito, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Text(value, fontFamily = Nunito, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleLarge)

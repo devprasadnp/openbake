@@ -38,7 +38,7 @@ fun AdminProductsScreen(
         } else {
             LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(padding)) {
                 items(state.products) { product ->
-                    Card(shape = RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth().clickable { onProductClick(product.id) }) {
+                    Card(shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, modifier = Modifier.fillMaxWidth().clickable { onProductClick(product.id) }) {
                         Row(Modifier.padding(16.dp).fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                             Column(Modifier.weight(1f)) {
                                 Text(product.name, fontFamily = Nunito, fontWeight = FontWeight.Bold)

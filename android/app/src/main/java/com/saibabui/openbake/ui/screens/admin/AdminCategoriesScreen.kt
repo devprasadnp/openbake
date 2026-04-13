@@ -54,7 +54,7 @@ fun AdminCategoriesScreen(
         } else {
             LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(padding)) {
                 items(state.categories) { category ->
-                    Card(shape = RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth()) {
+                    Card(shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, modifier = Modifier.fillMaxWidth()) {
                         Row(Modifier.padding(16.dp).fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                             Column(Modifier.weight(1f)) {
                                 Text(category.name, fontFamily = Nunito, fontWeight = FontWeight.Bold)
@@ -80,8 +80,8 @@ fun AdminCategoriesScreen(
             title = { Text(if (editId != null) "Edit Category" else "New Category") },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    OutlinedTextField(value = editName, onValueChange = { editName = it }, label = { Text("Name") }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp))
-                    OutlinedTextField(value = editImageUrl, onValueChange = { editImageUrl = it }, label = { Text("Image URL (optional)") }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp))
+                    com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = editName, onValueChange = { editName = it }, label = { Text("Name") }, modifier = Modifier.fillMaxWidth(), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small)
+                    com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = editImageUrl, onValueChange = { editImageUrl = it }, label = { Text("Image URL (optional)") }, modifier = Modifier.fillMaxWidth(), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small)
                 }
             },
             confirmButton = {

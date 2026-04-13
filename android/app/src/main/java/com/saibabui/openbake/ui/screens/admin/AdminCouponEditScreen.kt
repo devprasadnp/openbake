@@ -54,7 +54,7 @@ fun AdminCouponEditScreen(
             Modifier.fillMaxSize().padding(padding).verticalScroll(rememberScrollState()).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            OutlinedTextField(value = code, onValueChange = { code = it.uppercase() }, label = { Text("Coupon Code") }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp))
+            com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = code, onValueChange = { code = it.uppercase() }, label = { Text("Coupon Code") }, modifier = Modifier.fillMaxWidth(), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small)
 
             Text("Discount Type", fontFamily = Nunito, fontWeight = FontWeight.SemiBold)
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -62,12 +62,12 @@ fun AdminCouponEditScreen(
                 FilterChip(selected = discountType == "flat", onClick = { discountType = "flat" }, label = { Text("Flat Amount") })
             }
 
-            OutlinedTextField(value = discountValue, onValueChange = { discountValue = it }, label = { Text(if (discountType == "percentage") "Discount %" else "Discount Amount") }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal))
-            OutlinedTextField(value = minOrderValue, onValueChange = { minOrderValue = it }, label = { Text("Min Order Value") }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal))
-            OutlinedTextField(value = maxUses, onValueChange = { maxUses = it }, label = { Text("Max Uses") }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number))
+            com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = discountValue, onValueChange = { discountValue = it }, label = { Text(if (discountType == "percentage") "Discount %" else "Discount Amount") }, modifier = Modifier.fillMaxWidth(), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal))
+            com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = minOrderValue, onValueChange = { minOrderValue = it }, label = { Text("Min Order Value") }, modifier = Modifier.fillMaxWidth(), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal))
+            com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = maxUses, onValueChange = { maxUses = it }, label = { Text("Max Uses") }, modifier = Modifier.fillMaxWidth(), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number))
 
-            OutlinedTextField(value = validFrom, onValueChange = { validFrom = it }, label = { Text("Valid From (YYYY-MM-DD)") }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp))
-            OutlinedTextField(value = validUntil, onValueChange = { validUntil = it }, label = { Text("Valid Until (YYYY-MM-DD)") }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp))
+            com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = validFrom, onValueChange = { validFrom = it }, label = { Text("Valid From (YYYY-MM-DD)") }, modifier = Modifier.fillMaxWidth(), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small)
+            com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = validUntil, onValueChange = { validUntil = it }, label = { Text("Valid Until (YYYY-MM-DD)") }, modifier = Modifier.fillMaxWidth(), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small)
 
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                 Text("Active", fontFamily = Nunito); Switch(checked = isActive, onCheckedChange = { isActive = it })

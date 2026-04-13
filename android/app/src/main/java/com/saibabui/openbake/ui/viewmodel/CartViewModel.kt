@@ -70,13 +70,20 @@ class CartViewModel : ViewModel() {
         variant: ProductVariant? = null,
         isEggless: Boolean = false,
         cakeMessage: String? = null
-    ) {
+    ): Boolean {
+        // Stock check
+        if (product.stockCount <= 0 || !product.isAvailable) return false
+
         val current = _items.value.toMutableList()
         val existingIdx = current.indexOfFirst {
             it.product.id == product.id &&
                     it.selectedVariant?.id == variant?.id &&
                     it.isEggless == isEggless
         }
+
+        val totalQty = if (existingIdx >= 0) current[existingIdx].quantity + quantity else quantity
+        if (totalQty > product.stockCount) return false
+
         if (existingIdx >= 0) {
             val existing = current[existingIdx]
             current[existingIdx] = existing.copy(quantity = existing.quantity + quantity)
@@ -92,6 +99,7 @@ class CartViewModel : ViewModel() {
             )
         }
         _items.value = current
+        return true
     }
 
     fun updateQuantity(index: Int, quantity: Int) {

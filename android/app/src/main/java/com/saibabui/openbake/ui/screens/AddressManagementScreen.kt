@@ -12,14 +12,15 @@ import android.os.Looper
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.material3.*
@@ -115,6 +116,7 @@ fun AddressManagementScreen(onBack: () -> Unit) {
     var addresses by remember { mutableStateOf<List<Address>>(emptyList()) }
     var loading by remember { mutableStateOf(true) }
     var showAddForm by remember { mutableStateOf(false) }
+    var editingAddress by remember { mutableStateOf<Address?>(null) }
 
     // Form fields
     var label by remember { mutableStateOf("Home") }
@@ -157,34 +159,95 @@ fun AddressManagementScreen(onBack: () -> Unit) {
         houseNumber = ""; street = ""; fullAddress = ""; landmark = ""
         city = ""; state = ""; pincode = ""
         isDefault = false; locationLat = null; locationLng = null; errorMsg = null
+        editingAddress = null
+    }
+
+    fun populateFormFromAddress(addr: Address) {
+        editingAddress = addr
+        label = addr.label
+        recipientName = addr.recipientName ?: ""
+        recipientPhone = addr.recipientPhone ?: ""
+        houseNumber = addr.houseNumber ?: ""
+        street = addr.street ?: ""
+        fullAddress = addr.fullAddress
+        landmark = addr.landmark ?: ""
+        city = addr.city
+        state = addr.state ?: ""
+        pincode = addr.pincode
+        isDefault = addr.isDefault
+        locationLat = addr.lat
+        locationLng = addr.lng
+        errorMsg = null
+        showAddForm = true
+    }
+
+    fun isPhoneValid(phone: String): Boolean {
+        val digits = phone.filter { it.isDigit() }
+        return digits.length == 10 && digits.firstOrNull() in '6'..'9'
+    }
+
+    fun isAddressFormReady(): Boolean {
+        val pincodeDigits = pincode.filter { it.isDigit() }
+        return label.trim().isNotEmpty() &&
+            recipientName.trim().isNotEmpty() &&
+            isPhoneValid(recipientPhone) &&
+            houseNumber.trim().isNotEmpty() &&
+            street.trim().isNotEmpty() &&
+            fullAddress.trim().isNotEmpty() &&
+            city.trim().isNotEmpty() &&
+            state.trim().isNotEmpty() &&
+            pincodeDigits.length == 6
     }
 
     fun saveAddress() {
-        if (fullAddress.isBlank() || city.isBlank() || pincode.isBlank()) return
+        val pincodeDigits = pincode.filter { it.isDigit() }
+        when {
+            label.trim().isEmpty() -> { errorMsg = "Address label is required"; return }
+            recipientName.trim().isEmpty() -> { errorMsg = "Recipient name is required"; return }
+            !isPhoneValid(recipientPhone) -> { errorMsg = "Enter a valid 10-digit recipient phone"; return }
+            houseNumber.trim().isEmpty() -> { errorMsg = "House / Flat number is required"; return }
+            street.trim().isEmpty() -> { errorMsg = "Street / Colony is required"; return }
+            fullAddress.trim().isEmpty() -> { errorMsg = "Full address is required"; return }
+            city.trim().isEmpty() -> { errorMsg = "City is required"; return }
+            state.trim().isEmpty() -> { errorMsg = "State is required"; return }
+            pincodeDigits.length != 6 -> { errorMsg = "Pincode must be exactly 6 digits"; return }
+        }
+
+        val request = AddressRequest(
+            label = label.trim(),
+            recipientName = recipientName.trim(),
+            recipientPhone = recipientPhone.filter { it.isDigit() },
+            houseNumber = houseNumber.trim(),
+            street = street.trim(),
+            fullAddress = fullAddress.trim(),
+            landmark = landmark.ifBlank { null },
+            city = city.trim(),
+            state = state.trim(),
+            pincode = pincodeDigits,
+            isDefault = isDefault,
+            lat = locationLat,
+            lng = locationLng
+        )
+
         scope.launch {
             saving = true
             errorMsg = null
+            val isEditing = editingAddress != null
             runCatching {
-                RetrofitClient.apiService.addAddress(
-                    AddressRequest(
-                        label = label,
-                        recipientName = recipientName.ifBlank { null },
-                        recipientPhone = recipientPhone.ifBlank { null },
-                        houseNumber = houseNumber.ifBlank { null },
-                        street = street.ifBlank { null },
-                        fullAddress = fullAddress,
-                        landmark = landmark.ifBlank { null },
-                        city = city,
-                        state = state.ifBlank { null },
-                        pincode = pincode,
-                        isDefault = isDefault,
-                        lat = locationLat,
-                        lng = locationLng
-                    )
-                )
+                if (isEditing) {
+                    RetrofitClient.apiService.updateAddress(editingAddress!!.id, request)
+                } else {
+                    RetrofitClient.apiService.addAddress(request)
+                }
             }.onSuccess { resp ->
                 if (resp.isSuccessful) {
-                    resp.body()?.let { addresses = addresses + it }
+                    resp.body()?.let { updatedAddr ->
+                        if (isEditing) {
+                            addresses = addresses.map { if (it.id == editingAddress!!.id) updatedAddr else it }
+                        } else {
+                            addresses = addresses + updatedAddr
+                        }
+                    }
                     showAddForm = false
                     resetForm()
                 } else {
@@ -225,7 +288,7 @@ fun AddressManagementScreen(onBack: () -> Unit) {
         ActivityResultContracts.RequestPermission()
     ) { granted ->
         if (granted) fetchLocation()
-        else errorMsg = "Location permission denied"
+        else errorMsg = "Location permission denied. Please enable it in Settings to auto-detect your address."
     }
 
     fun requestLocation() {
@@ -253,7 +316,13 @@ fun AddressManagementScreen(onBack: () -> Unit) {
                     }
                 },
                 actions = {
-                    IconButton(onClick = { showAddForm = !showAddForm; if (showAddForm) resetForm() }) {
+                    IconButton(onClick = { 
+                        if (showAddForm) {
+                            showAddForm = false; resetForm()
+                        } else {
+                            resetForm(); showAddForm = true
+                        }
+                    }) {
                         Icon(
                             Icons.Filled.Add,
                             contentDescription = "Add Address",
@@ -278,7 +347,7 @@ fun AddressManagementScreen(onBack: () -> Unit) {
             if (showAddForm) {
                 item {
                     Surface(
-                        shape = RoundedCornerShape(20.dp),
+                        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.large,
                         color = MaterialTheme.colorScheme.surfaceContainerLowest,
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -287,7 +356,7 @@ fun AddressManagementScreen(onBack: () -> Unit) {
                             verticalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
                             Text(
-                                "New Address",
+                                if (editingAddress != null) "Edit Address" else "New Address",
                                 style = MaterialTheme.typography.titleMedium.copy(
                                     fontFamily = PlayfairDisplay,
                                     fontWeight = FontWeight.Bold
@@ -299,7 +368,7 @@ fun AddressManagementScreen(onBack: () -> Unit) {
                                 onClick = { requestLocation() },
                                 modifier = Modifier.fillMaxWidth(),
                                 enabled = !locating,
-                                shape = RoundedCornerShape(12.dp)
+                                shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small
                             ) {
                                 if (locating) {
                                     CircularProgressIndicator(
@@ -349,7 +418,7 @@ fun AddressManagementScreen(onBack: () -> Unit) {
                                 }
                             }
 
-                            OutlinedTextField(
+                            com.saibabui.openbake.ui.screens.common.OpenBakeTextField(
                                 value = recipientName,
                                 onValueChange = { recipientName = it },
                                 label = {
@@ -359,16 +428,16 @@ fun AddressManagementScreen(onBack: () -> Unit) {
                                     )
                                 },
                                 modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(12.dp),
+                                shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small,
                                 singleLine = true,
                                 colors = OutlinedTextFieldDefaults.colors(
                                     unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
                                     focusedBorderColor = MaterialTheme.colorScheme.primary
                                 )
                             )
-                            OutlinedTextField(
+                            com.saibabui.openbake.ui.screens.common.OpenBakeTextField(
                                 value = recipientPhone,
-                                onValueChange = { recipientPhone = it },
+                                onValueChange = { recipientPhone = it.filter { c -> c.isDigit() }.take(10) },
                                 label = {
                                     Text(
                                         "Recipient Phone",
@@ -376,7 +445,7 @@ fun AddressManagementScreen(onBack: () -> Unit) {
                                     )
                                 },
                                 modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(12.dp),
+                                shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small,
                                 singleLine = true,
                                 colors = OutlinedTextFieldDefaults.colors(
                                     unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
@@ -384,7 +453,7 @@ fun AddressManagementScreen(onBack: () -> Unit) {
                                 )
                             )
                             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                                OutlinedTextField(
+                                com.saibabui.openbake.ui.screens.common.OpenBakeTextField(
                                     value = houseNumber,
                                     onValueChange = { houseNumber = it },
                                     label = {
@@ -394,10 +463,10 @@ fun AddressManagementScreen(onBack: () -> Unit) {
                                         )
                                     },
                                     modifier = Modifier.weight(1f),
-                                    shape = RoundedCornerShape(12.dp),
+                                    shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small,
                                     singleLine = true
                                 )
-                                OutlinedTextField(
+                                com.saibabui.openbake.ui.screens.common.OpenBakeTextField(
                                     value = street,
                                     onValueChange = { street = it },
                                     label = {
@@ -407,11 +476,11 @@ fun AddressManagementScreen(onBack: () -> Unit) {
                                         )
                                     },
                                     modifier = Modifier.weight(1f),
-                                    shape = RoundedCornerShape(12.dp),
+                                    shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small,
                                     singleLine = true
                                 )
                             }
-                            OutlinedTextField(
+                            com.saibabui.openbake.ui.screens.common.OpenBakeTextField(
                                 value = fullAddress,
                                 onValueChange = { fullAddress = it },
                                 label = {
@@ -421,14 +490,14 @@ fun AddressManagementScreen(onBack: () -> Unit) {
                                     )
                                 },
                                 modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(12.dp),
+                                shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small,
                                 minLines = 2,
                                 colors = OutlinedTextFieldDefaults.colors(
                                     unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
                                     focusedBorderColor = MaterialTheme.colorScheme.primary
                                 )
                             )
-                            OutlinedTextField(
+                            com.saibabui.openbake.ui.screens.common.OpenBakeTextField(
                                 value = landmark,
                                 onValueChange = { landmark = it },
                                 label = {
@@ -438,7 +507,7 @@ fun AddressManagementScreen(onBack: () -> Unit) {
                                     )
                                 },
                                 modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(12.dp),
+                                shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small,
                                 singleLine = true,
                                 colors = OutlinedTextFieldDefaults.colors(
                                     unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
@@ -446,7 +515,7 @@ fun AddressManagementScreen(onBack: () -> Unit) {
                                 )
                             )
                             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                                OutlinedTextField(
+                                com.saibabui.openbake.ui.screens.common.OpenBakeTextField(
                                     value = city,
                                     onValueChange = { city = it },
                                     label = {
@@ -456,9 +525,9 @@ fun AddressManagementScreen(onBack: () -> Unit) {
                                         )
                                     },
                                     modifier = Modifier.weight(1f),
-                                    shape = RoundedCornerShape(12.dp)
+                                    shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small
                                 )
-                                OutlinedTextField(
+                                com.saibabui.openbake.ui.screens.common.OpenBakeTextField(
                                     value = state,
                                     onValueChange = { state = it },
                                     label = {
@@ -468,11 +537,11 @@ fun AddressManagementScreen(onBack: () -> Unit) {
                                         )
                                     },
                                     modifier = Modifier.weight(1f),
-                                    shape = RoundedCornerShape(12.dp)
+                                    shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small
                                 )
-                                OutlinedTextField(
+                                com.saibabui.openbake.ui.screens.common.OpenBakeTextField(
                                     value = pincode,
-                                    onValueChange = { pincode = it },
+                                    onValueChange = { pincode = it.filter { c -> c.isDigit() }.take(6) },
                                     label = {
                                         Text(
                                             "Pincode",
@@ -480,7 +549,7 @@ fun AddressManagementScreen(onBack: () -> Unit) {
                                         )
                                     },
                                     modifier = Modifier.weight(1f),
-                                    shape = RoundedCornerShape(12.dp)
+                                    shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small
                                 )
                             }
 
@@ -496,7 +565,7 @@ fun AddressManagementScreen(onBack: () -> Unit) {
                                 OutlinedButton(
                                     onClick = { showAddForm = false; resetForm() },
                                     modifier = Modifier.weight(1f),
-                                    shape = RoundedCornerShape(12.dp)
+                                    shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small
                                 ) {
                                     Text(
                                         "Cancel",
@@ -506,8 +575,8 @@ fun AddressManagementScreen(onBack: () -> Unit) {
                                 Button(
                                     onClick = { saveAddress() },
                                     modifier = Modifier.weight(1f),
-                                    enabled = !saving && fullAddress.isNotBlank() && city.isNotBlank() && pincode.isNotBlank(),
-                                    shape = RoundedCornerShape(12.dp)
+                                    enabled = !saving && isAddressFormReady(),
+                                    shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small
                                 ) {
                                     if (saving) {
                                         CircularProgressIndicator(
@@ -517,7 +586,7 @@ fun AddressManagementScreen(onBack: () -> Unit) {
                                         )
                                     } else {
                                         Text(
-                                            "Save",
+                                            if (editingAddress != null) "Update" else "Save",
                                             style = MaterialTheme.typography.bodyMedium.copy(
                                                 fontFamily = Nunito,
                                                 fontWeight = FontWeight.Bold
@@ -572,7 +641,7 @@ fun AddressManagementScreen(onBack: () -> Unit) {
                         Spacer(Modifier.height(24.dp))
                         Button(
                             onClick = { showAddForm = true },
-                            shape = RoundedCornerShape(12.dp)
+                            shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small
                         ) {
                             Icon(Icons.Filled.Add, contentDescription = null, modifier = Modifier.size(16.dp))
                             Spacer(Modifier.width(8.dp))
@@ -588,7 +657,11 @@ fun AddressManagementScreen(onBack: () -> Unit) {
                 }
             } else {
                 items(addresses, key = { it.id }) { addr ->
-                    SavedAddressCard(address = addr, onDelete = { deleteAddress(addr.id) })
+                    SavedAddressCard(
+                        address = addr,
+                        onEdit = { populateFormFromAddress(addr) },
+                        onDelete = { deleteAddress(addr.id) }
+                    )
                 }
             }
         }
@@ -596,15 +669,15 @@ fun AddressManagementScreen(onBack: () -> Unit) {
 }
 
 @Composable
-private fun SavedAddressCard(address: Address, onDelete: () -> Unit) {
+private fun SavedAddressCard(address: Address, onEdit: () -> Unit, onDelete: () -> Unit) {
     var showConfirm by remember { mutableStateOf(false) }
 
     Surface(
-        shape = RoundedCornerShape(20.dp),
+        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.large,
         color = if (address.isDefault)
             MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)
         else MaterialTheme.colorScheme.surfaceContainerLowest,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth().clickable { onEdit() }
     ) {
         Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.Top) {
             Box(
@@ -612,7 +685,7 @@ private fun SavedAddressCard(address: Address, onDelete: () -> Unit) {
                     .size(40.dp)
                     .background(
                         MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-                        RoundedCornerShape(12.dp)
+                        com.saibabui.openbake.ui.theme.OpenBakeShapes.small
                     ),
                 contentAlignment = Alignment.Center
             ) {
@@ -638,7 +711,7 @@ private fun SavedAddressCard(address: Address, onDelete: () -> Unit) {
                     )
                     if (address.isDefault) {
                         Surface(
-                            shape = RoundedCornerShape(50),
+                            shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.pill,
                             color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
                         ) {
                             Text(
@@ -662,13 +735,23 @@ private fun SavedAddressCard(address: Address, onDelete: () -> Unit) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            IconButton(onClick = { showConfirm = true }) {
-                Icon(
-                    Icons.Filled.Delete,
-                    contentDescription = "Delete",
-                    tint = MaterialTheme.colorScheme.error.copy(alpha = 0.7f),
-                    modifier = Modifier.size(18.dp)
-                )
+            Column {
+                IconButton(onClick = { onEdit() }) {
+                    Icon(
+                        Icons.Filled.Edit,
+                        contentDescription = "Edit",
+                        tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f),
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
+                IconButton(onClick = { showConfirm = true }) {
+                    Icon(
+                        Icons.Filled.Delete,
+                        contentDescription = "Delete",
+                        tint = MaterialTheme.colorScheme.error.copy(alpha = 0.7f),
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
             }
         }
     }

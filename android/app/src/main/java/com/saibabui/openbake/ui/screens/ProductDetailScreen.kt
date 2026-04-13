@@ -59,6 +59,10 @@ fun ProductDetailScreen(
     var isInWishlist by remember { mutableStateOf(false) }
     var wishlistLoading by remember { mutableStateOf(false) }
 
+    // Stock error snackbar
+    var stockError by remember { mutableStateOf<String?>(null) }
+    val snackbarHostState = remember { SnackbarHostState() }
+
     LaunchedEffect(productId) {
         productViewModel.loadProductDetail(productId)
         // Check if product is in wishlist
@@ -81,6 +85,14 @@ fun ProductDetailScreen(
 
     val isOutOfStock = product.stockCount <= 0 || !product.isAvailable
 
+    // Show stock error in snackbar
+    LaunchedEffect(stockError) {
+        stockError?.let {
+            snackbarHostState.showSnackbar(it)
+            stockError = null
+        }
+    }
+
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -95,11 +107,14 @@ fun ProductDetailScreen(
                     .height(320.dp)
             ) {
                 if (product.images.isNotEmpty()) {
-                    AsyncImage(
+                    com.saibabui.openbake.ui.screens.common.OpenBakeImage(
                         model = product.images.first(),
                         contentDescription = product.name,
                         modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
+                        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.medium,
+                        contentScale = ContentScale.Crop,
+                        placeholderEmoji = "🎂",
+                        emojiFontSize = 72
                     )
                 } else {
                     Box(
@@ -121,7 +136,7 @@ fun ProductDetailScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Surface(
-                            shape = RoundedCornerShape(12.dp),
+                            shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small,
                             color = MaterialTheme.colorScheme.error
                         ) {
                             Text(
@@ -228,7 +243,7 @@ fun ProductDetailScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .offset(y = (-24).dp),
-                shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
+                shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.bottomBarTop,
                 color = MaterialTheme.colorScheme.background
             ) {
                 Column(modifier = Modifier.padding(24.dp)) {
@@ -257,7 +272,7 @@ fun ProductDetailScreen(
                         )
                         if (product.rating > 0) {
                             Surface(
-                                shape = RoundedCornerShape(12.dp),
+                                shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small,
                                 color = MaterialTheme.colorScheme.surfaceContainerLow
                             ) {
                                 Row(
@@ -310,7 +325,7 @@ fun ProductDetailScreen(
                     // Waitlist section for out-of-stock products
                     if (isOutOfStock) {
                         Surface(
-                            shape = RoundedCornerShape(16.dp),
+                            shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.medium,
                             color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f),
                             modifier = Modifier.fillMaxWidth()
                         ) {
@@ -352,7 +367,7 @@ fun ProductDetailScreen(
                                         }
                                     },
                                     enabled = !waitlistLoading,
-                                    shape = RoundedCornerShape(12.dp),
+                                    shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small,
                                     colors = if (onWaitlist) ButtonDefaults.outlinedButtonColors()
                                     else ButtonDefaults.buttonColors()
                                 ) {
@@ -399,7 +414,7 @@ fun ProductDetailScreen(
                                             style = MaterialTheme.typography.labelMedium.copy(fontFamily = Nunito)
                                         )
                                     },
-                                    shape = RoundedCornerShape(50),
+                                    shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.pill,
                                     colors = FilterChipDefaults.filterChipColors(
                                         selectedContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
                                         selectedLabelColor = MaterialTheme.colorScheme.primary
@@ -413,7 +428,7 @@ fun ProductDetailScreen(
                     // Eggless option (only if in stock)
                     if (!isOutOfStock && product.isEgglessAvailable) {
                         Surface(
-                            shape = RoundedCornerShape(16.dp),
+                            shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.medium,
                             color = MaterialTheme.colorScheme.surfaceContainerLow,
                             modifier = Modifier.fillMaxWidth()
                         ) {
@@ -518,7 +533,7 @@ fun ProductDetailScreen(
                         Spacer(modifier = Modifier.height(10.dp))
                         detailState.reviews.take(3).forEach { review ->
                             Surface(
-                                shape = RoundedCornerShape(14.dp),
+                                shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.input,
                                 color = MaterialTheme.colorScheme.surfaceContainerLow,
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -561,7 +576,7 @@ fun ProductDetailScreen(
                 modifier = Modifier.align(Alignment.BottomCenter),
                 shadowElevation = 8.dp,
                 color = MaterialTheme.colorScheme.surface,
-                shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
+                shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.sheetTop
             ) {
                 Row(
                     modifier = Modifier
@@ -588,13 +603,31 @@ fun ProductDetailScreen(
                     GradientButton(
                         text = "Add to Cart",
                         onClick = {
-                            cartViewModel.addItem(product, quantity, selectedVariant, isEggless)
-                            onBack()
+                            if (product.stockCount <= 0 || !product.isAvailable) {
+                                stockError = "Sorry, this item is currently out of stock."
+                            } else if (quantity > product.stockCount) {
+                                stockError = "Only ${product.stockCount} items available in stock."
+                            } else {
+                                val added = cartViewModel.addItem(product, quantity, selectedVariant, isEggless)
+                                if (added) {
+                                    onBack()
+                                } else {
+                                    stockError = "Cannot add to cart. Stock limit reached."
+                                }
+                            }
                         },
                         modifier = Modifier.weight(1f)
                     )
                 }
             }
         }
+
+        // Snackbar for stock errors
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = if (!isOutOfStock) 90.dp else 16.dp)
+        )
     }
 }

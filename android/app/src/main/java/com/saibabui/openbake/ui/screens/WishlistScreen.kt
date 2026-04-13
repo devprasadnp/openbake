@@ -115,7 +115,7 @@ private fun WishlistCard(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() },
-        shape = RoundedCornerShape(20.dp),
+        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.large,
         color = MaterialTheme.colorScheme.surfaceContainerLowest
     ) {
         Column {
@@ -125,13 +125,14 @@ private fun WishlistCard(
                     .height(140.dp)
             ) {
                 if (product.images.isNotEmpty()) {
-                    AsyncImage(
+                    com.saibabui.openbake.ui.screens.common.OpenBakeImage(
                         model = product.images.first(),
                         contentDescription = product.name,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)),
-                        contentScale = ContentScale.Crop
+                        modifier = Modifier.fillMaxSize(),
+                        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.mediaTop,
+                        contentScale = ContentScale.Crop,
+                        placeholderEmoji = "🎂",
+                        emojiFontSize = 40
                     )
                 } else {
                     Box(

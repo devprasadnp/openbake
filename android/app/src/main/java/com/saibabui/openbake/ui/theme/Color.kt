@@ -32,12 +32,12 @@ val SurfaceContainerHigh = Color(0xFFEEE7E1)
 val SurfaceContainerHighest = Color(0xFFE8E1DC)
 
 // On Surface
-val OnSurface = Color(0xFF1E1B18)
-val OnSurfaceVariant = Color(0xFF534439)
+val OnSurface = Color(0xFF1C1914)
+val OnSurfaceVariant = Color(0xFF443729)
 
 // Outline
-val Outline = Color(0xFF867468)
-val OutlineVariant = Color(0xFFD8C2B4)
+val Outline = Color(0xFF756458)
+val OutlineVariant = Color(0xFFC4AD9E)
 
 // Error
 val Error = Color(0xFFBA1A1A)

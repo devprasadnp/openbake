@@ -8,7 +8,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
@@ -29,6 +28,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.saibabui.openbake.ui.theme.Nunito
+import com.saibabui.openbake.ui.theme.OpenBakeShapes
+import com.saibabui.openbake.ui.theme.openBakeSpacing
 
 data class BottomNavItem(
     val label: String,
@@ -59,10 +60,11 @@ fun OpenBakeBottomBar(
     onItemSelected: (String) -> Unit
 ) {
     val navItems = if (isAdmin) adminNavItems else customerNavItems
+    val spacing = MaterialTheme.openBakeSpacing
 
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
+        shape = OpenBakeShapes.bottomBarTop,
         shadowElevation = 0.dp,
         tonalElevation = 0.dp,
         color = MaterialTheme.colorScheme.surface.copy(alpha = 0.92f),
@@ -70,7 +72,7 @@ fun OpenBakeBottomBar(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp, vertical = 8.dp)
+                .padding(horizontal = spacing.xs, vertical = spacing.xs)
                 .navigationBarsPadding(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
@@ -94,12 +96,12 @@ fun OpenBakeBottomBar(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .scale(scale)
-                        .clip(RoundedCornerShape(16.dp))
+                        .clip(OpenBakeShapes.medium)
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = null
                         ) { onItemSelected(item.route) }
-                        .padding(horizontal = 16.dp, vertical = 6.dp)
+                        .padding(horizontal = spacing.md, vertical = 6.dp)
                 ) {
                     Box(
                         modifier = Modifier
@@ -107,10 +109,10 @@ fun OpenBakeBottomBar(
                                 if (isSelected) Modifier
                                     .background(
                                         MaterialTheme.colorScheme.primary.copy(alpha = 0.08f),
-                                        RoundedCornerShape(50)
+                                        OpenBakeShapes.pill
                                     )
-                                    .padding(horizontal = 16.dp, vertical = 4.dp)
-                                else Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+                                    .padding(horizontal = spacing.md, vertical = spacing.xxs)
+                                else Modifier.padding(horizontal = spacing.md, vertical = spacing.xxs)
                             ),
                         contentAlignment = Alignment.Center
                     ) {

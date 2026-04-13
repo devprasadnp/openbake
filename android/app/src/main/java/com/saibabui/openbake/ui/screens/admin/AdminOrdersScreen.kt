@@ -54,7 +54,7 @@ fun AdminOrdersScreen(
                 LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     items(state.orders) { order ->
                         Card(
-                            shape = RoundedCornerShape(12.dp),
+                            shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small,
                             modifier = Modifier.fillMaxWidth().clickable { onOrderClick(order.id) }
                         ) {
                             Row(Modifier.padding(16.dp).fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {

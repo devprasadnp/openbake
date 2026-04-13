@@ -60,14 +60,14 @@ fun AdminSettingsScreen(
             ) {
                 Text("Bakery Location", fontFamily = Nunito, fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.titleMedium)
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    OutlinedTextField(value = bakeryLat, onValueChange = { bakeryLat = it }, label = { Text("Latitude") }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal))
-                    OutlinedTextField(value = bakeryLng, onValueChange = { bakeryLng = it }, label = { Text("Longitude") }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal))
+                    com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = bakeryLat, onValueChange = { bakeryLat = it }, label = { Text("Latitude") }, modifier = Modifier.weight(1f), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal))
+                    com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = bakeryLng, onValueChange = { bakeryLng = it }, label = { Text("Longitude") }, modifier = Modifier.weight(1f), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal))
                 }
 
                 Text("Delivery Configuration", fontFamily = Nunito, fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.titleMedium)
-                OutlinedTextField(value = freeRadius, onValueChange = { freeRadius = it }, label = { Text("Free Delivery Radius (km)") }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal))
-                OutlinedTextField(value = deliveryFee, onValueChange = { deliveryFee = it }, label = { Text("Default Delivery Fee") }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal))
-                OutlinedTextField(value = speedPerKm, onValueChange = { speedPerKm = it }, label = { Text("Speed (min/km)") }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal))
+                com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = freeRadius, onValueChange = { freeRadius = it }, label = { Text("Free Delivery Radius (km)") }, modifier = Modifier.fillMaxWidth(), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal))
+                com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = deliveryFee, onValueChange = { deliveryFee = it }, label = { Text("Default Delivery Fee") }, modifier = Modifier.fillMaxWidth(), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal))
+                com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = speedPerKm, onValueChange = { speedPerKm = it }, label = { Text("Speed (min/km)") }, modifier = Modifier.fillMaxWidth(), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal))
 
                 state.error?.let { Text(it, color = MaterialTheme.colorScheme.error, fontFamily = Nunito) }
                 if (state.saveSuccess) { Text("Settings saved!", color = MaterialTheme.colorScheme.primary, fontFamily = Nunito) }

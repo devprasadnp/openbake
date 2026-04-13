@@ -75,7 +75,7 @@ fun CartScreen(
             Surface(
                 shadowElevation = 8.dp,
                 color = MaterialTheme.colorScheme.surface,
-                shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
+                shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.sheetTop
             ) {
                 Column(
                     modifier = Modifier
@@ -177,7 +177,7 @@ private fun CartItemCard(
     onRemove: () -> Unit
 ) {
     Surface(
-        shape = RoundedCornerShape(20.dp),
+        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.large,
         color = MaterialTheme.colorScheme.surfaceContainerLowest,
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -187,19 +187,20 @@ private fun CartItemCard(
         ) {
             // Image
             if (item.product.images.isNotEmpty()) {
-                AsyncImage(
+                com.saibabui.openbake.ui.screens.common.OpenBakeImage(
                     model = item.product.images.first(),
                     contentDescription = item.product.name,
-                    modifier = Modifier
-                        .size(80.dp)
-                        .clip(RoundedCornerShape(14.dp)),
-                    contentScale = ContentScale.Crop
+                    modifier = Modifier.size(80.dp),
+                    shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.input,
+                    contentScale = ContentScale.Crop,
+                    placeholderEmoji = "🎂",
+                    emojiFontSize = 32
                 )
             } else {
                 Box(
                     modifier = Modifier
                         .size(80.dp)
-                        .background(MaterialTheme.colorScheme.surfaceContainerLow, RoundedCornerShape(14.dp)),
+                        .background(MaterialTheme.colorScheme.surfaceContainerLow, com.saibabui.openbake.ui.theme.OpenBakeShapes.input),
                     contentAlignment = Alignment.Center
                 ) {
                     Text("🎂", fontSize = 32.sp)
@@ -245,7 +246,7 @@ private fun CartItemCard(
                         modifier = Modifier
                             .background(
                                 MaterialTheme.colorScheme.surfaceContainerLow,
-                                RoundedCornerShape(50)
+                                com.saibabui.openbake.ui.theme.OpenBakeShapes.pill
                             )
                             .padding(horizontal = 4.dp, vertical = 2.dp)
                     ) {

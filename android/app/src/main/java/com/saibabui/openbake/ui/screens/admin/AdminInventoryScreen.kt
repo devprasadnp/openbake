@@ -41,17 +41,17 @@ fun AdminInventoryScreen(
             LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(padding)) {
                 items(state.items) { item ->
                     var stockText by remember(item.id) { mutableStateOf(item.stockCount.toString()) }
-                    Card(shape = RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth()) {
+                    Card(shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, modifier = Modifier.fillMaxWidth()) {
                         Row(Modifier.padding(16.dp).fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                             Column(Modifier.weight(1f)) {
                                 Text(item.name, fontFamily = Nunito, fontWeight = FontWeight.Bold)
                                 Text(if (item.isAvailable) "Available" else "Unavailable", fontFamily = Nunito, style = MaterialTheme.typography.bodySmall, color = if (item.isAvailable) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error)
                             }
-                            OutlinedTextField(
+                            com.saibabui.openbake.ui.screens.common.OpenBakeTextField(
                                 value = stockText, onValueChange = { stockText = it },
                                 modifier = Modifier.width(80.dp),
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                                shape = RoundedCornerShape(8.dp), singleLine = true
+                                shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.xSmall, singleLine = true
                             )
                             Spacer(Modifier.width(8.dp))
                             Button(

@@ -9,11 +9,11 @@ interface BadgeProps {
 }
 
 const variantStyles: Record<BadgeVariant, string> = {
-  success: "bg-success/10 text-success",
-  warning: "bg-secondary/10 text-secondary",
-  error: "bg-error/10 text-error",
-  info: "bg-primary/10 text-primary",
-  default: "bg-border/50 text-text-secondary",
+  success: "bg-success/15 text-success border-success/30",
+  warning: "bg-secondary/15 text-primary border-secondary/40",
+  error: "bg-error/10 text-error border-error/30",
+  info: "bg-primary/10 text-primary border-primary/25",
+  default: "bg-surface-muted text-text-secondary border-border",
 };
 
 export default function Badge({
@@ -24,7 +24,7 @@ export default function Badge({
   return (
     <span
       className={cn(
-        "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold",
+        "inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-semibold tracking-wide",
         variantStyles[variant],
         className
       )}

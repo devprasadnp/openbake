@@ -112,7 +112,7 @@ fun LoginScreen(
 
             // Form Card
             Surface(
-                shape = RoundedCornerShape(24.dp),
+                shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.xLarge,
                 color = MaterialTheme.colorScheme.surfaceContainerLowest,
                 shadowElevation = 0.dp,
                 tonalElevation = 0.dp,
@@ -125,12 +125,12 @@ fun LoginScreen(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Spacer(modifier = Modifier.height(6.dp))
-                    OutlinedTextField(
+                    com.saibabui.openbake.ui.screens.common.OpenBakeTextField(
                         value = email,
                         onValueChange = { email = it; emailTouched = true },
                         modifier = Modifier.fillMaxWidth(),
                         placeholder = { Text("hello@openbake.com", style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito)) },
-                        shape = RoundedCornerShape(14.dp),
+                        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.input,
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Email,
                             imeAction = ImeAction.Next
@@ -156,12 +156,12 @@ fun LoginScreen(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Spacer(modifier = Modifier.height(6.dp))
-                    OutlinedTextField(
+                    com.saibabui.openbake.ui.screens.common.OpenBakeTextField(
                         value = password,
                         onValueChange = { password = it; passwordTouched = true },
                         modifier = Modifier.fillMaxWidth(),
                         placeholder = { Text("••••••••", style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito)) },
-                        shape = RoundedCornerShape(14.dp),
+                        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.input,
                         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Password,

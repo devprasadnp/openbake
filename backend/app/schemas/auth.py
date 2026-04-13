@@ -65,46 +65,66 @@ class ProfileUpdateRequest(BaseModel):
 
 class AddressCreate(BaseModel):
     label: str = "Home"
-    recipient_name: Optional[str] = None
-    recipient_phone: Optional[str] = None
-    house_number: Optional[str] = None
-    street: Optional[str] = None
+    recipient_name: str
+    recipient_phone: str
+    house_number: str
+    street: str
     landmark: Optional[str] = None
     full_address: str
     city: str
-    state: Optional[str] = None
+    state: str
     pincode: str
     lat: Optional[float] = None
     lng: Optional[float] = None
     is_default: bool = False
 
+    @field_validator("label", "recipient_name", "house_number", "street", "state")
+    @classmethod
+    def validate_required_text_fields(cls, v: str):
+        value = v.strip()
+        if not value:
+            raise ValueError("This field is required")
+        return value
+
     @field_validator("pincode")
     @classmethod
     def validate_pincode(cls, v):
-        if not re.match(r"^\d{6}$", v):
+        digits = re.sub(r"\D", "", v)
+        if not re.match(r"^\d{6}$", digits):
             raise ValueError("Pincode must be exactly 6 digits")
-        return v
+        return digits
 
     @field_validator("full_address")
     @classmethod
     def validate_full_address(cls, v):
-        if not v or len(v.strip()) < 5:
+        value = v.strip()
+        if not value or len(value) < 5:
             raise ValueError("Full address must be at least 5 characters")
-        return v.strip()
+        return value
 
     @field_validator("city")
     @classmethod
     def validate_city(cls, v):
-        if not v or len(v.strip()) < 2:
+        value = v.strip()
+        if not value or len(value) < 2:
             raise ValueError("City name must be at least 2 characters")
-        return v.strip()
+        return value
+
+    @field_validator("state")
+    @classmethod
+    def validate_state(cls, v):
+        value = v.strip()
+        if not value or len(value) < 2:
+            raise ValueError("State name must be at least 2 characters")
+        return value
 
     @field_validator("recipient_phone")
     @classmethod
     def validate_recipient_phone(cls, v):
-        if v is not None and v != "" and not re.match(r"^\+?\d{10,13}$", v):
-            raise ValueError("Invalid phone number format")
-        return v
+        digits = re.sub(r"\D", "", v)
+        if not re.match(r"^[6-9]\d{9}$", digits):
+            raise ValueError("Recipient phone must be a valid 10-digit Indian mobile number")
+        return digits
 
 
 class AddressResponse(BaseModel):

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { ChefHat } from "lucide-react";
 import { useAuthStore } from "@/store/authStore";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
@@ -54,7 +55,9 @@ export default function LoginPage() {
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
             <Link href="/" className="inline-flex items-center gap-2">
-              <span className="text-3xl">🍰</span>
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary text-white shadow-sm">
+                <ChefHat size={20} />
+              </span>
               <span className="font-playfair text-2xl font-bold text-primary">
                 Sri Vinayaka Bakery
               </span>
@@ -101,8 +104,8 @@ export default function LoginPage() {
                   error={fieldErrors.password}
                 />
               </div>
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Signing in..." : "Sign In"}
+              <Button type="submit" className="w-full" isLoading={isLoading}>
+                Sign In
               </Button>
             </form>
 

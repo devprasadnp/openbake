@@ -71,7 +71,7 @@ fun OrderConfirmationScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Surface(
-                shape = RoundedCornerShape(14.dp),
+                shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.input,
                 color = MaterialTheme.colorScheme.surfaceContainerLow
             ) {
                 Text(

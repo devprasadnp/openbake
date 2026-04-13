@@ -103,8 +103,8 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     fun logout() {
         viewModelScope.launch {
-            authRepo.logout()
             _uiState.value = AuthUiState(isLoggedIn = false)
+            runCatching { authRepo.logout() }
         }
     }
 

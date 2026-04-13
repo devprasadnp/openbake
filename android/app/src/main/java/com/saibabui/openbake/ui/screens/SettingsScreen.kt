@@ -123,7 +123,7 @@ private fun SettingsToggleRow(
     onCheckedChange: (Boolean) -> Unit
 ) {
     Surface(
-        shape = RoundedCornerShape(14.dp),
+        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.input,
         color = MaterialTheme.colorScheme.surfaceContainerLowest
     ) {
         Row(
@@ -161,7 +161,7 @@ private fun SettingsToggleRow(
 @Composable
 private fun SettingsInfoRow(label: String, value: String) {
     Surface(
-        shape = RoundedCornerShape(14.dp),
+        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.input,
         color = MaterialTheme.colorScheme.surfaceContainerLowest
     ) {
         Row(

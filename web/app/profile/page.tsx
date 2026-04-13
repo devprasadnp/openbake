@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import Navbar from "@/components/layout/Navbar";
@@ -338,7 +339,7 @@ function ProfileContent() {
                   <div className="text-center py-12">
                     <div className="text-5xl mb-3">💛</div>
                     <p className="text-text-secondary mb-4">Your wishlist is empty</p>
-                    <a href="/menu" className="text-primary font-medium hover:underline">Browse products</a>
+                    <Link href="/menu" className="text-primary font-medium hover:underline">Browse products</Link>
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">

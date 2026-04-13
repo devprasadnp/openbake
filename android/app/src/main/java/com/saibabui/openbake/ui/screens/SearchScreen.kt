@@ -80,7 +80,7 @@ fun SearchScreen(
                 .padding(padding)
         ) {
             // Search bar
-            OutlinedTextField(
+            com.saibabui.openbake.ui.screens.common.OpenBakeTextField(
                 value = query,
                 onValueChange = {
                     query = it
@@ -102,7 +102,7 @@ fun SearchScreen(
                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 },
-                shape = RoundedCornerShape(50),
+                shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.pill,
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
                     unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
@@ -157,7 +157,7 @@ private fun SearchResultCard(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() },
-        shape = RoundedCornerShape(20.dp),
+        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.large,
         color = MaterialTheme.colorScheme.surfaceContainerLowest
     ) {
         Column {
@@ -167,13 +167,14 @@ private fun SearchResultCard(
                     .height(130.dp)
             ) {
                 if (product.images.isNotEmpty()) {
-                    AsyncImage(
+                    com.saibabui.openbake.ui.screens.common.OpenBakeImage(
                         model = product.images.first(),
                         contentDescription = product.name,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)),
-                        contentScale = ContentScale.Crop
+                        modifier = Modifier.fillMaxSize(),
+                        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.mediaTop,
+                        contentScale = ContentScale.Crop,
+                        placeholderEmoji = "🎂",
+                        emojiFontSize = 40
                     )
                 } else {
                     Box(

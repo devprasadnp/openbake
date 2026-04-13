@@ -141,7 +141,7 @@ fun HomeScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
                     .height(180.dp)
-                    .clip(RoundedCornerShape(24.dp))
+                    .clip(com.saibabui.openbake.ui.theme.OpenBakeShapes.xLarge)
                     .background(
                         Brush.linearGradient(
                             colors = listOf(
@@ -168,7 +168,7 @@ fun HomeScreen(
                         lineHeight = 34.sp
                     )
                     Surface(
-                        shape = RoundedCornerShape(50),
+                        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.pill,
                         color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.95f)
                     ) {
                         Text(
@@ -318,7 +318,7 @@ fun HomeScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
-                    .clip(RoundedCornerShape(20.dp))
+                    .clip(com.saibabui.openbake.ui.theme.OpenBakeShapes.large)
                     .background(
                         Brush.horizontalGradient(
                             listOf(
@@ -349,7 +349,7 @@ fun HomeScreen(
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                     Surface(
-                        shape = RoundedCornerShape(50),
+                        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.pill,
                         color = MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.15f)
                     ) {
                         Text(
@@ -440,7 +440,7 @@ private fun QuickActionCard(
     onClick: () -> Unit
 ) {
     Surface(
-        shape = RoundedCornerShape(16.dp),
+        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.medium,
         color = color,
         modifier = modifier
             .aspectRatio(1f)
@@ -470,7 +470,7 @@ private fun QuickActionCard(
 @Composable
 private fun FeatureBadge(emoji: String, title: String, subtitle: String) {
     Surface(
-        shape = RoundedCornerShape(16.dp),
+        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.medium,
         color = MaterialTheme.colorScheme.surfaceContainerLowest,
         modifier = Modifier.width(140.dp)
     ) {
@@ -498,7 +498,7 @@ private fun FeatureBadge(emoji: String, title: String, subtitle: String) {
 @Composable
 private fun CategoryChip(category: Category, onClick: () -> Unit) {
     Surface(
-        shape = RoundedCornerShape(20.dp),
+        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.large,
         color = MaterialTheme.colorScheme.surfaceContainerLowest,
         modifier = Modifier
             .width(100.dp)
@@ -509,13 +509,14 @@ private fun CategoryChip(category: Category, onClick: () -> Unit) {
             modifier = Modifier.padding(12.dp)
         ) {
             if (!category.imageUrl.isNullOrBlank()) {
-                AsyncImage(
+                com.saibabui.openbake.ui.screens.common.OpenBakeImage(
                     model = category.imageUrl,
                     contentDescription = category.name,
-                    modifier = Modifier
-                        .size(56.dp)
-                        .clip(CircleShape),
-                    contentScale = ContentScale.Crop
+                    modifier = Modifier.size(56.dp),
+                    shape = CircleShape,
+                    contentScale = ContentScale.Crop,
+                    placeholderEmoji = "🍞",
+                    emojiFontSize = 24
                 )
             } else {
                 Box(
@@ -552,7 +553,7 @@ private fun ProductCard(
         modifier = Modifier
             .width(170.dp)
             .clickable { onClick() },
-        shape = RoundedCornerShape(20.dp),
+        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.large,
         color = MaterialTheme.colorScheme.surfaceContainerLowest
     ) {
         Column {
@@ -562,13 +563,14 @@ private fun ProductCard(
                     .height(140.dp)
             ) {
                 if (product.images.isNotEmpty()) {
-                    AsyncImage(
+                    com.saibabui.openbake.ui.screens.common.OpenBakeImage(
                         model = product.images.first(),
                         contentDescription = product.name,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)),
-                        contentScale = ContentScale.Crop
+                        modifier = Modifier.fillMaxSize(),
+                        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.mediaTop,
+                        contentScale = ContentScale.Crop,
+                        placeholderEmoji = "🎂",
+                        emojiFontSize = 40
                     )
                 } else {
                     Box(
@@ -583,7 +585,7 @@ private fun ProductCard(
                 // Rating badge
                 if (product.rating > 0) {
                     Surface(
-                        shape = RoundedCornerShape(12.dp),
+                        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small,
                         color = MaterialTheme.colorScheme.surfaceContainerLowest.copy(alpha = 0.9f),
                         modifier = Modifier
                             .align(Alignment.TopEnd)

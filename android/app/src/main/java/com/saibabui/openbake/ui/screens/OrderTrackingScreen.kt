@@ -149,7 +149,7 @@ fun OrderTrackingScreen(
 
             // Order info card
             Surface(
-                shape = RoundedCornerShape(20.dp),
+                shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.large,
                 color = MaterialTheme.colorScheme.surfaceContainerLowest,
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -187,7 +187,7 @@ fun OrderTrackingScreen(
                     estimatedEta?.let { eta ->
                         Spacer(modifier = Modifier.height(8.dp))
                         Surface(
-                            shape = RoundedCornerShape(8.dp),
+                            shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.xSmall,
                             color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
                         ) {
                             Text(
@@ -218,7 +218,7 @@ fun OrderTrackingScreen(
             // Vertical stepper
             if (isCancelled) {
                 Surface(
-                    shape = RoundedCornerShape(16.dp),
+                    shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.medium,
                     color = MaterialTheme.colorScheme.error.copy(alpha = 0.08f),
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -330,7 +330,7 @@ fun OrderTrackingScreen(
             )
             Spacer(modifier = Modifier.height(12.dp))
             Surface(
-                shape = RoundedCornerShape(20.dp),
+                shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.large,
                 color = MaterialTheme.colorScheme.surfaceContainerLowest,
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -366,7 +366,7 @@ fun OrderTrackingScreen(
                 OutlinedButton(
                     onClick = { orderViewModel.cancelOrder(order.id) },
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(50),
+                    shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.pill,
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error)
                 ) {
                     Text(

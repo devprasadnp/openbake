@@ -109,7 +109,7 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.height(32.dp))
 
             Surface(
-                shape = RoundedCornerShape(24.dp),
+                shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.xLarge,
                 color = MaterialTheme.colorScheme.surfaceContainerLowest,
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -156,12 +156,12 @@ fun RegisterScreen(
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Spacer(modifier = Modifier.height(6.dp))
-                        OutlinedTextField(
+                        com.saibabui.openbake.ui.screens.common.OpenBakeTextField(
                             value = password,
                             onValueChange = { password = it; passwordTouched = true },
                             modifier = Modifier.fillMaxWidth(),
                             placeholder = { Text("••••••••", style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito)) },
-                            shape = RoundedCornerShape(14.dp),
+                            shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.input,
                             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
                             singleLine = true,
@@ -289,12 +289,12 @@ private fun FormField(
         color = MaterialTheme.colorScheme.onSurfaceVariant
     )
     Spacer(modifier = Modifier.height(6.dp))
-    OutlinedTextField(
+    com.saibabui.openbake.ui.screens.common.OpenBakeTextField(
         value = value,
         onValueChange = onValueChange,
         modifier = Modifier.fillMaxWidth(),
         placeholder = { Text(placeholder, style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito)) },
-        shape = RoundedCornerShape(14.dp),
+        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.input,
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = imeAction),
         singleLine = true,
         isError = isError,
