@@ -134,18 +134,18 @@ fun RegisterScreen(
                     if (selectedTab == 0) {
                         // ── Email Signup ──
                         FormField(label = "Full Name", value = name, onValueChange = { name = it },
-                            placeholder = "John Baker", keyboardType = KeyboardType.Text, imeAction = ImeAction.Next)
+                            placeholder = "Name", keyboardType = KeyboardType.Text, imeAction = ImeAction.Next)
 
                         Spacer(modifier = Modifier.height(16.dp))
 
                         FormField(label = "Email", value = email, onValueChange = { email = it; emailTouched = true },
-                            placeholder = "hello@example.com", keyboardType = KeyboardType.Email, imeAction = ImeAction.Next,
+                            placeholder = "Email", keyboardType = KeyboardType.Email, imeAction = ImeAction.Next,
                             isError = emailTouched && !emailValid, errorText = "Enter a valid email address")
 
                         Spacer(modifier = Modifier.height(16.dp))
 
                         FormField(label = "Phone", value = phone, onValueChange = { phone = it.filter { c -> c.isDigit() }.take(10); phoneTouched = true },
-                            placeholder = "9876543210", keyboardType = KeyboardType.Phone, imeAction = ImeAction.Next,
+                            placeholder = "Phone", keyboardType = KeyboardType.Phone, imeAction = ImeAction.Next,
                             isError = phoneTouched && !phoneValid, errorText = "Enter a valid 10-digit mobile number")
 
                         Spacer(modifier = Modifier.height(16.dp))
@@ -160,7 +160,7 @@ fun RegisterScreen(
                             value = password,
                             onValueChange = { password = it; passwordTouched = true },
                             modifier = Modifier.fillMaxWidth(),
-                            placeholder = { Text("••••••••", style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito)) },
+                            placeholder = { Text("Password", style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito)) },
                             shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.input,
                             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
@@ -182,7 +182,9 @@ fun RegisterScreen(
                                 unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
                                 focusedBorderColor = MaterialTheme.colorScheme.primary,
                                 unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-                                focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLow
+                                focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                                focusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.38f),
+                                unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.38f)
                             )
                         )
 
@@ -206,19 +208,19 @@ fun RegisterScreen(
                     } else {
                         // ── OTP Signup ──
                         FormField(label = "Full Name", value = otpName, onValueChange = { otpName = it },
-                            placeholder = "John Baker", keyboardType = KeyboardType.Text, imeAction = ImeAction.Next)
+                            placeholder = "Name", keyboardType = KeyboardType.Text, imeAction = ImeAction.Next)
 
                         Spacer(modifier = Modifier.height(16.dp))
 
                         FormField(label = "Phone", value = otpPhone, onValueChange = { otpPhone = it.filter { c -> c.isDigit() }.take(10); otpPhoneTouched = true },
-                            placeholder = "9876543210", keyboardType = KeyboardType.Phone, imeAction = ImeAction.Done,
+                            placeholder = "Phone", keyboardType = KeyboardType.Phone, imeAction = ImeAction.Done,
                             isError = otpPhoneTouched && !otpPhoneValid, errorText = "Enter a valid 10-digit mobile number")
 
                         Spacer(modifier = Modifier.height(16.dp))
 
                         if (authState.otpSent) {
                             FormField(label = "OTP Code", value = otpCode, onValueChange = { otpCode = it.filter { c -> c.isDigit() }.take(6) },
-                                placeholder = "Enter 6-digit OTP", keyboardType = KeyboardType.Number, imeAction = ImeAction.Done)
+                                placeholder = "OTP Code", keyboardType = KeyboardType.Number, imeAction = ImeAction.Done)
                         }
 
                         Spacer(modifier = Modifier.height(24.dp))
@@ -305,7 +307,9 @@ private fun FormField(
             unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
             focusedBorderColor = MaterialTheme.colorScheme.primary,
             unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-            focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLow
+            focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+            focusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.38f),
+            unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.38f)
         )
     )
 }

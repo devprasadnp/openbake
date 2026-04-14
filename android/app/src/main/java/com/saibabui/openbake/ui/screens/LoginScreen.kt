@@ -129,7 +129,7 @@ fun LoginScreen(
                         value = email,
                         onValueChange = { email = it; emailTouched = true },
                         modifier = Modifier.fillMaxWidth(),
-                        placeholder = { Text("hello@openbake.com", style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito)) },
+                        placeholder = { Text("Email", style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito)) },
                         shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.input,
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Email,
@@ -144,7 +144,9 @@ fun LoginScreen(
                             unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
                             focusedBorderColor = MaterialTheme.colorScheme.primary,
                             unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-                            focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLow
+                            focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                            focusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.38f),
+                            unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.38f)
                         )
                     )
 
@@ -160,7 +162,7 @@ fun LoginScreen(
                         value = password,
                         onValueChange = { password = it; passwordTouched = true },
                         modifier = Modifier.fillMaxWidth(),
-                        placeholder = { Text("••••••••", style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito)) },
+                        placeholder = { Text("Password", style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito)) },
                         shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.input,
                         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         keyboardOptions = KeyboardOptions(
@@ -185,7 +187,9 @@ fun LoginScreen(
                             unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
                             focusedBorderColor = MaterialTheme.colorScheme.primary,
                             unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-                            focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLow
+                            focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                            focusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.38f),
+                            unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.38f)
                         )
                     )
 

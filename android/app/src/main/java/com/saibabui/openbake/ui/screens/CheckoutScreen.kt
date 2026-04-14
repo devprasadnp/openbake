@@ -104,6 +104,7 @@ fun CheckoutScreen(
         "5:00 PM – 7:00 PM"
     )
     var selectedTimeSlot by remember { mutableStateOf<String?>(null) }
+    var timeSlotExpanded by remember { mutableStateOf(false) }
 
     // Stable idempotency key per checkout session — prevents duplicate orders on back-nav
     val idempotencyKey = remember { java.util.UUID.randomUUID().toString() }
@@ -501,7 +502,7 @@ fun CheckoutScreen(
 
             Spacer(modifier = Modifier.height(28.dp))
 
-            // ── Delivery / Pickup Toggle ──
+            // ── Order Type Toggle ──
             Text(
                 text = "Order Type",
                 style = MaterialTheme.typography.titleMedium.copy(
@@ -754,40 +755,42 @@ fun CheckoutScreen(
                     )
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    "Optional — leave empty for earliest available",
-                    style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    timeSlots.forEach { slot ->
-                        val sel = selectedTimeSlot == slot
-                        Surface(
-                            shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small,
-                            color = if (sel) MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
-                            else MaterialTheme.colorScheme.surfaceContainerLowest,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    selectedTimeSlot = if (sel) null else slot
-                                },
-                            border = if (sel) ButtonDefaults.outlinedButtonBorder(enabled = true) else null
-                        ) {
-                            Row(
-                                modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                RadioButton(selected = sel, onClick = { selectedTimeSlot = if (sel) null else slot }, modifier = Modifier.size(20.dp))
-                                Spacer(modifier = Modifier.width(10.dp))
-                                Text(
-                                    slot,
-                                    style = MaterialTheme.typography.bodyMedium.copy(
-                                        fontFamily = Nunito,
-                                        fontWeight = if (sel) FontWeight.SemiBold else FontWeight.Normal
-                                    )
-                                )
+                ExposedDropdownMenuBox(
+                    expanded = timeSlotExpanded,
+                    onExpandedChange = { timeSlotExpanded = !timeSlotExpanded },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    com.saibabui.openbake.ui.screens.common.OpenBakeTextField(
+                        value = selectedTimeSlot ?: "Earliest Available",
+                        onValueChange = {},
+                        readOnly = true,
+                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = timeSlotExpanded) },
+                        modifier = Modifier
+                            .menuAnchor()
+                            .fillMaxWidth(),
+                        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small
+                    )
+
+                    ExposedDropdownMenu(
+                        expanded = timeSlotExpanded,
+                        onDismissRequest = { timeSlotExpanded = false },
+                        modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainerLowest)
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text("Earliest Available", style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito)) },
+                            onClick = {
+                                selectedTimeSlot = null
+                                timeSlotExpanded = false
                             }
+                        )
+                        timeSlots.forEach { slot ->
+                            DropdownMenuItem(
+                                text = { Text(slot, style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito)) },
+                                onClick = {
+                                    selectedTimeSlot = slot
+                                    timeSlotExpanded = false
+                                }
+                            )
                         }
                     }
                 }
@@ -945,7 +948,11 @@ fun CheckoutScreen(
                     if (isSelected) {
                         Surface(
                             shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small,
-                            color = when (value) { "upi" -> Color(0xFFF0F7FF); "card" -> Color(0xFFF5F0FF); else -> Color(0xFFF0FFF4) },
+                            color = when (value) {
+                                "upi" -> MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.15f)
+                                "card" -> MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.15f)
+                                else -> MaterialTheme.colorScheme.surfaceContainerLow
+                            },
                             modifier = Modifier.fillMaxWidth().padding(start = 40.dp, top = 4.dp)
                         ) {
                             Column(modifier = Modifier.padding(14.dp)) {
@@ -1064,10 +1071,10 @@ private fun StepLine(isActive: Boolean) {
 @Composable
 private fun PaymentStep(number: String, description: String) {
     Row(modifier = Modifier.padding(bottom = 6.dp), verticalAlignment = Alignment.Top) {
-        Box(modifier = Modifier.size(20.dp).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f), CircleShape), contentAlignment = Alignment.Center) {
+        Box(modifier = Modifier.size(20.dp).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.2f), CircleShape), contentAlignment = Alignment.Center) {
             Text(number, style = MaterialTheme.typography.labelSmall.copy(fontFamily = Nunito, fontWeight = FontWeight.Bold), color = MaterialTheme.colorScheme.primary)
         }
         Spacer(modifier = Modifier.width(10.dp))
-        Text(description, style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito), color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(description, style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito), color = MaterialTheme.colorScheme.onSurface)
     }
 }
