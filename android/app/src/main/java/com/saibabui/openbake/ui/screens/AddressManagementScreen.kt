@@ -2,13 +2,16 @@ package com.saibabui.openbake.ui.screens
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
+import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -28,8 +31,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.saibabui.openbake.data.api.RetrofitClient
 import com.saibabui.openbake.data.model.Address
@@ -42,6 +49,18 @@ import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import java.util.Locale
 import kotlin.coroutines.resume
+
+// ── Helper composable for required field labels ──────────────────────────────
+@Composable
+private fun RequiredLabel(text: String, style: androidx.compose.ui.text.TextStyle = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito)) {
+    Text(
+        buildAnnotatedString {
+            append(text)
+            withStyle(SpanStyle(color = MaterialTheme.colorScheme.error)) { append(" *") }
+        },
+        style = style
+    )
+}
 
 // ── Helper data ──────────────────────────────────────────────────────────────
 data class GeocodedAddress(val fullAddress: String, val city: String, val pincode: String)
@@ -284,18 +303,81 @@ fun AddressManagementScreen(onBack: () -> Unit) {
         }
     }
 
+    var showLocationSettingsDialog by remember { mutableStateOf(false) }
+    var showGpsDisabledDialog by remember { mutableStateOf(false) }
+
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { granted ->
         if (granted) fetchLocation()
-        else errorMsg = "Location permission denied. Please enable it in Settings to auto-detect your address."
+        else {
+            // Check if we should show rationale – if not, user permanently denied
+            val activity = context as? android.app.Activity
+            val shouldShowRationale = activity?.let {
+                ActivityCompat.shouldShowRequestPermissionRationale(it, Manifest.permission.ACCESS_FINE_LOCATION)
+            } ?: false
+            if (!shouldShowRationale) {
+                showLocationSettingsDialog = true
+            } else {
+                errorMsg = "Location permission denied. Please allow location to auto-detect your address."
+            }
+        }
     }
 
     fun requestLocation() {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
             == PackageManager.PERMISSION_GRANTED
-        ) fetchLocation()
+        ) {
+            // Check if GPS is enabled
+            val lm = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER) &&
+                !lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+            ) {
+                showGpsDisabledDialog = true
+            } else {
+                fetchLocation()
+            }
+        }
         else permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+    }
+
+    // Dialog: Navigate to app settings (permission permanently denied)
+    if (showLocationSettingsDialog) {
+        AlertDialog(
+            onDismissRequest = { showLocationSettingsDialog = false },
+            title = { Text("Location Permission Required", fontFamily = PlayfairDisplay, fontWeight = FontWeight.Bold) },
+            text = { Text("Location permission is permanently denied. Please enable it in app settings to auto-detect your address.", fontFamily = Nunito) },
+            confirmButton = {
+                TextButton(onClick = {
+                    showLocationSettingsDialog = false
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                        data = Uri.fromParts("package", context.packageName, null)
+                    }
+                    context.startActivity(intent)
+                }) { Text("Open Settings") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showLocationSettingsDialog = false }) { Text("Cancel") }
+            }
+        )
+    }
+
+    // Dialog: Navigate to location/GPS settings
+    if (showGpsDisabledDialog) {
+        AlertDialog(
+            onDismissRequest = { showGpsDisabledDialog = false },
+            title = { Text("GPS Disabled", fontFamily = PlayfairDisplay, fontWeight = FontWeight.Bold) },
+            text = { Text("Your device's location (GPS) is turned off. Please enable it to auto-detect your address.", fontFamily = Nunito) },
+            confirmButton = {
+                TextButton(onClick = {
+                    showGpsDisabledDialog = false
+                    context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+                }) { Text("Enable GPS") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showGpsDisabledDialog = false }) { Text("Cancel") }
+            }
+        )
     }
 
     Scaffold(
@@ -421,12 +503,7 @@ fun AddressManagementScreen(onBack: () -> Unit) {
                             com.saibabui.openbake.ui.screens.common.OpenBakeTextField(
                                 value = recipientName,
                                 onValueChange = { recipientName = it },
-                                label = {
-                                    Text(
-                                        "Recipient Name",
-                                        style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito)
-                                    )
-                                },
+                                label = { RequiredLabel("Recipient Name") },
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small,
                                 singleLine = true,
@@ -438,12 +515,7 @@ fun AddressManagementScreen(onBack: () -> Unit) {
                             com.saibabui.openbake.ui.screens.common.OpenBakeTextField(
                                 value = recipientPhone,
                                 onValueChange = { recipientPhone = it.filter { c -> c.isDigit() }.take(10) },
-                                label = {
-                                    Text(
-                                        "Recipient Phone",
-                                        style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito)
-                                    )
-                                },
+                                label = { RequiredLabel("Recipient Phone") },
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small,
                                 singleLine = true,
@@ -456,12 +528,7 @@ fun AddressManagementScreen(onBack: () -> Unit) {
                                 com.saibabui.openbake.ui.screens.common.OpenBakeTextField(
                                     value = houseNumber,
                                     onValueChange = { houseNumber = it },
-                                    label = {
-                                        Text(
-                                            "House / Flat No.",
-                                            style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)
-                                        )
-                                    },
+                                    label = { RequiredLabel("House / Flat No.", MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) },
                                     modifier = Modifier.weight(1f),
                                     shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small,
                                     singleLine = true
@@ -469,12 +536,7 @@ fun AddressManagementScreen(onBack: () -> Unit) {
                                 com.saibabui.openbake.ui.screens.common.OpenBakeTextField(
                                     value = street,
                                     onValueChange = { street = it },
-                                    label = {
-                                        Text(
-                                            "Street / Colony",
-                                            style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)
-                                        )
-                                    },
+                                    label = { RequiredLabel("Street / Colony", MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) },
                                     modifier = Modifier.weight(1f),
                                     shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small,
                                     singleLine = true
@@ -483,12 +545,7 @@ fun AddressManagementScreen(onBack: () -> Unit) {
                             com.saibabui.openbake.ui.screens.common.OpenBakeTextField(
                                 value = fullAddress,
                                 onValueChange = { fullAddress = it },
-                                label = {
-                                    Text(
-                                        "Full Address",
-                                        style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito)
-                                    )
-                                },
+                                label = { RequiredLabel("Full Address") },
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small,
                                 minLines = 2,
@@ -518,36 +575,21 @@ fun AddressManagementScreen(onBack: () -> Unit) {
                                 com.saibabui.openbake.ui.screens.common.OpenBakeTextField(
                                     value = city,
                                     onValueChange = { city = it },
-                                    label = {
-                                        Text(
-                                            "City",
-                                            style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)
-                                        )
-                                    },
+                                    label = { RequiredLabel("City", MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) },
                                     modifier = Modifier.weight(1f),
                                     shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small
                                 )
                                 com.saibabui.openbake.ui.screens.common.OpenBakeTextField(
                                     value = state,
                                     onValueChange = { state = it },
-                                    label = {
-                                        Text(
-                                            "State",
-                                            style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)
-                                        )
-                                    },
+                                    label = { RequiredLabel("State", MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) },
                                     modifier = Modifier.weight(1f),
                                     shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small
                                 )
                                 com.saibabui.openbake.ui.screens.common.OpenBakeTextField(
                                     value = pincode,
                                     onValueChange = { pincode = it.filter { c -> c.isDigit() }.take(6) },
-                                    label = {
-                                        Text(
-                                            "Pincode",
-                                            style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)
-                                        )
-                                    },
+                                    label = { RequiredLabel("Pincode", MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) },
                                     modifier = Modifier.weight(1f),
                                     shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small
                                 )

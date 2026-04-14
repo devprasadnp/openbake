@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -46,28 +47,32 @@ fun AdminOrdersScreen(
                 }
             }
 
-            if (state.isLoading) {
-                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
-            } else if (state.orders.isEmpty()) {
-                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text("No orders found", fontFamily = Nunito) }
-            } else {
-                LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    items(state.orders) { order ->
-                        Card(
-                            shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small,
-                            modifier = Modifier.fillMaxWidth().clickable { onOrderClick(order.id) }
-                        ) {
-                            Row(Modifier.padding(16.dp).fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                                Column {
-                                    Text("#${order.id.takeLast(6)}", fontFamily = Nunito, fontWeight = FontWeight.Bold)
-                                    Text("${order.items.size} items", fontFamily = Nunito, style = MaterialTheme.typography.bodySmall)
-                                }
-                                Column(horizontalAlignment = Alignment.End) {
-                                    AssistChip(
-                                        onClick = {},
-                                        label = { Text(order.status.replaceFirstChar { it.uppercase() }, fontFamily = Nunito) }
-                                    )
-                                    Text("₹${String.format("%.2f", order.total)}", fontFamily = Nunito, fontWeight = FontWeight.SemiBold)
+            PullToRefreshBox(
+                isRefreshing = state.isLoading,
+                onRefresh = { viewModel.loadOrders(state.selectedFilter) },
+                modifier = Modifier.fillMaxSize()
+            ) {
+                if (state.orders.isEmpty() && !state.isLoading) {
+                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text("No orders found", fontFamily = Nunito) }
+                } else {
+                    LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        items(state.orders) { order ->
+                            Card(
+                                shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small,
+                                modifier = Modifier.fillMaxWidth().clickable { onOrderClick(order.id) }
+                            ) {
+                                Row(Modifier.padding(16.dp).fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                                    Column {
+                                        Text("#${order.id.takeLast(6)}", fontFamily = Nunito, fontWeight = FontWeight.Bold)
+                                        Text("${order.items.size} items", fontFamily = Nunito, style = MaterialTheme.typography.bodySmall)
+                                    }
+                                    Column(horizontalAlignment = Alignment.End) {
+                                        AssistChip(
+                                            onClick = {},
+                                            label = { Text(order.status.replaceFirstChar { it.uppercase() }, fontFamily = Nunito) }
+                                        )
+                                        Text("₹${String.format("%.2f", order.total)}", fontFamily = Nunito, fontWeight = FontWeight.SemiBold)
+                                    }
                                 }
                             }
                         }

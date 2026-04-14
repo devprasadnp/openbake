@@ -154,7 +154,7 @@ fun AdminProductEditScreen(
                 // Image preview
                 if (selectedImageUri != null || imageUrl.isNotBlank()) {
                     Box(modifier = Modifier.fillMaxWidth().height(160.dp).clip(com.saibabui.openbake.ui.theme.OpenBakeShapes.medium)) {
-                        AsyncImage(
+                        com.saibabui.openbake.ui.screens.common.OpenBakeImage(
                             model = selectedImageUri ?: imageUrl,
                             contentDescription = "Product image",
                             modifier = Modifier.fillMaxSize(),

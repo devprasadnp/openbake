@@ -155,6 +155,10 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         _uiState.value = _uiState.value.copy(error = null)
     }
 
+    fun resetUpdateSuccess() {
+        _uiState.value = _uiState.value.copy(updateSuccess = false)
+    }
+
     fun sendOtp(phone: String) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(otpSending = true, error = null)

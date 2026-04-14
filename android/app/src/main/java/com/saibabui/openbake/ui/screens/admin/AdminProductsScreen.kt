@@ -9,9 +9,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -33,16 +35,39 @@ fun AdminProductsScreen(
         topBar = { TopAppBar(title = { Text("Products", fontFamily = PlayfairDisplay, fontWeight = FontWeight.Bold) }) },
         floatingActionButton = { FloatingActionButton(onClick = onAddProduct) { Icon(Icons.Filled.Add, "Add Product") } }
     ) { padding ->
-        if (state.isLoading) {
-            Box(Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
-        } else {
-            LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(padding)) {
+        PullToRefreshBox(
+            isRefreshing = state.isLoading,
+            onRefresh = { viewModel.loadProducts() },
+            modifier = Modifier.fillMaxSize().padding(padding)
+        ) {
+            LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 items(state.products) { product ->
+                    val isLowStock = product.stockCount in 1..5
+                    val isOutOfStock = product.stockCount == 0
+                    val stockColor = when {
+                        isOutOfStock -> MaterialTheme.colorScheme.error
+                        isLowStock -> Color(0xFFE65100) // Deep orange for low stock
+                        else -> MaterialTheme.colorScheme.onSurfaceVariant
+                    }
                     Card(shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, modifier = Modifier.fillMaxWidth().clickable { onProductClick(product.id) }) {
                         Row(Modifier.padding(16.dp).fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                             Column(Modifier.weight(1f)) {
                                 Text(product.name, fontFamily = Nunito, fontWeight = FontWeight.Bold)
-                                Text("₹${String.format("%.2f", product.price)} · Stock: ${product.stockCount}", fontFamily = Nunito, style = MaterialTheme.typography.bodySmall)
+                                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                    Text("₹${String.format("%.2f", product.price)}", fontFamily = Nunito, style = MaterialTheme.typography.bodySmall)
+                                    Text("·", fontFamily = Nunito, style = MaterialTheme.typography.bodySmall)
+                                    Text(
+                                        when {
+                                            isOutOfStock -> "Out of Stock"
+                                            isLowStock -> "Low Stock: ${product.stockCount}"
+                                            else -> "Stock: ${product.stockCount}"
+                                        },
+                                        fontFamily = Nunito,
+                                        style = MaterialTheme.typography.bodySmall,
+                                        fontWeight = if (isOutOfStock || isLowStock) FontWeight.Bold else FontWeight.Normal,
+                                        color = stockColor
+                                    )
+                                }
                             }
                             Switch(checked = product.isAvailable, onCheckedChange = { viewModel.toggleAvailability(product) })
                             IconButton(onClick = { deleteTarget = product.id }) {

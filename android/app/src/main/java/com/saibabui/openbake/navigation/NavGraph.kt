@@ -308,7 +308,8 @@ fun AppNavGraph() {
 
             composable(Screen.EditProfile.route) {
                 EditProfileScreen(
-                    onBack = { navController.popBackStack() }
+                    onBack = { navController.popBackStack() },
+                    authViewModel = authViewModel
                 )
             }
 

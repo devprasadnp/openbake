@@ -23,7 +23,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
@@ -43,6 +46,17 @@ import com.saibabui.openbake.ui.theme.*
 import com.saibabui.openbake.ui.viewmodel.CartViewModel
 import com.saibabui.openbake.ui.viewmodel.OrderViewModel
 import kotlinx.coroutines.launch
+
+@Composable
+private fun CheckoutRequiredLabel(text: String, style: androidx.compose.ui.text.TextStyle) {
+    Text(
+        buildAnnotatedString {
+            append(text)
+            withStyle(SpanStyle(color = MaterialTheme.colorScheme.error)) { append(" *") }
+        },
+        style = style
+    )
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -665,18 +679,18 @@ fun CheckoutScreen(
                                 color = MaterialTheme.colorScheme.error,
                             )
                         }
-                        com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = newAddrRecipientName, onValueChange = { newAddrRecipientName = it }, label = { Text("Recipient Name", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.fillMaxWidth(), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, singleLine = true)
-                        com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = newAddrRecipientPhone, onValueChange = { newAddrRecipientPhone = it.filter { c -> c.isDigit() }.take(10) }, label = { Text("Recipient Phone", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.fillMaxWidth(), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, singleLine = true)
+                        com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = newAddrRecipientName, onValueChange = { newAddrRecipientName = it }, label = { CheckoutRequiredLabel("Recipient Name", MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.fillMaxWidth(), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, singleLine = true)
+                        com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = newAddrRecipientPhone, onValueChange = { newAddrRecipientPhone = it.filter { c -> c.isDigit() }.take(10) }, label = { CheckoutRequiredLabel("Recipient Phone", MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.fillMaxWidth(), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, singleLine = true)
                         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                            com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = newAddrHouseNumber, onValueChange = { newAddrHouseNumber = it }, label = { Text("House / Flat No.", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.weight(1f), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, singleLine = true)
-                            com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = newAddrStreet, onValueChange = { newAddrStreet = it }, label = { Text("Street / Colony", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.weight(1f), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, singleLine = true)
+                            com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = newAddrHouseNumber, onValueChange = { newAddrHouseNumber = it }, label = { CheckoutRequiredLabel("House / Flat No.", MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.weight(1f), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, singleLine = true)
+                            com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = newAddrStreet, onValueChange = { newAddrStreet = it }, label = { CheckoutRequiredLabel("Street / Colony", MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.weight(1f), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, singleLine = true)
                         }
-                        com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = newAddrFull, onValueChange = { newAddrFull = it }, label = { Text("Full Address", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.fillMaxWidth(), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, minLines = 2)
+                        com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = newAddrFull, onValueChange = { newAddrFull = it }, label = { CheckoutRequiredLabel("Full Address", MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.fillMaxWidth(), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, minLines = 2)
                         com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = newAddrLandmark, onValueChange = { newAddrLandmark = it }, label = { Text("Landmark", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.fillMaxWidth(), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, singleLine = true)
                         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                            com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = newAddrCity, onValueChange = { newAddrCity = it }, label = { Text("City", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.weight(1f), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small)
-                            com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = newAddrState, onValueChange = { newAddrState = it }, label = { Text("State", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.weight(1f), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small)
-                            com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = newAddrPincode, onValueChange = { newAddrPincode = it.filter { c -> c.isDigit() }.take(6) }, label = { Text("Pincode", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.weight(1f), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small)
+                            com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = newAddrCity, onValueChange = { newAddrCity = it }, label = { CheckoutRequiredLabel("City", MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.weight(1f), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small)
+                            com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = newAddrState, onValueChange = { newAddrState = it }, label = { CheckoutRequiredLabel("State", MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.weight(1f), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small)
+                            com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = newAddrPincode, onValueChange = { newAddrPincode = it.filter { c -> c.isDigit() }.take(6) }, label = { CheckoutRequiredLabel("Pincode", MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito)) }, modifier = Modifier.weight(1f), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small)
                         }
                         Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
                             OutlinedButton(onClick = { showAddressForm = false; addressFormError = null }, modifier = Modifier.weight(1f), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small) {

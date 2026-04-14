@@ -43,6 +43,11 @@ fun EditProfileScreen(
     val authState by authViewModel.uiState.collectAsState()
     val user = authState.user
 
+    // Ensure profile is loaded when this screen opens
+    LaunchedEffect(Unit) {
+        if (user == null) authViewModel.checkAuthState()
+    }
+
     var name by remember(user) { mutableStateOf(user?.name ?: "") }
     var phone by remember(user) { mutableStateOf(user?.phone ?: "") }
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
@@ -54,6 +59,7 @@ fun EditProfileScreen(
     // Navigate back on success
     LaunchedEffect(authState.updateSuccess) {
         if (authState.updateSuccess) {
+            authViewModel.resetUpdateSuccess()
             onBack()
         }
     }
