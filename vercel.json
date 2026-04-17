@@ -1,5 +1,6 @@
 {
-  "installCommand": "cd web && npm install",
-  "buildCommand": "cd web && npx next build",
-  "outputDirectory": "web/.next"
+  "rootDirectory": "web",
+  "installCommand": "npm install",
+  "buildCommand": "npx next build",
+  "outputDirectory": ".next"
 }

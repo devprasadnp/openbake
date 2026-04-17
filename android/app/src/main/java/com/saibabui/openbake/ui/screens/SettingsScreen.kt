@@ -26,13 +26,20 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.saibabui.openbake.ui.theme.*
+import com.saibabui.openbake.ui.viewmodel.AuthViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(onBack: () -> Unit) {
+fun SettingsScreen(
+    onBack: () -> Unit,
+    authViewModel: AuthViewModel = viewModel()
+) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
+    val authState by authViewModel.uiState.collectAsState()
+    val user = authState.user
 
     // Check actual notification permission status
     fun isNotificationPermissionGranted(): Boolean {
@@ -118,6 +125,13 @@ fun SettingsScreen(onBack: () -> Unit) {
                 .padding(horizontal = 20.dp, vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            // ── Account Information ──────────────────────────────────────────
+            SettingsSectionTitle("Account")
+            SettingsInfoRow("Full Name", user?.name ?: "Guest")
+            SettingsInfoRow("Email", user?.email ?: "Not logged in")
+
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+
             // ── Notifications ────────────────────────────────────────────────
             SettingsSectionTitle("Notifications")
 

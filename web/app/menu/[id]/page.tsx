@@ -169,7 +169,7 @@ export default function ProductDetailPage() {
           <div>
             <div className="bg-white rounded-2xl overflow-hidden shadow-sm relative">
               <div className="relative aspect-square">
-                {product.images?.[activeImage] ? (
+                {product.images?.[activeImage] && (product.images[activeImage].startsWith("http") || product.images[activeImage].startsWith("/")) ? (
                   <Image
                     src={product.images[activeImage]}
                     alt={product.name}
@@ -190,9 +190,9 @@ export default function ProductDetailPage() {
                 </div>
               )}
             </div>
-            {product.images.length > 1 && (
+            {product.images.filter(img => img.startsWith("http") || img.startsWith("/")).length > 1 && (
               <div className="flex gap-2 mt-3">
-                {product.images.map((img, i) => (
+                {product.images.filter(img => img.startsWith("http") || img.startsWith("/")).map((img, i) => (
                   <button
                     key={i}
                     onClick={() => setActiveImage(i)}

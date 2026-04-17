@@ -36,30 +36,22 @@ fun AppNavGraph() {
     val cartItems by cartViewModel.items.collectAsState()
     val cartCount = cartItems.sumOf { it.quantity }
 
-    val customerRoutes = listOf(
+    val customerBottomBarRoutes = listOf(
         Screen.Home.route,
         Screen.OrderHistory.route,
-        Screen.Wishlist.route,
-        Screen.Profile.route,
         Screen.Cart.route,
-        Screen.Search.route,
-        Screen.AddressManagement.route
+        Screen.Profile.route
     )
-    val adminRoutes = listOf(
+    val adminBottomBarRoutes = listOf(
         Screen.AdminDashboard.route,
         Screen.AdminOrders.route,
         Screen.AdminProducts.route,
-        Screen.AdminMore.route,
-        Screen.AdminInventory.route,
-        Screen.AdminCoupons.route,
-        Screen.AdminAnalytics.route,
-        Screen.AdminSettings.route,
-        Screen.AdminCategories.route
+        Screen.AdminMore.route
     )
 
     val showBottomBar = currentRoute != null && (
-        (isAdmin && currentRoute in adminRoutes) ||
-        (!isAdmin && (currentRoute in customerRoutes || currentRoute?.startsWith("product_list") == true))
+        (isAdmin && currentRoute in adminBottomBarRoutes) ||
+        (!isAdmin && currentRoute in customerBottomBarRoutes)
     )
 
     Scaffold(
@@ -274,6 +266,9 @@ fun AppNavGraph() {
                             launchSingleTop = true
                         }
                     },
+                    onBack = {
+                        navController.popBackStack()
+                    },
                     onNavigateToOrders = {
                         navController.navigate(Screen.OrderHistory.route)
                     },
@@ -296,7 +291,8 @@ fun AppNavGraph() {
                 WishlistScreen(
                     onProductClick = { productId ->
                         navController.navigate(Screen.ProductDetail.createRoute(productId))
-                    }
+                    },
+                    onBack = { navController.popBackStack() }
                 )
             }
 

@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.Favorite
@@ -36,6 +37,7 @@ import com.saibabui.openbake.ui.viewmodel.AuthViewModel
 @Composable
 fun ProfileScreen(
     onLogout: () -> Unit,
+    onBack: () -> Unit,
     onNavigateToOrders: () -> Unit = {},
     onNavigateToWishlist: () -> Unit = {},
     onNavigateToAddresses: () -> Unit = {},
@@ -53,148 +55,172 @@ fun ProfileScreen(
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .verticalScroll(rememberScrollState())
-    ) {
-        // Header
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .statusBarsPadding()
-                .padding(top = 24.dp, bottom = 20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            // Avatar
-            val avatarUrl = user?.profileImageUrl?.let { url ->
-                if (url.startsWith("http")) url
-                else RetrofitClient.getBaseUrl().trimEnd('/') + url
-            }
-            Box(
-                modifier = Modifier
-                    .size(88.dp)
-                    .background(MaterialTheme.colorScheme.primary, CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                if (avatarUrl != null) {
-                    com.saibabui.openbake.ui.screens.common.OpenBakeImage(
-                        model = avatarUrl,
-                        contentDescription = "Profile photo",
-                        modifier = Modifier.size(88.dp),
-                        shape = CircleShape,
-                        contentScale = ContentScale.Crop,
-                        placeholderEmoji = "👤",
-                        emojiFontSize = 36
-                    )
-                } else {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
                     Text(
-                        text = user?.name?.firstOrNull()?.uppercase() ?: "?",
-                        style = MaterialTheme.typography.headlineLarge.copy(
+                        "Profile",
+                        style = MaterialTheme.typography.titleLarge.copy(
                             fontFamily = PlayfairDisplay,
                             fontWeight = FontWeight.Bold
-                        ),
-                        color = MaterialTheme.colorScheme.onPrimary
+                        )
                     )
-                }
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = user?.name ?: "Guest",
-                style = MaterialTheme.typography.headlineSmall.copy(
-                    fontFamily = PlayfairDisplay,
-                    fontWeight = FontWeight.Bold
-                ),
-                color = MaterialTheme.colorScheme.onBackground
-            )
-            user?.email?.let {
-                Text(
-                    text = it,
-                    style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background
                 )
-            }
+            )
         }
-
-        // Menu items
-        Column(modifier = Modifier.padding(horizontal = 20.dp)) {
-            ProfileMenuItem(
-                icon = Icons.Filled.Person,
-                title = "Edit Profile",
-                subtitle = "Update your personal information",
-                onClick = onNavigateToEditProfile
-            )
-            ProfileMenuItem(
-                icon = Icons.Filled.LocationOn,
-                title = "Addresses",
-                subtitle = "Manage delivery addresses",
-                onClick = onNavigateToAddresses
-            )
-            ProfileMenuItem(
-                icon = Icons.Filled.Receipt,
-                title = "Order History",
-                subtitle = "View past orders",
-                onClick = onNavigateToOrders
-            )
-            ProfileMenuItem(
-                icon = Icons.Filled.Favorite,
-                title = "Wishlist",
-                subtitle = "Your saved items",
-                onClick = onNavigateToWishlist
-            )
-            ProfileMenuItem(
-                icon = Icons.Filled.Settings,
-                title = "Settings",
-                subtitle = "App preferences",
-                onClick = onNavigateToSettings
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Logout
-            Surface(
-                shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.medium,
-                color = MaterialTheme.colorScheme.error.copy(alpha = 0.06f),
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .background(MaterialTheme.colorScheme.background)
+                .verticalScroll(rememberScrollState())
+        ) {
+            // Header
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable {
-                        onLogout()
-                    }
+                    .padding(top = 8.dp, bottom = 20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Row(
-                    modifier = Modifier.padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                // Avatar
+                val avatarUrl = user?.profileImageUrl?.let { url ->
+                    if (url.startsWith("http")) url
+                    else RetrofitClient.getBaseUrl().trimEnd('/') + url
+                }
+                Box(
+                    modifier = Modifier
+                        .size(88.dp)
+                        .background(MaterialTheme.colorScheme.primary, CircleShape),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Icon(
-                        Icons.AutoMirrored.Filled.Logout,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.error,
-                        modifier = Modifier.size(22.dp)
-                    )
-                    Spacer(modifier = Modifier.width(16.dp))
+                    if (avatarUrl != null) {
+                        com.saibabui.openbake.ui.screens.common.OpenBakeImage(
+                            model = avatarUrl,
+                            contentDescription = "Profile photo",
+                            modifier = Modifier.size(88.dp),
+                            shape = CircleShape,
+                            contentScale = ContentScale.Crop,
+                            placeholderEmoji = "👤",
+                            emojiFontSize = 36
+                        )
+                    } else {
+                        Text(
+                            text = user?.name?.firstOrNull()?.uppercase() ?: "?",
+                            style = MaterialTheme.typography.headlineLarge.copy(
+                                fontFamily = PlayfairDisplay,
+                                fontWeight = FontWeight.Bold
+                            ),
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = user?.name ?: "Guest",
+                    style = MaterialTheme.typography.headlineSmall.copy(
+                        fontFamily = PlayfairDisplay,
+                        fontWeight = FontWeight.Bold
+                    ),
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                user?.email?.let {
                     Text(
-                        "Sign Out",
-                        style = MaterialTheme.typography.titleSmall.copy(
-                            fontFamily = Nunito,
-                            fontWeight = FontWeight.Bold
-                        ),
-                        color = MaterialTheme.colorScheme.error
+                        text = it,
+                        style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
+            // Menu items
+            Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+                ProfileMenuItem(
+                    icon = Icons.Filled.Person,
+                    title = "Edit Profile",
+                    subtitle = "Update your personal information",
+                    onClick = onNavigateToEditProfile
+                )
+                ProfileMenuItem(
+                    icon = Icons.Filled.LocationOn,
+                    title = "Addresses",
+                    subtitle = "Manage delivery addresses",
+                    onClick = onNavigateToAddresses
+                )
+                ProfileMenuItem(
+                    icon = Icons.Filled.Receipt,
+                    title = "Order History",
+                    subtitle = "View past orders",
+                    onClick = onNavigateToOrders
+                )
+                ProfileMenuItem(
+                    icon = Icons.Filled.Favorite,
+                    title = "Wishlist",
+                    subtitle = "Your saved items",
+                    onClick = onNavigateToWishlist
+                )
+                ProfileMenuItem(
+                    icon = Icons.Filled.Settings,
+                    title = "Settings",
+                    subtitle = "App preferences",
+                    onClick = onNavigateToSettings
+                )
 
-            Text(
-                text = "Sri Vinayaka Bakery v1.0",
-                style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito),
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center
-            )
+                Spacer(modifier = Modifier.height(24.dp))
 
-            Spacer(modifier = Modifier.height(24.dp))
+                // Logout
+                Surface(
+                    shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.medium,
+                    color = MaterialTheme.colorScheme.error.copy(alpha = 0.06f),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            onLogout()
+                        }
+                ) {
+                    Row(
+                        modifier = Modifier.padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            Icons.AutoMirrored.Filled.Logout,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.size(22.dp)
+                        )
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Text(
+                            "Sign Out",
+                            style = MaterialTheme.typography.titleSmall.copy(
+                                fontFamily = Nunito,
+                                fontWeight = FontWeight.Bold
+                            ),
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(32.dp))
+
+                Text(
+                    text = "Sri Vinayaka Bakery v1.0",
+                    style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
+            }
         }
     }
 }

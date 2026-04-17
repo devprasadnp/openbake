@@ -1,8 +1,10 @@
 """OpenBake FastAPI application — production-ready entry point."""
 import logging
 import os
+import re
 import time
 import uuid
+from urllib.parse import urlsplit
 
 from fastapi import FastAPI, Request, Response, status
 from fastapi.middleware.cors import CORSMiddleware
@@ -41,16 +43,58 @@ app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # ── CORS ───────────────────────────────────────────────────────────────────────
-_raw_origins = settings.ALLOWED_ORIGINS
-allowed_origins = [o.strip() for o in _raw_origins.split(",") if o.strip()] if _raw_origins else ["*"]
+def _normalize_origin(origin: str) -> str:
+    candidate = origin.strip().rstrip("/")
+    if not candidate or candidate == "*":
+        return candidate
+
+    parsed = urlsplit(candidate)
+    if parsed.scheme and parsed.netloc:
+        return f"{parsed.scheme}://{parsed.netloc}"
+
+    return candidate
+
+
+def _build_cors_config(raw_origins: str, app_env: str) -> tuple[list[str], str | None]:
+    # In development, allow browser access from any local tunnel or frontend host.
+    if app_env == "development":
+        return [], ".*"
+
+    explicit_origins: list[str] = []
+    wildcard_patterns: list[str] = []
+
+    for origin in raw_origins.split(",") if raw_origins else ["*"]:
+        normalized = _normalize_origin(origin)
+        if not normalized:
+            continue
+
+        if normalized == "*":
+            return [], ".*"
+
+        if "*" in normalized:
+            wildcard_patterns.append("^" + re.escape(normalized).replace(r"\*", ".*") + "$")
+            continue
+
+        explicit_origins.append(normalized)
+
+    deduped_origins = list(dict.fromkeys(explicit_origins))
+    wildcard_regex = "|".join(wildcard_patterns) if wildcard_patterns else None
+    return deduped_origins, wildcard_regex
+
+
+allowed_origins, allowed_origin_regex = _build_cors_config(
+    settings.ALLOWED_ORIGINS,
+    settings.APP_ENV,
+)
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
+    allow_origin_regex=allowed_origin_regex,
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allow_headers=["Authorization", "Content-Type", "Accept"],
-    expose_headers=["X-Request-ID"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["X-Request-ID", "X-Response-Time"],
 )
 
 # ── Request-ID + timing middleware ─────────────────────────────────────────────

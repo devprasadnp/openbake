@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -32,7 +33,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WishlistScreen(
-    onProductClick: (String) -> Unit
+    onProductClick: (String) -> Unit,
+    onBack: () -> Unit
 ) {
     var wishlistItems by remember { mutableStateOf<List<WishlistItem>>(emptyList()) }
     var isLoading by remember { mutableStateOf(true) }
@@ -68,37 +70,41 @@ fun WishlistScreen(
                         )
                     )
                 },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                    }
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.background
                 )
             )
         }
     ) { padding ->
-        when {
-            isLoading -> LoadingScreen()
-            wishlistItems.isEmpty() -> {
-                EmptyState(
-                    emoji = "💝",
-                    title = "Wishlist is empty",
-                    subtitle = "Save your favorite bakes here"
-                )
-            }
-            else -> {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    contentPadding = PaddingValues(
-                        start = 16.dp, end = 16.dp,
-                        top = padding.calculateTopPadding() + 8.dp,
-                        bottom = 16.dp
-                    ),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    items(wishlistItems) { item ->
-                        WishlistCard(
-                            product = item.product,
-                            onClick = { onProductClick(item.product.id) }
-                        )
+        Box(modifier = Modifier.padding(padding)) {
+            when {
+                isLoading -> LoadingScreen()
+                wishlistItems.isEmpty() -> {
+                    EmptyState(
+                        emoji = "💝",
+                        title = "Wishlist is empty",
+                        subtitle = "Save your favorite bakes here"
+                    )
+                }
+                else -> {
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(2),
+                        contentPadding = PaddingValues(16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        items(wishlistItems) { item ->
+                            WishlistCard(
+                                product = item.product,
+                                onClick = { onProductClick(item.product.id) }
+                            )
+                        }
                     }
                 }
             }

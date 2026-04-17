@@ -7,7 +7,11 @@ const BASE_URL =
 
 const api = axios.create({
   baseURL: BASE_URL,
-  headers: { "Content-Type": "application/json" },
+  headers: {
+    "Content-Type": "application/json",
+    // Skip ngrok browser-warning interstitial when tunnelling locally
+    "ngrok-skip-browser-warning": "true",
+  },
   timeout: 15000, // 15s — prevent hanging requests
 });
 

@@ -19,7 +19,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "BASE_URL", "\"https://cebc-2402-e280-213a-15c-141b-df27-bd1a-ee33.ngrok-free.app/api/\"")
+        buildConfigField("String", "BASE_URL", "\"https://ac36-2402-e280-213a-15c-f06e-54da-6f9b-c0f8.ngrok-free.app/api/\"")
     }
 
     buildTypes {

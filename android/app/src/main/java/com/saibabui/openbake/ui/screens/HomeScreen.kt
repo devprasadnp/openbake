@@ -78,7 +78,7 @@ fun HomeScreen(
                     )
                     .padding(horizontal = 20.dp)
                     .statusBarsPadding()
-                    .padding(top = 16.dp, bottom = 8.dp)
+                    .padding(bottom = 8.dp)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -133,7 +133,7 @@ fun HomeScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             // ── Hero banner ────────────────────────────────────────────────────
             Box(
@@ -222,7 +222,7 @@ fun HomeScreen(
                     label = "Offers",
                     color = MaterialTheme.colorScheme.tertiaryContainer,
                     modifier = Modifier.weight(1f),
-                    onClick = onMenuClick
+                    onClick = { /* Navigate to Offers/Coupons if applicable */ }
                 )
             }
 

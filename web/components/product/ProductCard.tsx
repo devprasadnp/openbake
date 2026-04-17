@@ -15,6 +15,10 @@ interface ProductCardProps {
   product: Product;
 }
 
+function isValidImageUrl(url: string): boolean {
+  return url.startsWith("http://") || url.startsWith("https://") || url.startsWith("/");
+}
+
 export default function ProductCard({ product }: ProductCardProps) {
   const addItem = useCartStore((s) => s.addItem);
   const { isAuthenticated } = useAuthStore();
@@ -45,7 +49,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     <div className="group overflow-hidden rounded-2xl border border-border/80 bg-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-lg">
       <Link href={`/menu/${product.id}`}>
         <div className="relative aspect-[4/3] overflow-hidden">
-          {product.images?.[0] ? (
+          {product.images?.[0] && isValidImageUrl(product.images[0]) ? (
             <Image
               src={product.images[0]}
               alt={product.name}
