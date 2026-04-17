@@ -20,8 +20,13 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: blob: https://images.unsplash.com https://res.cloudinary.com https://*",
-      "connect-src 'self' " +
-        (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000"),
+      [
+        "connect-src 'self'",
+        process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000",
+        // Allow any ngrok tunnel (local dev + staging)
+        "https://*.ngrok-free.app",
+        "https://*.ngrok.io",
+      ].join(" "),
       "frame-ancestors 'none'",
     ].join("; "),
   },
