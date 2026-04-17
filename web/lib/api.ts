@@ -3,7 +3,8 @@ import toast from "react-hot-toast";
 import type { Product } from "@/types";
 
 const BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+  process.env.NEXT_PUBLIC_API_URL ||
+  "https://ff22-2402-e280-213a-15c-4531-6ad8-9ef0-5f12.ngrok-free.app/api";
 
 const api = axios.create({
   baseURL: BASE_URL,

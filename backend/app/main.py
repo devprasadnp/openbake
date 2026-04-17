@@ -58,7 +58,7 @@ def _normalize_origin(origin: str) -> str:
 def _build_cors_config(raw_origins: str, app_env: str) -> tuple[list[str], str | None]:
     # In development, allow browser access from any local tunnel or frontend host.
     if app_env == "development":
-        return [], ".*"
+        return ["*"], None
 
     explicit_origins: list[str] = []
     wildcard_patterns: list[str] = []
@@ -91,7 +91,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
     allow_origin_regex=allowed_origin_regex,
-    allow_credentials=True,
+    allow_credentials=len(allowed_origins) != 1 or allowed_origins[0] != "*",
     allow_methods=["*"],
     allow_headers=["*"],
     expose_headers=["X-Request-ID", "X-Response-Time"],
