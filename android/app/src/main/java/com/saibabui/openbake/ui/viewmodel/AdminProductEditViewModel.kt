@@ -48,7 +48,7 @@ class AdminProductEditViewModel(application: Application) : AndroidViewModel(app
         productId: String?,
         name: String, description: String, price: Double, categoryId: String,
         images: List<String>, isAvailable: Boolean, isEggless: Boolean,
-        customizable: Boolean, stockCount: Int, variants: List<VariantRequest>
+        customizable: Boolean, stockCount: Int, unlimitedStock: Boolean, variants: List<VariantRequest>
     ) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isSaving = true, error = null)
@@ -56,14 +56,14 @@ class AdminProductEditViewModel(application: Application) : AndroidViewModel(app
                 repo.updateProduct(productId, ProductUpdateRequest(
                     name = name, description = description, price = price,
                     images = images, isAvailable = isAvailable, isEgglessAvailable = isEggless,
-                    customizable = customizable, stockCount = stockCount
+                    customizable = customizable, stockCount = stockCount, unlimitedStock = unlimitedStock
                 ))
             } else {
                 repo.createProduct(ProductCreateRequest(
                     categoryId = categoryId, name = name, description = description,
                     price = price, images = images, isAvailable = isAvailable,
                     isEgglessAvailable = isEggless, customizable = customizable,
-                    stockCount = stockCount, variants = variants
+                    stockCount = stockCount, unlimitedStock = unlimitedStock, variants = variants
                 ))
             }
             result.fold(

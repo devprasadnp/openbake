@@ -42,7 +42,7 @@ def calculate_order_totals(
             raise ValueError(f"Product {item.product_id} not found")
         if not product.is_available:
             raise ValueError(f"Product '{product.name}' is currently unavailable")
-        if product.stock_count < item.quantity:
+        if not product.unlimited_stock and product.stock_count < item.quantity:
             raise ValueError(
                 f"Only {product.stock_count} units left for '{product.name}'"
             )
@@ -166,9 +166,9 @@ def place_order(db: Session, user_id: str, data: OrderCreate) -> Order:
         order_item.customization = item_data["customization"]
         db.add(order_item)
 
-        # Decrement stock
+        # Decrement stock (skip for unlimited stock products)
         product = db.query(Product).filter(Product.id == item_data["product_id"]).first()
-        if product:
+        if product and not product.unlimited_stock:
             product.stock_count = max(0, product.stock_count - item_data["quantity"])
 
     db.commit()

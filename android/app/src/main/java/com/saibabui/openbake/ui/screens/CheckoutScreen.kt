@@ -106,8 +106,33 @@ fun CheckoutScreen(
     var selectedTimeSlot by remember { mutableStateOf<String?>(null) }
     var timeSlotExpanded by remember { mutableStateOf(false) }
 
+    // Date picker state (Issue #10)
+    var selectedDate by remember { mutableStateOf<String?>(null) }
+    var showDatePicker by remember { mutableStateOf(false) }
+
+    // COD availability (Issue #7)
+    var codEnabled by remember { mutableStateOf(true) }
+
     // Stable idempotency key per checkout session — prevents duplicate orders on back-nav
     val idempotencyKey = remember { java.util.UUID.randomUUID().toString() }
+
+    // Fetch delivery config to check COD availability
+    LaunchedEffect(Unit) {
+        try {
+            val api = RetrofitClient.apiService
+            val response = api.getDeliveryConfig()
+            if (response.isSuccessful) {
+                val config = response.body()
+                if (config != null) {
+                    codEnabled = config.codEnabled
+                    // If COD disabled and currently selected, switch to UPI
+                    if (!config.codEnabled && paymentMethod == "cod") {
+                        paymentMethod = "upi"
+                    }
+                }
+            }
+        } catch (_: Exception) {}
+    }
 
     // Inline address form state
     var showAddressForm by remember { mutableStateOf(false) }
@@ -745,6 +770,72 @@ fun CheckoutScreen(
                 Spacer(modifier = Modifier.height(24.dp))
             }
 
+            // ── Delivery Date (Issue #10) ──
+            if (orderType == "delivery") {
+                Text(
+                    text = "Delivery Date",
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        fontFamily = PlayfairDisplay,
+                        fontWeight = FontWeight.Bold
+                    )
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Surface(
+                    shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small,
+                    color = MaterialTheme.colorScheme.surfaceContainerLowest,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { showDatePicker = true }
+                ) {
+                    Row(
+                        modifier = Modifier.padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = selectedDate ?: "Today (earliest)",
+                            style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito),
+                            color = if (selectedDate != null) MaterialTheme.colorScheme.onSurface
+                                    else MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Text("📅", fontSize = 20.sp)
+                    }
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // DatePickerDialog
+                if (showDatePicker) {
+                    val datePickerState = rememberDatePickerState(
+                        initialSelectedDateMillis = System.currentTimeMillis()
+                    )
+                    DatePickerDialog(
+                        onDismissRequest = { showDatePicker = false },
+                        confirmButton = {
+                            TextButton(onClick = {
+                                datePickerState.selectedDateMillis?.let { millis ->
+                                    val cal = java.util.Calendar.getInstance().apply { timeInMillis = millis }
+                                    selectedDate = String.format(
+                                        "%04d-%02d-%02d",
+                                        cal.get(java.util.Calendar.YEAR),
+                                        cal.get(java.util.Calendar.MONTH) + 1,
+                                        cal.get(java.util.Calendar.DAY_OF_MONTH)
+                                    )
+                                }
+                                showDatePicker = false
+                            }) { Text("OK") }
+                        },
+                        dismissButton = {
+                            TextButton(onClick = {
+                                selectedDate = null
+                                showDatePicker = false
+                            }) { Text("Clear") }
+                        }
+                    ) {
+                        DatePicker(state = datePickerState)
+                    }
+                }
+            }
+
             // ── Time Slot (delivery only) ──
             if (orderType == "delivery") {
                 Text(
@@ -918,10 +1009,11 @@ fun CheckoutScreen(
             Text(text = "Payment Method", style = MaterialTheme.typography.titleMedium.copy(fontFamily = PlayfairDisplay, fontWeight = FontWeight.Bold))
             Spacer(modifier = Modifier.height(12.dp))
 
-            listOf(
-                Triple("cod", "💵", "Cash on Delivery"),
-                Triple("upi", "📱", "UPI Payment")
-            ).forEach { (value, emoji, label) ->
+            val paymentMethods = buildList {
+                if (codEnabled) add(Triple("cod", "💵", "Cash on Delivery"))
+                add(Triple("upi", "📱", "UPI Payment"))
+            }
+            paymentMethods.forEach { (value, emoji, label) ->
                 val isSelected = paymentMethod == value
                 val subtitle = when (value) {
                     "cod" -> "Pay when your order is delivered"
@@ -1028,6 +1120,7 @@ fun CheckoutScreen(
                             orderType = orderType,
                             addressId = if (isDelivery) selectedAddressId else null,
                             couponCode = if (couponValid) couponCode.trim() else null,
+                            scheduledDate = if (orderType == "delivery") selectedDate else null,
                             timeSlot = if (orderType == "delivery") selectedTimeSlot else null,
                             specialNote = specialNote.ifBlank { null },
                             idempotencyKey = idempotencyKey

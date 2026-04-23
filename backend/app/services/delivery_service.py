@@ -26,6 +26,14 @@ def _get_setting(db: Session, key: str, default: float) -> float:
     return default
 
 
+def _get_bool_setting(db: Session, key: str, default: bool) -> bool:
+    """Read a boolean setting from DB, fall back to default."""
+    row = db.query(AppSettings).filter(AppSettings.key == key).first()
+    if row:
+        return row.value.lower() in ("true", "1", "yes")
+    return default
+
+
 def get_bakery_location(db: Session) -> tuple[float, float]:
     """Return (lat, lng) of the bakery."""
     lat = _get_setting(db, "bakery_lat", DEFAULT_BAKERY_LAT)
@@ -41,20 +49,22 @@ def get_delivery_config(db: Session) -> dict:
         "free_delivery_radius_km": _get_setting(db, "free_delivery_radius_km", DEFAULT_FREE_DELIVERY_RADIUS_KM),
         "delivery_fee_default": _get_setting(db, "delivery_fee_default", DEFAULT_DELIVERY_FEE),
         "speed_min_per_km": _get_setting(db, "speed_min_per_km", DEFAULT_SPEED_MIN_PER_KM),
+        "cod_enabled": _get_bool_setting(db, "cod_enabled", True),
     }
 
 
 def update_delivery_config(db: Session, updates: dict) -> dict:
     """Update delivery settings in DB. Returns the new config."""
-    allowed_keys = {"bakery_lat", "bakery_lng", "free_delivery_radius_km", "delivery_fee_default", "speed_min_per_km"}
+    allowed_keys = {"bakery_lat", "bakery_lng", "free_delivery_radius_km", "delivery_fee_default", "speed_min_per_km", "cod_enabled"}
     for key, value in updates.items():
         if key not in allowed_keys:
             continue
+        str_value = str(value).lower() if isinstance(value, bool) else str(value)
         row = db.query(AppSettings).filter(AppSettings.key == key).first()
         if row:
-            row.value = str(value)
+            row.value = str_value
         else:
-            db.add(AppSettings(key=key, value=str(value)))
+            db.add(AppSettings(key=key, value=str_value))
     db.commit()
     return get_delivery_config(db)
 
@@ -102,8 +112,12 @@ def calculate_delivery_fee(
 
     # Prep time (packing, etc.) + travel time
     prep_time = 15  # minutes
-    travel_time = math.ceil(distance_km * speed)
-    estimated_time = prep_time + travel_time
+    # When speed is 0 or not set, skip ETA calculation
+    if speed > 0:
+        travel_time = math.ceil(distance_km * speed)
+        estimated_time = prep_time + travel_time
+    else:
+        estimated_time = None  # Speed estimation disabled
 
     is_free = distance_km <= free_radius
     delivery_fee = 0.0 if is_free else default_fee

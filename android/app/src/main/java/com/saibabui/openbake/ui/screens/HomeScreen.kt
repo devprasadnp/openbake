@@ -35,6 +35,7 @@ import com.saibabui.openbake.ui.screens.common.LoadingScreen
 import com.saibabui.openbake.ui.theme.*
 import com.saibabui.openbake.ui.viewmodel.CartViewModel
 import com.saibabui.openbake.ui.viewmodel.HomeViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,6 +52,8 @@ fun HomeScreen(
 ) {
     val homeState by homeViewModel.uiState.collectAsState()
     val cartItems by cartViewModel.items.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
     if (homeState.isLoading) {
         LoadingScreen()
@@ -86,14 +89,24 @@ fun HomeScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column {
-                        Text(
-                            text = "Sri Vinayaka Bakery 🍰",
-                            style = MaterialTheme.typography.headlineSmall.copy(
-                                fontFamily = PlayfairDisplay,
-                                fontWeight = FontWeight.Bold
-                            ),
-                            color = MaterialTheme.colorScheme.onBackground
-                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            androidx.compose.foundation.Image(
+                                painter = androidx.compose.ui.res.painterResource(id = com.saibabui.openbake.R.drawable.bakery_logo),
+                                contentDescription = "Sri Vinayaka Bakery",
+                                modifier = Modifier.size(42.dp)
+                            )
+                            Text(
+                                text = "Sri Vinayaka Bakery",
+                                style = MaterialTheme.typography.headlineSmall.copy(
+                                    fontFamily = PlayfairDisplay,
+                                    fontWeight = FontWeight.Bold
+                                ),
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                        }
                         Text(
                             text = "Freshly baked, delivered with love",
                             style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito),
@@ -305,7 +318,14 @@ fun HomeScreen(
                         ProductCard(
                             product = product,
                             onClick = { onProductClick(product.id) },
-                            onAddToCart = { cartViewModel.addItem(product) }
+                            onAddToCart = {
+                                val added = cartViewModel.addItem(product)
+                                if (added) {
+                                    scope.launch { snackbarHostState.showSnackbar("Added to cart! 🛒") }
+                                } else {
+                                    scope.launch { snackbarHostState.showSnackbar("Could not add — check stock") }
+                                }
+                            }
                         )
                     }
                 }
@@ -403,6 +423,14 @@ fun HomeScreen(
                 }
             }
         }
+
+        // Snackbar for add-to-cart feedback
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 80.dp)
+        )
     }
 }
 

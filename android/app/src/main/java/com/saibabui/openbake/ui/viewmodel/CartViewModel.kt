@@ -71,8 +71,8 @@ class CartViewModel : ViewModel() {
         isEggless: Boolean = false,
         cakeMessage: String? = null
     ): Boolean {
-        // Stock check
-        if (product.stockCount <= 0 || !product.isAvailable) return false
+        // Stock check (skip for unlimited stock products)
+        if (!product.unlimitedStock && (product.stockCount <= 0 || !product.isAvailable)) return false
 
         val current = _items.value.toMutableList()
         val existingIdx = current.indexOfFirst {
@@ -82,7 +82,7 @@ class CartViewModel : ViewModel() {
         }
 
         val totalQty = if (existingIdx >= 0) current[existingIdx].quantity + quantity else quantity
-        if (totalQty > product.stockCount) return false
+        if (!product.unlimitedStock && totalQty > product.stockCount) return false
 
         if (existingIdx >= 0) {
             val existing = current[existingIdx]

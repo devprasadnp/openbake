@@ -1,5 +1,7 @@
 package com.saibabui.openbake.ui.screens
 
+import android.content.Intent
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -16,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalContext
 import com.google.gson.Gson
 import com.saibabui.openbake.BuildConfig
 import com.saibabui.openbake.data.api.RetrofitClient
@@ -98,6 +101,7 @@ fun OrderTrackingScreen(
     }
 
     val order = detailState.order ?: return
+    val context = androidx.compose.ui.platform.LocalContext.current
 
     // Use live status from SSE if available, otherwise use the fetched status
     val currentStatus = liveStatus ?: order.status
@@ -360,9 +364,49 @@ fun OrderTrackingScreen(
                 }
             }
 
+            // Share via WhatsApp
+            Spacer(modifier = Modifier.height(16.dp))
+            OutlinedButton(
+                onClick = {
+                    val itemsText = order.items.joinToString("\n") { item ->
+                        "  • ${item.productName ?: "Item"} × ${item.quantity} — ₹${(item.unitPrice * item.quantity).toInt()}"
+                    }
+                    val shareText = buildString {
+                        append("🍰 *Sri Vinayaka Bakery — Order Update*\n\n")
+                        append("📦 Order #${order.id.takeLast(8)}\n")
+                        append("📋 Status: ${currentStatus.replaceFirstChar { it.uppercase() }}\n\n")
+                        append("🧁 Items:\n$itemsText\n\n")
+                        append("💰 Total: ₹${order.total.toInt()}\n")
+                        if (estimatedEta != null) append("⏱ ETA: ~$estimatedEta min\n")
+                    }
+                    val sendIntent = Intent(Intent.ACTION_SEND).apply {
+                        type = "text/plain"
+                        putExtra(Intent.EXTRA_TEXT, shareText)
+                        setPackage("com.whatsapp")
+                    }
+                    try {
+                        context.startActivity(sendIntent)
+                    } catch (_: Exception) {
+                        // WhatsApp not installed — fall back to generic share
+                        val fallback = Intent(Intent.ACTION_SEND).apply {
+                            type = "text/plain"
+                            putExtra(Intent.EXTRA_TEXT, shareText)
+                        }
+                        context.startActivity(Intent.createChooser(fallback, "Share order"))
+                    }
+                },
+                modifier = Modifier.fillMaxWidth(),
+                shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.pill
+            ) {
+                Text(
+                    "Share via WhatsApp",
+                    style = MaterialTheme.typography.labelLarge.copy(fontFamily = Nunito, fontWeight = FontWeight.Bold)
+                )
+            }
+
             // Cancel button (only if placed or accepted, within cancellation window)
             if (currentStatus.lowercase() in listOf("placed", "accepted")) {
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(12.dp))
                 OutlinedButton(
                     onClick = { orderViewModel.cancelOrder(order.id) },
                     modifier = Modifier.fillMaxWidth(),

@@ -51,6 +51,7 @@ class ProductResponse(BaseModel):
     is_eggless_available: bool
     customizable: bool
     stock_count: int
+    unlimited_stock: bool = False
     rating: float
     variants: List[ProductVariantResponse] = []
 
@@ -68,6 +69,7 @@ class ProductCreate(BaseModel):
     is_eggless_available: bool = False
     customizable: bool = False
     stock_count: int = 0
+    unlimited_stock: bool = False
     variants: List[ProductVariantCreate] = []
 
 
@@ -80,6 +82,7 @@ class ProductUpdate(BaseModel):
     is_eggless_available: Optional[bool] = None
     customizable: Optional[bool] = None
     stock_count: Optional[int] = None
+    unlimited_stock: Optional[bool] = None
 
 
 class PaginatedProductResponse(BaseModel):

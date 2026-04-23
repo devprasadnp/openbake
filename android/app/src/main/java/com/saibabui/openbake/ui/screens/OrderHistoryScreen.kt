@@ -1,5 +1,7 @@
 package com.saibabui.openbake.ui.screens
 
+import android.content.Intent
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -20,6 +22,7 @@ import com.saibabui.openbake.ui.screens.common.EmptyState
 import com.saibabui.openbake.ui.screens.common.LoadingScreen
 import com.saibabui.openbake.ui.theme.*
 import com.saibabui.openbake.ui.viewmodel.OrderViewModel
+import androidx.compose.ui.platform.LocalContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -101,6 +104,17 @@ fun OrderHistoryScreen(
 
 @Composable
 private fun OrderCard(order: Order, onClick: () -> Unit) {
+    val context = LocalContext.current
+
+    // Build items summary text with cake names (Issue #6)
+    val itemsSummary = if (order.items.isNotEmpty()) {
+        val firstName = order.items.first().productName ?: "Item"
+        val remaining = order.items.size - 1
+        if (remaining > 0) "$firstName + $remaining more" else firstName
+    } else {
+        "${order.items.size} items"
+    }
+
     Surface(
         shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.large,
         color = MaterialTheme.colorScheme.surfaceContainerLowest,
@@ -114,7 +128,7 @@ private fun OrderCard(order: Order, onClick: () -> Unit) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Column {
+                Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = "Order #${order.id.takeLast(6).uppercase()}",
                         style = MaterialTheme.typography.titleSmall.copy(
@@ -129,16 +143,55 @@ private fun OrderCard(order: Order, onClick: () -> Unit) {
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
-                StatusBadge(status = order.status)
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    // WhatsApp share button
+                    IconButton(
+                        onClick = {
+                            val itemsText = order.items.joinToString("\n") { item ->
+                                "  \u2022 ${item.productName ?: "Item"} \u00d7 ${item.quantity}"
+                            }
+                            val shareText = buildString {
+                                append("\ud83c\udf70 *Sri Vinayaka Bakery*\n\n")
+                                append("\ud83d\udce6 Order #${order.id.takeLast(8)}\n")
+                                append("\ud83d\udccb Status: ${order.status.replaceFirstChar { it.uppercase() }}\n\n")
+                                append("Items:\n$itemsText\n\n")
+                                append("\ud83d\udcb0 Total: \u20b9${order.total.toInt()}")
+                            }
+                            val sendIntent = Intent(Intent.ACTION_SEND).apply {
+                                type = "text/plain"
+                                putExtra(Intent.EXTRA_TEXT, shareText)
+                                setPackage("com.whatsapp")
+                            }
+                            try {
+                                context.startActivity(sendIntent)
+                            } catch (_: Exception) {
+                                val fallback = Intent(Intent.ACTION_SEND).apply {
+                                    type = "text/plain"
+                                    putExtra(Intent.EXTRA_TEXT, shareText)
+                                }
+                                context.startActivity(Intent.createChooser(fallback, "Share order"))
+                            }
+                        },
+                        modifier = Modifier.size(32.dp)
+                    ) {
+                        Text("\ud83d\udce4", style = MaterialTheme.typography.bodyLarge)
+                    }
+                    StatusBadge(status = order.status)
+                }
             }
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Items summary
+            // Items summary with product names
             Text(
-                text = "${order.items.size} item${if (order.items.size > 1) "s" else ""}",
+                text = itemsSummary,
                 style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito),
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -149,7 +202,7 @@ private fun OrderCard(order: Order, onClick: () -> Unit) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "₹${order.total.toInt()}",
+                    text = "\u20b9${order.total.toInt()}",
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontFamily = Nunito,
                         fontWeight = FontWeight.Bold
@@ -161,7 +214,7 @@ private fun OrderCard(order: Order, onClick: () -> Unit) {
                     color = MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
                 ) {
                     Text(
-                        text = "View Details →",
+                        text = "View Details \u2192",
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                         style = MaterialTheme.typography.labelMedium.copy(
                             fontFamily = Nunito,

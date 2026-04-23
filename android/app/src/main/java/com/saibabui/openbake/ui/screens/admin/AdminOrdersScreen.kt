@@ -62,9 +62,17 @@ fun AdminOrdersScreen(
                                 modifier = Modifier.fillMaxWidth().clickable { onOrderClick(order.id) }
                             ) {
                                 Row(Modifier.padding(16.dp).fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                                    Column {
+                                    Column(modifier = Modifier.weight(1f)) {
                                         Text("#${order.id.takeLast(6)}", fontFamily = Nunito, fontWeight = FontWeight.Bold)
-                                        Text("${order.items.size} items", fontFamily = Nunito, style = MaterialTheme.typography.bodySmall)
+                                        // Show first cake name + remaining count
+                                        val itemsSummary = if (order.items.isNotEmpty()) {
+                                            val firstName = order.items.first().productName ?: "Item"
+                                            val remaining = order.items.size - 1
+                                            if (remaining > 0) "$firstName + $remaining more" else firstName
+                                        } else {
+                                            "${order.items.size} items"
+                                        }
+                                        Text(itemsSummary, fontFamily = Nunito, style = MaterialTheme.typography.bodySmall, maxLines = 1)
                                     }
                                     Column(horizontalAlignment = Alignment.End) {
                                         AssistChip(

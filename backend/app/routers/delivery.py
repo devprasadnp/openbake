@@ -28,6 +28,7 @@ class DeliveryConfigResponse(BaseModel):
     free_delivery_radius_km: float
     delivery_fee_default: float
     speed_min_per_km: float
+    cod_enabled: bool = True
 
 
 class DeliveryConfigUpdate(BaseModel):
@@ -36,6 +37,7 @@ class DeliveryConfigUpdate(BaseModel):
     free_delivery_radius_km: Optional[float] = None
     delivery_fee_default: Optional[float] = None
     speed_min_per_km: Optional[float] = None
+    cod_enabled: Optional[bool] = None
 
 
 # --- Endpoints ---

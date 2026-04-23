@@ -16,6 +16,8 @@ alter_stmts = [
     "ALTER TABLE orders ADD COLUMN idempotency_key VARCHAR(64)",
     # v2: order status timestamps (JSON dict: {status: iso_timestamp})
     "ALTER TABLE orders ADD COLUMN status_timestamps TEXT",
+    # v3: unlimited stock for products
+    "ALTER TABLE products ADD COLUMN unlimited_stock BOOLEAN DEFAULT 0",
 ]
 
 for stmt in alter_stmts:
@@ -41,6 +43,10 @@ print(f"\nAddress columns: {cols}")
 result2 = db.execute(text("PRAGMA table_info(orders)"))
 cols2 = [r[1] for r in result2.fetchall()]
 print(f"Order columns: {cols2}")
+
+result3 = db.execute(text("PRAGMA table_info(products)"))
+cols3 = [r[1] for r in result3.fetchall()]
+print(f"Product columns: {cols3}")
 
 db.close()
 print("\nMigration complete!")

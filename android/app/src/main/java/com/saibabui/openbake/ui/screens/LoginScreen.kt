@@ -1,11 +1,11 @@
 package com.saibabui.openbake.ui.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -16,6 +16,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -25,6 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.saibabui.openbake.R
 import com.saibabui.openbake.ui.screens.common.GradientButton
 import com.saibabui.openbake.ui.theme.*
 import com.saibabui.openbake.ui.viewmodel.AuthViewModel
@@ -86,11 +89,16 @@ fun LoginScreen(
         ) {
             Spacer(modifier = Modifier.height(80.dp))
 
-            // Brand
-            Text(
-                text = "🍰",
-                fontSize = 48.sp
-            )
+            // Brand Logo
+//            Image(
+//                painter = painterResource(id = R.mipmap.ic_launcher_foreground),
+//                contentDescription = "App Logo",
+//                modifier = Modifier
+//                    .size(100.dp)
+//                    .clip(CircleShape)
+//                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
+//            )
+            
             Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = "Welcome Back",

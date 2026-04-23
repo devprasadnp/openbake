@@ -108,6 +108,7 @@ data class Product(
     @SerializedName("is_eggless_available") val isEgglessAvailable: Boolean = false,
     val customizable: Boolean = false,
     @SerializedName("stock_count") val stockCount: Int = 0,
+    @SerializedName("unlimited_stock") val unlimitedStock: Boolean = false,
     val rating: Double = 0.0,
     val variants: List<ProductVariant> = emptyList()
 )
@@ -391,6 +392,7 @@ data class ProductCreateRequest(
     @SerializedName("is_eggless_available") val isEgglessAvailable: Boolean = false,
     val customizable: Boolean = false,
     @SerializedName("stock_count") val stockCount: Int = 0,
+    @SerializedName("unlimited_stock") val unlimitedStock: Boolean = false,
     val variants: List<VariantRequest> = emptyList()
 )
 
@@ -402,7 +404,8 @@ data class ProductUpdateRequest(
     @SerializedName("is_available") val isAvailable: Boolean? = null,
     @SerializedName("is_eggless_available") val isEgglessAvailable: Boolean? = null,
     val customizable: Boolean? = null,
-    @SerializedName("stock_count") val stockCount: Int? = null
+    @SerializedName("stock_count") val stockCount: Int? = null,
+    @SerializedName("unlimited_stock") val unlimitedStock: Boolean? = null
 )
 
 data class VariantRequest(
@@ -458,7 +461,8 @@ data class DeliveryConfig(
     @SerializedName("bakery_lng") val bakeryLng: Double = 0.0,
     @SerializedName("free_delivery_radius_km") val freeDeliveryRadiusKm: Double = 0.0,
     @SerializedName("delivery_fee_default") val deliveryFeeDefault: Double = 0.0,
-    @SerializedName("speed_min_per_km") val speedMinPerKm: Double = 0.0
+    @SerializedName("speed_min_per_km") val speedMinPerKm: Double = 0.0,
+    @SerializedName("cod_enabled") val codEnabled: Boolean = true
 )
 
 data class DeliveryConfigUpdateRequest(
@@ -466,7 +470,8 @@ data class DeliveryConfigUpdateRequest(
     @SerializedName("bakery_lng") val bakeryLng: Double? = null,
     @SerializedName("free_delivery_radius_km") val freeDeliveryRadiusKm: Double? = null,
     @SerializedName("delivery_fee_default") val deliveryFeeDefault: Double? = null,
-    @SerializedName("speed_min_per_km") val speedMinPerKm: Double? = null
+    @SerializedName("speed_min_per_km") val speedMinPerKm: Double? = null,
+    @SerializedName("cod_enabled") val codEnabled: Boolean? = null
 )
 
 // ── Admin Category Create ──

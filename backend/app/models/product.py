@@ -37,6 +37,7 @@ class Product(Base):
     is_eggless_available: Mapped[bool] = mapped_column(Boolean, default=False)
     customizable: Mapped[bool] = mapped_column(Boolean, default=False)
     stock_count: Mapped[int] = mapped_column(Integer, default=0)
+    unlimited_stock: Mapped[bool] = mapped_column(Boolean, default=False)
     rating: Mapped[float] = mapped_column(Float, default=0.0)
 
     @property

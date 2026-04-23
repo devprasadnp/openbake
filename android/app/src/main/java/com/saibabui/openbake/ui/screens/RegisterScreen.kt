@@ -88,7 +88,7 @@ fun RegisterScreen(
         ) {
             Spacer(modifier = Modifier.height(60.dp))
 
-            Text(text = "🧁", fontSize = 44.sp)
+//            Text(text = "🧁", fontSize = 44.sp)
             Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = "Create Account",

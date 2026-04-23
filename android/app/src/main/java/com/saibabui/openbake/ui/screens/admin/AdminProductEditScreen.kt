@@ -57,6 +57,7 @@ fun AdminProductEditScreen(
     var isAvailable by remember { mutableStateOf(true) }
     var isEggless by remember { mutableStateOf(false) }
     var customizable by remember { mutableStateOf(false) }
+    var unlimitedStock by remember { mutableStateOf(false) }
     var permissionDeniedMsg by remember { mutableStateOf<String?>(null) }
 
     // Image picker launcher
@@ -106,6 +107,7 @@ fun AdminProductEditScreen(
             price = p.price.toString(); stockCount = p.stockCount.toString()
             selectedCategoryId = p.categoryId; imageUrl = p.images.firstOrNull() ?: ""
             isAvailable = p.isAvailable; isEggless = p.isEgglessAvailable; customizable = p.customizable
+            unlimitedStock = p.unlimitedStock
         }
     }
 
@@ -128,7 +130,9 @@ fun AdminProductEditScreen(
                 com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = description, onValueChange = { description = it }, label = { Text("Description") }, modifier = Modifier.fillMaxWidth(), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, minLines = 3)
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = price, onValueChange = { price = it }, label = { Text("Price") }, modifier = Modifier.weight(1f), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal))
-                    com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = stockCount, onValueChange = { stockCount = it }, label = { Text("Stock") }, modifier = Modifier.weight(1f), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number))
+                    if (!unlimitedStock) {
+                        com.saibabui.openbake.ui.screens.common.OpenBakeTextField(value = stockCount, onValueChange = { stockCount = it }, label = { Text("Stock") }, modifier = Modifier.weight(1f), shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number))
+                    }
                 }
 
                 var expanded by remember { mutableStateOf(false) }
@@ -186,6 +190,13 @@ fun AdminProductEditScreen(
                 }
 
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                    Column {
+                        Text("Unlimited Stock", fontFamily = Nunito)
+                        Text("No stock tracking needed", fontFamily = Nunito, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                    Switch(checked = unlimitedStock, onCheckedChange = { unlimitedStock = it })
+                }
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                     Text("Available", fontFamily = Nunito); Switch(checked = isAvailable, onCheckedChange = { isAvailable = it })
                 }
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
@@ -202,7 +213,7 @@ fun AdminProductEditScreen(
                         viewModel.saveProduct(
                             productId, name, description, price.toDoubleOrNull() ?: 0.0, selectedCategoryId,
                             if (imageUrl.isNotBlank()) listOf(imageUrl) else emptyList(),
-                            isAvailable, isEggless, customizable, stockCount.toIntOrNull() ?: 0, emptyList()
+                            isAvailable, isEggless, customizable, stockCount.toIntOrNull() ?: 0, unlimitedStock, emptyList()
                         )
                     },
                     modifier = Modifier.fillMaxWidth(),

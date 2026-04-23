@@ -83,7 +83,7 @@ fun ProductDetailScreen(
 
     val product = detailState.product ?: return
 
-    val isOutOfStock = product.stockCount <= 0 || !product.isAvailable
+    val isOutOfStock = !product.unlimitedStock && (product.stockCount <= 0 || !product.isAvailable)
 
     // Show stock error in snackbar
     LaunchedEffect(stockError) {
@@ -297,7 +297,7 @@ fun ProductDetailScreen(
                             }
                         }
                         // Stock indicator
-                        if (!isOutOfStock && product.stockCount <= 5) {
+                        if (!isOutOfStock && !product.unlimitedStock && product.stockCount <= 5) {
                             Text(
                                 text = "Only ${product.stockCount} left!",
                                 style = MaterialTheme.typography.labelSmall.copy(
@@ -505,7 +505,7 @@ fun ProductDetailScreen(
                                 modifier = Modifier
                                     .size(40.dp)
                                     .clickable {
-                                        if (quantity < product.stockCount) quantity++
+                                        if (product.unlimitedStock || quantity < product.stockCount) quantity++
                                     }
                             ) {
                                 Box(contentAlignment = Alignment.Center) {
@@ -603,14 +603,14 @@ fun ProductDetailScreen(
                     GradientButton(
                         text = "Add to Cart",
                         onClick = {
-                            if (product.stockCount <= 0 || !product.isAvailable) {
+                            if (product.stockCount <= 0 && !product.unlimitedStock) {
                                 stockError = "Sorry, this item is currently out of stock."
-                            } else if (quantity > product.stockCount) {
+                            } else if (!product.unlimitedStock && quantity > product.stockCount) {
                                 stockError = "Only ${product.stockCount} items available in stock."
                             } else {
                                 val added = cartViewModel.addItem(product, quantity, selectedVariant, isEggless)
                                 if (added) {
-                                    onBack()
+                                    stockError = "✓ Added to cart!"
                                 } else {
                                     stockError = "Cannot add to cart. Stock limit reached."
                                 }

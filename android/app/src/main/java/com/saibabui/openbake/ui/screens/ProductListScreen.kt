@@ -30,6 +30,7 @@ import com.saibabui.openbake.ui.screens.common.LoadingScreen
 import com.saibabui.openbake.ui.theme.*
 import com.saibabui.openbake.ui.viewmodel.CartViewModel
 import com.saibabui.openbake.ui.viewmodel.ProductViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,6 +44,8 @@ fun ProductListScreen(
 ) {
     val listState by productViewModel.listState.collectAsState()
     val cartItems by cartViewModel.items.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(categoryId) {
         productViewModel.loadProducts(categoryId = categoryId)
@@ -105,23 +108,38 @@ fun ProductListScreen(
                 )
             }
             else -> {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    contentPadding = PaddingValues(
-                        start = 16.dp, end = 16.dp,
-                        top = padding.calculateTopPadding() + 8.dp,
-                        bottom = 16.dp
-                    ),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    items(listState.products) { product ->
-                        GridProductCard(
-                            product = product,
-                            onClick = { onProductClick(product.id) },
-                            onAddToCart = { cartViewModel.addItem(product) }
-                        )
+                Box(modifier = Modifier.fillMaxSize()) {
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(2),
+                        contentPadding = PaddingValues(
+                            start = 16.dp, end = 16.dp,
+                            top = padding.calculateTopPadding() + 8.dp,
+                            bottom = 16.dp
+                        ),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        items(listState.products) { product ->
+                            GridProductCard(
+                                product = product,
+                                onClick = { onProductClick(product.id) },
+                                onAddToCart = {
+                                    val added = cartViewModel.addItem(product)
+                                    if (added) {
+                                        scope.launch { snackbarHostState.showSnackbar("Added to cart! \uD83D\uDED2") }
+                                    } else {
+                                        scope.launch { snackbarHostState.showSnackbar("Could not add \u2014 check stock") }
+                                    }
+                                }
+                            )
+                        }
                     }
+                    SnackbarHost(
+                        hostState = snackbarHostState,
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .padding(bottom = 16.dp)
+                    )
                 }
             }
         }
