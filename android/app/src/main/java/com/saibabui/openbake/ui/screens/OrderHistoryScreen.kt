@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -69,7 +70,7 @@ fun OrderHistoryScreen(
                 listState.isLoading -> LoadingScreen()
                 listState.error != null -> {
                     EmptyState(
-                        emoji = "😕",
+                        emoji = "",
                         title = "Something went wrong",
                         subtitle = listState.error ?: "Please try again",
                         actionLabel = "Retry",
@@ -78,7 +79,7 @@ fun OrderHistoryScreen(
                 }
                 listState.orders.isEmpty() -> {
                     EmptyState(
-                        emoji = "📦",
+                        emoji = "",
                         title = "No orders yet",
                         subtitle = "Your order history will appear here"
                     )
@@ -154,11 +155,11 @@ private fun OrderCard(order: Order, onClick: () -> Unit) {
                                 "  \u2022 ${item.productName ?: "Item"} \u00d7 ${item.quantity}"
                             }
                             val shareText = buildString {
-                                append("\ud83c\udf70 *Sri Vinayaka Bakery*\n\n")
-                                append("\ud83d\udce6 Order #${order.id.takeLast(8)}\n")
-                                append("\ud83d\udccb Status: ${order.status.replaceFirstChar { it.uppercase() }}\n\n")
+                                append("*Sri Vinayaka Bakery*\n\n")
+                                append("Order #${order.id.takeLast(8)}\n")
+                                append("Status: ${order.status.replaceFirstChar { it.uppercase() }}\n\n")
                                 append("Items:\n$itemsText\n\n")
-                                append("\ud83d\udcb0 Total: \u20b9${order.total.toInt()}")
+                                append("Total: \u20b9${order.total.toInt()}")
                             }
                             val sendIntent = Intent(Intent.ACTION_SEND).apply {
                                 type = "text/plain"
@@ -177,7 +178,7 @@ private fun OrderCard(order: Order, onClick: () -> Unit) {
                         },
                         modifier = Modifier.size(32.dp)
                     ) {
-                        Text("\ud83d\udce4", style = MaterialTheme.typography.bodyLarge)
+                        Icon(Icons.Filled.Share, contentDescription = "Share", modifier = Modifier.size(18.dp))
                     }
                     StatusBadge(status = order.status)
                 }

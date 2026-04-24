@@ -540,7 +540,7 @@ fun CheckoutScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                listOf("delivery" to "🚚 Delivery", "pickup" to "🏪 Pickup").forEach { (value, label) ->
+                listOf("delivery" to "Delivery", "pickup" to "Pickup").forEach { (value, label) ->
                     val sel = orderType == value
                     Surface(
                         shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.input,
@@ -634,16 +634,16 @@ fun CheckoutScreen(
                         Column(modifier = Modifier.padding(12.dp)) {
                             if (est.isDeliverable) {
                                 Text(
-                                    "📍 ${String.format("%.1f", est.distanceKm)} km away • ETA ~${est.estimatedTimeMinutes} min",
+                                    "${String.format("%.1f", est.distanceKm)} km away • ETA ~${est.estimatedTimeMinutes} min",
                                     style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito, fontWeight = FontWeight.SemiBold),
                                     color = Success
                                 )
                                 if (est.deliveryFee == 0.0) {
-                                    Text("🎉 Free delivery!", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito), color = Success)
+                                    Text("Free delivery!", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito), color = Success)
                                 }
                             } else {
                                 Text(
-                                    "⚠️ Outside delivery area (${String.format("%.1f", est.distanceKm)} km)",
+                                    "Outside delivery area (${String.format("%.1f", est.distanceKm)} km)",
                                     style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito, fontWeight = FontWeight.SemiBold),
                                     color = MaterialTheme.colorScheme.error
                                 )
@@ -756,7 +756,7 @@ fun CheckoutScreen(
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(
-                            "🏪 Store Pickup",
+                            "Store Pickup",
                             style = MaterialTheme.typography.bodyLarge.copy(fontFamily = Nunito, fontWeight = FontWeight.Bold)
                         )
                         Spacer(modifier = Modifier.height(4.dp))
@@ -798,7 +798,7 @@ fun CheckoutScreen(
                             color = if (selectedDate != null) MaterialTheme.colorScheme.onSurface
                                     else MaterialTheme.colorScheme.onSurfaceVariant
                         )
-                        Text("📅", fontSize = 20.sp)
+                        Text("", fontSize = 20.sp)
                     }
                 }
                 Spacer(modifier = Modifier.height(16.dp))
@@ -1010,8 +1010,8 @@ fun CheckoutScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             val paymentMethods = buildList {
-                if (codEnabled) add(Triple("cod", "💵", "Cash on Delivery"))
-                add(Triple("upi", "📱", "UPI Payment"))
+                if (codEnabled) add(Triple("cod", "", "Cash on Delivery"))
+                add(Triple("upi", "", "UPI Payment"))
             }
             paymentMethods.forEach { (value, emoji, label) ->
                 val isSelected = paymentMethod == value
@@ -1057,7 +1057,7 @@ fun CheckoutScreen(
                                         PaymentStep("2", "PayU opens — choose your UPI app or enter UPI ID")
                                         PaymentStep("3", "Approve in your UPI app — order confirmed!")
                                         Spacer(modifier = Modifier.height(4.dp))
-                                        Text("🔒 Secure UPI payment via PayU", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito), color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                        Text("Secure UPI payment via PayU", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito), color = MaterialTheme.colorScheme.onSurfaceVariant)
                                     }
                                 }
                             }

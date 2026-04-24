@@ -294,6 +294,78 @@ fun AdminOrderDetailScreen(
                     }
                 }
 
+                // ── Share to Delivery Agent (WhatsApp) ──
+                Card(shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.medium) {
+                    Column(Modifier.padding(16.dp).fillMaxWidth()) {
+                        Text("Share with Delivery Agent", fontFamily = Nunito, fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.titleMedium)
+                        Spacer(Modifier.height(8.dp))
+                        FilledTonalButton(
+                            onClick = {
+                                val customerName = order.customer?.name ?: "N/A"
+                                val customerPhone = order.customer?.phone ?: "N/A"
+                                val address = order.address
+                                val addressText = if (address != null) {
+                                    listOfNotNull(
+                                        address.recipientName?.let { "Recipient: $it" },
+                                        address.houseNumber,
+                                        address.street,
+                                        address.fullAddress,
+                                        address.landmark?.let { "Landmark: $it" },
+                                        "${address.city} — ${address.pincode}",
+                                        if (address.lat != null && address.lng != null)
+                                            "Maps: https://maps.google.com/?q=${address.lat},${address.lng}"
+                                        else null
+                                    ).joinToString("\n")
+                                } else "Pickup order"
+
+                                val itemsText = order.items.joinToString("\n") { item ->
+                                    "  • ${item.productName ?: "Item"} × ${item.quantity} — ₹${(item.unitPrice * item.quantity).toInt()}"
+                                }
+
+                                val scheduleText = listOfNotNull(
+                                    order.scheduledDate?.let { "Date: $it" },
+                                    order.timeSlot?.let { "Time: $it" }
+                                ).joinToString(" | ")
+
+                                val shareText = buildString {
+                                    append("*Sri Vinayaka Bakery — Delivery*\n\n")
+                                    append("Order #${order.id.takeLast(8)}\n")
+                                    append("Status: ${order.status.replaceFirstChar { it.uppercase() }}\n")
+                                    if (scheduleText.isNotBlank()) append("$scheduleText\n")
+                                    append("\n--- Customer ---\n")
+                                    append("Name: $customerName\n")
+                                    append("Phone: $customerPhone\n")
+                                    append("\n--- Delivery Address ---\n")
+                                    append("$addressText\n")
+                                    append("\n--- Items ---\n")
+                                    append("$itemsText\n\n")
+                                    append("Total: ₹${order.total.toInt()}\n")
+                                    append("Payment: ${order.paymentMethod?.uppercase() ?: "N/A"} (${order.paymentStatus})\n")
+                                    order.specialNote?.let { append("\nNote: $it\n") }
+                                }
+
+                                val sendIntent = Intent(Intent.ACTION_SEND).apply {
+                                    type = "text/plain"
+                                    putExtra(Intent.EXTRA_TEXT, shareText)
+                                    setPackage("com.whatsapp")
+                                }
+                                try {
+                                    context.startActivity(sendIntent)
+                                } catch (_: Exception) {
+                                    val fallback = Intent(Intent.ACTION_SEND).apply {
+                                        type = "text/plain"
+                                        putExtra(Intent.EXTRA_TEXT, shareText)
+                                    }
+                                    context.startActivity(Intent.createChooser(fallback, "Share order"))
+                                }
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text("Share via WhatsApp", fontFamily = Nunito, fontWeight = FontWeight.Bold)
+                        }
+                    }
+                }
+
                 Spacer(Modifier.height(16.dp))
             }
         }

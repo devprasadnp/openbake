@@ -230,7 +230,7 @@ fun OrderTrackingScreen(
                         modifier = Modifier.padding(16.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text("❌", fontSize = 24.sp)
+                        Text("✕", fontSize = 24.sp)
                         Spacer(modifier = Modifier.width(12.dp))
                         Column {
                             Text(
@@ -372,12 +372,12 @@ fun OrderTrackingScreen(
                         "  • ${item.productName ?: "Item"} × ${item.quantity} — ₹${(item.unitPrice * item.quantity).toInt()}"
                     }
                     val shareText = buildString {
-                        append("🍰 *Sri Vinayaka Bakery — Order Update*\n\n")
-                        append("📦 Order #${order.id.takeLast(8)}\n")
-                        append("📋 Status: ${currentStatus.replaceFirstChar { it.uppercase() }}\n\n")
-                        append("🧁 Items:\n$itemsText\n\n")
-                        append("💰 Total: ₹${order.total.toInt()}\n")
-                        if (estimatedEta != null) append("⏱ ETA: ~$estimatedEta min\n")
+                        append("*Sri Vinayaka Bakery — Order Update*\n\n")
+                        append("Order #${order.id.takeLast(8)}\n")
+                        append("Status: ${currentStatus.replaceFirstChar { it.uppercase() }}\n\n")
+                        append("Items:\n$itemsText\n\n")
+                        append("Total: ₹${order.total.toInt()}\n")
+                        if (estimatedEta != null) append("ETA: ~$estimatedEta min\n")
                     }
                     val sendIntent = Intent(Intent.ACTION_SEND).apply {
                         type = "text/plain"

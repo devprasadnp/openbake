@@ -116,14 +116,14 @@ fun SearchScreen(
                 listState.isLoading -> LoadingScreen()
                 listState.products.isEmpty() && query.isNotBlank() -> {
                     EmptyState(
-                        emoji = "🔍",
+                        emoji = "",
                         title = "No results",
                         subtitle = "Try different keywords"
                     )
                 }
                 listState.products.isEmpty() -> {
                     EmptyState(
-                        emoji = "🍰",
+                        emoji = "",
                         title = "Discover our bakes",
                         subtitle = "Start typing to search"
                     )
@@ -173,7 +173,7 @@ private fun SearchResultCard(
                         modifier = Modifier.fillMaxSize(),
                         shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.mediaTop,
                         contentScale = ContentScale.Crop,
-                        placeholderEmoji = "🎂",
+                        placeholderEmoji = "",
                         emojiFontSize = 40
                     )
                 } else {
@@ -183,7 +183,7 @@ private fun SearchResultCard(
                             .background(MaterialTheme.colorScheme.surfaceContainerLow),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("🎂", fontSize = 36.sp)
+                        Text("", fontSize = 36.sp)
                     }
                 }
             }

@@ -93,7 +93,7 @@ fun ProductListScreen(
             listState.isLoading -> LoadingScreen()
             listState.error != null -> {
                 EmptyState(
-                    emoji = "😕",
+                    emoji = "",
                     title = "Something went wrong",
                     subtitle = listState.error ?: "Please try again",
                     actionLabel = "Retry",
@@ -102,7 +102,7 @@ fun ProductListScreen(
             }
             listState.products.isEmpty() -> {
                 EmptyState(
-                    emoji = "🧁",
+                    emoji = "",
                     title = "No products found",
                     subtitle = "Check back soon for fresh bakes!"
                 )
@@ -126,7 +126,7 @@ fun ProductListScreen(
                                 onAddToCart = {
                                     val added = cartViewModel.addItem(product)
                                     if (added) {
-                                        scope.launch { snackbarHostState.showSnackbar("Added to cart! \uD83D\uDED2") }
+                                        scope.launch { snackbarHostState.showSnackbar("Added to cart!") }
                                     } else {
                                         scope.launch { snackbarHostState.showSnackbar("Could not add \u2014 check stock") }
                                     }
@@ -172,7 +172,7 @@ private fun GridProductCard(
                         modifier = Modifier.fillMaxSize(),
                         shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.mediaTop,
                         contentScale = ContentScale.Crop,
-                        placeholderEmoji = "🎂",
+                        placeholderEmoji = "",
                         emojiFontSize = 40
                     )
                 } else {
@@ -182,7 +182,7 @@ private fun GridProductCard(
                             .background(MaterialTheme.colorScheme.surfaceContainerLow),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("🎂", fontSize = 36.sp)
+                        Text("", fontSize = 36.sp)
                     }
                 }
                 if (product.rating > 0) {
@@ -209,7 +209,7 @@ private fun GridProductCard(
                             .padding(8.dp)
                     ) {
                         Text(
-                            text = "🌱 Eggless",
+                            text = "Eggless",
                             style = MaterialTheme.typography.labelSmall.copy(
                                 fontFamily = Nunito,
                                 fontWeight = FontWeight.Bold

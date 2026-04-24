@@ -172,7 +172,7 @@ fun HomeScreen(
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     Text(
-                        text = "Fresh from\nthe Oven! 🔥",
+                        text = "Fresh from\nthe Oven!",
                         style = MaterialTheme.typography.headlineMedium.copy(
                             fontFamily = PlayfairDisplay,
                             fontWeight = FontWeight.Bold
@@ -195,14 +195,6 @@ fun HomeScreen(
                         )
                     }
                 }
-                // Emoji decoration
-                Text(
-                    text = "🎂",
-                    fontSize = 64.sp,
-                    modifier = Modifier
-                        .align(Alignment.CenterEnd)
-                        .padding(end = 8.dp)
-                )
             }
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -217,21 +209,21 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 QuickActionCard(
-                    emoji = "🍞",
+                    emoji = "",
                     label = "Browse Menu",
                     color = MaterialTheme.colorScheme.primaryContainer,
                     modifier = Modifier.weight(1f),
                     onClick = onMenuClick
                 )
                 QuickActionCard(
-                    emoji = "📦",
+                    emoji = "",
                     label = "My Orders",
                     color = MaterialTheme.colorScheme.secondaryContainer,
                     modifier = Modifier.weight(1f),
                     onClick = onOrdersClick
                 )
                 QuickActionCard(
-                    emoji = "🎁",
+                    emoji = "",
                     label = "Offers",
                     color = MaterialTheme.colorScheme.tertiaryContainer,
                     modifier = Modifier.weight(1f),
@@ -249,11 +241,11 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 val features = listOf(
-                    Triple("🚚", "Free Delivery", "Orders above ₹500"),
-                    Triple("🌟", "Fresh Daily", "Baked every morning"),
-                    Triple("🎂", "Custom Cakes", "Any occasion"),
-                    Triple("⚡", "Fast Dispatch", "2-hour slots"),
-                    Triple("🥗", "Eggless Options", "Always available")
+                    Triple("", "Free Delivery", "Orders above ₹500"),
+                    Triple("", "Fresh Daily", "Baked every morning"),
+                    Triple("", "Custom Cakes", "Any occasion"),
+                    Triple("", "Fast Dispatch", "2-hour slots"),
+                    Triple("", "Eggless Options", "Always available")
                 )
                 items(features) { (emoji, title, subtitle) ->
                     FeatureBadge(emoji = emoji, title = title, subtitle = subtitle)
@@ -301,7 +293,7 @@ fun HomeScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    SectionHeaderInline(title = "Bestsellers 🔥")
+                    SectionHeaderInline(title = "Bestsellers")
                     Text(
                         text = "View all →",
                         style = MaterialTheme.typography.labelMedium.copy(fontFamily = Nunito),
@@ -321,7 +313,7 @@ fun HomeScreen(
                             onAddToCart = {
                                 val added = cartViewModel.addItem(product)
                                 if (added) {
-                                    scope.launch { snackbarHostState.showSnackbar("Added to cart! 🛒") }
+                                    scope.launch { snackbarHostState.showSnackbar("Added to cart!") }
                                 } else {
                                     scope.launch { snackbarHostState.showSnackbar("Could not add — check stock") }
                                 }
@@ -353,7 +345,7 @@ fun HomeScreen(
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
-                        text = "🎉 First Order Discount!",
+                        text = "First Order Discount!",
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontFamily = PlayfairDisplay,
                             fontWeight = FontWeight.Bold
@@ -543,7 +535,7 @@ private fun CategoryChip(category: Category, onClick: () -> Unit) {
                     modifier = Modifier.size(56.dp),
                     shape = CircleShape,
                     contentScale = ContentScale.Crop,
-                    placeholderEmoji = "🍞",
+                    placeholderEmoji = "",
                     emojiFontSize = 24
                 )
             } else {
@@ -553,7 +545,7 @@ private fun CategoryChip(category: Category, onClick: () -> Unit) {
                         .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f), CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("🍞", fontSize = 24.sp)
+                    Text("", fontSize = 24.sp)
                 }
             }
             Spacer(modifier = Modifier.height(8.dp))
@@ -597,7 +589,7 @@ private fun ProductCard(
                         modifier = Modifier.fillMaxSize(),
                         shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.mediaTop,
                         contentScale = ContentScale.Crop,
-                        placeholderEmoji = "🎂",
+                        placeholderEmoji = "",
                         emojiFontSize = 40
                     )
                 } else {
@@ -607,7 +599,7 @@ private fun ProductCard(
                             .background(MaterialTheme.colorScheme.surfaceContainerLow),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("🎂", fontSize = 40.sp)
+                        Text("", fontSize = 40.sp)
                     }
                 }
                 // Rating badge

@@ -62,7 +62,7 @@ fun OrderConfirmationScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Your artisanal bakes are being prepared\nwith love and care ❤️",
+                text = "Your artisanal bakes are being prepared\nwith love and care",
                 style = MaterialTheme.typography.bodyLarge.copy(fontFamily = Nunito),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center

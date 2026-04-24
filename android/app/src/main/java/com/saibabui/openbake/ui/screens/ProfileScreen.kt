@@ -110,7 +110,7 @@ fun ProfileScreen(
                             modifier = Modifier.size(88.dp),
                             shape = CircleShape,
                             contentScale = ContentScale.Crop,
-                            placeholderEmoji = "👤",
+                            placeholderEmoji = "",
                             emojiFontSize = 36
                         )
                     } else {

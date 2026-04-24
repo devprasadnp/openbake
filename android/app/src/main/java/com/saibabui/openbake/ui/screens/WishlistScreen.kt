@@ -86,7 +86,7 @@ fun WishlistScreen(
                 isLoading -> LoadingScreen()
                 wishlistItems.isEmpty() -> {
                     EmptyState(
-                        emoji = "💝",
+                        emoji = "",
                         title = "Wishlist is empty",
                         subtitle = "Save your favorite bakes here"
                     )
@@ -137,7 +137,7 @@ private fun WishlistCard(
                         modifier = Modifier.fillMaxSize(),
                         shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.mediaTop,
                         contentScale = ContentScale.Crop,
-                        placeholderEmoji = "🎂",
+                        placeholderEmoji = "",
                         emojiFontSize = 40
                     )
                 } else {
@@ -147,7 +147,7 @@ private fun WishlistCard(
                             .background(MaterialTheme.colorScheme.surfaceContainerLow),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("🎂", fontSize = 36.sp)
+                        Text("", fontSize = 36.sp)
                     }
                 }
                 // Heart icon

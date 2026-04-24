@@ -317,7 +317,7 @@ fun OpenBakeImage(
     modifier: Modifier = Modifier,
     shape: Shape = OpenBakeShapes.medium,
     contentScale: ContentScale = ContentScale.Crop,
-    placeholderEmoji: String = "🎂",
+    placeholderEmoji: String = "",
     emojiFontSize: Int = 32
 ) {
     SubcomposeAsyncImage(

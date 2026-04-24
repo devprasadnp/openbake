@@ -136,7 +136,7 @@ fun EditProfileScreen(
                         modifier = Modifier.size(100.dp),
                         shape = CircleShape,
                         contentScale = ContentScale.Crop,
-                        placeholderEmoji = "👤",
+                        placeholderEmoji = "",
                         emojiFontSize = 40
                     )
                 } else {
