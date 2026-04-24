@@ -371,12 +371,24 @@ fun OrderTrackingScreen(
                     val itemsText = order.items.joinToString("\n") { item ->
                         "  • ${item.productName ?: "Item"} × ${item.quantity} — ₹${(item.unitPrice * item.quantity).toInt()}"
                     }
+                    val addressText = order.address?.let { addr ->
+                        buildString {
+                            append("\n--- Delivery Address ---\n")
+                            append(addr.fullAddress)
+                            if (addr.city.isNotBlank()) append(", ${addr.city}")
+                            if (addr.pincode.isNotBlank()) append(" — ${addr.pincode}")
+                            if (addr.lat != null && addr.lng != null) {
+                                append("\nMaps: https://maps.google.com/?q=${addr.lat},${addr.lng}")
+                            }
+                        }
+                    } ?: ""
                     val shareText = buildString {
                         append("*Sri Vinayaka Bakery — Order Update*\n\n")
                         append("Order #${order.id.takeLast(8)}\n")
                         append("Status: ${currentStatus.replaceFirstChar { it.uppercase() }}\n\n")
-                        append("Items:\n$itemsText\n\n")
-                        append("Total: ₹${order.total.toInt()}\n")
+                        append("Items:\n$itemsText\n")
+                        if (addressText.isNotBlank()) append("$addressText\n")
+                        append("\nTotal: ₹${order.total.toInt()}\n")
                         if (estimatedEta != null) append("ETA: ~$estimatedEta min\n")
                     }
                     val sendIntent = Intent(Intent.ACTION_SEND).apply {

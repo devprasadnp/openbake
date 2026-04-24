@@ -14,6 +14,16 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.MenuBook
+import androidx.compose.material.icons.automirrored.outlined.MenuBook as MenuBookIcon
+import androidx.compose.material.icons.outlined.Receipt
+import androidx.compose.material.icons.outlined.LocalOffer
+import androidx.compose.material.icons.outlined.LocalShipping
+import androidx.compose.material.icons.outlined.WbSunny
+import androidx.compose.material.icons.outlined.Cake
+import androidx.compose.material.icons.outlined.Speed
+import androidx.compose.material.icons.outlined.EggAlt
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -209,21 +219,21 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 QuickActionCard(
-                    emoji = "",
+                    icon = MenuBookIcon,
                     label = "Browse Menu",
                     color = MaterialTheme.colorScheme.primaryContainer,
                     modifier = Modifier.weight(1f),
                     onClick = onMenuClick
                 )
                 QuickActionCard(
-                    emoji = "",
+                    icon = Icons.Outlined.Receipt,
                     label = "My Orders",
                     color = MaterialTheme.colorScheme.secondaryContainer,
                     modifier = Modifier.weight(1f),
                     onClick = onOrdersClick
                 )
                 QuickActionCard(
-                    emoji = "",
+                    icon = Icons.Outlined.LocalOffer,
                     label = "Offers",
                     color = MaterialTheme.colorScheme.tertiaryContainer,
                     modifier = Modifier.weight(1f),
@@ -240,15 +250,16 @@ fun HomeScreen(
                 contentPadding = PaddingValues(horizontal = 20.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
+                data class FeatureItem(val icon: ImageVector, val title: String, val subtitle: String)
                 val features = listOf(
-                    Triple("", "Free Delivery", "Orders above ₹500"),
-                    Triple("", "Fresh Daily", "Baked every morning"),
-                    Triple("", "Custom Cakes", "Any occasion"),
-                    Triple("", "Fast Dispatch", "2-hour slots"),
-                    Triple("", "Eggless Options", "Always available")
+                    FeatureItem(Icons.Outlined.LocalShipping, "Free Delivery", "Orders above ₹500"),
+                    FeatureItem(Icons.Outlined.WbSunny, "Fresh Daily", "Baked every morning"),
+                    FeatureItem(Icons.Outlined.Cake, "Custom Cakes", "Any occasion"),
+                    FeatureItem(Icons.Outlined.Speed, "Fast Dispatch", "2-hour slots"),
+                    FeatureItem(Icons.Outlined.EggAlt, "Eggless Options", "Always available")
                 )
-                items(features) { (emoji, title, subtitle) ->
-                    FeatureBadge(emoji = emoji, title = title, subtitle = subtitle)
+                items(features) { feature ->
+                    FeatureBadge(icon = feature.icon, title = feature.title, subtitle = feature.subtitle)
                 }
             }
 
@@ -453,7 +464,7 @@ private fun SectionHeaderInline(title: String) {
 
 @Composable
 private fun QuickActionCard(
-    emoji: String,
+    icon: ImageVector,
     label: String,
     color: Color,
     modifier: Modifier = Modifier,
@@ -471,7 +482,12 @@ private fun QuickActionCard(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.padding(12.dp)
         ) {
-            Text(emoji, fontSize = 28.sp)
+            Icon(
+                imageVector = icon,
+                contentDescription = label,
+                modifier = Modifier.size(28.dp),
+                tint = MaterialTheme.colorScheme.onSurface
+            )
             Spacer(modifier = Modifier.height(6.dp))
             Text(
                 text = label,
@@ -488,14 +504,19 @@ private fun QuickActionCard(
 }
 
 @Composable
-private fun FeatureBadge(emoji: String, title: String, subtitle: String) {
+private fun FeatureBadge(icon: ImageVector, title: String, subtitle: String) {
     Surface(
         shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.medium,
         color = MaterialTheme.colorScheme.surfaceContainerLowest,
         modifier = Modifier.width(140.dp)
     ) {
         Column(modifier = Modifier.padding(14.dp)) {
-            Text(emoji, fontSize = 22.sp)
+            Icon(
+                imageVector = icon,
+                contentDescription = title,
+                modifier = Modifier.size(22.dp),
+                tint = MaterialTheme.colorScheme.primary
+            )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = title,
@@ -545,7 +566,12 @@ private fun CategoryChip(category: Category, onClick: () -> Unit) {
                         .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f), CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("", fontSize = 24.sp)
+                    Icon(
+                        imageVector = Icons.Outlined.Cake,
+                        contentDescription = "Category",
+                        modifier = Modifier.size(24.dp),
+                        tint = MaterialTheme.colorScheme.primary
+                    )
                 }
             }
             Spacer(modifier = Modifier.height(8.dp))
@@ -599,7 +625,12 @@ private fun ProductCard(
                             .background(MaterialTheme.colorScheme.surfaceContainerLow),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("", fontSize = 40.sp)
+                        Icon(
+                            imageVector = Icons.Outlined.Cake,
+                            contentDescription = "Product",
+                            modifier = Modifier.size(40.dp),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
                 }
                 // Rating badge

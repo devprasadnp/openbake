@@ -154,12 +154,24 @@ private fun OrderCard(order: Order, onClick: () -> Unit) {
                             val itemsText = order.items.joinToString("\n") { item ->
                                 "  \u2022 ${item.productName ?: "Item"} \u00d7 ${item.quantity}"
                             }
+                            val addressText = order.address?.let { addr ->
+                                buildString {
+                                    append("\nDelivery Address:\n")
+                                    append(addr.fullAddress)
+                                    if (addr.city.isNotBlank()) append(", ${addr.city}")
+                                    if (addr.pincode.isNotBlank()) append(" — ${addr.pincode}")
+                                    if (addr.lat != null && addr.lng != null) {
+                                        append("\nMaps: https://maps.google.com/?q=${addr.lat},${addr.lng}")
+                                    }
+                                }
+                            } ?: ""
                             val shareText = buildString {
                                 append("*Sri Vinayaka Bakery*\n\n")
                                 append("Order #${order.id.takeLast(8)}\n")
                                 append("Status: ${order.status.replaceFirstChar { it.uppercase() }}\n\n")
-                                append("Items:\n$itemsText\n\n")
-                                append("Total: \u20b9${order.total.toInt()}")
+                                append("Items:\n$itemsText\n")
+                                if (addressText.isNotBlank()) append("$addressText\n")
+                                append("\nTotal: \u20b9${order.total.toInt()}")
                             }
                             val sendIntent = Intent(Intent.ACTION_SEND).apply {
                                 type = "text/plain"
