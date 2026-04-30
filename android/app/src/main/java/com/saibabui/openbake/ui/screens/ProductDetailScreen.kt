@@ -14,11 +14,14 @@ import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.Cake
+import androidx.compose.material.icons.outlined.Eco
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -123,7 +126,12 @@ fun ProductDetailScreen(
                             .background(MaterialTheme.colorScheme.surfaceContainerLow),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("🎂", fontSize = 72.sp)
+                        Icon(
+                            imageVector = Icons.Outlined.Cake,
+                            contentDescription = "Product",
+                            modifier = Modifier.size(72.dp),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
                 }
 
@@ -436,7 +444,12 @@ fun ProductDetailScreen(
                                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text("🌱", fontSize = 20.sp)
+                                Icon(
+                                    imageVector = Icons.Outlined.Eco,
+                                    contentDescription = "Eggless",
+                                    modifier = Modifier.size(20.dp),
+                                    tint = Success
+                                )
                                 Spacer(modifier = Modifier.width(12.dp))
                                 Column(modifier = Modifier.weight(1f)) {
                                     Text(
@@ -572,6 +585,10 @@ fun ProductDetailScreen(
 
         // Bottom Add to Cart bar (hidden when out of stock)
         if (!isOutOfStock) {
+            // Check if this product is already in cart
+            val cartItem = cartItems.find { it.product.id == product.id }
+            val isInCart = cartItem != null
+
             Surface(
                 modifier = Modifier.align(Alignment.BottomCenter),
                 shadowElevation = 8.dp,
@@ -585,39 +602,112 @@ fun ProductDetailScreen(
                         .navigationBarsPadding(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            "Total",
-                            style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito),
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Text(
-                            "₹${((product.price + (selectedVariant?.extraPrice ?: 0.0)) * quantity).toInt()}",
-                            style = MaterialTheme.typography.titleLarge.copy(
-                                fontFamily = Nunito,
-                                fontWeight = FontWeight.Bold
-                            ),
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                    GradientButton(
-                        text = "Add to Cart",
-                        onClick = {
-                            if (product.stockCount <= 0 && !product.unlimitedStock) {
-                                stockError = "Sorry, this item is currently out of stock."
-                            } else if (!product.unlimitedStock && quantity > product.stockCount) {
-                                stockError = "Only ${product.stockCount} items available in stock."
-                            } else {
-                                val added = cartViewModel.addItem(product, quantity, selectedVariant, isEggless)
-                                if (added) {
-                                    stockError = "✓ Added to cart!"
-                                } else {
-                                    stockError = "Cannot add to cart. Stock limit reached."
+                    if (isInCart) {
+                        // ── In-cart mode: show [- qty +] and "View Cart" ──
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .background(
+                                    MaterialTheme.colorScheme.surfaceContainerLow,
+                                    com.saibabui.openbake.ui.theme.OpenBakeShapes.pill
+                                )
+                                .padding(horizontal = 6.dp, vertical = 4.dp)
+                        ) {
+                            Surface(
+                                shape = CircleShape,
+                                color = MaterialTheme.colorScheme.surface,
+                                modifier = Modifier
+                                    .size(36.dp)
+                                    .clickable {
+                                        val idx = cartItems.indexOfFirst { it.product.id == product.id }
+                                        if (idx >= 0) {
+                                            cartViewModel.updateQuantity(idx, cartItem!!.quantity - 1)
+                                        }
+                                    }
+                            ) {
+                                Box(contentAlignment = Alignment.Center) {
+                                    Text(
+                                        "−",
+                                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
                                 }
                             }
-                        },
-                        modifier = Modifier.weight(1f)
-                    )
+                            Text(
+                                text = "${cartItem!!.quantity}",
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                style = MaterialTheme.typography.titleMedium.copy(
+                                    fontFamily = Nunito,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            )
+                            Surface(
+                                shape = CircleShape,
+                                color = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier
+                                    .size(36.dp)
+                                    .clickable {
+                                        val idx = cartItems.indexOfFirst { it.product.id == product.id }
+                                        if (idx >= 0) {
+                                            if (product.unlimitedStock || cartItem.quantity < product.stockCount) {
+                                                cartViewModel.updateQuantity(idx, cartItem.quantity + 1)
+                                            } else {
+                                                stockError = "Only ${product.stockCount} items available."
+                                            }
+                                        }
+                                    }
+                            ) {
+                                Box(contentAlignment = Alignment.Center) {
+                                    Text(
+                                        "+",
+                                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                                        color = MaterialTheme.colorScheme.onPrimary
+                                    )
+                                }
+                            }
+                        }
+                        Spacer(modifier = Modifier.width(16.dp))
+                        GradientButton(
+                            text = "View Cart",
+                            onClick = onCartClick,
+                            modifier = Modifier.weight(1f)
+                        )
+                    } else {
+                        // ── Default mode: Total + Add to Cart ──
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                "Total",
+                                style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Text(
+                                "₹${((product.price + (selectedVariant?.extraPrice ?: 0.0)) * quantity).toInt()}",
+                                style = MaterialTheme.typography.titleLarge.copy(
+                                    fontFamily = Nunito,
+                                    fontWeight = FontWeight.Bold
+                                ),
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                        GradientButton(
+                            text = "Add to Cart",
+                            onClick = {
+                                if (product.stockCount <= 0 && !product.unlimitedStock) {
+                                    stockError = "Sorry, this item is currently out of stock."
+                                } else if (!product.unlimitedStock && quantity > product.stockCount) {
+                                    stockError = "Only ${product.stockCount} items available in stock."
+                                } else {
+                                    val added = cartViewModel.addItem(product, quantity, selectedVariant, isEggless)
+                                    if (added) {
+                                        stockError = "✓ Added to cart!"
+                                    } else {
+                                        stockError = "Cannot add to cart. Stock limit reached."
+                                    }
+                                }
+                            },
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
                 }
             }
         }
@@ -628,6 +718,21 @@ fun ProductDetailScreen(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = if (!isOutOfStock) 90.dp else 16.dp)
-        )
+        ) { data ->
+            Snackbar(
+                containerColor = Success, // Green for success and contrast
+                contentColor = Color.White,
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text(
+                    text = data.visuals.message,
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        fontFamily = Nunito,
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 16.sp
+                    )
+                )
+            }
+        }
     }
 }

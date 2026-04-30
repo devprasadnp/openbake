@@ -17,6 +17,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.MyLocation
+import androidx.compose.material.icons.outlined.CalendarMonth
+import androidx.compose.material.icons.outlined.Money
+import androidx.compose.material.icons.outlined.PhoneAndroid
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -77,6 +80,7 @@ fun CheckoutScreen(
     val deliveryLoading by cartViewModel.deliveryLoading.collectAsState()
 
     var paymentMethod by remember { mutableStateOf("cod") }
+    var paymentExpanded by remember { mutableStateOf(false) }
     var specialNote by remember { mutableStateOf("") }
     var orderType by remember { mutableStateOf("delivery") }
     var addresses by remember { mutableStateOf<List<Address>>(emptyList()) }
@@ -798,7 +802,12 @@ fun CheckoutScreen(
                             color = if (selectedDate != null) MaterialTheme.colorScheme.onSurface
                                     else MaterialTheme.colorScheme.onSurfaceVariant
                         )
-                        Text("", fontSize = 20.sp)
+                        Icon(
+                            imageVector = Icons.Outlined.CalendarMonth,
+                            contentDescription = "Select date",
+                            modifier = Modifier.size(20.dp),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
                     }
                 }
                 Spacer(modifier = Modifier.height(16.dp))
@@ -1009,13 +1018,19 @@ fun CheckoutScreen(
             Text(text = "Payment Method", style = MaterialTheme.typography.titleMedium.copy(fontFamily = PlayfairDisplay, fontWeight = FontWeight.Bold))
             Spacer(modifier = Modifier.height(12.dp))
 
+            data class PaymentOption(val value: String, val icon: androidx.compose.ui.graphics.vector.ImageVector, val label: String)
             val paymentMethods = buildList {
-                if (codEnabled) add(Triple("cod", "", "Cash on Delivery"))
-                add(Triple("upi", "", "UPI Payment"))
+                if (codEnabled) add(PaymentOption("cod", Icons.Outlined.Money, "Cash on Delivery"))
+                add(PaymentOption("upi", Icons.Outlined.PhoneAndroid, "UPI Payment"))
             }
-            paymentMethods.forEach { (value, emoji, label) ->
-                val isSelected = paymentMethod == value
-                val subtitle = when (value) {
+
+            // Show selected method + "Change" button when collapsed
+            val selectedOption = paymentMethods.find { it.value == paymentMethod } ?: paymentMethods.first()
+            val methodsToShow = if (paymentExpanded) paymentMethods else listOf(selectedOption)
+
+            methodsToShow.forEach { option ->
+                val isSelected = paymentMethod == option.value
+                val subtitle = when (option.value) {
                     "cod" -> "Pay when your order is delivered"
                     "upi" -> "Google Pay, PhonePe, Paytm & more"
                     else -> ""
@@ -1024,14 +1039,22 @@ fun CheckoutScreen(
                     Surface(
                         shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.medium,
                         color = if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.08f) else MaterialTheme.colorScheme.surfaceContainerLowest,
-                        modifier = Modifier.fillMaxWidth().clickable { paymentMethod = value },
+                        modifier = Modifier.fillMaxWidth().clickable {
+                            paymentMethod = option.value
+                            paymentExpanded = false
+                        },
                         border = if (isSelected) ButtonDefaults.outlinedButtonBorder(enabled = true) else null
                     ) {
                         Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                            Text(emoji, fontSize = 24.sp)
+                            Icon(
+                                imageVector = option.icon,
+                                contentDescription = option.label,
+                                modifier = Modifier.size(24.dp),
+                                tint = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                            )
                             Spacer(modifier = Modifier.width(16.dp))
                             Column(modifier = Modifier.weight(1f)) {
-                                Text(label, style = MaterialTheme.typography.bodyLarge.copy(fontFamily = Nunito, fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium))
+                                Text(option.label, style = MaterialTheme.typography.bodyLarge.copy(fontFamily = Nunito, fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium))
                                 Text(subtitle, style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito), color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
                             if (isSelected) Icon(Icons.Filled.Check, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
@@ -1040,7 +1063,7 @@ fun CheckoutScreen(
                     if (isSelected) {
                         Surface(
                             shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small,
-                            color = when (value) {
+                            color = when (option.value) {
                                 "upi" -> MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.15f)
                                 "card" -> MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.15f)
                                 else -> MaterialTheme.colorScheme.surfaceContainerLow
@@ -1048,7 +1071,7 @@ fun CheckoutScreen(
                             modifier = Modifier.fillMaxWidth().padding(start = 40.dp, top = 4.dp)
                         ) {
                             Column(modifier = Modifier.padding(14.dp)) {
-                                when (value) {
+                                when (option.value) {
                                     "cod" -> Text("Pay with cash or UPI QR when your order arrives.", style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito), color = MaterialTheme.colorScheme.onSurfaceVariant)
                                     "upi" -> {
                                         Text("How UPI payment works:", style = MaterialTheme.typography.labelMedium.copy(fontFamily = Nunito, fontWeight = FontWeight.SemiBold))
@@ -1064,6 +1087,21 @@ fun CheckoutScreen(
                         }
                     }
                 }
+            }
+
+            // "Change payment method" link when collapsed and more than 1 method available
+            if (!paymentExpanded && paymentMethods.size > 1) {
+                Text(
+                    text = "Change payment method",
+                    style = MaterialTheme.typography.labelMedium.copy(
+                        fontFamily = Nunito,
+                        fontWeight = FontWeight.SemiBold
+                    ),
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier
+                        .clickable { paymentExpanded = true }
+                        .padding(vertical = 4.dp)
+                )
             }
 
             Spacer(modifier = Modifier.height(20.dp))

@@ -134,18 +134,18 @@ fun RegisterScreen(
                     if (selectedTab == 0) {
                         // ── Email Signup ──
                         FormField(label = "Full Name", value = name, onValueChange = { name = it },
-                            placeholder = "Name", keyboardType = KeyboardType.Text, imeAction = ImeAction.Next)
+                            placeholder = "Enter your full name", keyboardType = KeyboardType.Text, imeAction = ImeAction.Next)
 
                         Spacer(modifier = Modifier.height(16.dp))
 
                         FormField(label = "Email", value = email, onValueChange = { email = it; emailTouched = true },
-                            placeholder = "Email", keyboardType = KeyboardType.Email, imeAction = ImeAction.Next,
+                            placeholder = "your@email.com", keyboardType = KeyboardType.Email, imeAction = ImeAction.Next,
                             isError = emailTouched && !emailValid, errorText = "Enter a valid email address")
 
                         Spacer(modifier = Modifier.height(16.dp))
 
                         FormField(label = "Phone", value = phone, onValueChange = { phone = it.filter { c -> c.isDigit() }.take(10); phoneTouched = true },
-                            placeholder = "Phone", keyboardType = KeyboardType.Phone, imeAction = ImeAction.Next,
+                            placeholder = "10-digit mobile number", keyboardType = KeyboardType.Phone, imeAction = ImeAction.Next,
                             isError = phoneTouched && !phoneValid, errorText = "Enter a valid 10-digit mobile number")
 
                         Spacer(modifier = Modifier.height(16.dp))
@@ -160,7 +160,7 @@ fun RegisterScreen(
                             value = password,
                             onValueChange = { password = it; passwordTouched = true },
                             modifier = Modifier.fillMaxWidth(),
-                            placeholder = { Text("Password", style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito)) },
+                            placeholder = { Text("Min. 6 characters", style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito), color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)) },
                             shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.input,
                             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
@@ -208,19 +208,19 @@ fun RegisterScreen(
                     } else {
                         // ── OTP Signup ──
                         FormField(label = "Full Name", value = otpName, onValueChange = { otpName = it },
-                            placeholder = "Name", keyboardType = KeyboardType.Text, imeAction = ImeAction.Next)
+                            placeholder = "Enter your full name", keyboardType = KeyboardType.Text, imeAction = ImeAction.Next)
 
                         Spacer(modifier = Modifier.height(16.dp))
 
                         FormField(label = "Phone", value = otpPhone, onValueChange = { otpPhone = it.filter { c -> c.isDigit() }.take(10); otpPhoneTouched = true },
-                            placeholder = "Phone", keyboardType = KeyboardType.Phone, imeAction = ImeAction.Done,
+                            placeholder = "10-digit mobile number", keyboardType = KeyboardType.Phone, imeAction = ImeAction.Done,
                             isError = otpPhoneTouched && !otpPhoneValid, errorText = "Enter a valid 10-digit mobile number")
 
                         Spacer(modifier = Modifier.height(16.dp))
 
                         if (authState.otpSent) {
                             FormField(label = "OTP Code", value = otpCode, onValueChange = { otpCode = it.filter { c -> c.isDigit() }.take(6) },
-                                placeholder = "OTP Code", keyboardType = KeyboardType.Number, imeAction = ImeAction.Done)
+                                placeholder = "Enter 6-digit code", keyboardType = KeyboardType.Number, imeAction = ImeAction.Done)
                         }
 
                         Spacer(modifier = Modifier.height(24.dp))
@@ -295,7 +295,7 @@ private fun FormField(
         value = value,
         onValueChange = onValueChange,
         modifier = Modifier.fillMaxWidth(),
-        placeholder = { Text(placeholder, style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito)) },
+        placeholder = { Text(placeholder, style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito), color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)) },
         shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.input,
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = imeAction),
         singleLine = true,

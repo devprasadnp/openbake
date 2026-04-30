@@ -8,7 +8,8 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.outlined.Cake
+import androidx.compose.material.icons.outlined.Eco
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -31,7 +32,8 @@ import com.saibabui.openbake.ui.viewmodel.CartViewModel
 fun CartScreen(
     cartViewModel: CartViewModel,
     onCheckout: () -> Unit,
-    onContinueShopping: () -> Unit
+    onContinueShopping: () -> Unit,
+    onProductClick: (String) -> Unit = {}
 ) {
     val items by cartViewModel.items.collectAsState()
 
@@ -163,7 +165,8 @@ fun CartScreen(
                 CartItemCard(
                     item = item,
                     onQuantityChange = { qty -> cartViewModel.updateQuantity(index, qty) },
-                    onRemove = { cartViewModel.removeItem(index) }
+                    onRemove = { cartViewModel.removeItem(index) },
+                    onClick = { onProductClick(item.product.id) }
                 )
             }
         }
@@ -174,12 +177,15 @@ fun CartScreen(
 private fun CartItemCard(
     item: CartItem,
     onQuantityChange: (Int) -> Unit,
-    onRemove: () -> Unit
+    onRemove: () -> Unit,
+    onClick: () -> Unit = {}
 ) {
     Surface(
         shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.large,
         color = MaterialTheme.colorScheme.surfaceContainerLowest,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() }
     ) {
         Row(
             modifier = Modifier.padding(12.dp),
@@ -203,7 +209,12 @@ private fun CartItemCard(
                         .background(MaterialTheme.colorScheme.surfaceContainerLow, com.saibabui.openbake.ui.theme.OpenBakeShapes.input),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("🎂", fontSize = 32.sp)
+                    Icon(
+                        imageVector = Icons.Outlined.Cake,
+                        contentDescription = "Product",
+                        modifier = Modifier.size(32.dp),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
             }
 
@@ -228,11 +239,19 @@ private fun CartItemCard(
                     )
                 }
                 if (item.isEggless) {
-                    Text(
-                        text = "🌱 Eggless",
-                        style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito),
-                        color = Success
-                    )
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Icon(
+                            imageVector = Icons.Outlined.Eco,
+                            contentDescription = "Eggless",
+                            modifier = Modifier.size(14.dp),
+                            tint = Success
+                        )
+                        Text(
+                            text = "Eggless",
+                            style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito),
+                            color = Success
+                        )
+                    }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
 
@@ -293,19 +312,6 @@ private fun CartItemCard(
                         color = MaterialTheme.colorScheme.primary
                     )
                 }
-            }
-
-            // Delete
-            IconButton(
-                onClick = onRemove,
-                modifier = Modifier.size(36.dp)
-            ) {
-                Icon(
-                    Icons.Filled.Delete,
-                    contentDescription = "Remove",
-                    tint = MaterialTheme.colorScheme.error.copy(alpha = 0.7f),
-                    modifier = Modifier.size(20.dp)
-                )
             }
         }
     }

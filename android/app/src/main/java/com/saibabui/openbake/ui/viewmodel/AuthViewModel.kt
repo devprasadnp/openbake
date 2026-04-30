@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 data class AuthUiState(
     val isLoading: Boolean = false,
     val isLoggedIn: Boolean = false,
+    val isGuest: Boolean = false,
     val user: User? = null,
     val error: String? = null,
     val updateSuccess: Boolean = false,
@@ -103,9 +104,13 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     fun logout() {
         viewModelScope.launch {
-            _uiState.value = AuthUiState(isLoggedIn = false)
+            _uiState.value = AuthUiState(isLoggedIn = false, isGuest = false)
             runCatching { authRepo.logout() }
         }
+    }
+
+    fun continueAsGuest() {
+        _uiState.value = AuthUiState(isLoggedIn = false, isGuest = true)
     }
 
     fun updateProfile(name: String?, phone: String?) {

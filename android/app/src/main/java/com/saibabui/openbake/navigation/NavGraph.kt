@@ -112,6 +112,11 @@ fun AppNavGraph() {
                             popUpTo(Screen.Login.route) { inclusive = true }
                         }
                     },
+                    onGuestBrowse = {
+                        navController.navigate(Screen.Home.route) {
+                            popUpTo(Screen.Login.route) { inclusive = true }
+                        }
+                    },
                     authViewModel = authViewModel
                 )
             }
@@ -195,7 +200,10 @@ fun AppNavGraph() {
                 CartScreen(
                     cartViewModel = cartViewModel,
                     onCheckout = { navController.navigate(Screen.Checkout.route) },
-                    onContinueShopping = { navController.popBackStack() }
+                    onContinueShopping = { navController.popBackStack() },
+                    onProductClick = { productId ->
+                        navController.navigate(Screen.ProductDetail.createRoute(productId))
+                    }
                 )
             }
 

@@ -25,7 +25,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.saibabui.openbake.data.model.Product
 import com.saibabui.openbake.ui.screens.common.EmptyState
-import com.saibabui.openbake.ui.screens.common.LoadingScreen
 import com.saibabui.openbake.ui.theme.*
 import com.saibabui.openbake.ui.viewmodel.ProductViewModel
 import kotlinx.coroutines.delay
@@ -112,16 +111,26 @@ fun SearchScreen(
                 )
             )
 
+            // Subtle loading indicator (not blocking)
+            if (listState.isLoading) {
+                LinearProgressIndicator(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp),
+                    color = MaterialTheme.colorScheme.primary,
+                    trackColor = MaterialTheme.colorScheme.surfaceContainerLow
+                )
+            }
+
             when {
-                listState.isLoading -> LoadingScreen()
-                listState.products.isEmpty() && query.isNotBlank() -> {
+                listState.products.isEmpty() && query.isNotBlank() && !listState.isLoading -> {
                     EmptyState(
                         emoji = "",
                         title = "No results",
                         subtitle = "Try different keywords"
                     )
                 }
-                listState.products.isEmpty() -> {
+                listState.products.isEmpty() && query.isBlank() && !listState.isLoading -> {
                     EmptyState(
                         emoji = "",
                         title = "Discover our bakes",

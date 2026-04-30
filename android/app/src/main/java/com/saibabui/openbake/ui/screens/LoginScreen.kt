@@ -38,6 +38,7 @@ fun LoginScreen(
     onNavigateToRegister: () -> Unit,
     onLoginSuccess: () -> Unit,
     onAdminLoginSuccess: () -> Unit = {},
+    onGuestBrowse: () -> Unit = {},
     authViewModel: AuthViewModel = viewModel()
 ) {
     val authState by authViewModel.uiState.collectAsState()
@@ -137,7 +138,7 @@ fun LoginScreen(
                         value = email,
                         onValueChange = { email = it; emailTouched = true },
                         modifier = Modifier.fillMaxWidth(),
-                        placeholder = { Text("Email", style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito)) },
+                        placeholder = { Text("your@email.com", style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito), color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)) },
                         shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.input,
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Email,
@@ -170,7 +171,7 @@ fun LoginScreen(
                         value = password,
                         onValueChange = { password = it; passwordTouched = true },
                         modifier = Modifier.fillMaxWidth(),
-                        placeholder = { Text("Password", style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito)) },
+                        placeholder = { Text("Enter your password", style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito), color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)) },
                         shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.input,
                         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         keyboardOptions = KeyboardOptions(
@@ -238,6 +239,34 @@ fun LoginScreen(
                     ),
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.clickable { onNavigateToRegister() }
+                )
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            // Continue as Guest
+            OutlinedButton(
+                onClick = {
+                    authViewModel.continueAsGuest()
+                    onGuestBrowse()
+                },
+                modifier = Modifier.fillMaxWidth(),
+                shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.pill,
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                ),
+                border = androidx.compose.foundation.BorderStroke(
+                    1.dp,
+                    MaterialTheme.colorScheme.outlineVariant
+                )
+            ) {
+                Text(
+                    text = "Continue as Guest",
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        fontFamily = Nunito,
+                        fontWeight = FontWeight.SemiBold
+                    ),
+                    modifier = Modifier.padding(vertical = 4.dp)
                 )
             }
 

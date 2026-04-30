@@ -22,14 +22,14 @@ val TertiaryContainer = Color(0xFFC05237)
 val OnTertiary = Color(0xFFFFFFFF)
 val OnTertiaryContainer = Color(0xFFFFFFFF)
 
-// Surfaces — Warm cream layered hierarchy
-val Background = Color(0xFFFFF8F2)
-val Surface = Color(0xFFFFF8F2)
+// Surfaces — Pure white & Clean grays
+val Background = Color(0xFFFFFFFF)
+val Surface = Color(0xFFFFFFFF)
 val SurfaceContainerLowest = Color(0xFFFFFFFF)
-val SurfaceContainerLow = Color(0xFFF9F2EC)
-val SurfaceContainer = Color(0xFFF3EDE7)
-val SurfaceContainerHigh = Color(0xFFEEE7E1)
-val SurfaceContainerHighest = Color(0xFFE8E1DC)
+val SurfaceContainerLow = Color(0xFFF8F8F8)
+val SurfaceContainer = Color(0xFFF0F0F0)
+val SurfaceContainerHigh = Color(0xFFE8E8E8)
+val SurfaceContainerHighest = Color(0xFFE0E0E0)
 
 // On Surface
 val OnSurface = Color(0xFF1C1914)

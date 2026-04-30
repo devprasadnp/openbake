@@ -1,5 +1,6 @@
 package com.saibabui.openbake.ui.screens
 
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,23 +13,25 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.automirrored.outlined.ArrowForward
+import androidx.compose.material.icons.outlined.Cake
+import androidx.compose.material.icons.outlined.EggAlt
 import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.material.icons.outlined.MenuBook
-import androidx.compose.material.icons.automirrored.outlined.MenuBook as MenuBookIcon
-import androidx.compose.material.icons.outlined.Receipt
 import androidx.compose.material.icons.outlined.LocalOffer
 import androidx.compose.material.icons.outlined.LocalShipping
-import androidx.compose.material.icons.outlined.WbSunny
-import androidx.compose.material.icons.outlined.Cake
+import androidx.compose.material.icons.outlined.Receipt
+import androidx.compose.material.icons.outlined.RestaurantMenu
 import androidx.compose.material.icons.outlined.Speed
-import androidx.compose.material.icons.outlined.EggAlt
+import androidx.compose.material.icons.outlined.WbSunny
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -77,78 +80,75 @@ fun HomeScreen(
                 .background(MaterialTheme.colorScheme.background)
                 .verticalScroll(rememberScrollState())
         ) {
-            // ── Top bar ───────────────────────────────────────────────────────
+            // ── Top Header ──────────────────────────────────────────────────
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(
-                        Brush.verticalGradient(
-                            listOf(
-                                MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f),
-                                MaterialTheme.colorScheme.background
-                            )
-                        )
-                    )
+                    .background(MaterialTheme.colorScheme.background)
                     .padding(horizontal = 20.dp)
                     .statusBarsPadding()
-                    .padding(bottom = 8.dp)
+                    .padding(top = 12.dp, bottom = 16.dp)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Column {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(10.dp)
-                        ) {
-                            androidx.compose.foundation.Image(
-                                painter = androidx.compose.ui.res.painterResource(id = com.saibabui.openbake.R.drawable.bakery_logo),
-                                contentDescription = "Sri Vinayaka Bakery",
-                                modifier = Modifier.size(42.dp)
-                            )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        androidx.compose.foundation.Image(
+                            painter = androidx.compose.ui.res.painterResource(id = com.saibabui.openbake.R.drawable.bakery_logo),
+                            contentDescription = "Sri Vinayaka Bakery",
+                            modifier = Modifier.size(44.dp)
+                        )
+                        Column {
                             Text(
-                                text = "Sri Vinayaka Bakery",
-                                style = MaterialTheme.typography.headlineSmall.copy(
+                                text = "Sri Vinayaka",
+                                style = MaterialTheme.typography.titleLarge.copy(
                                     fontFamily = PlayfairDisplay,
                                     fontWeight = FontWeight.Bold
                                 ),
                                 color = MaterialTheme.colorScheme.onBackground
                             )
+                            Text(
+                                text = "Bakery & Sweets",
+                                style = MaterialTheme.typography.bodySmall.copy(
+                                    fontFamily = Nunito,
+                                    fontWeight = FontWeight.Medium,
+                                    letterSpacing = 1.sp
+                                ),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
                         }
-                        Text(
-                            text = "Freshly baked, delivered with love",
-                            style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito),
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
                     }
-                    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                        Box(
-                            modifier = Modifier
-                                .size(42.dp)
-                                .background(MaterialTheme.colorScheme.surfaceContainerHigh, CircleShape)
-                                .clickable { onWishlistClick() },
-                            contentAlignment = Alignment.Center
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        FilledIconButton(
+                            onClick = { onWishlistClick() },
+                            modifier = Modifier.size(40.dp),
+                            colors = IconButtonDefaults.filledIconButtonColors(
+                                containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                                contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
                         ) {
                             Icon(
                                 Icons.Outlined.Favorite,
                                 contentDescription = "Wishlist",
-                                tint = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.size(20.dp)
                             )
                         }
-                        Box(
-                            modifier = Modifier
-                                .size(42.dp)
-                                .background(MaterialTheme.colorScheme.primary, CircleShape)
-                                .clickable { onSearchClick() },
-                            contentAlignment = Alignment.Center
+                        FilledIconButton(
+                            onClick = { onSearchClick() },
+                            modifier = Modifier.size(40.dp),
+                            colors = IconButtonDefaults.filledIconButtonColors(
+                                containerColor = MaterialTheme.colorScheme.primary,
+                                contentColor = MaterialTheme.colorScheme.onPrimary
+                            )
                         ) {
                             Icon(
                                 Icons.Filled.Search,
                                 contentDescription = "Search",
-                                tint = MaterialTheme.colorScheme.onPrimary,
                                 modifier = Modifier.size(20.dp)
                             )
                         }
@@ -156,30 +156,89 @@ fun HomeScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            // ── Search Bar Teaser ───────────────────────────────────────────
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+                    .clickable { onSearchClick() },
+                shape = OpenBakeShapes.pill,
+                color = MaterialTheme.colorScheme.surfaceContainerLow,
+                border = androidx.compose.foundation.BorderStroke(
+                    1.dp,
+                    MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
+                )
+            ) {
+                Row(
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Icon(
+                        Icons.Filled.Search,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Text(
+                        text = "Search cakes, breads, sweets...",
+                        style = MaterialTheme.typography.bodyMedium.copy(fontFamily = Nunito),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                    )
+                }
+            }
 
-            // ── Hero banner ────────────────────────────────────────────────────
+            Spacer(modifier = Modifier.height(20.dp))
+
+            // ── Hero Banner ─────────────────────────────────────────────────
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
-                    .height(180.dp)
-                    .clip(com.saibabui.openbake.ui.theme.OpenBakeShapes.xLarge)
+                    .height(170.dp)
+                    .shadow(
+                        elevation = 12.dp,
+                        shape = OpenBakeShapes.xLarge,
+                        ambientColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+                        spotColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+                    )
+                    .clip(OpenBakeShapes.xLarge)
                     .background(
                         Brush.linearGradient(
                             colors = listOf(
-                                MaterialTheme.colorScheme.primary,
-                                MaterialTheme.colorScheme.primary.copy(alpha = 0.75f),
-                                MaterialTheme.colorScheme.tertiary.copy(alpha = 0.85f)
+                                Color(0xFF7A3D08),
+                                Color(0xFF9E5B1E),
+                                Color(0xFFB87333)
                             )
                         )
                     )
                     .clickable { onMenuClick() }
-                    .padding(24.dp)
             ) {
+                // Decorative circles
+                Box(
+                    modifier = Modifier
+                        .size(120.dp)
+                        .offset(x = 220.dp, y = (-20).dp)
+                        .background(
+                            Color.White.copy(alpha = 0.06f),
+                            CircleShape
+                        )
+                )
+                Box(
+                    modifier = Modifier
+                        .size(80.dp)
+                        .offset(x = 260.dp, y = 100.dp)
+                        .background(
+                            Color.White.copy(alpha = 0.04f),
+                            CircleShape
+                        )
+                )
+
                 Column(
-                    modifier = Modifier.align(Alignment.CenterStart),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .padding(24.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Text(
                         text = "Fresh from\nthe Oven!",
@@ -187,85 +246,40 @@ fun HomeScreen(
                             fontFamily = PlayfairDisplay,
                             fontWeight = FontWeight.Bold
                         ),
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        color = Color.White,
                         lineHeight = 34.sp
                     )
                     Surface(
-                        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.pill,
-                        color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.95f)
+                        shape = OpenBakeShapes.pill,
+                        color = Color.White
                     ) {
-                        Text(
-                            text = "  Order Now →  ",
-                            modifier = Modifier.padding(vertical = 8.dp),
-                            style = MaterialTheme.typography.labelLarge.copy(
-                                fontFamily = Nunito,
-                                fontWeight = FontWeight.Bold
-                            ),
-                            color = MaterialTheme.colorScheme.primary
-                        )
+                        Row(
+                            modifier = Modifier.padding(horizontal = 18.dp, vertical = 10.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            Text(
+                                text = "Order Now",
+                                style = MaterialTheme.typography.labelLarge.copy(
+                                    fontFamily = Nunito,
+                                    fontWeight = FontWeight.Bold
+                                ),
+                                color = Color(0xFF7A3D08)
+                            )
+                            Icon(
+                                Icons.AutoMirrored.Outlined.ArrowForward,
+                                contentDescription = null,
+                                modifier = Modifier.size(16.dp),
+                                tint = Color(0xFF7A3D08)
+                            )
+                        }
                     }
                 }
             }
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // ── Quick actions ──────────────────────────────────────────────────
-            SectionHeader(title = "Quick Actions")
-            Spacer(modifier = Modifier.height(12.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                QuickActionCard(
-                    icon = MenuBookIcon,
-                    label = "Browse Menu",
-                    color = MaterialTheme.colorScheme.primaryContainer,
-                    modifier = Modifier.weight(1f),
-                    onClick = onMenuClick
-                )
-                QuickActionCard(
-                    icon = Icons.Outlined.Receipt,
-                    label = "My Orders",
-                    color = MaterialTheme.colorScheme.secondaryContainer,
-                    modifier = Modifier.weight(1f),
-                    onClick = onOrdersClick
-                )
-                QuickActionCard(
-                    icon = Icons.Outlined.LocalOffer,
-                    label = "Offers",
-                    color = MaterialTheme.colorScheme.tertiaryContainer,
-                    modifier = Modifier.weight(1f),
-                    onClick = { /* Navigate to Offers/Coupons if applicable */ }
-                )
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // ── Why choose us ─────────────────────────────────────────────────
-            SectionHeader(title = "Why Sri Vinayaka Bakery?")
-            Spacer(modifier = Modifier.height(12.dp))
-            LazyRow(
-                contentPadding = PaddingValues(horizontal = 20.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                data class FeatureItem(val icon: ImageVector, val title: String, val subtitle: String)
-                val features = listOf(
-                    FeatureItem(Icons.Outlined.LocalShipping, "Free Delivery", "Orders above ₹500"),
-                    FeatureItem(Icons.Outlined.WbSunny, "Fresh Daily", "Baked every morning"),
-                    FeatureItem(Icons.Outlined.Cake, "Custom Cakes", "Any occasion"),
-                    FeatureItem(Icons.Outlined.Speed, "Fast Dispatch", "2-hour slots"),
-                    FeatureItem(Icons.Outlined.EggAlt, "Eggless Options", "Always available")
-                )
-                items(features) { feature ->
-                    FeatureBadge(icon = feature.icon, title = feature.title, subtitle = feature.subtitle)
-                }
-            }
-
-            Spacer(modifier = Modifier.height(28.dp))
-
-            // ── Categories ────────────────────────────────────────────────────
+            // ── Categories ──────────────────────────────────────────────────
             if (homeState.categories.isNotEmpty()) {
                 Row(
                     modifier = Modifier
@@ -274,10 +288,20 @@ fun HomeScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    SectionHeaderInline(title = "Categories")
                     Text(
-                        text = "See all →",
-                        style = MaterialTheme.typography.labelMedium.copy(fontFamily = Nunito),
+                        text = "Categories",
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontFamily = Nunito,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    Text(
+                        text = "See all",
+                        style = MaterialTheme.typography.labelMedium.copy(
+                            fontFamily = Nunito,
+                            fontWeight = FontWeight.SemiBold
+                        ),
                         color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.clickable { onMenuClick() }
                     )
@@ -285,17 +309,16 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.height(12.dp))
                 LazyRow(
                     contentPadding = PaddingValues(horizontal = 20.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     items(homeState.categories) { category ->
                         CategoryChip(category = category, onClick = { onCategoryClick(category.id) })
                     }
                 }
+                Spacer(modifier = Modifier.height(28.dp))
             }
 
-            Spacer(modifier = Modifier.height(28.dp))
-
-            // ── Bestsellers ───────────────────────────────────────────────────
+            // ── Bestsellers ─────────────────────────────────────────────────
             if (homeState.bestsellers.isNotEmpty()) {
                 Row(
                     modifier = Modifier
@@ -304,10 +327,20 @@ fun HomeScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    SectionHeaderInline(title = "Bestsellers")
                     Text(
-                        text = "View all →",
-                        style = MaterialTheme.typography.labelMedium.copy(fontFamily = Nunito),
+                        text = "Bestsellers",
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontFamily = Nunito,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    Text(
+                        text = "View all",
+                        style = MaterialTheme.typography.labelMedium.copy(
+                            fontFamily = Nunito,
+                            fontWeight = FontWeight.SemiBold
+                        ),
                         color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.clickable { onMenuClick() }
                     )
@@ -315,7 +348,7 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.height(12.dp))
                 LazyRow(
                     contentPadding = PaddingValues(horizontal = 20.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    horizontalArrangement = Arrangement.spacedBy(14.dp)
                 ) {
                     items(homeState.bestsellers) { product ->
                         ProductCard(
@@ -332,59 +365,139 @@ fun HomeScreen(
                         )
                     }
                 }
+                Spacer(modifier = Modifier.height(28.dp))
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // ── Promo banner ──────────────────────────────────────────────────
-            Box(
+            // ── Promo / Coupon Strip ────────────────────────────────────────
+            Surface(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
-                    .clip(com.saibabui.openbake.ui.theme.OpenBakeShapes.large)
-                    .background(
-                        Brush.horizontalGradient(
-                            listOf(
-                                MaterialTheme.colorScheme.secondary.copy(alpha = 0.9f),
-                                MaterialTheme.colorScheme.tertiary.copy(alpha = 0.85f)
-                            )
-                        )
-                    )
-                    .clickable { onMenuClick() }
-                    .padding(20.dp),
-                contentAlignment = Alignment.Center
+                    .clickable { onMenuClick() },
+                shape = OpenBakeShapes.large,
+                color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.15f),
+                border = androidx.compose.foundation.BorderStroke(
+                    1.dp,
+                    MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
+                )
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        text = "First Order Discount!",
-                        style = MaterialTheme.typography.titleMedium.copy(
-                            fontFamily = PlayfairDisplay,
-                            fontWeight = FontWeight.Bold
-                        ),
-                        color = MaterialTheme.colorScheme.onSecondary
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = "Use code WELCOME10 for 10% off",
-                        style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito),
-                        color = MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.85f),
-                        textAlign = TextAlign.Center
-                    )
-                    Spacer(modifier = Modifier.height(12.dp))
+                Row(
+                    modifier = Modifier.padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(14.dp)
+                ) {
                     Surface(
-                        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.pill,
-                        color = MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.15f)
+                        shape = OpenBakeShapes.medium,
+                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                        modifier = Modifier.size(48.dp)
                     ) {
+                        Box(contentAlignment = Alignment.Center) {
+                            Icon(
+                                Icons.Outlined.LocalOffer,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(24.dp)
+                            )
+                        }
+                    }
+                    Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = "  Shop Now →  ",
-                            modifier = Modifier.padding(vertical = 8.dp),
-                            style = MaterialTheme.typography.labelLarge.copy(
+                            text = "First Order Discount!",
+                            style = MaterialTheme.typography.titleSmall.copy(
                                 fontFamily = Nunito,
                                 fontWeight = FontWeight.Bold
                             ),
-                            color = MaterialTheme.colorScheme.onSecondary
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Text(
+                            text = "Use code WELCOME10 for 10% off",
+                            style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
+                    Icon(
+                        Icons.AutoMirrored.Outlined.ArrowForward,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(28.dp))
+
+            // ── Quick Actions ───────────────────────────────────────────────
+            Text(
+                text = "Quick Actions",
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontFamily = Nunito,
+                    fontWeight = FontWeight.Bold
+                ),
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier.padding(horizontal = 20.dp)
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                QuickActionCard(
+                    icon = Icons.Outlined.RestaurantMenu,
+                    label = "Browse\nMenu",
+                    color = MaterialTheme.colorScheme.primaryContainer,
+                    iconTint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.weight(1f),
+                    onClick = onMenuClick
+                )
+                QuickActionCard(
+                    icon = Icons.Outlined.Receipt,
+                    label = "My\nOrders",
+                    color = MaterialTheme.colorScheme.secondaryContainer,
+                    iconTint = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier.weight(1f),
+                    onClick = onOrdersClick
+                )
+                QuickActionCard(
+                    icon = Icons.Outlined.LocalOffer,
+                    label = "Deals &\nOffers",
+                    color = MaterialTheme.colorScheme.tertiaryContainer,
+                    iconTint = MaterialTheme.colorScheme.tertiary,
+                    modifier = Modifier.weight(1f),
+                    onClick = { /* Navigate to Offers/Coupons if applicable */ }
+                )
+            }
+
+            Spacer(modifier = Modifier.height(28.dp))
+
+            // ── Why Choose Us ───────────────────────────────────────────────
+            Text(
+                text = "Why Sri Vinayaka?",
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontFamily = Nunito,
+                    fontWeight = FontWeight.Bold
+                ),
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier.padding(horizontal = 20.dp)
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            val primaryColor = MaterialTheme.colorScheme.primary
+            val tertiaryColor = MaterialTheme.colorScheme.tertiary
+            data class FeatureItem(val icon: ImageVector, val title: String, val subtitle: String, val tint: Color)
+            val features = listOf(
+                FeatureItem(Icons.Outlined.LocalShipping, "Free Delivery", "Orders above ₹500", primaryColor),
+                FeatureItem(Icons.Outlined.WbSunny, "Fresh Daily", "Baked every morning", Caramel),
+                FeatureItem(Icons.Outlined.Cake, "Custom Cakes", "For any occasion", tertiaryColor),
+                FeatureItem(Icons.Outlined.Speed, "Fast Dispatch", "2-hour delivery slots", primaryColor),
+                FeatureItem(Icons.Outlined.EggAlt, "Eggless Options", "Always available", Success)
+            )
+            LazyRow(
+                contentPadding = PaddingValues(horizontal = 20.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                items(features) { feature ->
+                    FeatureBadge(icon = feature.icon, title = feature.title, subtitle = feature.subtitle, iconTint = feature.tint)
                 }
             }
 
@@ -433,91 +546,105 @@ fun HomeScreen(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 80.dp)
-        )
+        ) { data ->
+            Snackbar(
+                containerColor = Color(0xFF1C1914), // Near-black for maximum contrast
+                contentColor = Color.White,
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text(
+                    text = data.visuals.message,
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        fontFamily = Nunito,
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 16.sp
+                    )
+                )
+            }
+        }
     }
 }
 
-@Composable
-private fun SectionHeader(title: String) {
-    Text(
-        text = title,
-        style = MaterialTheme.typography.titleLarge.copy(
-            fontFamily = PlayfairDisplay,
-            fontWeight = FontWeight.Bold
-        ),
-        color = MaterialTheme.colorScheme.onBackground,
-        modifier = Modifier.padding(horizontal = 20.dp)
-    )
-}
-
-@Composable
-private fun SectionHeaderInline(title: String) {
-    Text(
-        text = title,
-        style = MaterialTheme.typography.titleLarge.copy(
-            fontFamily = PlayfairDisplay,
-            fontWeight = FontWeight.Bold
-        ),
-        color = MaterialTheme.colorScheme.onBackground
-    )
-}
+// ── Component: Quick Action Card ────────────────────────────────────────────
 
 @Composable
 private fun QuickActionCard(
     icon: ImageVector,
     label: String,
     color: Color,
+    iconTint: Color,
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
     Surface(
-        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.medium,
-        color = color,
-        modifier = modifier
-            .aspectRatio(1f)
-            .clickable { onClick() }
+        shape = OpenBakeShapes.large,
+        color = color.copy(alpha = 0.35f),
+        modifier = modifier.clickable { onClick() }
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
-            modifier = Modifier.padding(12.dp)
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 18.dp)
         ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = label,
-                modifier = Modifier.size(28.dp),
-                tint = MaterialTheme.colorScheme.onSurface
-            )
-            Spacer(modifier = Modifier.height(6.dp))
+            Surface(
+                shape = CircleShape,
+                color = color.copy(alpha = 0.6f),
+                modifier = Modifier.size(44.dp)
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = label,
+                        modifier = Modifier.size(22.dp),
+                        tint = iconTint
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(10.dp))
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelSmall.copy(
                     fontFamily = Nunito,
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.Bold
                 ),
                 color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center,
+                lineHeight = 16.sp,
                 maxLines = 2
             )
         }
     }
 }
 
+// ── Component: Feature Badge ────────────────────────────────────────────────
+
 @Composable
-private fun FeatureBadge(icon: ImageVector, title: String, subtitle: String) {
+private fun FeatureBadge(icon: ImageVector, title: String, subtitle: String, iconTint: Color = MaterialTheme.colorScheme.primary) {
     Surface(
-        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.medium,
+        shape = OpenBakeShapes.large,
         color = MaterialTheme.colorScheme.surfaceContainerLowest,
-        modifier = Modifier.width(140.dp)
+        border = androidx.compose.foundation.BorderStroke(
+            1.dp,
+            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.25f)
+        ),
+        modifier = Modifier.width(150.dp)
     ) {
-        Column(modifier = Modifier.padding(14.dp)) {
-            Icon(
-                imageVector = icon,
-                contentDescription = title,
-                modifier = Modifier.size(22.dp),
-                tint = MaterialTheme.colorScheme.primary
-            )
-            Spacer(modifier = Modifier.height(8.dp))
+        Column(modifier = Modifier.padding(16.dp)) {
+            Surface(
+                shape = OpenBakeShapes.medium,
+                color = iconTint.copy(alpha = 0.1f),
+                modifier = Modifier.size(40.dp)
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = title,
+                        modifier = Modifier.size(20.dp),
+                        tint = iconTint
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = title,
                 style = MaterialTheme.typography.labelLarge.copy(
@@ -526,9 +653,10 @@ private fun FeatureBadge(icon: ImageVector, title: String, subtitle: String) {
                 ),
                 color = MaterialTheme.colorScheme.onSurface
             )
+            Spacer(modifier = Modifier.height(2.dp))
             Text(
                 text = subtitle,
-                style = MaterialTheme.typography.labelSmall.copy(fontFamily = Nunito),
+                style = MaterialTheme.typography.bodySmall.copy(fontFamily = Nunito),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 1
             )
@@ -536,40 +664,45 @@ private fun FeatureBadge(icon: ImageVector, title: String, subtitle: String) {
     }
 }
 
+// ── Component: Category Chip ────────────────────────────────────────────────
+
 @Composable
 private fun CategoryChip(category: Category, onClick: () -> Unit) {
     Surface(
-        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.large,
+        shape = OpenBakeShapes.large,
         color = MaterialTheme.colorScheme.surfaceContainerLowest,
         modifier = Modifier
-            .width(100.dp)
+            .width(88.dp)
             .clickable { onClick() }
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(12.dp)
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 12.dp)
         ) {
             if (!category.imageUrl.isNullOrBlank()) {
                 com.saibabui.openbake.ui.screens.common.OpenBakeImage(
                     model = category.imageUrl,
                     contentDescription = category.name,
-                    modifier = Modifier.size(56.dp),
+                    modifier = Modifier.size(48.dp),
                     shape = CircleShape,
                     contentScale = ContentScale.Crop,
                     placeholderEmoji = "",
-                    emojiFontSize = 24
+                    emojiFontSize = 20
                 )
             } else {
                 Box(
                     modifier = Modifier
-                        .size(56.dp)
-                        .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f), CircleShape),
+                        .size(48.dp)
+                        .background(
+                            MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f),
+                            CircleShape
+                        ),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Cake,
                         contentDescription = "Category",
-                        modifier = Modifier.size(24.dp),
+                        modifier = Modifier.size(22.dp),
                         tint = MaterialTheme.colorScheme.primary
                     )
                 }
@@ -577,17 +710,20 @@ private fun CategoryChip(category: Category, onClick: () -> Unit) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = category.name,
-                style = MaterialTheme.typography.labelMedium.copy(
+                style = MaterialTheme.typography.labelSmall.copy(
                     fontFamily = Nunito,
                     fontWeight = FontWeight.SemiBold
                 ),
                 color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.Center
             )
         }
     }
 }
+
+// ── Component: Product Card ─────────────────────────────────────────────────
 
 @Composable
 private fun ProductCard(
@@ -597,23 +733,24 @@ private fun ProductCard(
 ) {
     Surface(
         modifier = Modifier
-            .width(170.dp)
+            .width(165.dp)
             .clickable { onClick() },
-        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.large,
-        color = MaterialTheme.colorScheme.surfaceContainerLowest
+        shape = OpenBakeShapes.large,
+        color = MaterialTheme.colorScheme.surfaceContainerLowest,
+        shadowElevation = 2.dp
     ) {
         Column {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(140.dp)
+                    .height(130.dp)
             ) {
                 if (product.images.isNotEmpty()) {
                     com.saibabui.openbake.ui.screens.common.OpenBakeImage(
                         model = product.images.first(),
                         contentDescription = product.name,
                         modifier = Modifier.fillMaxSize(),
-                        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.mediaTop,
+                        shape = OpenBakeShapes.mediaTop,
                         contentScale = ContentScale.Crop,
                         placeholderEmoji = "",
                         emojiFontSize = 40
@@ -636,20 +773,31 @@ private fun ProductCard(
                 // Rating badge
                 if (product.rating > 0) {
                     Surface(
-                        shape = com.saibabui.openbake.ui.theme.OpenBakeShapes.small,
-                        color = MaterialTheme.colorScheme.surfaceContainerLowest.copy(alpha = 0.9f),
+                        shape = OpenBakeShapes.small,
+                        color = MaterialTheme.colorScheme.surfaceContainerLowest.copy(alpha = 0.92f),
                         modifier = Modifier
                             .align(Alignment.TopEnd)
-                            .padding(8.dp)
+                            .padding(6.dp)
                     ) {
-                        Text(
-                            text = "⭐ ${String.format("%.1f", product.rating)}",
-                            style = MaterialTheme.typography.labelSmall.copy(
-                                fontFamily = Nunito,
-                                fontWeight = FontWeight.Bold
-                            ),
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-                        )
+                        Row(
+                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(3.dp)
+                        ) {
+                            Icon(
+                                Icons.Filled.Star,
+                                contentDescription = null,
+                                tint = Caramel,
+                                modifier = Modifier.size(12.dp)
+                            )
+                            Text(
+                                text = String.format("%.1f", product.rating),
+                                style = MaterialTheme.typography.labelSmall.copy(
+                                    fontFamily = Nunito,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            )
+                        }
                     }
                 }
             }
@@ -657,9 +805,9 @@ private fun ProductCard(
             Column(modifier = Modifier.padding(12.dp)) {
                 Text(
                     text = product.name,
-                    style = MaterialTheme.typography.titleSmall.copy(
+                    style = MaterialTheme.typography.bodyMedium.copy(
                         fontFamily = Nunito,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.SemiBold
                     ),
                     color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 1,
@@ -673,7 +821,7 @@ private fun ProductCard(
                 ) {
                     Text(
                         text = "₹${product.price.toInt()}",
-                        style = MaterialTheme.typography.titleMedium.copy(
+                        style = MaterialTheme.typography.titleSmall.copy(
                             fontFamily = Nunito,
                             fontWeight = FontWeight.Bold
                         ),
@@ -683,7 +831,7 @@ private fun ProductCard(
                         shape = CircleShape,
                         color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier
-                            .size(32.dp)
+                            .size(30.dp)
                             .clickable { onAddToCart() }
                     ) {
                         Box(contentAlignment = Alignment.Center) {
@@ -691,7 +839,7 @@ private fun ProductCard(
                                 Icons.Outlined.Add,
                                 contentDescription = "Add to cart",
                                 tint = MaterialTheme.colorScheme.onPrimary,
-                                modifier = Modifier.size(18.dp)
+                                modifier = Modifier.size(16.dp)
                             )
                         }
                     }
