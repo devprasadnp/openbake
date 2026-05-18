@@ -304,22 +304,27 @@ fun AdminOrderDetailScreen(
                                 val customerName = order.customer?.name ?: "N/A"
                                 val customerPhone = order.customer?.phone ?: "N/A"
                                 val address = order.address
+                                
+                                val mapsLink = if (address != null && address.lat != null && address.lng != null) {
+                                    "https://www.google.com/maps/search/?api=1&query=${address.lat},${address.lng}"
+                                } else if (address != null) {
+                                    "https://www.google.com/maps/search/?api=1&query=${Uri.encode(address.fullAddress)}"
+                                } else null
+
                                 val addressText = if (address != null) {
                                     listOfNotNull(
                                         address.recipientName?.let { "Recipient: $it" },
-                                        address.houseNumber,
+                                        address.houseNumber?.let { "H.No: $it" },
                                         address.street,
                                         address.fullAddress,
                                         address.landmark?.let { "Landmark: $it" },
                                         "${address.city} — ${address.pincode}",
-                                        if (address.lat != null && address.lng != null)
-                                            "Maps: https://maps.google.com/?q=${address.lat},${address.lng}"
-                                        else null
+                                        mapsLink?.let { "*LOCATION:* $it" }
                                     ).joinToString("\n")
                                 } else "Pickup order"
 
                                 val itemsText = order.items.joinToString("\n") { item ->
-                                    "  • ${item.productName ?: "Item"} × ${item.quantity} — ₹${(item.unitPrice * item.quantity).toInt()}"
+                                    "  • ${item.productName ?: "Item"} × ${item.quantity}"
                                 }
 
                                 val scheduleText = listOfNotNull(
@@ -328,36 +333,31 @@ fun AdminOrderDetailScreen(
                                 ).joinToString(" | ")
 
                                 val shareText = buildString {
-                                    append("*Sri Vinayaka Bakery — Delivery*\n\n")
-                                    append("Order #${order.id.takeLast(8)}\n")
+                                    append("*Sri Vinayaka Bakery — NEW ORDER*\n\n")
+                                    append("Order: #${order.id.takeLast(8)}\n")
                                     append("Status: ${order.status.replaceFirstChar { it.uppercase() }}\n")
-                                    if (scheduleText.isNotBlank()) append("$scheduleText\n")
-                                    append("\n--- Customer ---\n")
+                                    if (scheduleText.isNotBlank()) append("Schedule: $scheduleText\n")
+                                    
+                                    append("\n*--- Customer Details ---*\n")
                                     append("Name: $customerName\n")
                                     append("Phone: $customerPhone\n")
-                                    append("\n--- Delivery Address ---\n")
+                                    
+                                    append("\n*--- Delivery Address ---*\n")
                                     append("$addressText\n")
-                                    append("\n--- Items ---\n")
-                                    append("$itemsText\n\n")
-                                    append("Total: ₹${order.total.toInt()}\n")
+                                    
+                                    append("\n*--- Items ---*\n")
+                                    append("$itemsText\n")
+                                    
+                                    append("\n*Total Amount: ₹${order.total.toInt()}*\n")
                                     append("Payment: ${order.paymentMethod?.uppercase() ?: "N/A"} (${order.paymentStatus})\n")
-                                    order.specialNote?.let { append("\nNote: $it\n") }
+                                    order.specialNote?.let { append("\n*Note:* $it\n") }
                                 }
 
                                 val sendIntent = Intent(Intent.ACTION_SEND).apply {
                                     type = "text/plain"
                                     putExtra(Intent.EXTRA_TEXT, shareText)
-                                    setPackage("com.whatsapp")
                                 }
-                                try {
-                                    context.startActivity(sendIntent)
-                                } catch (_: Exception) {
-                                    val fallback = Intent(Intent.ACTION_SEND).apply {
-                                        type = "text/plain"
-                                        putExtra(Intent.EXTRA_TEXT, shareText)
-                                    }
-                                    context.startActivity(Intent.createChooser(fallback, "Share order"))
-                                }
+                                context.startActivity(Intent.createChooser(sendIntent, "Share Order Details"))
                             },
                             modifier = Modifier.fillMaxWidth()
                         ) {
