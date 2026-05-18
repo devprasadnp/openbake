@@ -15,6 +15,7 @@ class Settings(BaseSettings):
 
     # Database
     DATABASE_URL: str = "sqlite:///./openbake.db"
+    POSTGRES_URL: str | None = None
 
     # Redis
     REDIS_URL: str = "redis://localhost:6379"
@@ -59,6 +60,14 @@ class Settings(BaseSettings):
 
     def validate_production(self):
         """Raise if critical settings are insecure in production."""
+        # Vercel Postgres support: Use POSTGRES_URL if available
+        if self.POSTGRES_URL and "sqlite" in self.DATABASE_URL:
+            self.DATABASE_URL = self.POSTGRES_URL
+            
+        # SQLAlchemy 2.0 requires postgresql:// instead of postgres://
+        if self.DATABASE_URL.startswith("postgres://"):
+            self.DATABASE_URL = self.DATABASE_URL.replace("postgres://", "postgresql://", 1)
+            
         if self.APP_ENV == "production":
             if self.SECRET_KEY == "change-this-to-a-long-random-secret-in-production":
                 raise ValueError(
