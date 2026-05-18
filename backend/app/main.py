@@ -24,7 +24,10 @@ settings = get_settings()
 setup_logging(level="DEBUG" if settings.APP_ENV == "development" else "INFO")
 
 # Auto-create tables (use Alembic migrations in production instead)
-Base.metadata.create_all(bind=engine)
+try:
+    Base.metadata.create_all(bind=engine)
+except Exception as e:
+    logger.warning("Could not auto-create tables", extra={"error": str(e)})
 
 # ── Rate limiter ───────────────────────────────────────────────────────────────
 limiter = Limiter(key_func=get_remote_address, default_limits=["200/minute"])
@@ -155,8 +158,11 @@ app.include_router(admin.router,    prefix="/api/admin", tags=["Admin"])
 
 # ── Static files (media uploads) ───────────────────────────────────────────────
 _media_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "media")
-os.makedirs(_media_dir, exist_ok=True)
-app.mount("/media", StaticFiles(directory=_media_dir), name="media")
+try:
+    os.makedirs(_media_dir, exist_ok=True)
+    app.mount("/media", StaticFiles(directory=_media_dir), name="media")
+except Exception as e:
+    logger.warning("Could not create/mount media directory (read-only filesystem)", extra={"error": str(e)})
 
 
 # ── Health & root ──────────────────────────────────────────────────────────────
