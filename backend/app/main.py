@@ -26,8 +26,12 @@ setup_logging(level="DEBUG" if settings.APP_ENV == "development" else "INFO")
 # Auto-create tables (use Alembic migrations in production instead)
 try:
     Base.metadata.create_all(bind=engine)
+    
+    # Auto-seed the database if it is empty
+    from app.seed import seed
+    seed()
 except Exception as e:
-    logger.warning("Could not auto-create tables", extra={"error": str(e)})
+    logger.warning("Could not auto-create tables or seed database", extra={"error": str(e)})
 
 # ── Rate limiter ───────────────────────────────────────────────────────────────
 limiter = Limiter(key_func=get_remote_address, default_limits=["200/minute"])
