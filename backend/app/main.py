@@ -198,3 +198,21 @@ def health_check():
             "env": settings.APP_ENV,
         },
     )
+
+
+@app.post("/seed", tags=["Admin"])
+def seed_database():
+    """Manually trigger database table creation and seeding."""
+    try:
+        Base.metadata.create_all(bind=engine)
+        
+        from app.seed import seed
+        seed()
+        
+        return {"message": "Database tables created and seeded successfully."}
+    except Exception as e:
+        logger.error("Manual seed failed", exc_info=True)
+        return JSONResponse(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            content={"detail": f"Failed to seed database: {str(e)}"}
+        )
