@@ -207,9 +207,9 @@ def seed_database():
         Base.metadata.create_all(bind=engine)
         
         from app.seed import seed
-        seed()
+        result = seed()
         
-        return {"message": "Database tables created and seeded successfully."}
+        return {"message": result or "Database seeded successfully."}
     except Exception as e:
         logger.error("Manual seed failed", exc_info=True)
         return JSONResponse(

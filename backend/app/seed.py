@@ -20,47 +20,53 @@ def seed():
 
     db = SessionLocal()
 
-    # Check if already seeded
-    if db.query(User).first():
-        print("Database already seeded. Skipping.")
+    # Check if already seeded based on Products/Categories, not Users (as users might register first)
+    if db.query(Category).first() and db.query(Product).first():
+        msg = "Database already seeded with products and categories. Skipping."
+        print(msg)
         db.close()
-        return
+        return msg
 
     print("Seeding database...")
 
     # ── Admin User ──
-    admin = User(
-        name="Admin",
-        email=settings.ADMIN_EMAIL,
-        password_hash=hash_password(settings.ADMIN_PASSWORD),
-        auth_provider="email",
-        role="admin",
-    )
-    db.add(admin)
-    db.flush()
+    admin = db.query(User).filter_by(email=settings.ADMIN_EMAIL).first()
+    if not admin:
+        admin = User(
+            name="Admin",
+            email=settings.ADMIN_EMAIL,
+            password_hash=hash_password(settings.ADMIN_PASSWORD),
+            auth_provider="email",
+            role="admin",
+        )
+        db.add(admin)
+        db.flush()
 
     # ── Test Customer ──
-    customer = User(
-        name="Test Customer",
-        email="customer@openbake.com",
-        phone="9876543210",
-        password_hash=hash_password("Customer@123"),
-        auth_provider="email",
-        role="customer",
-    )
-    db.add(customer)
-    db.flush()
+    customer = db.query(User).filter_by(email="customer@openbake.com").first()
+    if not customer:
+        customer = User(
+            name="Test Customer",
+            email="customer@openbake.com",
+            phone="9876543210",
+            password_hash=hash_password("Customer@123"),
+            auth_provider="email",
+            role="customer",
+        )
+        db.add(customer)
+        db.flush()
 
-    # ── Customer Address ──
-    addr = Address(
-        user_id=customer.id,
-        label="Home",
-        full_address="123, Bakery Lane, Banjara Hills",
-        city="Hyderabad",
-        pincode="500034",
-        is_default=True,
-    )
-    db.add(addr)
+        # ── Customer Address ──
+        addr = Address(
+            user_id=customer.id,
+            label="Home",
+            full_address="123, Bakery Lane, Banjara Hills",
+            city="Hyderabad",
+            pincode="500034",
+            is_default=True,
+        )
+        db.add(addr)
+        db.flush()
     db.flush()
 
     # ── Categories ──
@@ -74,9 +80,11 @@ def seed():
     ]
     cats = {}
     for c in categories_data:
-        cat = Category(**c)
-        db.add(cat)
-        db.flush()
+        cat = db.query(Category).filter_by(name=c["name"]).first()
+        if not cat:
+            cat = Category(**c)
+            db.add(cat)
+            db.flush()
         cats[c["name"]] = cat
 
     # ── Products ──
@@ -214,16 +222,18 @@ def seed():
         cat_name = pdata.pop("category")
         images = pdata.pop("images", [])
 
-        product = Product(
-            category_id=cats[cat_name].id,
-            **pdata,
-        )
-        product.images = images
-        db.add(product)
-        db.flush()
+        product = db.query(Product).filter_by(name=pdata["name"]).first()
+        if not product:
+            product = Product(
+                category_id=cats[cat_name].id,
+                **pdata,
+            )
+            product.images = images
+            db.add(product)
+            db.flush()
 
-        for v in variants:
-            db.add(ProductVariant(product_id=product.id, **v))
+            for v in variants:
+                db.add(ProductVariant(product_id=product.id, **v))
 
     # ── Coupons ──
     today = date.today()
@@ -236,17 +246,20 @@ def seed():
                max_uses=50, valid_from=today, valid_until=today + timedelta(days=30)),
     ]
     for c in coupons:
-        db.add(c)
+        if not db.query(Coupon).filter_by(code=c.code).first():
+            db.add(c)
 
     db.commit()
     db.close()
 
-    print("✅ Database seeded successfully!")
+    msg = "Database seeded successfully!"
+    print(f"✅ {msg}")
     print(f"   Admin: {settings.ADMIN_EMAIL} / {settings.ADMIN_PASSWORD}")
     print("   Customer: customer@openbake.com / Customer@123")
     print(f"   Categories: {len(categories_data)}")
     print(f"   Products: {len(products_data)}")
     print(f"   Coupons: {len(coupons)}")
+    return msg
 
 
 if __name__ == "__main__":
