@@ -26,6 +26,9 @@ const securityHeaders = [
         // Allow any ngrok tunnel (local dev + staging)
         "https://*.ngrok-free.app",
         "https://*.ngrok.io",
+        // Allow Vercel backends
+        "https://*.vercel.app",
+        "https://openbakebackenda.vercel.app"
       ].join(" "),
       "frame-ancestors 'none'",
     ].join("; "),
