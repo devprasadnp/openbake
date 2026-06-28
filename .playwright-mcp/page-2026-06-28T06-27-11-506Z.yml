@@ -1,0 +1,239 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e3]:
+      - link "🍰 SVB Admin" [ref=e5] [cursor=pointer]:
+        - /url: /admin/dashboard
+        - generic [ref=e6]: 🍰
+        - generic [ref=e7]: SVB Admin
+      - navigation [ref=e8]:
+        - link "Dashboard" [ref=e9] [cursor=pointer]:
+          - /url: /admin/dashboard
+          - img [ref=e10]
+          - text: Dashboard
+        - link "Orders" [ref=e15] [cursor=pointer]:
+          - /url: /admin/orders
+          - img [ref=e16]
+          - text: Orders
+        - link "Products" [ref=e20] [cursor=pointer]:
+          - /url: /admin/products
+          - img [ref=e21]
+          - text: Products
+        - link "Coupons" [ref=e25] [cursor=pointer]:
+          - /url: /admin/coupons
+          - img [ref=e26]
+          - text: Coupons
+        - link "Inventory" [ref=e29] [cursor=pointer]:
+          - /url: /admin/inventory
+          - img [ref=e30]
+          - text: Inventory
+        - link "Analytics" [ref=e40] [cursor=pointer]:
+          - /url: /admin/analytics
+          - img [ref=e41]
+          - text: Analytics
+        - link "Settings" [ref=e43] [cursor=pointer]:
+          - /url: /admin/settings
+          - img [ref=e44]
+          - text: Settings
+      - button "Logout" [ref=e48]:
+        - img [ref=e49]
+        - text: Logout
+    - generic [ref=e52]:
+      - banner [ref=e53]:
+        - heading "Admin Panel" [level=2] [ref=e54]
+        - generic [ref=e55]:
+          - generic [ref=e56]: A
+          - generic [ref=e57]: Admin
+      - main [ref=e58]:
+        - generic [ref=e59]:
+          - heading "Inventory" [level=1] [ref=e61]
+          - generic [ref=e62]:
+            - 'button "All Products: 16" [ref=e63]'
+            - 'button "Low Stock (≤10): 1" [ref=e64]'
+            - 'button "Out of Stock: 0" [ref=e65]'
+          - table [ref=e67]:
+            - rowgroup [ref=e68]:
+              - row "Product Stock Status Actions" [ref=e69]:
+                - columnheader "Product" [ref=e70]
+                - columnheader "Stock" [ref=e71]
+                - columnheader "Status" [ref=e72]
+                - columnheader "Actions" [ref=e73]
+            - rowgroup [ref=e74]:
+              - row "Classic Chocolate Cake Classic Chocolate Cake 22 units Active Update Stock" [ref=e75]:
+                - cell "Classic Chocolate Cake Classic Chocolate Cake" [ref=e76]:
+                  - generic [ref=e77]:
+                    - img "Classic Chocolate Cake" [ref=e79]
+                    - generic [ref=e80]: Classic Chocolate Cake
+                - cell "22 units" [ref=e81]:
+                  - button "22 units" [ref=e82]
+                - cell "Active" [ref=e83]:
+                  - generic [ref=e84]: Active
+                - cell "Update Stock" [ref=e85]:
+                  - button "Update Stock" [ref=e86]
+              - row "Red Velvet Cake Red Velvet Cake 14 units Active Update Stock" [ref=e87]:
+                - cell "Red Velvet Cake Red Velvet Cake" [ref=e88]:
+                  - generic [ref=e89]:
+                    - img "Red Velvet Cake" [ref=e91]
+                    - generic [ref=e92]: Red Velvet Cake
+                - cell "14 units" [ref=e93]:
+                  - button "14 units" [ref=e94]
+                - cell "Active" [ref=e95]:
+                  - generic [ref=e96]: Active
+                - cell "Update Stock" [ref=e97]:
+                  - button "Update Stock" [ref=e98]
+              - row "Butterscotch Crunch Cake Butterscotch Crunch Cake 20 units Active Update Stock" [ref=e99]:
+                - cell "Butterscotch Crunch Cake Butterscotch Crunch Cake" [ref=e100]:
+                  - generic [ref=e101]:
+                    - img "Butterscotch Crunch Cake" [ref=e103]
+                    - generic [ref=e104]: Butterscotch Crunch Cake
+                - cell "20 units" [ref=e105]:
+                  - button "20 units" [ref=e106]
+                - cell "Active" [ref=e107]:
+                  - generic [ref=e108]: Active
+                - cell "Update Stock" [ref=e109]:
+                  - button "Update Stock" [ref=e110]
+              - row "Mango Delight Cake Mango Delight Cake 10 units Active Update Stock" [ref=e111]:
+                - cell "Mango Delight Cake Mango Delight Cake" [ref=e112]:
+                  - generic [ref=e113]:
+                    - img "Mango Delight Cake" [ref=e115]
+                    - generic [ref=e116]: Mango Delight Cake
+                - cell "10 units" [ref=e117]:
+                  - button "10 units" [ref=e118]
+                - cell "Active" [ref=e119]:
+                  - generic [ref=e120]: Active
+                - cell "Update Stock" [ref=e121]:
+                  - button "Update Stock" [ref=e122]
+              - row "Chocolate Éclair Chocolate Éclair 49 units Active Update Stock" [ref=e123]:
+                - cell "Chocolate Éclair Chocolate Éclair" [ref=e124]:
+                  - generic [ref=e125]:
+                    - img "Chocolate Éclair" [ref=e127]
+                    - generic [ref=e128]: Chocolate Éclair
+                - cell "49 units" [ref=e129]:
+                  - button "49 units" [ref=e130]
+                - cell "Active" [ref=e131]:
+                  - generic [ref=e132]: Active
+                - cell "Update Stock" [ref=e133]:
+                  - button "Update Stock" [ref=e134]
+              - row "Fruit Danish Fruit Danish 40 units Active Update Stock" [ref=e135]:
+                - cell "Fruit Danish Fruit Danish" [ref=e136]:
+                  - generic [ref=e137]:
+                    - img "Fruit Danish" [ref=e139]
+                    - generic [ref=e140]: Fruit Danish
+                - cell "40 units" [ref=e141]:
+                  - button "40 units" [ref=e142]
+                - cell "Active" [ref=e143]:
+                  - generic [ref=e144]: Active
+                - cell "Update Stock" [ref=e145]:
+                  - button "Update Stock" [ref=e146]
+              - row "Almond Croissant Almond Croissant 35 units Active Update Stock" [ref=e147]:
+                - cell "Almond Croissant Almond Croissant" [ref=e148]:
+                  - generic [ref=e149]:
+                    - img "Almond Croissant" [ref=e151]
+                    - generic [ref=e152]: Almond Croissant
+                - cell "35 units" [ref=e153]:
+                  - button "35 units" [ref=e154]
+                - cell "Active" [ref=e155]:
+                  - generic [ref=e156]: Active
+                - cell "Update Stock" [ref=e157]:
+                  - button "Update Stock" [ref=e158]
+              - row "Sourdough Loaf Sourdough Loaf 30 units Active Update Stock" [ref=e159]:
+                - cell "Sourdough Loaf Sourdough Loaf" [ref=e160]:
+                  - generic [ref=e161]:
+                    - img "Sourdough Loaf" [ref=e163]
+                    - generic [ref=e164]: Sourdough Loaf
+                - cell "30 units" [ref=e165]:
+                  - button "30 units" [ref=e166]
+                - cell "Active" [ref=e167]:
+                  - generic [ref=e168]: Active
+                - cell "Update Stock" [ref=e169]:
+                  - button "Update Stock" [ref=e170]
+              - row "Garlic Focaccia Garlic Focaccia 25 units Active Update Stock" [ref=e171]:
+                - cell "Garlic Focaccia Garlic Focaccia" [ref=e172]:
+                  - generic [ref=e173]:
+                    - img "Garlic Focaccia" [ref=e175]
+                    - generic [ref=e176]: Garlic Focaccia
+                - cell "25 units" [ref=e177]:
+                  - button "25 units" [ref=e178]
+                - cell "Active" [ref=e179]:
+                  - generic [ref=e180]: Active
+                - cell "Update Stock" [ref=e181]:
+                  - button "Update Stock" [ref=e182]
+              - row "Multigrain Bread Multigrain Bread 40 units Active Update Stock" [ref=e183]:
+                - cell "Multigrain Bread Multigrain Bread" [ref=e184]:
+                  - generic [ref=e185]:
+                    - img "Multigrain Bread" [ref=e187]
+                    - generic [ref=e188]: Multigrain Bread
+                - cell "40 units" [ref=e189]:
+                  - button "40 units" [ref=e190]
+                - cell "Active" [ref=e191]:
+                  - generic [ref=e192]: Active
+                - cell "Update Stock" [ref=e193]:
+                  - button "Update Stock" [ref=e194]
+              - row "Chocolate Chip Cookies (6 pcs) Chocolate Chip Cookies (6 pcs) 60 units Active Update Stock" [ref=e195]:
+                - cell "Chocolate Chip Cookies (6 pcs) Chocolate Chip Cookies (6 pcs)" [ref=e196]:
+                  - generic [ref=e197]:
+                    - img "Chocolate Chip Cookies (6 pcs)" [ref=e199]
+                    - generic [ref=e200]: Chocolate Chip Cookies (6 pcs)
+                - cell "60 units" [ref=e201]:
+                  - button "60 units" [ref=e202]
+                - cell "Active" [ref=e203]:
+                  - generic [ref=e204]: Active
+                - cell "Update Stock" [ref=e205]:
+                  - button "Update Stock" [ref=e206]
+              - row "Almond Biscotti (8 pcs) Almond Biscotti (8 pcs) 45 units Active Update Stock" [ref=e207]:
+                - cell "Almond Biscotti (8 pcs) Almond Biscotti (8 pcs)" [ref=e208]:
+                  - generic [ref=e209]:
+                    - img "Almond Biscotti (8 pcs)" [ref=e211]
+                    - generic [ref=e212]: Almond Biscotti (8 pcs)
+                - cell "45 units" [ref=e213]:
+                  - button "45 units" [ref=e214]
+                - cell "Active" [ref=e215]:
+                  - generic [ref=e216]: Active
+                - cell "Update Stock" [ref=e217]:
+                  - button "Update Stock" [ref=e218]
+              - row "Vanilla Rainbow Cupcakes (4 pcs) Vanilla Rainbow Cupcakes (4 pcs) 30 units Active Update Stock" [ref=e219]:
+                - cell "Vanilla Rainbow Cupcakes (4 pcs) Vanilla Rainbow Cupcakes (4 pcs)" [ref=e220]:
+                  - generic [ref=e221]:
+                    - img "Vanilla Rainbow Cupcakes (4 pcs)" [ref=e223]
+                    - generic [ref=e224]: Vanilla Rainbow Cupcakes (4 pcs)
+                - cell "30 units" [ref=e225]:
+                  - button "30 units" [ref=e226]
+                - cell "Active" [ref=e227]:
+                  - generic [ref=e228]: Active
+                - cell "Update Stock" [ref=e229]:
+                  - button "Update Stock" [ref=e230]
+              - row "Salted Caramel Cupcakes (4 pcs) Salted Caramel Cupcakes (4 pcs) 20 units Active Update Stock" [ref=e231]:
+                - cell "Salted Caramel Cupcakes (4 pcs) Salted Caramel Cupcakes (4 pcs)" [ref=e232]:
+                  - generic [ref=e233]:
+                    - img "Salted Caramel Cupcakes (4 pcs)" [ref=e235]
+                    - generic [ref=e236]: Salted Caramel Cupcakes (4 pcs)
+                - cell "20 units" [ref=e237]:
+                  - button "20 units" [ref=e238]
+                - cell "Active" [ref=e239]:
+                  - generic [ref=e240]: Active
+                - cell "Update Stock" [ref=e241]:
+                  - button "Update Stock" [ref=e242]
+              - row "Hot Chocolate Hot Chocolate 100 units Active Update Stock" [ref=e243]:
+                - cell "Hot Chocolate Hot Chocolate" [ref=e244]:
+                  - generic [ref=e245]:
+                    - img "Hot Chocolate" [ref=e247]
+                    - generic [ref=e248]: Hot Chocolate
+                - cell "100 units" [ref=e249]:
+                  - button "100 units" [ref=e250]
+                - cell "Active" [ref=e251]:
+                  - generic [ref=e252]: Active
+                - cell "Update Stock" [ref=e253]:
+                  - button "Update Stock" [ref=e254]
+              - row "Iced Matcha Latte Iced Matcha Latte 80 units Active Update Stock" [ref=e255]:
+                - cell "Iced Matcha Latte Iced Matcha Latte" [ref=e256]:
+                  - generic [ref=e257]:
+                    - img "Iced Matcha Latte" [ref=e259]
+                    - generic [ref=e260]: Iced Matcha Latte
+                - cell "80 units" [ref=e261]:
+                  - button "80 units" [ref=e262]
+                - cell "Active" [ref=e263]:
+                  - generic [ref=e264]: Active
+                - cell "Update Stock" [ref=e265]:
+                  - button "Update Stock" [ref=e266]
+  - button "Open Next.js Dev Tools" [ref=e272] [cursor=pointer]:
+    - img [ref=e273]
+  - alert [ref=e276]

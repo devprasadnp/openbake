@@ -1,0 +1,146 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]:
+      - link "Sri Vinayaka Bakery" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img [ref=e6]
+        - generic [ref=e8]: Sri Vinayaka Bakery
+      - generic [ref=e9]:
+        - button "Open search" [ref=e10]:
+          - img [ref=e11]
+        - link "Open cart" [ref=e14] [cursor=pointer]:
+          - /url: /cart
+          - img [ref=e15]
+        - button "Open menu" [ref=e18]:
+          - img [ref=e19]
+  - main [ref=e20]:
+    - generic [ref=e27]:
+      - generic [ref=e28]:
+        - img [ref=e29]
+        - text: Fresh from the oven, every day
+      - heading "Fresh Cakes & Bakes, Delivered Warm" [level=1] [ref=e32]
+      - paragraph [ref=e33]: Cakes, pastries, breads and more — baked fresh every day and delivered hot to your home.
+      - generic [ref=e34]:
+        - link "Order Now" [ref=e35] [cursor=pointer]:
+          - /url: /menu
+          - text: Order Now
+          - img [ref=e36]
+        - link "View Menu" [ref=e38] [cursor=pointer]:
+          - /url: /menu
+      - generic [ref=e39]:
+        - generic [ref=e40]:
+          - img [ref=e41]
+          - generic [ref=e43]: 4.8/5 Rating
+        - generic [ref=e44]:
+          - img [ref=e45]
+          - generic [ref=e50]: Free Delivery over ₹500
+    - heading "Shop by Category" [level=2] [ref=e52]
+    - generic [ref=e55]:
+      - heading "Our Bestsellers" [level=2] [ref=e56]
+      - link "View All" [ref=e57] [cursor=pointer]:
+        - /url: /menu
+        - text: View All
+        - img [ref=e58]
+    - generic [ref=e86]:
+      - heading "How It Works" [level=2] [ref=e87]
+      - generic [ref=e88]:
+        - generic [ref=e89]:
+          - img [ref=e91]
+          - generic [ref=e94]: Step 1
+          - heading "Browse & Choose" [level=3] [ref=e95]
+          - paragraph [ref=e96]: Explore our freshly baked collection of cakes, breads & more
+        - generic [ref=e97]:
+          - img [ref=e99]
+          - generic [ref=e101]: Step 2
+          - heading "Customize" [level=3] [ref=e102]
+          - paragraph [ref=e103]: Pick your size, flavor, add a personal message on cakes
+        - generic [ref=e104]:
+          - img [ref=e106]
+          - generic [ref=e111]: Step 3
+          - heading "Fast Delivery" [level=3] [ref=e112]
+          - paragraph [ref=e113]: Get it delivered warm to your doorstep in your chosen time slot
+    - generic [ref=e115]:
+      - heading "What Our Customers Say" [level=2] [ref=e116]
+      - generic [ref=e117]:
+        - generic [ref=e118]:
+          - generic [ref=e119]:
+            - img [ref=e120]
+            - img [ref=e122]
+            - img [ref=e124]
+            - img [ref=e126]
+            - img [ref=e128]
+          - paragraph [ref=e130]: “The chocolate truffle cake was divine! Perfectly moist and delivered on time.”
+          - paragraph [ref=e131]: Priya S.
+        - generic [ref=e132]:
+          - generic [ref=e133]:
+            - img [ref=e134]
+            - img [ref=e136]
+            - img [ref=e138]
+            - img [ref=e140]
+            - img [ref=e142]
+          - paragraph [ref=e144]: “Best bakery in town. The sourdough bread is absolutely fresh every time.”
+          - paragraph [ref=e145]: Rahul M.
+        - generic [ref=e146]:
+          - generic [ref=e147]:
+            - img [ref=e148]
+            - img [ref=e150]
+            - img [ref=e152]
+            - img [ref=e154]
+            - img [ref=e156]
+          - paragraph [ref=e158]: “Love the eggless options. My birthday cake was beautifully customized!”
+          - paragraph [ref=e159]: Ananya K.
+    - generic [ref=e161]:
+      - heading "Get 10% Off Your First Order" [level=2] [ref=e162]
+      - paragraph [ref=e163]: Use code WELCOME10 at checkout
+      - link "Shop Now" [ref=e164] [cursor=pointer]:
+        - /url: /menu
+        - text: Shop Now
+        - img [ref=e165]
+  - contentinfo [ref=e167]:
+    - generic [ref=e168]:
+      - generic [ref=e169]:
+        - generic [ref=e170]:
+          - generic [ref=e171]:
+            - generic [ref=e172]: 🍰
+            - generic [ref=e173]: Sri Vinayaka Bakery
+          - paragraph [ref=e174]: Fresh. Warm. Delivered. Order fresh bakery items online and enjoy them at your doorstep.
+        - generic [ref=e175]:
+          - heading "Quick Links" [level=3] [ref=e176]
+          - list [ref=e177]:
+            - listitem [ref=e178]:
+              - link "Menu" [ref=e179] [cursor=pointer]:
+                - /url: /menu
+            - listitem [ref=e180]:
+              - link "About Us" [ref=e181] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e182]:
+              - link "Contact" [ref=e183] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e184]:
+              - link "Track Order" [ref=e185] [cursor=pointer]:
+                - /url: /orders
+        - generic [ref=e186]:
+          - heading "Contact" [level=3] [ref=e187]
+          - list [ref=e188]:
+            - listitem [ref=e189]: 123 Bakery Street
+            - listitem [ref=e190]: Hyderabad, India 500001
+            - listitem [ref=e191]: hello@srivinayakabakery.in
+            - listitem [ref=e192]: +91 98765 43210
+        - generic [ref=e193]:
+          - heading "Follow Us" [level=3] [ref=e194]
+          - generic [ref=e195]:
+            - link "Instagram" [ref=e196] [cursor=pointer]:
+              - /url: "#"
+            - link "Facebook" [ref=e197] [cursor=pointer]:
+              - /url: "#"
+            - link "Twitter" [ref=e198] [cursor=pointer]:
+              - /url: "#"
+      - generic [ref=e199]:
+        - paragraph [ref=e200]: © 2026 Sri Vinayaka Bakery. All rights reserved.
+        - generic [ref=e201]:
+          - link "Privacy Policy" [ref=e202] [cursor=pointer]:
+            - /url: /privacy
+          - link "Terms of Service" [ref=e203] [cursor=pointer]:
+            - /url: /terms
+  - button "Open Next.js Dev Tools" [ref=e209] [cursor=pointer]:
+    - img [ref=e210]

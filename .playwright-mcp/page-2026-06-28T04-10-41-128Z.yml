@@ -1,0 +1,27 @@
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]:
+    - img [ref=e8]
+  - alert [ref=e11]
+  - generic [ref=e14]:
+    - link "Sri Vinayaka Bakery" [ref=e16] [cursor=pointer]:
+      - /url: /
+      - img [ref=e18]
+      - generic [ref=e20]: Sri Vinayaka Bakery
+    - generic [ref=e21]:
+      - heading "Welcome Back" [level=1] [ref=e22]
+      - generic [ref=e23]:
+        - generic [ref=e25]:
+          - generic [ref=e26]: Email
+          - textbox "Email" [ref=e27]:
+            - /placeholder: you@example.com
+        - generic [ref=e29]:
+          - generic [ref=e30]: Password
+          - textbox "Password" [ref=e31]:
+            - /placeholder: Your password
+        - button "Sign In" [ref=e32]
+      - generic [ref=e37]: or
+      - button "Continue with Google" [ref=e38]
+      - paragraph [ref=e39]:
+        - text: Don't have an account?
+        - link "Sign Up" [ref=e40] [cursor=pointer]:
+          - /url: /register

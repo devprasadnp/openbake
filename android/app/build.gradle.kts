@@ -19,7 +19,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "BASE_URL", "\"https://openbakebackenda.vercel.app/api/\"")
+        buildConfigField("String", "BASE_URL", "\"https://23f7-2402-e280-213a-15c-3ce7-ff21-eba8-b00e.ngrok-free.app/api/\"")
     }
 
     buildTypes {

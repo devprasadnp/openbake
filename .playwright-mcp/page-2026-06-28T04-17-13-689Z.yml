@@ -1,0 +1,118 @@
+- generic [active] [ref=e1]:
+  - status [ref=e186]: Order placed successfully!
+  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]:
+    - img [ref=e8]
+  - alert [ref=e11]
+  - navigation [ref=e187]:
+    - generic [ref=e188]:
+      - link "Sri Vinayaka Bakery" [ref=e189] [cursor=pointer]:
+        - /url: /
+        - img [ref=e191]
+        - generic [ref=e193]: Sri Vinayaka Bakery
+      - generic [ref=e194]:
+        - link "Home" [ref=e195] [cursor=pointer]:
+          - /url: /
+        - link "Menu" [ref=e196] [cursor=pointer]:
+          - /url: /menu
+        - link "My Orders" [ref=e197] [cursor=pointer]:
+          - /url: /orders
+        - link "About" [ref=e198] [cursor=pointer]:
+          - /url: /about
+      - generic [ref=e199]:
+        - button "Open search" [ref=e200]:
+          - img [ref=e201]
+        - link "Open wishlist" [ref=e204] [cursor=pointer]:
+          - /url: /profile?tab=wishlist
+          - img [ref=e205]
+        - link "Open cart" [ref=e207] [cursor=pointer]:
+          - /url: /cart
+          - img [ref=e208]
+        - link "Test" [ref=e211] [cursor=pointer]:
+          - /url: /profile
+          - img [ref=e212]
+          - generic [ref=e215]: Test
+  - main [ref=e216]:
+    - generic [ref=e217]:
+      - heading "My Orders" [level=1] [ref=e218]
+      - button "Refresh" [ref=e219]:
+        - img [ref=e220]
+        - text: Refresh
+    - generic [ref=e225]:
+      - 'link "Order #CBBC0F03 28 Jun 2026 Placed Red Velvet Cake 🚚 Delivery 💳 cod 🕐 10:00 AM - 12:00 PM 📍 Hyderabad 1 item ₹739" [ref=e226] [cursor=pointer]':
+        - /url: /orders/cbbc0f03-616e-4328-8f68-b70e006c1ad7
+        - generic [ref=e227]:
+          - generic [ref=e228]:
+            - paragraph [ref=e229]: "Order #CBBC0F03"
+            - paragraph [ref=e230]: 28 Jun 2026
+          - generic [ref=e231]: Placed
+        - paragraph [ref=e232]: Red Velvet Cake
+        - generic [ref=e233]:
+          - generic [ref=e234]: 🚚 Delivery
+          - generic [ref=e235]: 💳 cod
+          - generic [ref=e236]: 🕐 10:00 AM - 12:00 PM
+          - generic [ref=e237]: 📍 Hyderabad
+        - generic [ref=e238]:
+          - paragraph [ref=e239]: 1 item
+          - paragraph [ref=e240]: ₹739
+      - 'link "Order #2DDF5F84 28 Jun 2026 Placed Classic Chocolate Cake 🚚 Delivery 💳 cod 🕐 10:00 AM - 12:00 PM 📍 Hyderabad 1 item ₹639" [ref=e241] [cursor=pointer]':
+        - /url: /orders/2ddf5f84-b2c1-4af6-be22-fb3057a01998
+        - generic [ref=e242]:
+          - generic [ref=e243]:
+            - paragraph [ref=e244]: "Order #2DDF5F84"
+            - paragraph [ref=e245]: 28 Jun 2026
+          - generic [ref=e246]: Placed
+        - paragraph [ref=e247]: Classic Chocolate Cake
+        - generic [ref=e248]:
+          - generic [ref=e249]: 🚚 Delivery
+          - generic [ref=e250]: 💳 cod
+          - generic [ref=e251]: 🕐 10:00 AM - 12:00 PM
+          - generic [ref=e252]: 📍 Hyderabad
+        - generic [ref=e253]:
+          - paragraph [ref=e254]: 1 item
+          - paragraph [ref=e255]: ₹639
+  - contentinfo [ref=e256]:
+    - generic [ref=e257]:
+      - generic [ref=e258]:
+        - generic [ref=e259]:
+          - generic [ref=e260]:
+            - generic [ref=e261]: 🍰
+            - generic [ref=e262]: Sri Vinayaka Bakery
+          - paragraph [ref=e263]: Fresh. Warm. Delivered. Order artisan bakery items online and enjoy them at your doorstep.
+        - generic [ref=e264]:
+          - heading "Quick Links" [level=3] [ref=e265]
+          - list [ref=e266]:
+            - listitem [ref=e267]:
+              - link "Menu" [ref=e268] [cursor=pointer]:
+                - /url: /menu
+            - listitem [ref=e269]:
+              - link "About Us" [ref=e270] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e271]:
+              - link "Contact" [ref=e272] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e273]:
+              - link "Track Order" [ref=e274] [cursor=pointer]:
+                - /url: /orders
+        - generic [ref=e275]:
+          - heading "Contact" [level=3] [ref=e276]
+          - list [ref=e277]:
+            - listitem [ref=e278]: 123 Bakery Street
+            - listitem [ref=e279]: Hyderabad, India 500001
+            - listitem [ref=e280]: hello@srivinayakabakery.in
+            - listitem [ref=e281]: +91 98765 43210
+        - generic [ref=e282]:
+          - heading "Follow Us" [level=3] [ref=e283]
+          - generic [ref=e284]:
+            - link "Instagram" [ref=e285] [cursor=pointer]:
+              - /url: "#"
+            - link "Facebook" [ref=e286] [cursor=pointer]:
+              - /url: "#"
+            - link "Twitter" [ref=e287] [cursor=pointer]:
+              - /url: "#"
+      - generic [ref=e288]:
+        - paragraph [ref=e289]: © 2026 Sri Vinayaka Bakery. All rights reserved.
+        - generic [ref=e290]:
+          - link "Privacy Policy" [ref=e291] [cursor=pointer]:
+            - /url: /privacy
+          - link "Terms of Service" [ref=e292] [cursor=pointer]:
+            - /url: /terms

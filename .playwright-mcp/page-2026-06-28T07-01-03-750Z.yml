@@ -1,0 +1,425 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]:
+      - link "Sri Vinayaka Bakery" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img [ref=e6]
+        - generic [ref=e8]: Sri Vinayaka Bakery
+      - generic [ref=e9]:
+        - button "Open search" [ref=e10]:
+          - img [ref=e11]
+        - link "Open cart" [ref=e14] [cursor=pointer]:
+          - /url: /cart
+          - img [ref=e15]
+          - generic [ref=e18]: "2"
+        - button "Open menu" [ref=e19]:
+          - img [ref=e20]
+  - main [ref=e21]:
+    - navigation [ref=e22]: Home / Menu
+    - generic [ref=e23]:
+      - textbox "Search products" [ref=e24]:
+        - /placeholder: Search products...
+      - generic [ref=e25]:
+        - button "All" [ref=e26]
+        - button "Cakes" [ref=e27]
+        - button "Pastries" [ref=e28]
+        - button "Breads" [ref=e29]
+        - button "Cookies" [ref=e30]
+        - button "Cupcakes" [ref=e31]
+        - button "Beverages" [ref=e32]
+      - generic [ref=e33]:
+        - generic [ref=e34] [cursor=pointer]:
+          - checkbox "Eggless only" [ref=e35]
+          - text: Eggless only
+        - combobox "Sort products" [ref=e36]:
+          - option "Popularity" [selected]
+          - 'option "Price: Low to High"'
+          - 'option "Price: High to Low"'
+          - option "Rating"
+    - generic [ref=e38]:
+      - generic [ref=e39]:
+        - heading "All Products" [level=1] [ref=e40]
+        - generic [ref=e41]: 16 items
+      - generic [ref=e42]:
+        - generic [ref=e43]:
+          - link "Classic Chocolate Cake Add Classic Chocolate Cake to wishlist EGGLESS" [ref=e44] [cursor=pointer]:
+            - /url: /menu/b5af1583-44c0-4890-b9d0-16c79a139408
+            - generic [ref=e45]:
+              - img "Classic Chocolate Cake" [ref=e46]
+              - button "Add Classic Chocolate Cake to wishlist" [ref=e47]:
+                - img [ref=e48]
+              - generic [ref=e51]: EGGLESS
+          - generic [ref=e52]:
+            - link "Classic Chocolate Cake" [ref=e53] [cursor=pointer]:
+              - /url: /menu/b5af1583-44c0-4890-b9d0-16c79a139408
+              - heading "Classic Chocolate Cake" [level=3] [ref=e54]
+            - paragraph [ref=e55]: Rich, moist chocolate cake layered with velvety chocolate ganache. Perfect for celebrations or as a sweet treat any day.
+            - generic [ref=e56]:
+              - generic [ref=e57]:
+                - paragraph [ref=e58]: ₹599
+                - generic [ref=e59]:
+                  - img [ref=e60]
+                  - generic [ref=e62]: "4.7"
+              - button "Add Classic Chocolate Cake to cart" [ref=e63]:
+                - img [ref=e64]
+        - generic [ref=e65]:
+          - link "Red Velvet Cake Add Red Velvet Cake to wishlist EGGLESS" [ref=e66] [cursor=pointer]:
+            - /url: /menu/1701dbcd-6a43-4372-93ba-eb26f542565c
+            - generic [ref=e67]:
+              - img "Red Velvet Cake" [ref=e68]
+              - button "Add Red Velvet Cake to wishlist" [ref=e69]:
+                - img [ref=e70]
+              - generic [ref=e73]: EGGLESS
+          - generic [ref=e74]:
+            - link "Red Velvet Cake" [ref=e75] [cursor=pointer]:
+              - /url: /menu/1701dbcd-6a43-4372-93ba-eb26f542565c
+              - heading "Red Velvet Cake" [level=3] [ref=e76]
+            - paragraph [ref=e77]: Stunning red velvet layers with cream cheese frosting. A showstopper for special occasions.
+            - generic [ref=e78]:
+              - generic [ref=e79]:
+                - paragraph [ref=e80]: ₹699
+                - generic [ref=e81]:
+                  - img [ref=e82]
+                  - generic [ref=e84]: "4.8"
+              - button "Add Red Velvet Cake to cart" [ref=e85]:
+                - img [ref=e86]
+        - generic [ref=e87]:
+          - link "Butterscotch Crunch Cake Add Butterscotch Crunch Cake to wishlist EGGLESS" [ref=e88] [cursor=pointer]:
+            - /url: /menu/7c3ef210-780a-44e4-8c6d-f25d728a7783
+            - generic [ref=e89]:
+              - img "Butterscotch Crunch Cake" [ref=e90]
+              - button "Add Butterscotch Crunch Cake to wishlist" [ref=e91]:
+                - img [ref=e92]
+              - generic [ref=e95]: EGGLESS
+          - generic [ref=e96]:
+            - link "Butterscotch Crunch Cake" [ref=e97] [cursor=pointer]:
+              - /url: /menu/7c3ef210-780a-44e4-8c6d-f25d728a7783
+              - heading "Butterscotch Crunch Cake" [level=3] [ref=e98]
+            - paragraph [ref=e99]: Soft butterscotch sponge loaded with crunchy caramel bits and butterscotch sauce.
+            - generic [ref=e100]:
+              - generic [ref=e101]:
+                - paragraph [ref=e102]: ₹549
+                - generic [ref=e103]:
+                  - img [ref=e104]
+                  - generic [ref=e106]: "4.5"
+              - button "Add Butterscotch Crunch Cake to cart" [ref=e107]:
+                - img [ref=e108]
+        - generic [ref=e109]:
+          - link "Mango Delight Cake Add Mango Delight Cake to wishlist EGGLESS" [ref=e110] [cursor=pointer]:
+            - /url: /menu/1da85006-6d6b-46e4-b611-f908513e28a3
+            - generic [ref=e111]:
+              - img "Mango Delight Cake" [ref=e112]
+              - button "Add Mango Delight Cake to wishlist" [ref=e113]:
+                - img [ref=e114]
+              - generic [ref=e117]: EGGLESS
+          - generic [ref=e118]:
+            - link "Mango Delight Cake" [ref=e119] [cursor=pointer]:
+              - /url: /menu/1da85006-6d6b-46e4-b611-f908513e28a3
+              - heading "Mango Delight Cake" [level=3] [ref=e120]
+            - paragraph [ref=e121]: Fresh mango cream cake made with real Alphonso mangoes. A seasonal favorite.
+            - generic [ref=e122]:
+              - generic [ref=e123]:
+                - paragraph [ref=e124]: ₹749
+                - generic [ref=e125]:
+                  - img [ref=e126]
+                  - generic [ref=e128]: "4.9"
+              - button "Add Mango Delight Cake to cart" [ref=e129]:
+                - img [ref=e130]
+        - generic [ref=e131]:
+          - link "Chocolate Éclair Add Chocolate Éclair to wishlist" [ref=e132] [cursor=pointer]:
+            - /url: /menu/78d7e9cb-5a02-4d6d-886f-bb446c9e60f0
+            - generic [ref=e133]:
+              - img "Chocolate Éclair" [ref=e134]
+              - button "Add Chocolate Éclair to wishlist" [ref=e135]:
+                - img [ref=e136]
+          - generic [ref=e138]:
+            - link "Chocolate Éclair" [ref=e139] [cursor=pointer]:
+              - /url: /menu/78d7e9cb-5a02-4d6d-886f-bb446c9e60f0
+              - heading "Chocolate Éclair" [level=3] [ref=e140]
+            - paragraph [ref=e141]: Choux pastry filled with silky pastry cream and topped with chocolate glaze.
+            - generic [ref=e142]:
+              - generic [ref=e143]:
+                - paragraph [ref=e144]: ₹120
+                - generic [ref=e145]:
+                  - img [ref=e146]
+                  - generic [ref=e148]: "4.3"
+              - button "Add Chocolate Éclair to cart" [ref=e149]:
+                - img [ref=e150]
+        - generic [ref=e151]:
+          - link "Fruit Danish Add Fruit Danish to wishlist" [ref=e152] [cursor=pointer]:
+            - /url: /menu/ff2dbc0a-6b94-4c4b-a6d9-6f9354b16fee
+            - generic [ref=e153]:
+              - img "Fruit Danish" [ref=e154]
+              - button "Add Fruit Danish to wishlist" [ref=e155]:
+                - img [ref=e156]
+          - generic [ref=e158]:
+            - link "Fruit Danish" [ref=e159] [cursor=pointer]:
+              - /url: /menu/ff2dbc0a-6b94-4c4b-a6d9-6f9354b16fee
+              - heading "Fruit Danish" [level=3] [ref=e160]
+            - paragraph [ref=e161]: Flaky puff pastry with custard cream and seasonal fresh fruits.
+            - generic [ref=e162]:
+              - generic [ref=e163]:
+                - paragraph [ref=e164]: ₹150
+                - generic [ref=e165]:
+                  - img [ref=e166]
+                  - generic [ref=e168]: "4.4"
+              - button "Add Fruit Danish to cart" [ref=e169]:
+                - img [ref=e170]
+        - generic [ref=e171]:
+          - link "Almond Croissant Add Almond Croissant to wishlist" [ref=e172] [cursor=pointer]:
+            - /url: /menu/e7d720fd-6c01-4de2-89fd-75ab4ddb3d1c
+            - generic [ref=e173]:
+              - img "Almond Croissant" [ref=e174]
+              - button "Add Almond Croissant to wishlist" [ref=e175]:
+                - img [ref=e176]
+          - generic [ref=e178]:
+            - link "Almond Croissant" [ref=e179] [cursor=pointer]:
+              - /url: /menu/e7d720fd-6c01-4de2-89fd-75ab4ddb3d1c
+              - heading "Almond Croissant" [level=3] [ref=e180]
+            - paragraph [ref=e181]: Buttery croissant filled with almond frangipane and topped with sliced almonds.
+            - generic [ref=e182]:
+              - generic [ref=e183]:
+                - paragraph [ref=e184]: ₹180
+                - generic [ref=e185]:
+                  - img [ref=e186]
+                  - generic [ref=e188]: "4.6"
+              - button "Add Almond Croissant to cart" [ref=e189]:
+                - img [ref=e190]
+        - generic [ref=e191]:
+          - link "Sourdough Loaf Add Sourdough Loaf to wishlist EGGLESS" [ref=e192] [cursor=pointer]:
+            - /url: /menu/422a75c7-d9a8-4cfb-9570-b6ea8c7637a5
+            - generic [ref=e193]:
+              - img "Sourdough Loaf" [ref=e194]
+              - button "Add Sourdough Loaf to wishlist" [ref=e195]:
+                - img [ref=e196]
+              - generic [ref=e199]: EGGLESS
+          - generic [ref=e200]:
+            - link "Sourdough Loaf" [ref=e201] [cursor=pointer]:
+              - /url: /menu/422a75c7-d9a8-4cfb-9570-b6ea8c7637a5
+              - heading "Sourdough Loaf" [level=3] [ref=e202]
+            - paragraph [ref=e203]: Artisan sourdough bread with a crispy crust and tangy, chewy interior. 72-hour ferment.
+            - generic [ref=e204]:
+              - generic [ref=e205]:
+                - paragraph [ref=e206]: ₹250
+                - generic [ref=e207]:
+                  - img [ref=e208]
+                  - generic [ref=e210]: "4.8"
+              - button "Add Sourdough Loaf to cart" [ref=e211]:
+                - img [ref=e212]
+        - generic [ref=e213]:
+          - link "Garlic Focaccia Add Garlic Focaccia to wishlist EGGLESS" [ref=e214] [cursor=pointer]:
+            - /url: /menu/5b466639-9361-4b98-9b2e-c4b5dc0f9bc6
+            - generic [ref=e215]:
+              - img "Garlic Focaccia" [ref=e216]
+              - button "Add Garlic Focaccia to wishlist" [ref=e217]:
+                - img [ref=e218]
+              - generic [ref=e221]: EGGLESS
+          - generic [ref=e222]:
+            - link "Garlic Focaccia" [ref=e223] [cursor=pointer]:
+              - /url: /menu/5b466639-9361-4b98-9b2e-c4b5dc0f9bc6
+              - heading "Garlic Focaccia" [level=3] [ref=e224]
+            - paragraph [ref=e225]: Italian-style flatbread infused with roasted garlic, olive oil, and rosemary.
+            - generic [ref=e226]:
+              - generic [ref=e227]:
+                - paragraph [ref=e228]: ₹199
+                - generic [ref=e229]:
+                  - img [ref=e230]
+                  - generic [ref=e232]: "4.5"
+              - button "Add Garlic Focaccia to cart" [ref=e233]:
+                - img [ref=e234]
+        - generic [ref=e235]:
+          - link "Multigrain Bread Add Multigrain Bread to wishlist EGGLESS" [ref=e236] [cursor=pointer]:
+            - /url: /menu/d022e031-7f4e-425d-a806-bea6e1a17a19
+            - generic [ref=e237]:
+              - img "Multigrain Bread" [ref=e238]
+              - button "Add Multigrain Bread to wishlist" [ref=e239]:
+                - img [ref=e240]
+              - generic [ref=e243]: EGGLESS
+          - generic [ref=e244]:
+            - link "Multigrain Bread" [ref=e245] [cursor=pointer]:
+              - /url: /menu/d022e031-7f4e-425d-a806-bea6e1a17a19
+              - heading "Multigrain Bread" [level=3] [ref=e246]
+            - paragraph [ref=e247]: Healthy multigrain bread packed with oats, flax, sunflower seeds, and whole wheat.
+            - generic [ref=e248]:
+              - generic [ref=e249]:
+                - paragraph [ref=e250]: ₹149
+                - generic [ref=e251]:
+                  - img [ref=e252]
+                  - generic [ref=e254]: "4.2"
+              - button "Add Multigrain Bread to cart" [ref=e255]:
+                - img [ref=e256]
+        - generic [ref=e257]:
+          - link "Chocolate Chip Cookies (6 pcs) Add Chocolate Chip Cookies (6 pcs) to wishlist EGGLESS" [ref=e258] [cursor=pointer]:
+            - /url: /menu/b7411440-e3c6-4229-a87e-83014bed8301
+            - generic [ref=e259]:
+              - img "Chocolate Chip Cookies (6 pcs)" [ref=e260]
+              - button "Add Chocolate Chip Cookies (6 pcs) to wishlist" [ref=e261]:
+                - img [ref=e262]
+              - generic [ref=e265]: EGGLESS
+          - generic [ref=e266]:
+            - link "Chocolate Chip Cookies (6 pcs)" [ref=e267] [cursor=pointer]:
+              - /url: /menu/b7411440-e3c6-4229-a87e-83014bed8301
+              - heading "Chocolate Chip Cookies (6 pcs)" [level=3] [ref=e268]
+            - paragraph [ref=e269]: Classic chewy cookies loaded with premium dark chocolate chips.
+            - generic [ref=e270]:
+              - generic [ref=e271]:
+                - paragraph [ref=e272]: ₹199
+                - generic [ref=e273]:
+                  - img [ref=e274]
+                  - generic [ref=e276]: "4.6"
+              - button "Add Chocolate Chip Cookies (6 pcs) to cart" [ref=e277]:
+                - img [ref=e278]
+        - generic [ref=e279]:
+          - link "Almond Biscotti (8 pcs) Add Almond Biscotti (8 pcs) to wishlist EGGLESS" [ref=e280] [cursor=pointer]:
+            - /url: /menu/9632af88-eddd-44cf-9a97-4c40a90ed56d
+            - generic [ref=e281]:
+              - img "Almond Biscotti (8 pcs)" [ref=e282]
+              - button "Add Almond Biscotti (8 pcs) to wishlist" [ref=e283]:
+                - img [ref=e284]
+              - generic [ref=e287]: EGGLESS
+          - generic [ref=e288]:
+            - link "Almond Biscotti (8 pcs)" [ref=e289] [cursor=pointer]:
+              - /url: /menu/9632af88-eddd-44cf-9a97-4c40a90ed56d
+              - heading "Almond Biscotti (8 pcs)" [level=3] [ref=e290]
+            - paragraph [ref=e291]: Crunchy Italian-style biscotti with toasted almonds. Perfect with coffee.
+            - generic [ref=e292]:
+              - generic [ref=e293]:
+                - paragraph [ref=e294]: ₹249
+                - generic [ref=e295]:
+                  - img [ref=e296]
+                  - generic [ref=e298]: "4.4"
+              - button "Add Almond Biscotti (8 pcs) to cart" [ref=e299]:
+                - img [ref=e300]
+        - generic [ref=e301]:
+          - link "Vanilla Rainbow Cupcakes (4 pcs) Add Vanilla Rainbow Cupcakes (4 pcs) to wishlist EGGLESS" [ref=e302] [cursor=pointer]:
+            - /url: /menu/788f21d3-238e-4a20-9ea5-7a776fc1f2b3
+            - generic [ref=e303]:
+              - img "Vanilla Rainbow Cupcakes (4 pcs)" [ref=e304]
+              - button "Add Vanilla Rainbow Cupcakes (4 pcs) to wishlist" [ref=e305]:
+                - img [ref=e306]
+              - generic [ref=e309]: EGGLESS
+          - generic [ref=e310]:
+            - link "Vanilla Rainbow Cupcakes (4 pcs)" [ref=e311] [cursor=pointer]:
+              - /url: /menu/788f21d3-238e-4a20-9ea5-7a776fc1f2b3
+              - heading "Vanilla Rainbow Cupcakes (4 pcs)" [level=3] [ref=e312]
+            - paragraph [ref=e313]: Fluffy vanilla cupcakes with rainbow buttercream swirl and sprinkles.
+            - generic [ref=e314]:
+              - generic [ref=e315]:
+                - paragraph [ref=e316]: ₹349
+                - generic [ref=e317]:
+                  - img [ref=e318]
+                  - generic [ref=e320]: "4.7"
+              - button "Add Vanilla Rainbow Cupcakes (4 pcs) to cart" [ref=e321]:
+                - img [ref=e322]
+        - generic [ref=e323]:
+          - link "Salted Caramel Cupcakes (4 pcs) Add Salted Caramel Cupcakes (4 pcs) to wishlist EGGLESS" [ref=e324] [cursor=pointer]:
+            - /url: /menu/bbfae6d6-5ae6-44a3-8488-2ee0614ea3e1
+            - generic [ref=e325]:
+              - img "Salted Caramel Cupcakes (4 pcs)" [ref=e326]
+              - button "Add Salted Caramel Cupcakes (4 pcs) to wishlist" [ref=e327]:
+                - img [ref=e328]
+              - generic [ref=e331]: EGGLESS
+          - generic [ref=e332]:
+            - link "Salted Caramel Cupcakes (4 pcs)" [ref=e333] [cursor=pointer]:
+              - /url: /menu/bbfae6d6-5ae6-44a3-8488-2ee0614ea3e1
+              - heading "Salted Caramel Cupcakes (4 pcs)" [level=3] [ref=e334]
+            - paragraph [ref=e335]: Moist caramel cupcakes with salted caramel buttercream and a drizzle of caramel sauce.
+            - generic [ref=e336]:
+              - generic [ref=e337]:
+                - paragraph [ref=e338]: ₹399
+                - generic [ref=e339]:
+                  - img [ref=e340]
+                  - generic [ref=e342]: "4.8"
+              - button "Add Salted Caramel Cupcakes (4 pcs) to cart" [ref=e343]:
+                - img [ref=e344]
+        - generic [ref=e345]:
+          - link "Hot Chocolate Add Hot Chocolate to wishlist EGGLESS" [ref=e346] [cursor=pointer]:
+            - /url: /menu/e3868e24-2f90-48d9-ba18-9c43df317c88
+            - generic [ref=e347]:
+              - img "Hot Chocolate" [ref=e348]
+              - button "Add Hot Chocolate to wishlist" [ref=e349]:
+                - img [ref=e350]
+              - generic [ref=e353]: EGGLESS
+          - generic [ref=e354]:
+            - link "Hot Chocolate" [ref=e355] [cursor=pointer]:
+              - /url: /menu/e3868e24-2f90-48d9-ba18-9c43df317c88
+              - heading "Hot Chocolate" [level=3] [ref=e356]
+            - paragraph [ref=e357]: Rich and creamy Belgian hot chocolate topped with whipped cream.
+            - generic [ref=e358]:
+              - generic [ref=e359]:
+                - paragraph [ref=e360]: ₹199
+                - generic [ref=e361]:
+                  - img [ref=e362]
+                  - generic [ref=e364]: "4.5"
+              - button "Add Hot Chocolate to cart" [ref=e365]:
+                - img [ref=e366]
+        - generic [ref=e367]:
+          - link "Iced Matcha Latte Add Iced Matcha Latte to wishlist EGGLESS" [ref=e368] [cursor=pointer]:
+            - /url: /menu/1d2ce0ea-6b24-497b-a555-72b5a958708c
+            - generic [ref=e369]:
+              - img "Iced Matcha Latte" [ref=e370]
+              - button "Add Iced Matcha Latte to wishlist" [ref=e371]:
+                - img [ref=e372]
+              - generic [ref=e375]: EGGLESS
+          - generic [ref=e376]:
+            - link "Iced Matcha Latte" [ref=e377] [cursor=pointer]:
+              - /url: /menu/1d2ce0ea-6b24-497b-a555-72b5a958708c
+              - heading "Iced Matcha Latte" [level=3] [ref=e378]
+            - paragraph [ref=e379]: Premium Japanese matcha whisked with chilled milk. Smooth and refreshing.
+            - generic [ref=e380]:
+              - generic [ref=e381]:
+                - paragraph [ref=e382]: ₹249
+                - generic [ref=e383]:
+                  - img [ref=e384]
+                  - generic [ref=e386]: "4.3"
+              - button "Add Iced Matcha Latte to cart" [ref=e387]:
+                - img [ref=e388]
+  - contentinfo [ref=e389]:
+    - generic [ref=e390]:
+      - generic [ref=e391]:
+        - generic [ref=e392]:
+          - generic [ref=e393]:
+            - generic [ref=e394]: 🍰
+            - generic [ref=e395]: Sri Vinayaka Bakery
+          - paragraph [ref=e396]: Fresh. Warm. Delivered. Order fresh bakery items online and enjoy them at your doorstep.
+        - generic [ref=e397]:
+          - heading "Quick Links" [level=3] [ref=e398]
+          - list [ref=e399]:
+            - listitem [ref=e400]:
+              - link "Menu" [ref=e401] [cursor=pointer]:
+                - /url: /menu
+            - listitem [ref=e402]:
+              - link "About Us" [ref=e403] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e404]:
+              - link "Contact" [ref=e405] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e406]:
+              - link "Track Order" [ref=e407] [cursor=pointer]:
+                - /url: /orders
+        - generic [ref=e408]:
+          - heading "Contact" [level=3] [ref=e409]
+          - list [ref=e410]:
+            - listitem [ref=e411]: 123 Bakery Street
+            - listitem [ref=e412]: Hyderabad, India 500001
+            - listitem [ref=e413]: hello@srivinayakabakery.in
+            - listitem [ref=e414]: +91 98765 43210
+        - generic [ref=e415]:
+          - heading "Follow Us" [level=3] [ref=e416]
+          - generic [ref=e417]:
+            - link "Instagram" [ref=e418] [cursor=pointer]:
+              - /url: "#"
+            - link "Facebook" [ref=e419] [cursor=pointer]:
+              - /url: "#"
+            - link "Twitter" [ref=e420] [cursor=pointer]:
+              - /url: "#"
+      - generic [ref=e421]:
+        - paragraph [ref=e422]: © 2026 Sri Vinayaka Bakery. All rights reserved.
+        - generic [ref=e423]:
+          - link "Privacy Policy" [ref=e424] [cursor=pointer]:
+            - /url: /privacy
+          - link "Terms of Service" [ref=e425] [cursor=pointer]:
+            - /url: /terms
+  - button "Open Next.js Dev Tools" [ref=e431] [cursor=pointer]:
+    - img [ref=e432]
+  - alert [ref=e435]

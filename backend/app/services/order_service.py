@@ -113,7 +113,13 @@ def calculate_order_totals(
                 raise ValueError("Delivery address is too far. Maximum delivery radius is 25 km.")
         else:
             # Fallback to flat fee if no coordinates
-            delivery_fee = Decimal("40.00")
+            delivery_fee = Decimal(str(settings.DELIVERY_FEE_DEFAULT))
+
+        # Free delivery for orders at/above the free-delivery order value.
+        # Mirrors the frontend's "Free delivery on orders above ₹X" promise so the
+        # charged total matches what the customer was shown at checkout.
+        if subtotal >= Decimal(str(settings.FREE_DELIVERY_ORDER_VALUE)):
+            delivery_fee = Decimal("0.00")
 
     total = max(subtotal - discount + delivery_fee, Decimal("0.00"))
 

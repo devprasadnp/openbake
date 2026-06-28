@@ -1,0 +1,128 @@
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]:
+    - img [ref=e8]
+  - alert [ref=e11]
+  - navigation [ref=e12]:
+    - generic [ref=e13]:
+      - link "Sri Vinayaka Bakery" [ref=e14] [cursor=pointer]:
+        - /url: /
+        - img [ref=e16]
+        - generic [ref=e18]: Sri Vinayaka Bakery
+      - generic [ref=e19]:
+        - link "Home" [ref=e20] [cursor=pointer]:
+          - /url: /
+        - link "Menu" [ref=e21] [cursor=pointer]:
+          - /url: /menu
+        - link "My Orders" [ref=e22] [cursor=pointer]:
+          - /url: /orders
+        - link "About" [ref=e23] [cursor=pointer]:
+          - /url: /about
+      - generic [ref=e24]:
+        - button "Open search" [ref=e25]:
+          - img [ref=e26]
+        - link "Open wishlist" [ref=e29] [cursor=pointer]:
+          - /url: /profile?tab=wishlist
+          - img [ref=e30]
+        - link "Open cart" [ref=e32] [cursor=pointer]:
+          - /url: /cart
+          - img [ref=e33]
+          - generic [ref=e36]: "1"
+        - link "Test" [ref=e37] [cursor=pointer]:
+          - /url: /profile
+          - img [ref=e38]
+          - generic [ref=e41]: Test
+  - main [ref=e42]:
+    - heading "Checkout" [level=1] [ref=e43]
+    - generic [ref=e44]:
+      - generic [ref=e45]:
+        - button "1" [ref=e46]
+        - generic [ref=e47]: Address
+      - generic [ref=e49]:
+        - button "2" [ref=e50]
+        - generic [ref=e51]: Delivery
+      - generic [ref=e53]:
+        - button "3" [ref=e54]
+        - generic [ref=e55]: Payment
+      - generic [ref=e57]:
+        - button "4" [ref=e58]
+        - generic [ref=e59]: Review
+    - generic [ref=e60]:
+      - generic [ref=e62]:
+        - heading "Delivery Method" [level=2] [ref=e63]
+        - generic [ref=e64]:
+          - button "🚗 Delivery" [ref=e65]
+          - button "🏪 Pickup" [ref=e66]
+        - heading "Select Address" [level=3] [ref=e67]
+        - generic [ref=e69] [cursor=pointer]:
+          - radio "Home 123, Bakery Lane, Banjara Hills, Hyderabad - 500034" [checked] [ref=e70]
+          - generic [ref=e71]:
+            - text: Home
+            - paragraph [ref=e72]: 123, Bakery Lane, Banjara Hills, Hyderabad - 500034
+        - button "+ Add New Address" [ref=e73]
+        - button "Continue" [ref=e75]
+      - generic [ref=e76]:
+        - heading "Order Summary" [level=2] [ref=e77]
+        - generic [ref=e78]:
+          - generic [ref=e79]:
+            - generic [ref=e80]: Classic Chocolate Cake x1
+            - generic [ref=e81]: ₹599
+          - generic [ref=e82]:
+            - generic [ref=e83]:
+              - generic [ref=e84]: Subtotal
+              - generic [ref=e85]: ₹599
+            - generic [ref=e86]:
+              - generic [ref=e87]: Delivery
+              - generic [ref=e88]: Free
+            - paragraph [ref=e89]: Free delivery on orders above ₹500!
+          - generic [ref=e90]:
+            - generic [ref=e91]: Total
+            - generic [ref=e92]: ₹599
+        - generic [ref=e94]:
+          - textbox "Coupon code" [ref=e95]
+          - button "Apply" [ref=e96]
+  - contentinfo [ref=e97]:
+    - generic [ref=e98]:
+      - generic [ref=e99]:
+        - generic [ref=e100]:
+          - generic [ref=e101]:
+            - generic [ref=e102]: 🍰
+            - generic [ref=e103]: Sri Vinayaka Bakery
+          - paragraph [ref=e104]: Fresh. Warm. Delivered. Order artisan bakery items online and enjoy them at your doorstep.
+        - generic [ref=e105]:
+          - heading "Quick Links" [level=3] [ref=e106]
+          - list [ref=e107]:
+            - listitem [ref=e108]:
+              - link "Menu" [ref=e109] [cursor=pointer]:
+                - /url: /menu
+            - listitem [ref=e110]:
+              - link "About Us" [ref=e111] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e112]:
+              - link "Contact" [ref=e113] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e114]:
+              - link "Track Order" [ref=e115] [cursor=pointer]:
+                - /url: /orders
+        - generic [ref=e116]:
+          - heading "Contact" [level=3] [ref=e117]
+          - list [ref=e118]:
+            - listitem [ref=e119]: 123 Bakery Street
+            - listitem [ref=e120]: Hyderabad, India 500001
+            - listitem [ref=e121]: hello@srivinayakabakery.in
+            - listitem [ref=e122]: +91 98765 43210
+        - generic [ref=e123]:
+          - heading "Follow Us" [level=3] [ref=e124]
+          - generic [ref=e125]:
+            - link "Instagram" [ref=e126] [cursor=pointer]:
+              - /url: "#"
+            - link "Facebook" [ref=e127] [cursor=pointer]:
+              - /url: "#"
+            - link "Twitter" [ref=e128] [cursor=pointer]:
+              - /url: "#"
+      - generic [ref=e129]:
+        - paragraph [ref=e130]: © 2026 Sri Vinayaka Bakery. All rights reserved.
+        - generic [ref=e131]:
+          - link "Privacy Policy" [ref=e132] [cursor=pointer]:
+            - /url: /privacy
+          - link "Terms of Service" [ref=e133] [cursor=pointer]:
+            - /url: /terms

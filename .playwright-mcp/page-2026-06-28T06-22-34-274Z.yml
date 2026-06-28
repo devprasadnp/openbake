@@ -1,0 +1,106 @@
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e36] [cursor=pointer]:
+    - img [ref=e37]
+  - alert [ref=e40]
+  - generic [ref=e41]:
+    - complementary [ref=e42]:
+      - link "🍰 SVB Admin" [ref=e44] [cursor=pointer]:
+        - /url: /admin/dashboard
+        - generic [ref=e45]: 🍰
+        - generic [ref=e46]: SVB Admin
+      - navigation [ref=e47]:
+        - link "Dashboard" [ref=e48] [cursor=pointer]:
+          - /url: /admin/dashboard
+          - img [ref=e49]
+          - text: Dashboard
+        - link "Orders" [ref=e54] [cursor=pointer]:
+          - /url: /admin/orders
+          - img [ref=e55]
+          - text: Orders
+        - link "Products" [ref=e59] [cursor=pointer]:
+          - /url: /admin/products
+          - img [ref=e60]
+          - text: Products
+        - link "Coupons" [ref=e64] [cursor=pointer]:
+          - /url: /admin/coupons
+          - img [ref=e65]
+          - text: Coupons
+        - link "Inventory" [ref=e68] [cursor=pointer]:
+          - /url: /admin/inventory
+          - img [ref=e69]
+          - text: Inventory
+        - link "Analytics" [ref=e79] [cursor=pointer]:
+          - /url: /admin/analytics
+          - img [ref=e80]
+          - text: Analytics
+        - link "Settings" [ref=e82] [cursor=pointer]:
+          - /url: /admin/settings
+          - img [ref=e83]
+          - text: Settings
+      - button "Logout" [ref=e87]:
+        - img [ref=e88]
+        - text: Logout
+    - generic [ref=e91]:
+      - banner [ref=e92]:
+        - heading "Admin Panel" [level=2] [ref=e93]
+        - generic [ref=e94]:
+          - generic [ref=e95]: A
+          - generic [ref=e96]: Admin
+      - main [ref=e97]:
+        - generic [ref=e98]:
+          - heading "Dashboard" [level=1] [ref=e99]
+          - generic [ref=e100]:
+            - generic [ref=e101]:
+              - paragraph [ref=e102]: Today's Orders
+              - paragraph [ref=e103]: "4"
+            - generic [ref=e104]:
+              - paragraph [ref=e105]: Today's Revenue
+              - paragraph [ref=e106]: ₹2,137
+            - generic [ref=e107]:
+              - paragraph [ref=e108]: This Month
+              - paragraph [ref=e109]: "4"
+            - generic [ref=e110]:
+              - paragraph [ref=e111]: Pending Orders
+              - paragraph [ref=e112]: "4"
+          - generic [ref=e113]:
+            - heading "Recent Orders" [level=2] [ref=e114]
+            - table [ref=e115]:
+              - rowgroup [ref=e116]:
+                - row "Order ID Total Status Payment" [ref=e117]:
+                  - columnheader "Order ID" [ref=e118]
+                  - columnheader "Total" [ref=e119]
+                  - columnheader "Status" [ref=e120]
+                  - columnheader "Payment" [ref=e121]
+              - rowgroup [ref=e122]:
+                - row "#4d6512ac ₹160 placed paid" [ref=e123]:
+                  - cell "#4d6512ac" [ref=e124]:
+                    - link "#4d6512ac" [ref=e125] [cursor=pointer]:
+                      - /url: /admin/orders
+                  - cell "₹160" [ref=e126]
+                  - cell "placed" [ref=e127]:
+                    - generic [ref=e128]: placed
+                  - cell "paid" [ref=e129]
+                - row "#f29480ca ₹599 placed paid" [ref=e130]:
+                  - cell "#f29480ca" [ref=e131]:
+                    - link "#f29480ca" [ref=e132] [cursor=pointer]:
+                      - /url: /admin/orders
+                  - cell "₹599" [ref=e133]
+                  - cell "placed" [ref=e134]:
+                    - generic [ref=e135]: placed
+                  - cell "paid" [ref=e136]
+                - row "#cbbc0f03 ₹739 placed paid" [ref=e137]:
+                  - cell "#cbbc0f03" [ref=e138]:
+                    - link "#cbbc0f03" [ref=e139] [cursor=pointer]:
+                      - /url: /admin/orders
+                  - cell "₹739" [ref=e140]
+                  - cell "placed" [ref=e141]:
+                    - generic [ref=e142]: placed
+                  - cell "paid" [ref=e143]
+                - row "#2ddf5f84 ₹639 placed paid" [ref=e144]:
+                  - cell "#2ddf5f84" [ref=e145]:
+                    - link "#2ddf5f84" [ref=e146] [cursor=pointer]:
+                      - /url: /admin/orders
+                  - cell "₹639" [ref=e147]
+                  - cell "placed" [ref=e148]:
+                    - generic [ref=e149]: placed
+                  - cell "paid" [ref=e150]

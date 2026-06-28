@@ -1,0 +1,187 @@
+- generic [ref=e1]:
+  - status [ref=e229]: Order updated to accepted
+  - generic [ref=e2]:
+    - complementary [ref=e3]:
+      - link "🍰 SVB Admin" [ref=e5] [cursor=pointer]:
+        - /url: /admin/dashboard
+        - generic [ref=e6]: 🍰
+        - generic [ref=e7]: SVB Admin
+      - navigation [ref=e8]:
+        - link "Dashboard" [ref=e9] [cursor=pointer]:
+          - /url: /admin/dashboard
+          - img [ref=e10]
+          - text: Dashboard
+        - link "Orders" [ref=e15] [cursor=pointer]:
+          - /url: /admin/orders
+          - img [ref=e16]
+          - text: Orders
+        - link "Products" [ref=e20] [cursor=pointer]:
+          - /url: /admin/products
+          - img [ref=e21]
+          - text: Products
+        - link "Coupons" [ref=e25] [cursor=pointer]:
+          - /url: /admin/coupons
+          - img [ref=e26]
+          - text: Coupons
+        - link "Inventory" [ref=e29] [cursor=pointer]:
+          - /url: /admin/inventory
+          - img [ref=e30]
+          - text: Inventory
+        - link "Analytics" [ref=e40] [cursor=pointer]:
+          - /url: /admin/analytics
+          - img [ref=e41]
+          - text: Analytics
+        - link "Settings" [ref=e43] [cursor=pointer]:
+          - /url: /admin/settings
+          - img [ref=e44]
+          - text: Settings
+      - button "Logout" [ref=e48]:
+        - img [ref=e49]
+        - text: Logout
+    - generic [ref=e52]:
+      - banner [ref=e53]:
+        - heading "Admin Panel" [level=2] [ref=e54]
+        - generic [ref=e55]:
+          - generic [ref=e56]: A
+          - generic [ref=e57]: Admin
+      - main [ref=e58]:
+        - generic [ref=e59]:
+          - heading "Orders Management" [level=1] [ref=e60]
+          - generic [ref=e61]:
+            - button "all" [ref=e62]
+            - button "placed (3)" [ref=e230]
+            - button "accepted (1)" [ref=e231]
+            - button "preparing (0)" [ref=e65]
+            - button "dispatched (0)" [ref=e66]
+            - button "delivered (0)" [ref=e67]
+            - button "cancelled (0)" [ref=e68]
+          - table [ref=e70]:
+            - rowgroup [ref=e71]:
+              - row "Order ID Date Type Delivery Address Items Total Payment Time Slot Status Action" [ref=e72]:
+                - columnheader "Order ID" [ref=e73]
+                - columnheader "Date" [ref=e74]
+                - columnheader "Type" [ref=e75]
+                - columnheader "Delivery Address" [ref=e76]
+                - columnheader "Items" [ref=e77]
+                - columnheader "Total" [ref=e78]
+                - columnheader "Payment" [ref=e79]
+                - columnheader "Time Slot" [ref=e80]
+                - columnheader "Status" [ref=e81]
+                - columnheader "Action" [ref=e82]
+            - rowgroup [ref=e83]:
+              - row "#4d6512ac 28 Jun 2026 delivery 123, Bakery Lane, Banjara Hills, Hyderabad 1 ₹160 paid 10:00 AM - 12:00 PM accepted Mark preparing" [ref=e232] [cursor=pointer]:
+                - cell "#4d6512ac" [ref=e85]
+                - cell "28 Jun 2026" [ref=e86]
+                - cell "delivery" [ref=e87]
+                - cell "123, Bakery Lane, Banjara Hills, Hyderabad" [ref=e88]:
+                  - generic [ref=e89]:
+                    - img [ref=e90]
+                    - generic "123, Bakery Lane, Banjara Hills, Hyderabad - 500034" [ref=e93]: 123, Bakery Lane, Banjara Hills, Hyderabad
+                - cell "1" [ref=e94]
+                - cell "₹160" [ref=e95]
+                - cell "paid" [ref=e96]
+                - cell "10:00 AM - 12:00 PM" [ref=e97]
+                - cell "accepted" [ref=e233]:
+                  - generic [ref=e99]: accepted
+                - cell "Mark preparing" [ref=e234]:
+                  - button "Mark preparing" [active] [ref=e235]
+              - row "#f29480ca 28 Jun 2026 delivery 123, Bakery Lane, Banjara Hills, Hyderabad 1 ₹599 paid 10:00 AM - 12:00 PM placed Mark accepted" [ref=e102] [cursor=pointer]:
+                - cell "#f29480ca" [ref=e103]
+                - cell "28 Jun 2026" [ref=e104]
+                - cell "delivery" [ref=e105]
+                - cell "123, Bakery Lane, Banjara Hills, Hyderabad" [ref=e106]:
+                  - generic [ref=e107]:
+                    - img [ref=e108]
+                    - generic "123, Bakery Lane, Banjara Hills, Hyderabad - 500034" [ref=e111]: 123, Bakery Lane, Banjara Hills, Hyderabad
+                - cell "1" [ref=e112]
+                - cell "₹599" [ref=e113]
+                - cell "paid" [ref=e114]
+                - cell "10:00 AM - 12:00 PM" [ref=e115]
+                - cell "placed" [ref=e116]:
+                  - generic [ref=e117]: placed
+                - cell "Mark accepted" [ref=e118]:
+                  - button "Mark accepted" [ref=e119]
+              - row "#cbbc0f03 28 Jun 2026 delivery 123, Bakery Lane, Banjara Hills, Hyderabad 1 ₹739 paid 10:00 AM - 12:00 PM placed Mark accepted" [ref=e120] [cursor=pointer]:
+                - cell "#cbbc0f03" [ref=e121]
+                - cell "28 Jun 2026" [ref=e122]
+                - cell "delivery" [ref=e123]
+                - cell "123, Bakery Lane, Banjara Hills, Hyderabad" [ref=e124]:
+                  - generic [ref=e125]:
+                    - img [ref=e126]
+                    - generic "123, Bakery Lane, Banjara Hills, Hyderabad - 500034" [ref=e129]: 123, Bakery Lane, Banjara Hills, Hyderabad
+                - cell "1" [ref=e130]
+                - cell "₹739" [ref=e131]
+                - cell "paid" [ref=e132]
+                - cell "10:00 AM - 12:00 PM" [ref=e133]
+                - cell "placed" [ref=e134]:
+                  - generic [ref=e135]: placed
+                - cell "Mark accepted" [ref=e136]:
+                  - button "Mark accepted" [ref=e137]
+              - row "#2ddf5f84 28 Jun 2026 delivery 123, Bakery Lane, Banjara Hills, Hyderabad 1 ₹639 paid 10:00 AM - 12:00 PM placed Mark accepted" [ref=e138] [cursor=pointer]:
+                - cell "#2ddf5f84" [ref=e139]
+                - cell "28 Jun 2026" [ref=e140]
+                - cell "delivery" [ref=e141]
+                - cell "123, Bakery Lane, Banjara Hills, Hyderabad" [ref=e142]:
+                  - generic [ref=e143]:
+                    - img [ref=e144]
+                    - generic "123, Bakery Lane, Banjara Hills, Hyderabad - 500034" [ref=e147]: 123, Bakery Lane, Banjara Hills, Hyderabad
+                - cell "1" [ref=e148]
+                - cell "₹639" [ref=e149]
+                - cell "paid" [ref=e150]
+                - cell "10:00 AM - 12:00 PM" [ref=e151]
+                - cell "placed" [ref=e152]:
+                  - generic [ref=e153]: placed
+                - cell "Mark accepted" [ref=e154]:
+                  - button "Mark accepted" [ref=e155]
+          - generic [ref=e156]:
+            - heading "Active Delivery Locations" [level=2] [ref=e157]:
+              - img [ref=e158]
+              - text: Active Delivery Locations
+            - generic [ref=e161]:
+              - generic [ref=e162]:
+                - generic [ref=e163]:
+                  - generic [ref=e164]: "#4d6512ac"
+                  - generic [ref=e165]: accepted
+                - generic [ref=e166]:
+                  - img [ref=e167]
+                  - generic [ref=e170]:
+                    - paragraph [ref=e171]: Home
+                    - paragraph [ref=e172]: 123, Bakery Lane, Banjara Hills
+                    - paragraph [ref=e173]: Hyderabad — 500034
+                - paragraph [ref=e174]: ₹160 · 1 item · 10:00 AM - 12:00 PM
+              - generic [ref=e175]:
+                - generic [ref=e176]:
+                  - generic [ref=e177]: "#f29480ca"
+                  - generic [ref=e178]: placed
+                - generic [ref=e179]:
+                  - img [ref=e180]
+                  - generic [ref=e183]:
+                    - paragraph [ref=e184]: Home
+                    - paragraph [ref=e185]: 123, Bakery Lane, Banjara Hills
+                    - paragraph [ref=e186]: Hyderabad — 500034
+                - paragraph [ref=e187]: ₹599 · 1 item · 10:00 AM - 12:00 PM
+              - generic [ref=e188]:
+                - generic [ref=e189]:
+                  - generic [ref=e190]: "#cbbc0f03"
+                  - generic [ref=e191]: placed
+                - generic [ref=e192]:
+                  - img [ref=e193]
+                  - generic [ref=e196]:
+                    - paragraph [ref=e197]: Home
+                    - paragraph [ref=e198]: 123, Bakery Lane, Banjara Hills
+                    - paragraph [ref=e199]: Hyderabad — 500034
+                - paragraph [ref=e200]: ₹739 · 1 item · 10:00 AM - 12:00 PM
+              - generic [ref=e201]:
+                - generic [ref=e202]:
+                  - generic [ref=e203]: "#2ddf5f84"
+                  - generic [ref=e204]: placed
+                - generic [ref=e205]:
+                  - img [ref=e206]
+                  - generic [ref=e209]:
+                    - paragraph [ref=e210]: Home
+                    - paragraph [ref=e211]: 123, Bakery Lane, Banjara Hills
+                    - paragraph [ref=e212]: Hyderabad — 500034
+                - paragraph [ref=e213]: ₹639 · 1 item · 10:00 AM - 12:00 PM
+  - button "Open Next.js Dev Tools" [ref=e219] [cursor=pointer]:
+    - img [ref=e220]
+  - alert [ref=e223]

@@ -1,0 +1,363 @@
+- generic [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]:
+      - link "Sri Vinayaka Bakery" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img [ref=e6]
+        - generic [ref=e8]: Sri Vinayaka Bakery
+      - generic [ref=e9]:
+        - button "Open search" [ref=e10]:
+          - img [ref=e11]
+        - link "Open cart" [ref=e14] [cursor=pointer]:
+          - /url: /cart
+          - img [ref=e15]
+          - generic [ref=e18]: "1"
+        - button "Close menu" [expanded] [active] [ref=e410]:
+          - img [ref=e411]
+  - dialog [ref=e414]:
+    - button "Close menu" [ref=e415]
+    - generic [ref=e416]:
+      - generic [ref=e417]:
+        - generic [ref=e418]: Menu
+        - button "Close menu panel" [ref=e419]:
+          - img [ref=e420]
+      - generic [ref=e423]:
+        - link "Home" [ref=e424] [cursor=pointer]:
+          - /url: /
+        - link "Menu" [ref=e425] [cursor=pointer]:
+          - /url: /menu
+        - link "My Orders" [ref=e426] [cursor=pointer]:
+          - /url: /orders
+        - link "About" [ref=e427] [cursor=pointer]:
+          - /url: /about
+        - link "Wishlist" [ref=e428] [cursor=pointer]:
+          - /url: /profile?tab=wishlist
+        - link "Admin Panel" [ref=e429] [cursor=pointer]:
+          - /url: /admin/dashboard
+      - link "My Profile" [ref=e431] [cursor=pointer]:
+        - /url: /profile
+  - main [ref=e21]:
+    - generic [ref=e28]:
+      - generic [ref=e29]:
+        - img [ref=e30]
+        - text: Fresh from the oven, every day
+      - heading "Artisan Bakes, Delivered Warm" [level=1] [ref=e33]
+      - paragraph [ref=e34]: Custom cakes, flaky pastries, artisan breads and more — crafted with love and delivered fresh to your doorstep.
+      - generic [ref=e35]:
+        - link "Order Now" [ref=e36] [cursor=pointer]:
+          - /url: /menu
+          - text: Order Now
+          - img [ref=e37]
+        - link "View Menu" [ref=e39] [cursor=pointer]:
+          - /url: /menu
+      - generic [ref=e40]:
+        - generic [ref=e41]:
+          - img [ref=e42]
+          - generic [ref=e44]: 4.8/5 Rating
+        - generic [ref=e45]:
+          - img [ref=e46]
+          - generic [ref=e51]: Free Delivery 500+
+    - generic [ref=e52]:
+      - heading "Shop by Category" [level=2] [ref=e53]
+      - generic [ref=e215]:
+        - link "Cakes Cakes" [ref=e216] [cursor=pointer]:
+          - /url: /menu?category=c565de9e-bb11-427a-b387-fda1e57b353c
+          - img "Cakes" [ref=e218]
+          - generic [ref=e219]: Cakes
+        - link "Pastries Pastries" [ref=e220] [cursor=pointer]:
+          - /url: /menu?category=aba663e8-dc3a-4641-996b-d2be54601472
+          - img "Pastries" [ref=e222]
+          - generic [ref=e223]: Pastries
+        - link "Breads Breads" [ref=e224] [cursor=pointer]:
+          - /url: /menu?category=a4cf1765-efe2-4451-b66b-f9431fa8b5e7
+          - img "Breads" [ref=e226]
+          - generic [ref=e227]: Breads
+        - link "Cookies Cookies" [ref=e228] [cursor=pointer]:
+          - /url: /menu?category=6eb5c755-4030-4f8d-a284-1f622ce5281c
+          - img "Cookies" [ref=e230]
+          - generic [ref=e231]: Cookies
+        - link "Cupcakes Cupcakes" [ref=e232] [cursor=pointer]:
+          - /url: /menu?category=eb06dfc0-8f8a-4b28-ae99-28bbec9666b6
+          - img "Cupcakes" [ref=e234]
+          - generic [ref=e235]: Cupcakes
+        - link "Beverages Beverages" [ref=e236] [cursor=pointer]:
+          - /url: /menu?category=3cea18b5-9438-4165-bede-d80361e1f4a6
+          - img "Beverages" [ref=e238]
+          - generic [ref=e239]: Beverages
+    - generic [ref=e55]:
+      - generic [ref=e56]:
+        - heading "Our Bestsellers" [level=2] [ref=e57]
+        - link "View All" [ref=e58] [cursor=pointer]:
+          - /url: /menu
+          - text: View All
+          - img [ref=e59]
+      - generic [ref=e61]:
+        - generic [ref=e240]:
+          - link "Classic Chocolate Cake Add Classic Chocolate Cake to wishlist EGGLESS" [ref=e241] [cursor=pointer]:
+            - /url: /menu/b5af1583-44c0-4890-b9d0-16c79a139408
+            - generic [ref=e242]:
+              - img "Classic Chocolate Cake" [ref=e243]
+              - button "Add Classic Chocolate Cake to wishlist" [ref=e244]:
+                - img [ref=e245]
+              - generic [ref=e248]: EGGLESS
+          - generic [ref=e249]:
+            - link "Classic Chocolate Cake" [ref=e250] [cursor=pointer]:
+              - /url: /menu/b5af1583-44c0-4890-b9d0-16c79a139408
+              - heading "Classic Chocolate Cake" [level=3] [ref=e251]
+            - paragraph [ref=e252]: Rich, moist chocolate cake layered with velvety chocolate ganache. Perfect for celebrations or as a sweet treat any day.
+            - generic [ref=e253]:
+              - generic [ref=e254]:
+                - paragraph [ref=e255]: ₹599
+                - generic [ref=e256]:
+                  - img [ref=e257]
+                  - generic [ref=e259]: "4.7"
+              - button "Add Classic Chocolate Cake to cart" [ref=e260]:
+                - img [ref=e261]
+        - generic [ref=e262]:
+          - link "Red Velvet Cake Add Red Velvet Cake to wishlist EGGLESS" [ref=e263] [cursor=pointer]:
+            - /url: /menu/1701dbcd-6a43-4372-93ba-eb26f542565c
+            - generic [ref=e264]:
+              - img "Red Velvet Cake" [ref=e265]
+              - button "Add Red Velvet Cake to wishlist" [ref=e266]:
+                - img [ref=e267]
+              - generic [ref=e270]: EGGLESS
+          - generic [ref=e271]:
+            - link "Red Velvet Cake" [ref=e272] [cursor=pointer]:
+              - /url: /menu/1701dbcd-6a43-4372-93ba-eb26f542565c
+              - heading "Red Velvet Cake" [level=3] [ref=e273]
+            - paragraph [ref=e274]: Stunning red velvet layers with cream cheese frosting. A showstopper for special occasions.
+            - generic [ref=e275]:
+              - generic [ref=e276]:
+                - paragraph [ref=e277]: ₹699
+                - generic [ref=e278]:
+                  - img [ref=e279]
+                  - generic [ref=e281]: "4.8"
+              - button "Add Red Velvet Cake to cart" [ref=e282]:
+                - img [ref=e283]
+        - generic [ref=e284]:
+          - link "Butterscotch Crunch Cake Add Butterscotch Crunch Cake to wishlist EGGLESS" [ref=e285] [cursor=pointer]:
+            - /url: /menu/7c3ef210-780a-44e4-8c6d-f25d728a7783
+            - generic [ref=e286]:
+              - img "Butterscotch Crunch Cake" [ref=e287]
+              - button "Add Butterscotch Crunch Cake to wishlist" [ref=e288]:
+                - img [ref=e289]
+              - generic [ref=e292]: EGGLESS
+          - generic [ref=e293]:
+            - link "Butterscotch Crunch Cake" [ref=e294] [cursor=pointer]:
+              - /url: /menu/7c3ef210-780a-44e4-8c6d-f25d728a7783
+              - heading "Butterscotch Crunch Cake" [level=3] [ref=e295]
+            - paragraph [ref=e296]: Soft butterscotch sponge loaded with crunchy caramel bits and butterscotch sauce.
+            - generic [ref=e297]:
+              - generic [ref=e298]:
+                - paragraph [ref=e299]: ₹549
+                - generic [ref=e300]:
+                  - img [ref=e301]
+                  - generic [ref=e303]: "4.5"
+              - button "Add Butterscotch Crunch Cake to cart" [ref=e304]:
+                - img [ref=e305]
+        - generic [ref=e306]:
+          - link "Mango Delight Cake Add Mango Delight Cake to wishlist EGGLESS" [ref=e307] [cursor=pointer]:
+            - /url: /menu/1da85006-6d6b-46e4-b611-f908513e28a3
+            - generic [ref=e308]:
+              - img "Mango Delight Cake" [ref=e309]
+              - button "Add Mango Delight Cake to wishlist" [ref=e310]:
+                - img [ref=e311]
+              - generic [ref=e314]: EGGLESS
+          - generic [ref=e315]:
+            - link "Mango Delight Cake" [ref=e316] [cursor=pointer]:
+              - /url: /menu/1da85006-6d6b-46e4-b611-f908513e28a3
+              - heading "Mango Delight Cake" [level=3] [ref=e317]
+            - paragraph [ref=e318]: Fresh mango cream cake made with real Alphonso mangoes. A seasonal favorite.
+            - generic [ref=e319]:
+              - generic [ref=e320]:
+                - paragraph [ref=e321]: ₹749
+                - generic [ref=e322]:
+                  - img [ref=e323]
+                  - generic [ref=e325]: "4.9"
+              - button "Add Mango Delight Cake to cart" [ref=e326]:
+                - img [ref=e327]
+        - generic [ref=e328]:
+          - link "Chocolate Éclair Add Chocolate Éclair to wishlist" [ref=e329] [cursor=pointer]:
+            - /url: /menu/78d7e9cb-5a02-4d6d-886f-bb446c9e60f0
+            - generic [ref=e330]:
+              - img "Chocolate Éclair" [ref=e331]
+              - button "Add Chocolate Éclair to wishlist" [ref=e332]:
+                - img [ref=e333]
+          - generic [ref=e335]:
+            - link "Chocolate Éclair" [ref=e336] [cursor=pointer]:
+              - /url: /menu/78d7e9cb-5a02-4d6d-886f-bb446c9e60f0
+              - heading "Chocolate Éclair" [level=3] [ref=e337]
+            - paragraph [ref=e338]: Choux pastry filled with silky pastry cream and topped with chocolate glaze.
+            - generic [ref=e339]:
+              - generic [ref=e340]:
+                - paragraph [ref=e341]: ₹120
+                - generic [ref=e342]:
+                  - img [ref=e343]
+                  - generic [ref=e345]: "4.3"
+              - button "Add Chocolate Éclair to cart" [ref=e346]:
+                - img [ref=e347]
+        - generic [ref=e348]:
+          - link "Fruit Danish Add Fruit Danish to wishlist" [ref=e349] [cursor=pointer]:
+            - /url: /menu/ff2dbc0a-6b94-4c4b-a6d9-6f9354b16fee
+            - generic [ref=e350]:
+              - img "Fruit Danish" [ref=e351]
+              - button "Add Fruit Danish to wishlist" [ref=e352]:
+                - img [ref=e353]
+          - generic [ref=e355]:
+            - link "Fruit Danish" [ref=e356] [cursor=pointer]:
+              - /url: /menu/ff2dbc0a-6b94-4c4b-a6d9-6f9354b16fee
+              - heading "Fruit Danish" [level=3] [ref=e357]
+            - paragraph [ref=e358]: Flaky puff pastry with custard cream and seasonal fresh fruits.
+            - generic [ref=e359]:
+              - generic [ref=e360]:
+                - paragraph [ref=e361]: ₹150
+                - generic [ref=e362]:
+                  - img [ref=e363]
+                  - generic [ref=e365]: "4.4"
+              - button "Add Fruit Danish to cart" [ref=e366]:
+                - img [ref=e367]
+        - generic [ref=e368]:
+          - link "Almond Croissant Add Almond Croissant to wishlist" [ref=e369] [cursor=pointer]:
+            - /url: /menu/e7d720fd-6c01-4de2-89fd-75ab4ddb3d1c
+            - generic [ref=e370]:
+              - img "Almond Croissant" [ref=e371]
+              - button "Add Almond Croissant to wishlist" [ref=e372]:
+                - img [ref=e373]
+          - generic [ref=e375]:
+            - link "Almond Croissant" [ref=e376] [cursor=pointer]:
+              - /url: /menu/e7d720fd-6c01-4de2-89fd-75ab4ddb3d1c
+              - heading "Almond Croissant" [level=3] [ref=e377]
+            - paragraph [ref=e378]: Buttery croissant filled with almond frangipane and topped with sliced almonds.
+            - generic [ref=e379]:
+              - generic [ref=e380]:
+                - paragraph [ref=e381]: ₹180
+                - generic [ref=e382]:
+                  - img [ref=e383]
+                  - generic [ref=e385]: "4.6"
+              - button "Add Almond Croissant to cart" [ref=e386]:
+                - img [ref=e387]
+        - generic [ref=e388]:
+          - link "Sourdough Loaf Add Sourdough Loaf to wishlist EGGLESS" [ref=e389] [cursor=pointer]:
+            - /url: /menu/422a75c7-d9a8-4cfb-9570-b6ea8c7637a5
+            - generic [ref=e390]:
+              - img "Sourdough Loaf" [ref=e391]
+              - button "Add Sourdough Loaf to wishlist" [ref=e392]:
+                - img [ref=e393]
+              - generic [ref=e396]: EGGLESS
+          - generic [ref=e397]:
+            - link "Sourdough Loaf" [ref=e398] [cursor=pointer]:
+              - /url: /menu/422a75c7-d9a8-4cfb-9570-b6ea8c7637a5
+              - heading "Sourdough Loaf" [level=3] [ref=e399]
+            - paragraph [ref=e400]: Artisan sourdough bread with a crispy crust and tangy, chewy interior. 72-hour ferment.
+            - generic [ref=e401]:
+              - generic [ref=e402]:
+                - paragraph [ref=e403]: ₹250
+                - generic [ref=e404]:
+                  - img [ref=e405]
+                  - generic [ref=e407]: "4.8"
+              - button "Add Sourdough Loaf to cart" [ref=e408]:
+                - img [ref=e409]
+    - generic [ref=e87]:
+      - heading "How It Works" [level=2] [ref=e88]
+      - generic [ref=e89]:
+        - generic [ref=e90]:
+          - img [ref=e92]
+          - generic [ref=e95]: Step 1
+          - heading "Browse & Choose" [level=3] [ref=e96]
+          - paragraph [ref=e97]: Explore our freshly baked collection of cakes, breads & more
+        - generic [ref=e98]:
+          - img [ref=e100]
+          - generic [ref=e102]: Step 2
+          - heading "Customize" [level=3] [ref=e103]
+          - paragraph [ref=e104]: Pick your size, flavor, add a personal message on cakes
+        - generic [ref=e105]:
+          - img [ref=e107]
+          - generic [ref=e112]: Step 3
+          - heading "Fast Delivery" [level=3] [ref=e113]
+          - paragraph [ref=e114]: Get it delivered warm to your doorstep in your chosen time slot
+    - generic [ref=e116]:
+      - heading "What Our Customers Say" [level=2] [ref=e117]
+      - generic [ref=e118]:
+        - generic [ref=e119]:
+          - generic [ref=e120]:
+            - img [ref=e121]
+            - img [ref=e123]
+            - img [ref=e125]
+            - img [ref=e127]
+            - img [ref=e129]
+          - paragraph [ref=e131]: “The chocolate truffle cake was divine! Perfectly moist and delivered on time.”
+          - paragraph [ref=e132]: Priya S.
+        - generic [ref=e133]:
+          - generic [ref=e134]:
+            - img [ref=e135]
+            - img [ref=e137]
+            - img [ref=e139]
+            - img [ref=e141]
+            - img [ref=e143]
+          - paragraph [ref=e145]: “Best bakery in town. The sourdough bread is absolutely fresh every time.”
+          - paragraph [ref=e146]: Rahul M.
+        - generic [ref=e147]:
+          - generic [ref=e148]:
+            - img [ref=e149]
+            - img [ref=e151]
+            - img [ref=e153]
+            - img [ref=e155]
+            - img [ref=e157]
+          - paragraph [ref=e159]: “Love the eggless options. My birthday cake was beautifully customized!”
+          - paragraph [ref=e160]: Ananya K.
+    - generic [ref=e162]:
+      - heading "Get 10% Off Your First Order" [level=2] [ref=e163]
+      - paragraph [ref=e164]: Use code WELCOME10 at checkout
+      - link "Shop Now" [ref=e165] [cursor=pointer]:
+        - /url: /menu
+        - text: Shop Now
+        - img [ref=e166]
+  - contentinfo [ref=e168]:
+    - generic [ref=e169]:
+      - generic [ref=e170]:
+        - generic [ref=e171]:
+          - generic [ref=e172]:
+            - generic [ref=e173]: 🍰
+            - generic [ref=e174]: Sri Vinayaka Bakery
+          - paragraph [ref=e175]: Fresh. Warm. Delivered. Order artisan bakery items online and enjoy them at your doorstep.
+        - generic [ref=e176]:
+          - heading "Quick Links" [level=3] [ref=e177]
+          - list [ref=e178]:
+            - listitem [ref=e179]:
+              - link "Menu" [ref=e180] [cursor=pointer]:
+                - /url: /menu
+            - listitem [ref=e181]:
+              - link "About Us" [ref=e182] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e183]:
+              - link "Contact" [ref=e184] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e185]:
+              - link "Track Order" [ref=e186] [cursor=pointer]:
+                - /url: /orders
+        - generic [ref=e187]:
+          - heading "Contact" [level=3] [ref=e188]
+          - list [ref=e189]:
+            - listitem [ref=e190]: 123 Bakery Street
+            - listitem [ref=e191]: Hyderabad, India 500001
+            - listitem [ref=e192]: hello@srivinayakabakery.in
+            - listitem [ref=e193]: +91 98765 43210
+        - generic [ref=e194]:
+          - heading "Follow Us" [level=3] [ref=e195]
+          - generic [ref=e196]:
+            - link "Instagram" [ref=e197] [cursor=pointer]:
+              - /url: "#"
+            - link "Facebook" [ref=e198] [cursor=pointer]:
+              - /url: "#"
+            - link "Twitter" [ref=e199] [cursor=pointer]:
+              - /url: "#"
+      - generic [ref=e200]:
+        - paragraph [ref=e201]: © 2026 Sri Vinayaka Bakery. All rights reserved.
+        - generic [ref=e202]:
+          - link "Privacy Policy" [ref=e203] [cursor=pointer]:
+            - /url: /privacy
+          - link "Terms of Service" [ref=e204] [cursor=pointer]:
+            - /url: /terms
+  - button "Open Next.js Dev Tools" [ref=e210] [cursor=pointer]:
+    - img [ref=e211]
+  - alert [ref=e214]

@@ -150,14 +150,14 @@ def seed():
             "category": "Pastries", "name": "Almond Croissant",
             "description": "Buttery croissant filled with almond frangipane and topped with sliced almonds.",
             "price": 180, "stock_count": 35, "is_eggless_available": False, "customizable": False, "rating": 4.6,
-            "images": ["https://images.unsplash.com/photo-1555507036-ab1f4159c578?w=600"],
+            "images": ["https://images.unsplash.com/photo-1530610476181-d83430b64dcd?w=600"],
         },
         # Breads
         {
             "category": "Breads", "name": "Sourdough Loaf",
             "description": "Artisan sourdough bread with a crispy crust and tangy, chewy interior. 72-hour ferment.",
             "price": 250, "stock_count": 30, "is_eggless_available": True, "customizable": False, "rating": 4.8,
-            "images": ["https://images.unsplash.com/photo-1549931319-a545753d62ce?w=600"],
+            "images": ["https://images.unsplash.com/photo-1589367920969-ab8e050bbb04?w=600"],
         },
         {
             "category": "Breads", "name": "Garlic Focaccia",

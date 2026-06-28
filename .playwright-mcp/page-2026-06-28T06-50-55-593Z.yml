@@ -1,0 +1,148 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]:
+      - link "Sri Vinayaka Bakery" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img [ref=e6]
+        - generic [ref=e8]: Sri Vinayaka Bakery
+      - generic [ref=e9]:
+        - button "Open search" [ref=e10]:
+          - img [ref=e11]
+        - link "Open cart" [ref=e14] [cursor=pointer]:
+          - /url: /cart
+          - img [ref=e15]
+          - generic [ref=e18]: "1"
+        - button "Open menu" [ref=e19]:
+          - img [ref=e20]
+  - main [ref=e21]:
+    - generic [ref=e28]:
+      - generic [ref=e29]:
+        - img [ref=e30]
+        - text: Fresh from the oven, every day
+      - heading "Artisan Bakes, Delivered Warm" [level=1] [ref=e33]
+      - paragraph [ref=e34]: Custom cakes, flaky pastries, artisan breads and more — crafted with love and delivered fresh to your doorstep.
+      - generic [ref=e35]:
+        - link "Order Now" [ref=e36] [cursor=pointer]:
+          - /url: /menu
+          - text: Order Now
+          - img [ref=e37]
+        - link "View Menu" [ref=e39] [cursor=pointer]:
+          - /url: /menu
+      - generic [ref=e40]:
+        - generic [ref=e41]:
+          - img [ref=e42]
+          - generic [ref=e44]: 4.8/5 Rating
+        - generic [ref=e45]:
+          - img [ref=e46]
+          - generic [ref=e51]: Free Delivery 500+
+    - heading "Shop by Category" [level=2] [ref=e53]
+    - generic [ref=e56]:
+      - heading "Our Bestsellers" [level=2] [ref=e57]
+      - link "View All" [ref=e58] [cursor=pointer]:
+        - /url: /menu
+        - text: View All
+        - img [ref=e59]
+    - generic [ref=e87]:
+      - heading "How It Works" [level=2] [ref=e88]
+      - generic [ref=e89]:
+        - generic [ref=e90]:
+          - img [ref=e92]
+          - generic [ref=e95]: Step 1
+          - heading "Browse & Choose" [level=3] [ref=e96]
+          - paragraph [ref=e97]: Explore our freshly baked collection of cakes, breads & more
+        - generic [ref=e98]:
+          - img [ref=e100]
+          - generic [ref=e102]: Step 2
+          - heading "Customize" [level=3] [ref=e103]
+          - paragraph [ref=e104]: Pick your size, flavor, add a personal message on cakes
+        - generic [ref=e105]:
+          - img [ref=e107]
+          - generic [ref=e112]: Step 3
+          - heading "Fast Delivery" [level=3] [ref=e113]
+          - paragraph [ref=e114]: Get it delivered warm to your doorstep in your chosen time slot
+    - generic [ref=e116]:
+      - heading "What Our Customers Say" [level=2] [ref=e117]
+      - generic [ref=e118]:
+        - generic [ref=e119]:
+          - generic [ref=e120]:
+            - img [ref=e121]
+            - img [ref=e123]
+            - img [ref=e125]
+            - img [ref=e127]
+            - img [ref=e129]
+          - paragraph [ref=e131]: “The chocolate truffle cake was divine! Perfectly moist and delivered on time.”
+          - paragraph [ref=e132]: Priya S.
+        - generic [ref=e133]:
+          - generic [ref=e134]:
+            - img [ref=e135]
+            - img [ref=e137]
+            - img [ref=e139]
+            - img [ref=e141]
+            - img [ref=e143]
+          - paragraph [ref=e145]: “Best bakery in town. The sourdough bread is absolutely fresh every time.”
+          - paragraph [ref=e146]: Rahul M.
+        - generic [ref=e147]:
+          - generic [ref=e148]:
+            - img [ref=e149]
+            - img [ref=e151]
+            - img [ref=e153]
+            - img [ref=e155]
+            - img [ref=e157]
+          - paragraph [ref=e159]: “Love the eggless options. My birthday cake was beautifully customized!”
+          - paragraph [ref=e160]: Ananya K.
+    - generic [ref=e162]:
+      - heading "Get 10% Off Your First Order" [level=2] [ref=e163]
+      - paragraph [ref=e164]: Use code WELCOME10 at checkout
+      - link "Shop Now" [ref=e165] [cursor=pointer]:
+        - /url: /menu
+        - text: Shop Now
+        - img [ref=e166]
+  - contentinfo [ref=e168]:
+    - generic [ref=e169]:
+      - generic [ref=e170]:
+        - generic [ref=e171]:
+          - generic [ref=e172]:
+            - generic [ref=e173]: 🍰
+            - generic [ref=e174]: Sri Vinayaka Bakery
+          - paragraph [ref=e175]: Fresh. Warm. Delivered. Order artisan bakery items online and enjoy them at your doorstep.
+        - generic [ref=e176]:
+          - heading "Quick Links" [level=3] [ref=e177]
+          - list [ref=e178]:
+            - listitem [ref=e179]:
+              - link "Menu" [ref=e180] [cursor=pointer]:
+                - /url: /menu
+            - listitem [ref=e181]:
+              - link "About Us" [ref=e182] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e183]:
+              - link "Contact" [ref=e184] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e185]:
+              - link "Track Order" [ref=e186] [cursor=pointer]:
+                - /url: /orders
+        - generic [ref=e187]:
+          - heading "Contact" [level=3] [ref=e188]
+          - list [ref=e189]:
+            - listitem [ref=e190]: 123 Bakery Street
+            - listitem [ref=e191]: Hyderabad, India 500001
+            - listitem [ref=e192]: hello@srivinayakabakery.in
+            - listitem [ref=e193]: +91 98765 43210
+        - generic [ref=e194]:
+          - heading "Follow Us" [level=3] [ref=e195]
+          - generic [ref=e196]:
+            - link "Instagram" [ref=e197] [cursor=pointer]:
+              - /url: "#"
+            - link "Facebook" [ref=e198] [cursor=pointer]:
+              - /url: "#"
+            - link "Twitter" [ref=e199] [cursor=pointer]:
+              - /url: "#"
+      - generic [ref=e200]:
+        - paragraph [ref=e201]: © 2026 Sri Vinayaka Bakery. All rights reserved.
+        - generic [ref=e202]:
+          - link "Privacy Policy" [ref=e203] [cursor=pointer]:
+            - /url: /privacy
+          - link "Terms of Service" [ref=e204] [cursor=pointer]:
+            - /url: /terms
+  - button "Open Next.js Dev Tools" [ref=e210] [cursor=pointer]:
+    - img [ref=e211]
+  - alert [ref=e214]

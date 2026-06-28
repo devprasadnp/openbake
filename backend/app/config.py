@@ -50,6 +50,9 @@ class Settings(BaseSettings):
     BAKERY_LNG: float = 77.5946
     FREE_DELIVERY_RADIUS_KM: float = 5.0
     DELIVERY_FEE_DEFAULT: float = 40.0
+    # Orders at or above this subtotal (before discount) get free delivery.
+    # Must match the frontend FREE_DELIVERY_THRESHOLD shown at checkout.
+    FREE_DELIVERY_ORDER_VALUE: float = 500.0
 
     # Admin bootstrap credentials (used only by seed.py)
     ADMIN_EMAIL: str = "admin@srivinayakabakery.in"

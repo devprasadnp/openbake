@@ -1,0 +1,95 @@
+{
+  "_README": "Fill in every \"value\" field with the real detail, then a developer wires these into the code/env. 'current' shows what is hardcoded today. 'used_in' lists the files to update (or the env var to set). 🔴 = inconsistent across files / must-change before release.",
+  "_generated": "2026-06-28",
+
+  "product": {
+    "_note": "Business/customer-facing details. The bakery owner provides these.",
+    "business_name": {
+      "value": "Sri Vinayaka Bakery",
+      "current": "Sri Vinayaka Bakery",
+      "used_in": ["web: everywhere", "android: HomeScreen/SplashScreen/ProfileScreen", "backend: main.py title"],
+      "status": "consistent"
+    },
+    "contact_email": {
+      "value": "",
+      "current": "hello@srivinayakabakery.in",
+      "used_in": ["web/app/contact/page.tsx:10,77", "web/app/about/page.tsx:178", "web/components/layout/Footer.tsx:39", "android SettingsScreen.kt:183"],
+      "status": "consistent - replace with real inbox"
+    },
+    "contact_phone": {
+      "value": "",
+      "current": "🔴 +91 800 123 4567 (contact)  vs  +91 98765 43210 (about/footer)",
+      "used_in": ["web/app/contact/page.tsx:65-66", "web/app/about/page.tsx:179", "web/components/layout/Footer.tsx:40"],
+      "status": "🔴 INCONSISTENT - two different numbers"
+    },
+    "address_line": {
+      "value": "",
+      "current": "🔴 123 Baker Street (contact) / 123 Bakery Street (footer) / 123 Bakery Lane, Banjara Hills (seed)",
+      "used_in": ["web/app/contact/page.tsx:11,54", "web/components/layout/Footer.tsx:38", "backend/app/seed.py:63"],
+      "status": "🔴 INCONSISTENT"
+    },
+    "city": {
+      "value": "",
+      "current": "🔴 Bengaluru (contact)  vs  Hyderabad (footer/seed)",
+      "used_in": ["web/app/contact/page.tsx", "web/components/layout/Footer.tsx", "backend/app/seed.py"],
+      "status": "🔴 INCONSISTENT - decide one city"
+    },
+    "state": { "value": "", "current": "Karnataka (contact only)", "used_in": ["web/app/contact/page.tsx"], "status": "needs real" },
+    "pincode": {
+      "value": "",
+      "current": "🔴 560001 (contact) vs 500001 (footer)",
+      "used_in": ["web/app/contact/page.tsx", "web/components/layout/Footer.tsx"],
+      "status": "🔴 INCONSISTENT"
+    },
+    "geo_lat": { "value": "", "current": "12.9716 (Bangalore default)", "used_in": ["backend/app/config.py:49 BAKERY_LAT", "web contact map (derived)"], "status": "needs real shop coords" },
+    "geo_lng": { "value": "", "current": "77.5946 (Bangalore default)", "used_in": ["backend/app/config.py:50 BAKERY_LNG"], "status": "needs real shop coords" },
+    "business_hours": {
+      "value": "",
+      "current": "🔴 'Mon-Sat 7AM-9PM / Sun 8AM-6PM' (contact) vs 'Sunday 7AM-7PM, Online 24/7' (about)",
+      "used_in": ["web/app/contact/page.tsx:84-86", "web/app/about/page.tsx:170-171"],
+      "status": "🔴 INCONSISTENT"
+    },
+    "social_instagram": { "value": "", "current": "href=\"#\" (dead) / @srivinayakabakery", "used_in": ["web/components/layout/Footer.tsx:48", "web/app/about/page.tsx:180"], "status": "🔴 dead link" },
+    "social_facebook": { "value": "", "current": "href=\"#\" (dead)", "used_in": ["web/components/layout/Footer.tsx:49"], "status": "🔴 dead link" },
+    "social_twitter": { "value": "", "current": "href=\"#\" (dead)", "used_in": ["web/components/layout/Footer.tsx:50"], "status": "🔴 dead link" },
+    "delivery_free_radius_km": { "value": "", "current": "5.0", "used_in": ["backend/app/config.py:51 FREE_DELIVERY_RADIUS_KM", "admin settings UI"], "status": "confirm" },
+    "delivery_fee_default": { "value": "", "current": "40.0", "used_in": ["backend/app/config.py:52 DELIVERY_FEE_DEFAULT", "admin settings UI"], "status": "confirm" }
+  },
+
+  "developer": {
+    "_note": "Technical config + secrets. Set via environment variables / build config. NEVER commit real secret values.",
+    "web_site_url": { "value": "", "current": "https://srivinayakabakery.in (fallback)", "used_in": ["env NEXT_PUBLIC_SITE_URL", "web/app/robots.ts:3", "web/app/sitemap.ts:3"], "status": "confirm real domain" },
+    "web_api_url": { "value": "", "current": "http://localhost:8000/api (local) / vercel (prod)", "used_in": ["env NEXT_PUBLIC_API_URL", "web/.env.local", "web/lib/api.ts:7"], "status": "env-based ok" },
+    "android_base_url": { "value": "", "current": "🔴 https://23f7-...ngrok-free.app/api/ (DEAD)", "used_in": ["android/app/build.gradle.kts:22 BuildConfig.BASE_URL"], "status": "🔴 RELEASE BLOCKER - dead ngrok tunnel" },
+    "backend_secret_key": { "value": "", "current": "change-this-to-a-long-random-secret-in-production", "used_in": ["backend/app/config.py:8 SECRET_KEY (env)"], "status": "🔴 must set strong random secret (enforced at startup)" },
+    "admin_email": { "value": "", "current": "admin@srivinayakabakery.in", "used_in": ["backend/app/config.py:55 ADMIN_EMAIL (env)"], "status": "set real admin" },
+    "admin_password": { "value": "", "current": "Admin@1234", "used_in": ["backend/app/config.py:56 ADMIN_PASSWORD (env)"], "status": "🔴 change before release" },
+    "payu_merchant_key": { "value": "", "current": "PgFuTw (TEST)", "used_in": ["backend/app/config.py:36 (env)"], "status": "real merchant key (only if payments enabled)" },
+    "payu_merchant_salt": { "value": "", "current": "vVRWH3Bs... (TEST, committed)", "used_in": ["backend/app/config.py:37 (env)"], "status": "🔴 real salt - rotate, never commit" },
+    "payu_client_id": { "value": "", "current": "62caa8f1... (TEST)", "used_in": ["backend/app/config.py:38 (env)"], "status": "real creds" },
+    "payu_client_secret": { "value": "", "current": "c039351a... (TEST)", "used_in": ["backend/app/config.py:39 (env)"], "status": "real creds" },
+    "payu_payment_url": { "value": "", "current": "https://test.payu.in/_payment", "used_in": ["backend/app/config.py:40 (env)"], "status": "https://secure.payu.in/_payment for prod" },
+    "payu_status_api_url": { "value": "", "current": "https://test.payu.in/merchant/postservice?form=2", "used_in": ["backend/app/config.py:41 (env)"], "status": "prod URL" },
+    "payu_callback_base_url": { "value": "", "current": "\"\" (empty)", "used_in": ["backend/app/config.py:42 (env)"], "status": "set to deployed backend URL" },
+    "web_base_url_backend": { "value": "", "current": "http://localhost:3000", "used_in": ["backend/app/config.py:45 WEB_BASE_URL (env) - payment redirect target"], "status": "prod web domain" },
+    "razorpay_key_id": { "value": "", "current": "\"\" (rzp_test_... in .env)", "used_in": ["backend/app/config.py:32 (env)"], "status": "legacy - only if used" },
+    "razorpay_key_secret": { "value": "", "current": "\"\"", "used_in": ["backend/app/config.py:33 (env)"], "status": "legacy - only if used" },
+    "cloudinary_cloud_name": { "value": "", "current": "\"\"", "used_in": ["backend/app/config.py:27 (env)"], "status": "for product image uploads" },
+    "cloudinary_api_key": { "value": "", "current": "\"\"", "used_in": ["backend/app/config.py:28 (env)"], "status": "for image uploads" },
+    "cloudinary_api_secret": { "value": "", "current": "\"\"", "used_in": ["backend/app/config.py:29 (env)"], "status": "for image uploads" },
+    "firebase_credentials": { "value": "", "current": "./firebase-credentials.json", "used_in": ["backend/app/config.py:24 FIREBASE_CREDENTIALS_PATH (env)"], "status": "needed for push notifications + Google login" },
+    "android_deep_link": { "value": "", "current": "openbake://payment-result", "used_in": ["backend/app/config.py:46", "android manifest + config"], "status": "wired ok (matters only if payments on)" }
+  },
+
+  "other": {
+    "_note": "Demo data, placeholder content, and missing pages to review.",
+    "demo_customer_account": { "value": "remove?", "current": "customer@openbake.com / Customer@123", "used_in": ["backend/app/seed.py:50-52,258"], "status": "🔴 remove/disable demo login in prod" },
+    "testimonials": { "value": "", "current": "fake: 'Priya S.', 'Rahul M.', 'Ananya K.'", "used_in": ["web/app/page.tsx:21-23"], "status": "replace with real reviews or hide" },
+    "about_stat_orders": { "value": "", "current": "'over 500 orders a week'", "used_in": ["web/app/about/page.tsx:76"], "status": "placeholder claim - verify or remove" },
+    "seo_title": { "value": "", "current": "Sri Vinayaka Bakery — Fresh. Warm. Delivered.", "used_in": ["web/app/layout.tsx:20"], "status": "verify final copy" },
+    "seo_description": { "value": "", "current": "Order freshly baked cakes, pastries, breads...", "used_in": ["web/app/layout.tsx:21-22"], "status": "verify final copy" },
+    "footer_privacy_page": { "value": "", "current": "links to /privacy", "used_in": ["web/components/layout/Footer.tsx:57"], "status": "⚠️ page may not exist (404) - create or remove link" },
+    "footer_terms_page": { "value": "", "current": "links to /terms", "used_in": ["web/components/layout/Footer.tsx:58"], "status": "⚠️ page may not exist (404) - create or remove link" },
+    "android_version_label": { "value": "", "current": "Sri Vinayaka Bakery v1.0", "used_in": ["android ProfileScreen.kt:215", "build.gradle.kts versionName=1.0"], "status": "keep in sync" }
+  }
+}

@@ -104,6 +104,27 @@ app.add_middleware(
     expose_headers=["X-Request-ID", "X-Response-Time"],
 )
 
+def _cors_headers_for_origin(origin: str | None) -> dict[str, str]:
+    """Mirror the CORSMiddleware behavior for manually-built responses.
+
+    Used by the global exception handler so that 500 responses still carry the
+    appropriate Access-Control-* headers; otherwise the browser masks the real
+    error as a misleading CORS policy failure.
+    """
+    headers: dict[str, str] = {}
+    if not origin:
+        return headers
+    if "*" in allowed_origins:
+        headers["Access-Control-Allow-Origin"] = "*"
+        return headers
+    if origin in allowed_origins or (
+        allowed_origin_regex and re.fullmatch(allowed_origin_regex, origin)
+    ):
+        headers["Access-Control-Allow-Origin"] = origin
+        headers["Access-Control-Allow-Credentials"] = "true"
+    return headers
+
+
 # ── Request-ID + timing middleware ─────────────────────────────────────────────
 @app.middleware("http")
 async def request_middleware(request: Request, call_next) -> Response:
@@ -147,6 +168,7 @@ async def unhandled_exception_handler(request: Request, exc: Exception) -> JSONR
             "detail": detail,
             "request_id": request_id,
         },
+        headers=_cors_headers_for_origin(request.headers.get("origin")),
     )
 
 

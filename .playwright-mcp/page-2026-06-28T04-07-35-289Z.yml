@@ -1,0 +1,130 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]:
+      - link "Sri Vinayaka Bakery" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img [ref=e6]
+        - generic [ref=e8]: Sri Vinayaka Bakery
+      - generic [ref=e9]:
+        - link "Home" [ref=e10] [cursor=pointer]:
+          - /url: /
+        - link "Menu" [ref=e11] [cursor=pointer]:
+          - /url: /menu
+        - link "My Orders" [ref=e12] [cursor=pointer]:
+          - /url: /orders
+        - link "About" [ref=e13] [cursor=pointer]:
+          - /url: /about
+      - generic [ref=e14]:
+        - button "Open search" [ref=e15]:
+          - img [ref=e16]
+        - link "Open wishlist" [ref=e19] [cursor=pointer]:
+          - /url: /profile?tab=wishlist
+          - img [ref=e20]
+        - link "Open cart" [ref=e22] [cursor=pointer]:
+          - /url: /cart
+          - img [ref=e23]
+        - link "Test" [ref=e26] [cursor=pointer]:
+          - /url: /profile
+          - img [ref=e27]
+          - generic [ref=e30]: Test
+  - main [ref=e31]:
+    - navigation [ref=e32]:
+      - link "Home" [ref=e33] [cursor=pointer]:
+        - /url: /
+      - text: /
+      - link "Menu" [ref=e34] [cursor=pointer]:
+        - /url: /menu
+      - text: /Classic Chocolate Cake
+    - generic [ref=e35]:
+      - img "Classic Chocolate Cake" [ref=e39]
+      - generic [ref=e40]:
+        - generic [ref=e41]:
+          - generic [ref=e42]:
+            - generic [ref=e43]: Eggless Available
+            - generic [ref=e44]: Customizable
+          - heading "Classic Chocolate Cake" [level=1] [ref=e45]
+          - generic [ref=e46]:
+            - img [ref=e47]
+            - generic [ref=e49]: "4.7"
+            - generic [ref=e50]: (0 reviews)
+        - paragraph [ref=e51]: ₹599
+        - paragraph [ref=e52]: Rich, moist chocolate cake layered with velvety chocolate ganache. Perfect for celebrations or as a sweet treat any day.
+        - generic [ref=e53]:
+          - heading "Customize Your Order" [level=3] [ref=e54]
+          - generic [ref=e55]:
+            - generic [ref=e56]: Size
+            - generic [ref=e57]:
+              - button "0.5 kg" [ref=e58]
+              - button "1 kg (+₹350)" [ref=e59]
+              - button "2 kg (+₹800)" [ref=e60]
+          - generic [ref=e61]:
+            - generic [ref=e62]: Flavor
+            - generic [ref=e63]:
+              - button "Dark Chocolate" [ref=e64]
+              - button "Truffle (+₹150)" [ref=e65]
+          - generic [ref=e66] [cursor=pointer]:
+            - checkbox "Make it Eggless" [ref=e67]
+            - text: Make it Eggless
+          - generic [ref=e68]:
+            - generic [ref=e69]: Message on Cake (optional)
+            - textbox "e.g., Happy Birthday!" [ref=e70]
+        - generic [ref=e71]:
+          - generic [ref=e72]:
+            - button [ref=e73]:
+              - img [ref=e74]
+            - generic [ref=e75]: "1"
+            - button [ref=e76]:
+              - img [ref=e77]
+          - button "Add to Cart" [ref=e78]:
+            - img [ref=e79]
+            - text: Add to Cart
+          - button "Buy Now" [ref=e82]
+  - contentinfo [ref=e83]:
+    - generic [ref=e84]:
+      - generic [ref=e85]:
+        - generic [ref=e86]:
+          - generic [ref=e87]:
+            - generic [ref=e88]: 🍰
+            - generic [ref=e89]: Sri Vinayaka Bakery
+          - paragraph [ref=e90]: Fresh. Warm. Delivered. Order artisan bakery items online and enjoy them at your doorstep.
+        - generic [ref=e91]:
+          - heading "Quick Links" [level=3] [ref=e92]
+          - list [ref=e93]:
+            - listitem [ref=e94]:
+              - link "Menu" [ref=e95] [cursor=pointer]:
+                - /url: /menu
+            - listitem [ref=e96]:
+              - link "About Us" [ref=e97] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e98]:
+              - link "Contact" [ref=e99] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e100]:
+              - link "Track Order" [ref=e101] [cursor=pointer]:
+                - /url: /orders
+        - generic [ref=e102]:
+          - heading "Contact" [level=3] [ref=e103]
+          - list [ref=e104]:
+            - listitem [ref=e105]: 123 Bakery Street
+            - listitem [ref=e106]: Hyderabad, India 500001
+            - listitem [ref=e107]: hello@srivinayakabakery.in
+            - listitem [ref=e108]: +91 98765 43210
+        - generic [ref=e109]:
+          - heading "Follow Us" [level=3] [ref=e110]
+          - generic [ref=e111]:
+            - link "Instagram" [ref=e112] [cursor=pointer]:
+              - /url: "#"
+            - link "Facebook" [ref=e113] [cursor=pointer]:
+              - /url: "#"
+            - link "Twitter" [ref=e114] [cursor=pointer]:
+              - /url: "#"
+      - generic [ref=e115]:
+        - paragraph [ref=e116]: © 2026 Sri Vinayaka Bakery. All rights reserved.
+        - generic [ref=e117]:
+          - link "Privacy Policy" [ref=e118] [cursor=pointer]:
+            - /url: /privacy
+          - link "Terms of Service" [ref=e119] [cursor=pointer]:
+            - /url: /terms
+  - button "Open Next.js Dev Tools" [ref=e125] [cursor=pointer]:
+    - img [ref=e126]
+  - alert [ref=e129]

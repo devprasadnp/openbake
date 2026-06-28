@@ -1,0 +1,104 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e3]:
+      - link "🍰 SVB Admin" [ref=e5] [cursor=pointer]:
+        - /url: /admin/dashboard
+        - generic [ref=e6]: 🍰
+        - generic [ref=e7]: SVB Admin
+      - navigation [ref=e8]:
+        - link "Dashboard" [ref=e9] [cursor=pointer]:
+          - /url: /admin/dashboard
+          - img [ref=e10]
+          - text: Dashboard
+        - link "Orders" [ref=e15] [cursor=pointer]:
+          - /url: /admin/orders
+          - img [ref=e16]
+          - text: Orders
+        - link "Products" [ref=e20] [cursor=pointer]:
+          - /url: /admin/products
+          - img [ref=e21]
+          - text: Products
+        - link "Coupons" [ref=e25] [cursor=pointer]:
+          - /url: /admin/coupons
+          - img [ref=e26]
+          - text: Coupons
+        - link "Inventory" [ref=e29] [cursor=pointer]:
+          - /url: /admin/inventory
+          - img [ref=e30]
+          - text: Inventory
+        - link "Analytics" [ref=e40] [cursor=pointer]:
+          - /url: /admin/analytics
+          - img [ref=e41]
+          - text: Analytics
+        - link "Settings" [ref=e43] [cursor=pointer]:
+          - /url: /admin/settings
+          - img [ref=e44]
+          - text: Settings
+      - button "Logout" [ref=e48]:
+        - img [ref=e49]
+        - text: Logout
+    - generic [ref=e52]:
+      - banner [ref=e53]:
+        - heading "Admin Panel" [level=2] [ref=e54]
+        - generic [ref=e55]:
+          - generic [ref=e56]: A
+          - generic [ref=e57]: Admin
+      - main [ref=e58]:
+        - generic [ref=e59]:
+          - heading "Settings" [level=1] [ref=e60]
+          - generic [ref=e61]:
+            - generic [ref=e62]:
+              - heading "Bakery Location" [level=2] [ref=e63]:
+                - img [ref=e64]
+                - text: Bakery Location
+              - paragraph [ref=e67]: Set your bakery's location. This is used to calculate delivery distance and fees for every order.
+              - generic [ref=e68]:
+                - generic [ref=e69]:
+                  - generic [ref=e70]:
+                    - generic [ref=e71]: Latitude
+                    - spinbutton "Latitude" [ref=e72]: "12.9716"
+                  - generic [ref=e73]:
+                    - generic [ref=e74]: Longitude
+                    - spinbutton "Longitude" [ref=e75]: "77.5946"
+                - generic [ref=e76]:
+                  - button "Detect My Location" [ref=e77]:
+                    - img [ref=e78]
+                    - text: Detect My Location
+                  - link "View on Map →" [ref=e81] [cursor=pointer]:
+                    - /url: https://maps.google.com/?q=12.9716,77.5946
+            - generic [ref=e82]:
+              - heading "Delivery Charges" [level=2] [ref=e83]:
+                - img [ref=e84]
+                - text: Delivery Charges
+              - paragraph [ref=e89]: Configure free delivery radius and base delivery fee. Orders beyond the free radius will be charged the delivery fee.
+              - generic [ref=e90]:
+                - generic [ref=e91]:
+                  - generic [ref=e92]: Free Delivery Radius (km)
+                  - spinbutton "Free Delivery Radius (km)" [ref=e93]: "5"
+                - generic [ref=e94]:
+                  - generic [ref=e95]: Delivery Fee (₹)
+                  - spinbutton "Delivery Fee (₹)" [ref=e96]: "40"
+                - generic [ref=e97]:
+                  - generic [ref=e98]: Speed (min per km)
+                  - spinbutton "Speed (min per km)" [ref=e99]: "3"
+                - generic [ref=e100]:
+                  - paragraph [ref=e101]: "How delivery fee works:"
+                  - list [ref=e102]:
+                    - listitem [ref=e103]:
+                      - text: Orders within
+                      - strong [ref=e104]: 5 km
+                      - text: — Free delivery
+                    - listitem [ref=e105]:
+                      - text: Orders beyond that —
+                      - strong [ref=e106]: ₹40
+                      - text: delivery charge
+                    - listitem [ref=e107]:
+                      - text: Maximum delivery distance —
+                      - strong [ref=e108]: 25 km
+                    - listitem [ref=e109]: ETA = 15 min prep + distance × 3 min/km
+          - button "Save Settings" [ref=e111]:
+            - img [ref=e112]
+            - text: Save Settings
+  - button "Open Next.js Dev Tools" [ref=e121] [cursor=pointer]:
+    - img [ref=e122]
+  - alert [ref=e125]

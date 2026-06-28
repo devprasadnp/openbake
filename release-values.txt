@@ -1,0 +1,161 @@
+============================================================
+ OPENBAKE / SRI VINAYAKA BAKERY — VALUES TO FILL BEFORE RELEASE
+ Generated: 2026-06-28
+------------------------------------------------------------
+ Fill the "=> " line under each item with the real value.
+ 🔴 = inconsistent across files OR must-change before launch
+ ⚠️ = review / may break
+============================================================
+
+
+############################################################
+# 1. PRODUCT  (business owner provides these)
+############################################################
+
+business_name        : Sri Vinayaka Bakery   (consistent)
+   =>
+
+contact_email        : hello@srivinayakabakery.in
+   used in: web contact/about/footer, android Settings
+   =>
+
+contact_phone        : 🔴 +91 800 123 4567 (contact)  vs  +91 98765 43210 (about/footer)
+   =>
+
+address_line         : 🔴 "123 Baker Street" / "123 Bakery Street" / "123 Bakery Lane, Banjara Hills"
+   =>
+
+city                 : 🔴 Bengaluru (contact)  vs  Hyderabad (footer/seed)
+   =>
+
+state                : Karnataka (contact only)
+   =>
+
+pincode              : 🔴 560001 (contact)  vs  500001 (footer)
+   =>
+
+geo_lat              : 12.9716  (Bangalore default - need real shop coords)
+   =>
+
+geo_lng              : 77.5946  (Bangalore default)
+   =>
+
+business_hours       : 🔴 "Mon-Sat 7AM-9PM / Sun 8AM-6PM"  vs  "Sunday 7AM-7PM, Online 24/7"
+   =>
+
+social_instagram     : 🔴 href="#" (dead)
+   =>
+
+social_facebook      : 🔴 href="#" (dead)
+   =>
+
+social_twitter       : 🔴 href="#" (dead)
+   =>
+
+delivery_free_radius_km : 5.0   (confirm)
+   =>
+
+delivery_fee_default    : 40.0  (confirm)
+   =>
+
+
+############################################################
+# 2. DEVELOPER  (env vars / build config — never commit secrets)
+############################################################
+
+web_site_url          : https://srivinayakabakery.in  -> env NEXT_PUBLIC_SITE_URL (robots.ts, sitemap.ts)
+   =>
+
+web_api_url           : http://localhost:8000/api (local) -> env NEXT_PUBLIC_API_URL
+   =>
+
+android_base_url      : 🔴 https://23f7-...ngrok-free.app/api/  (DEAD ngrok - RELEASE BLOCKER)
+   location: android/app/build.gradle.kts:22
+   =>
+
+backend_secret_key    : 🔴 change-this-...  -> env SECRET_KEY (enforced at startup)
+   =>
+
+admin_email           : admin@srivinayakabakery.in  -> env ADMIN_EMAIL
+   =>
+
+admin_password        : 🔴 Admin@1234  -> env ADMIN_PASSWORD
+   =>
+
+payu_merchant_key     : PgFuTw (TEST)  -> env PAYU_MERCHANT_KEY
+   =>
+
+payu_merchant_salt    : 🔴 vVRWH3Bs... (TEST, committed!)  -> env PAYU_MERCHANT_SALT
+   =>
+
+payu_client_id        : 62caa8f1... (TEST)  -> env PAYU_CLIENT_ID
+   =>
+
+payu_client_secret    : c039351a... (TEST)  -> env PAYU_CLIENT_SECRET
+   =>
+
+payu_payment_url      : https://test.payu.in/_payment  -> prod: https://secure.payu.in/_payment
+   =>
+
+payu_status_api_url   : https://test.payu.in/merchant/postservice?form=2  -> prod URL
+   =>
+
+payu_callback_base_url: "" (empty)  -> deployed backend URL
+   =>
+
+web_base_url (backend): http://localhost:3000  -> env WEB_BASE_URL (payment redirect)
+   =>
+
+razorpay_key_id       : "" (legacy)  -> env RAZORPAY_KEY_ID
+   =>
+
+razorpay_key_secret   : "" (legacy)  -> env RAZORPAY_KEY_SECRET
+   =>
+
+cloudinary_cloud_name : ""  -> env CLOUDINARY_CLOUD_NAME  (product image uploads)
+   =>
+
+cloudinary_api_key    : ""  -> env CLOUDINARY_API_KEY
+   =>
+
+cloudinary_api_secret : ""  -> env CLOUDINARY_API_SECRET
+   =>
+
+firebase_credentials  : ./firebase-credentials.json  (push notifications + Google login)
+   =>
+
+android_deep_link     : openbake://payment-result  (ok; matters only if payments on)
+   =>
+
+
+############################################################
+# 3. OTHER  (demo data, placeholder content, missing pages)
+############################################################
+
+demo_customer_account : 🔴 customer@openbake.com / Customer@123  (backend/app/seed.py) - remove in prod
+   =>
+
+testimonials          : fake names "Priya S." / "Rahul M." / "Ananya K."  (web/app/page.tsx) - replace or hide
+   =>
+
+about_stat_orders     : "over 500 orders a week"  (web/app/about/page.tsx) - verify or remove
+   =>
+
+seo_title             : Sri Vinayaka Bakery — Fresh. Warm. Delivered.  (web/app/layout.tsx)
+   =>
+
+seo_description       : Order freshly baked cakes, pastries, breads...  (web/app/layout.tsx)
+   =>
+
+footer_privacy_page   : ⚠️ /privacy link - page may not exist (404). Create or remove.
+   =>
+
+footer_terms_page     : ⚠️ /terms link - page may not exist (404). Create or remove.
+   =>
+
+android_version_label : "Sri Vinayaka Bakery v1.0" (ProfileScreen) - keep in sync with versionName
+   =>
+
+============================================================
+ END
+============================================================

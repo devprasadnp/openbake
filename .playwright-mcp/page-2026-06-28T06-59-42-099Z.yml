@@ -1,0 +1,83 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]:
+      - link "Sri Vinayaka Bakery" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img [ref=e6]
+        - generic [ref=e8]: Sri Vinayaka Bakery
+      - generic [ref=e9]:
+        - button "Open search" [ref=e10]:
+          - img [ref=e11]
+        - link "Open cart" [ref=e14] [cursor=pointer]:
+          - /url: /cart
+          - img [ref=e15]
+          - generic [ref=e18]: "2"
+        - button "Open menu" [ref=e19]:
+          - img [ref=e20]
+  - main [ref=e21]:
+    - navigation [ref=e22]: Home / Menu
+    - generic [ref=e23]:
+      - textbox "Search products" [ref=e24]:
+        - /placeholder: Search products...
+      - button "All" [ref=e26]
+      - generic [ref=e27]:
+        - generic [ref=e28] [cursor=pointer]:
+          - checkbox "Eggless only" [ref=e29]
+          - text: Eggless only
+        - combobox "Sort products" [ref=e30]:
+          - option "Popularity" [selected]
+          - 'option "Price: Low to High"'
+          - 'option "Price: High to Low"'
+          - option "Rating"
+    - generic [ref=e33]:
+      - heading "All Products" [level=1] [ref=e34]
+      - generic [ref=e35]: 0 items
+  - contentinfo [ref=e73]:
+    - generic [ref=e74]:
+      - generic [ref=e75]:
+        - generic [ref=e76]:
+          - generic [ref=e77]:
+            - generic [ref=e78]: 🍰
+            - generic [ref=e79]: Sri Vinayaka Bakery
+          - paragraph [ref=e80]: Fresh. Warm. Delivered. Order fresh bakery items online and enjoy them at your doorstep.
+        - generic [ref=e81]:
+          - heading "Quick Links" [level=3] [ref=e82]
+          - list [ref=e83]:
+            - listitem [ref=e84]:
+              - link "Menu" [ref=e85] [cursor=pointer]:
+                - /url: /menu
+            - listitem [ref=e86]:
+              - link "About Us" [ref=e87] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e88]:
+              - link "Contact" [ref=e89] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e90]:
+              - link "Track Order" [ref=e91] [cursor=pointer]:
+                - /url: /orders
+        - generic [ref=e92]:
+          - heading "Contact" [level=3] [ref=e93]
+          - list [ref=e94]:
+            - listitem [ref=e95]: 123 Bakery Street
+            - listitem [ref=e96]: Hyderabad, India 500001
+            - listitem [ref=e97]: hello@srivinayakabakery.in
+            - listitem [ref=e98]: +91 98765 43210
+        - generic [ref=e99]:
+          - heading "Follow Us" [level=3] [ref=e100]
+          - generic [ref=e101]:
+            - link "Instagram" [ref=e102] [cursor=pointer]:
+              - /url: "#"
+            - link "Facebook" [ref=e103] [cursor=pointer]:
+              - /url: "#"
+            - link "Twitter" [ref=e104] [cursor=pointer]:
+              - /url: "#"
+      - generic [ref=e105]:
+        - paragraph [ref=e106]: © 2026 Sri Vinayaka Bakery. All rights reserved.
+        - generic [ref=e107]:
+          - link "Privacy Policy" [ref=e108] [cursor=pointer]:
+            - /url: /privacy
+          - link "Terms of Service" [ref=e109] [cursor=pointer]:
+            - /url: /terms
+  - button "Open Next.js Dev Tools" [ref=e115] [cursor=pointer]:
+    - img [ref=e116]
+  - alert [ref=e119]

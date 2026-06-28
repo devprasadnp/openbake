@@ -1,0 +1,157 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e3]:
+      - link "🍰 SVB Admin" [ref=e5] [cursor=pointer]:
+        - /url: /admin/dashboard
+        - generic [ref=e6]: 🍰
+        - generic [ref=e7]: SVB Admin
+      - navigation [ref=e8]:
+        - link "Dashboard" [ref=e9] [cursor=pointer]:
+          - /url: /admin/dashboard
+          - img [ref=e10]
+          - text: Dashboard
+        - link "Orders" [ref=e15] [cursor=pointer]:
+          - /url: /admin/orders
+          - img [ref=e16]
+          - text: Orders
+        - link "Products" [ref=e20] [cursor=pointer]:
+          - /url: /admin/products
+          - img [ref=e21]
+          - text: Products
+        - link "Coupons" [ref=e25] [cursor=pointer]:
+          - /url: /admin/coupons
+          - img [ref=e26]
+          - text: Coupons
+        - link "Inventory" [ref=e29] [cursor=pointer]:
+          - /url: /admin/inventory
+          - img [ref=e30]
+          - text: Inventory
+        - link "Analytics" [ref=e40] [cursor=pointer]:
+          - /url: /admin/analytics
+          - img [ref=e41]
+          - text: Analytics
+        - link "Settings" [ref=e43] [cursor=pointer]:
+          - /url: /admin/settings
+          - img [ref=e44]
+          - text: Settings
+      - button "Logout" [ref=e48]:
+        - img [ref=e49]
+        - text: Logout
+    - generic [ref=e52]:
+      - banner [ref=e53]:
+        - heading "Admin Panel" [level=2] [ref=e54]
+        - generic [ref=e55]:
+          - generic [ref=e56]: A
+          - generic [ref=e57]: Admin
+      - main [ref=e58]:
+        - generic [ref=e59]:
+          - generic [ref=e60]:
+            - button [ref=e61]:
+              - img [ref=e62]
+            - generic [ref=e64]:
+              - 'heading "Order #dc2f7577" [level=1] [ref=e65]'
+              - paragraph [ref=e66]: 28 Jun 2026
+            - generic [ref=e67]: placed
+          - generic [ref=e68]:
+            - generic [ref=e69]:
+              - generic [ref=e70]:
+                - heading "Order Items" [level=2] [ref=e71]:
+                  - img [ref=e72]
+                  - text: Order Items
+                - generic [ref=e77]:
+                  - paragraph [ref=e79]: Classic Chocolate Cake
+                  - generic [ref=e80]:
+                    - paragraph [ref=e81]: ₹599
+                    - paragraph [ref=e82]: 1 × ₹599
+                - generic [ref=e83]:
+                  - generic [ref=e84]:
+                    - generic [ref=e85]: Subtotal
+                    - generic [ref=e86]: ₹599
+                  - generic [ref=e87]:
+                    - generic [ref=e88]: Total
+                    - generic [ref=e89]: ₹599
+              - generic [ref=e90]:
+                - heading "Payment & Delivery" [level=2] [ref=e91]:
+                  - img [ref=e92]
+                  - text: Payment & Delivery
+                - generic [ref=e94]:
+                  - generic [ref=e95]:
+                    - paragraph [ref=e96]: Payment Method
+                    - paragraph [ref=e97]: cod
+                  - generic [ref=e98]:
+                    - paragraph [ref=e99]: Payment Status
+                    - generic [ref=e100]: paid
+                  - generic [ref=e101]:
+                    - paragraph [ref=e102]: Order Type
+                    - paragraph [ref=e103]:
+                      - img [ref=e104]
+                      - text: delivery
+                  - generic [ref=e109]:
+                    - paragraph [ref=e110]: Time Slot
+                    - paragraph [ref=e111]:
+                      - img [ref=e112]
+                      - text: 10:00 AM - 12:00 PM
+                  - generic [ref=e115]:
+                    - paragraph [ref=e116]: Est. Delivery
+                    - paragraph [ref=e117]: 19 min
+              - generic [ref=e118]:
+                - heading "Delivery Address" [level=2] [ref=e119]:
+                  - img [ref=e120]
+                  - text: Delivery Address
+                - generic [ref=e123]:
+                  - generic [ref=e124]:
+                    - generic [ref=e125]: Home
+                    - generic [ref=e126]: Ravi Kumar
+                  - paragraph [ref=e127]: Flat 302, MG Road
+                  - paragraph [ref=e128]: Flat 302, MG Road, Bengaluru
+                  - paragraph [ref=e129]: "Landmark: Near Metro"
+                  - paragraph [ref=e130]: Bengaluru, Karnataka — 560001
+                  - paragraph [ref=e131]:
+                    - img [ref=e132]
+                    - link "9876543210" [ref=e134] [cursor=pointer]:
+                      - /url: tel:9876543210
+                  - generic [ref=e135]:
+                    - link "Navigate (Directions)" [ref=e136] [cursor=pointer]:
+                      - /url: https://www.google.com/maps/dir/?api=1&destination=12.975,77.605
+                      - img [ref=e137]
+                      - text: Navigate (Directions)
+                    - link "View pin (12.97500, 77.60500)" [ref=e141] [cursor=pointer]:
+                      - /url: https://www.google.com/maps?q=12.975,77.605
+            - generic [ref=e142]:
+              - generic [ref=e143]:
+                - heading "Customer" [level=2] [ref=e144]:
+                  - img [ref=e145]
+                  - text: Customer
+                - generic [ref=e148]:
+                  - generic [ref=e149]: T
+                  - generic [ref=e150]:
+                    - paragraph [ref=e151]: Test Customer
+                    - paragraph [ref=e152]: "ID: 2bfa9c1f"
+                - generic [ref=e153]:
+                  - generic [ref=e154]:
+                    - img [ref=e155]
+                    - link "customer@openbake.com" [ref=e158] [cursor=pointer]:
+                      - /url: mailto:customer@openbake.com
+                  - generic [ref=e159]:
+                    - img [ref=e160]
+                    - link "9876543210" [ref=e162] [cursor=pointer]:
+                      - /url: tel:9876543210
+              - generic [ref=e163]:
+                - heading "Update Status" [level=2] [ref=e164]
+                - generic [ref=e165]:
+                  - button "Mark as accepted" [ref=e166]
+                  - button "Cancel Order" [ref=e167]
+              - generic [ref=e168]:
+                - heading "Timeline" [level=2] [ref=e169]:
+                  - img [ref=e170]
+                  - text: Timeline
+                - generic [ref=e173]:
+                  - generic [ref=e174]:
+                    - generic [ref=e175]: Created
+                    - generic [ref=e176]: 28 Jun 2026
+                  - generic [ref=e177]:
+                    - generic [ref=e178]: Last Updated
+                    - generic [ref=e179]: 28 Jun 2026
+  - button "Open Next.js Dev Tools" [ref=e185] [cursor=pointer]:
+    - img [ref=e186]
+  - alert [ref=e189]

@@ -1,0 +1,104 @@
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]:
+    - img [ref=e8]
+  - alert [ref=e11]
+  - navigation [ref=e12]:
+    - generic [ref=e13]:
+      - link "Sri Vinayaka Bakery" [ref=e14] [cursor=pointer]:
+        - /url: /
+        - img [ref=e16]
+        - generic [ref=e18]: Sri Vinayaka Bakery
+      - generic [ref=e19]:
+        - link "Home" [ref=e20] [cursor=pointer]:
+          - /url: /
+        - link "Menu" [ref=e21] [cursor=pointer]:
+          - /url: /menu
+        - link "My Orders" [ref=e22] [cursor=pointer]:
+          - /url: /orders
+        - link "About" [ref=e23] [cursor=pointer]:
+          - /url: /about
+      - generic [ref=e24]:
+        - button "Open search" [ref=e25]:
+          - img [ref=e26]
+        - link "Open wishlist" [ref=e29] [cursor=pointer]:
+          - /url: /profile?tab=wishlist
+          - img [ref=e30]
+        - link "Open cart" [ref=e32] [cursor=pointer]:
+          - /url: /cart
+          - img [ref=e33]
+          - generic [ref=e36]: "1"
+        - link "Test" [ref=e37] [cursor=pointer]:
+          - /url: /profile
+          - img [ref=e38]
+          - generic [ref=e41]: Test
+  - main [ref=e42]:
+    - heading "My Profile" [level=1] [ref=e43]
+    - generic [ref=e44]:
+      - complementary [ref=e45]:
+        - navigation [ref=e46]:
+          - button "Profile" [ref=e47]
+          - button "Addresses" [ref=e48]
+          - button "Wishlist" [ref=e49]
+          - button "Logout" [ref=e50]
+      - generic [ref=e52]:
+        - generic [ref=e53]:
+          - generic [ref=e54]: T
+          - generic [ref=e55]:
+            - heading "Test Customer" [level=2] [ref=e56]
+            - paragraph [ref=e57]: customer@openbake.com
+        - generic [ref=e58]:
+          - generic [ref=e59]:
+            - generic [ref=e60]: Full Name
+            - textbox "Full Name" [ref=e61]: Test Customer
+          - generic [ref=e62]:
+            - generic [ref=e63]: Phone
+            - textbox "Phone" [ref=e64]:
+              - /placeholder: "9876543210"
+              - text: "9876543210"
+          - button "Save Changes" [ref=e65]
+  - contentinfo [ref=e66]:
+    - generic [ref=e67]:
+      - generic [ref=e68]:
+        - generic [ref=e69]:
+          - generic [ref=e70]:
+            - generic [ref=e71]: 🍰
+            - generic [ref=e72]: Sri Vinayaka Bakery
+          - paragraph [ref=e73]: Fresh. Warm. Delivered. Order artisan bakery items online and enjoy them at your doorstep.
+        - generic [ref=e74]:
+          - heading "Quick Links" [level=3] [ref=e75]
+          - list [ref=e76]:
+            - listitem [ref=e77]:
+              - link "Menu" [ref=e78] [cursor=pointer]:
+                - /url: /menu
+            - listitem [ref=e79]:
+              - link "About Us" [ref=e80] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e81]:
+              - link "Contact" [ref=e82] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e83]:
+              - link "Track Order" [ref=e84] [cursor=pointer]:
+                - /url: /orders
+        - generic [ref=e85]:
+          - heading "Contact" [level=3] [ref=e86]
+          - list [ref=e87]:
+            - listitem [ref=e88]: 123 Bakery Street
+            - listitem [ref=e89]: Hyderabad, India 500001
+            - listitem [ref=e90]: hello@srivinayakabakery.in
+            - listitem [ref=e91]: +91 98765 43210
+        - generic [ref=e92]:
+          - heading "Follow Us" [level=3] [ref=e93]
+          - generic [ref=e94]:
+            - link "Instagram" [ref=e95] [cursor=pointer]:
+              - /url: "#"
+            - link "Facebook" [ref=e96] [cursor=pointer]:
+              - /url: "#"
+            - link "Twitter" [ref=e97] [cursor=pointer]:
+              - /url: "#"
+      - generic [ref=e98]:
+        - paragraph [ref=e99]: © 2026 Sri Vinayaka Bakery. All rights reserved.
+        - generic [ref=e100]:
+          - link "Privacy Policy" [ref=e101] [cursor=pointer]:
+            - /url: /privacy
+          - link "Terms of Service" [ref=e102] [cursor=pointer]:
+            - /url: /terms
